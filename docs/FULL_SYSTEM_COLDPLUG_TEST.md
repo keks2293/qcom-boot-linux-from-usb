@@ -37,6 +37,24 @@ chmod +x scripts/cell-ii.sh
 | `lsmod` | `qcom_battmgr`, `ucsi`, `tcpm`, `q6v5_pas` etc |
 | rpm trace count | `grep -c rpm_suspend /sys/kernel/tracing/trace` if tracing available |
 
+## Fork variant (pre-plug vs post-plug)
+
+Run the full system boot **twice**:
+
+1. **Pre-plug:** flash drive inserted **before power-on**, boot to full system, then capture.
+2. **Post-plug:** boot **without** the drive, then cold-plug after the system is up and capture.
+
+Compare: does the drive enumerate in each variant, what does `usb_type` report, and what happens in the dmesg window around the attach.
+
+Interpretation matrix:
+
+| Pre-plug | Post-plug | Conclusion |
+|---|---|---|
+| enumerates | does not | mechanism = fresh CC-edge processed by the PPM (within the ~30 s window); fix direction = ADSP side (P-06) / early nudge |
+| does not | enumerates | a rootfs participant (udev/daemon) opens the path; bisect rootfs participants |
+| enumerates | enumerates | initramfs-specific; contradicts dbg runs V–dbg51, re-examine |
+| does not | does not | mechanism is outside "moment/environment"; re-examine P-01/P-06 |
+
 ## Interpretation
 
 - If `usb_type` becomes `SDP/DCP/PD` in full system but stays `Unknown` in initramfs -> **early BC1.2 classification / PPM nudge in initramfs** is a plausible fix direction

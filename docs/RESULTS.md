@@ -50,6 +50,26 @@ hsp-phy-not-in-L2=0
 - Wedge exists in all tested PM states -> **runtime-PM/L2 not the cause**
 - ADSP remains in `icm_ncp_stby` until charger type updated -> P-06/BC1.2 remains the leading candidate
 
+## Initramfs analysis (dbg51 image)
+
+The CI initramfs inside the `KERNEL` image was decoded to verify module composition:
+
+```
+header v1: page=2048, kernel_size=25532009, ramdisk_size=122811153
+ramdisk @ 25534464 =
+  [ raw early cpio, 306176 B (microcode) ]
+  [ zstd stream @ +306176 -> main cpio, 397752032 B, 3092 entries ]
+/init -> usr/lib/systemd/systemd   (systemd-based; modules loaded by systemd-udevd)
+```
+
+Findings:
+
+- **`qcom_battmgr.ko` (35536 B) is already present** in the CI initramfs (base commit `5d953ca`, i.e. *before* the explicit `add_drivers` commit). dracut runs with `--no-hostonly`, which ships the full module set into the image.
+- **`modules.alias`**: `alias auxiliary:pmic_glink.power-supply qcom_battmgr` — the module is auto-loaded by udev on the auxiliary-bus ADD uevent; no `modules-load.d` entry is needed.
+- **`modules.dep`**: `qcom_battmgr.ko` has **zero** dependencies; `qcom_q6v5_pas.ko` pulls 4 modules (`qcom_pil_info`, `qcom_q6v5`, `qcom_sysmon`, `qcom_common`).
+- **`modules.builtin`**: lists `typec_ucsi.ko` and `ucsi_glink.ko` as built-in; `qcom_battmgr` and `qcom_q6v5_*` are not built-in (they are `=m`).
+- Battery power-supply attributes (`qcom-battmgr-usb`, `battery`, `qcom-battmgr-wls`) are alive and readable in every initramfs run (dbg48–dbg51: VBUS 5057000–5069000 uV) — the module is loaded and probing successfully, so the "missing module" hypothesis is refuted.
+
 ## Evidence logs (raw excerpts)
 
 - [`logs/dbg31-role-swap-refused.txt`](../logs/dbg31-role-swap-refused.txt) — PPM/ADSP rejects role swaps (`SET_PDR` `-ECOMM`, `SET_UOR` `-ETIMEDOUT`)
