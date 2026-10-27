@@ -1,0 +1,90 @@
+33-[R0] running | [BL] pas mods=1
+34-[UL] 24.000073 PmicTcpcStateMachine_Main_Thread::Servicing Event 1
+35-     24.000078 PmicTcpcPlatform_Schg_PdPhy_R1_MsgReceivedIrq_Cb::
+36-     24.000082 PmicTcpcPlatform_Schg_PdPhy_R1_PDEvent_Handler::PDEv...
+37-     24.000087 PmicTcpcPlatform_Schg_PdPhy_R1_HW_GetRxMessageBuffer
+38-
+39-----------------------------------------------------------------------------
+40-ПРОГОН B — #4 [up 32.45s]
+41-----------------------------------------------------------------------------
+42-[E] те же 2 события (2.716134 / 3.182026); [E2] port-change=2 new-dev=0
+43-[H] NONE CCS=0 ; [6] port0 ori=reverse ; [R] hub-rebind #4: unbind=2 bind=2
+44-[PDR] [3.498103] 0x1fffffff -> dec=536870911
+45-[MK] marks: REPLUG1-HW up=24.27s
+46-[UL] 33.215581 BattMgrStateMachine_TimerCmd::Start BATTMGR_DRV_TIMER_ID_HEARTB
+47-     33.215584 ncp_stby_db_log: ncp_stby_db - chgr_stat=7, soc=6599
+48:     33.215588 Warn: icm_ncp_stby_main: keeps in icm_ncp_stby untill charger_type updated
+49-     33.215592 sm_state_loop: charger state: event_type=24, curr=2, next=2, status=0x0
+50-
+51-----------------------------------------------------------------------------
+52-ПРОГОН B — #5 [up 41.67s]   (действие B ВЫПОЛНЕНО)
+53-----------------------------------------------------------------------------
+54-[E] те же 2 события; [E2] port-change=2 new-dev=0 enum-fail=0  => ПОСЛЕ B новых событий НЕТ
+55-[PHY] now: a600000.usb[dwc3-qcom] 88e3000.phy[snps-eusb2-hsphy] 88e8000.phy[qcom-qmp-combo-phy]
+56-     xhci-hcd.0.auto[xhci-hcd] c400000.spmi:pmic7:phy@fd00[qcom-eusb2-repeater]
+57-[B=>] re-probe BEFORE: (те же 5)
+58-[B=>] drivers: dwc3=dwc3-qcom hsphy=snps-eusb2-hsphy repeater=c400000.spmi:pmic7:phy@fd00/qcom-eusb2-repeater
+59-     a600000.usb[dwc3-qcom]>ub_rc=0
+60-     88e3000.phy[snps-eusb2-hsphy]>ub_rc=0
+61-     c400000.spmi:pmic7:phy@fd00[qcom-eusb2-repeater]>ub_rc=0
+62-     c400000.spmi:pmic7:phy@fd00>bind(qcom-eusb2-repeater)_rc=0
+63-     88e3000.phy>bind(snps-eusb2-hsphy)_rc=0
+64-     a600000.usb>bind(dwc3-qcom)_rc=0
+65-[B=>] re-probe AFTER: (те же 5, всё свяxано)
+66-[3] ROOT: MISSING (на #5 после B)
+67-[6] port0 ori=reverse ; [PDR] [3.498103] dec=536870911
+68-[UL] 48.575368 BattMgrTech_QBG_R1_Calculate::fifo[11], deltaTime = 800000 uS, corr
+69-     48.575375 BattMgrTech_QBG_R1_Calculate::fifo[11], ibatt1 = 682 mA, ibatt2 = 0
+70-     48.575379 step_19_fuss_soc: batt_filt_10mv = 372405334
+71-     48.575383 step_20_fcss_soc: batt_filt_10ma = 35431414
+72-=> ВЫВОД: B (re-probe) на прогоне B ничего не породил (port-change остался 2, новых нет).
+73-
+74-----------------------------------------------------------------------------
+75-ПРОГОН C — #5 [up 41.64s]   (B ВЫПОЛНЕН, полный экран c END)
+76-----------------------------------------------------------------------------
+77-[CMD/BL/B/AU/G/D/UL] — см. базовый набор
+78-[E] usb-activity: NONE (ни одного события минув)
+79-[E2] counts: port-change=0 new-dev=0 enum-fail=0     => в прогоне C к 41.6с НИ ОДНОГО события шины
+80-[H] NONE ( CONNECTION — CCS=0)
+81-[S] toggle: (еще не было)
+82-[PHY] now: те же 5 устройств
+83-[B=>] re-probe BEFORE/ drivers / ub_rc=0 / bind_rc=0 / re-probe AFTER — ВСЁ rc=0 (как в прогоне B)
+84-[5] usb1/usb2 (root-hubs) ; [6] port0 pw=[source] sink dat=[host] device ori=normal
+85-[P] v=5062000 ; [PDR] [3.579534] 0x1fffffff -> dec=536870911
+86-[MK] marks: [24.252246] rp6-diag: REPLUG1-HW up=24.24s
+87-[UL] 48.640664/48.640670 BattMgrTech_QBG_R1_Calculate ... ibatt1 = 688 mA
+88-     48.640674 step_19_fuss_soc batt_filt_10mv=373269392 ; 48.640677 step_20_fcss_soc
+89-##### END DIAG24 #5 #####
+90-
+91-----------------------------------------------------------------------------
+92-ПРОГОН C — #6 [up 57.99s]   (действие B' ВЫПОЛНИТЬ НЕ УДАЛОСЬ — БАГ ПУТЕЙ)
+93-----------------------------------------------------------------------------
+94-[3] ROOT: MISSING
+95-[E] usb-activity:
+96-     [   46.005329] xhci-hcd xhci-hcd.0.auto: Port change event, 2-1, id 2, portsc: 0x2002a0
+97-[E2] counts: port-change=1 new-dev=0 enum-fail=0     => СОБЫТИЕ ПОСЛЕ B (B в ~42-44с, событие 46.0с)
+98-[H] NONE ( CONNECTION — CCS=0)
+99-[IRQ] xhci: 167: 2
+100-[B'] aux altmode rebind:
+101-     /usr/bin/dracut-initqueue: line 55: /sys/bus/auxiliary/drivers/pmic_glink_altmode/unbind: No such file or directory
+102-     pmic_glink.altmode.0>ub_rc=1
+103-     /usr/bin/dracut-initqueue: line 61: /sys/bus/auxiliary/drivers/pmic_glink_altmode/bind: No such file or directory
+104-     pmic_glink.altmode.0>bind_rc=1
+105-[B'] aux now: aux_bridge... aux_hpd_bridge... pmic_glink.altmode.0[pmic_glink_altmode.pmic_glink_altmode] pmic_glink.power-supp...  (всё по-прежнему привязано)
+106-[5] usb1/usb2 ; [6] port0 ori=normal ; [P] v=5063000 ; [PDR] [3.579534] dec=536870911
+107:[UL] 52.736372 Warn: icm_ncp_stby_main ... ; 52.736376 sm_state_loop: charger state: ev...
+108-     52.736379 battman_adc_read nCode=4576 nPhysical=5062 ; 52.736383 battman_adc_read-286 pAdcRead5062
+109-##### END DIAG24 #6 #####
+110-=> ВЫВОД: B' ФАКТИЧЕСКИ НЕ ВЫПОЛНЕН (rc=1, «No such file or directory»).
+111-
+112-----------------------------------------------------------------------------
+113-ПРОГОН C — #7 [up 68.33s]   (действие B'' ВЫПОЛНИТЬ НЕ УДАЛОСЬ — ТОТ ЖЕ БАГ)
+114-----------------------------------------------------------------------------
+115-[MK] >>> готовься: на след. экране — replug #2 (основная флешка) <<<
+116-[3] ROOT: MISSING ; [E] [46.005329] 0x2002a0 ; [E2] port-change=1 new-dev=0 ; [H] NONE CCS=0
+117-[B''] unbind typec-владельцев (ADSP не трогаем):
+118-     line 55: /sys/bus/auxiliary/drivers/pmic_glink_ucsi/unbind: No such file or directory   -> pmic_glink.ucsi.0>ub_rc=1
+119-     line 55: /sys/bus/auxiliary/drivers/pmic_glink_altmode/unbind: No such file or directory -> pmic_glink.altmode.0>ub_rc=1
+120-     line 55: /sys/bus/auxiliary/drivers/pmic_glink_power_supply/unbind: No such file or directory -> pmic_glink.power-supply.0>ub_rc=1
+121-[B''] aux now: все 6 по-прежнему привязаны
+122-[B''] typec class: port0 port0-partner

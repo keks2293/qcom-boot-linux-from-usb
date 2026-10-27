@@ -1,0 +1,168 @@
+# Прогон J — dbg31 (17 окт): минимальный рычаг T (role swap), фото единственного экрана
+
+Образ: `diag/KERNEL.ci-5d953ca-dbg31`, 148343504 Б, md5 `32c7e831e3c0a7a17d95ef76bb6d1bcb`,
+sha256 `83e71786c78b80151cec8e39ea1cb4a8f5c175f26e03c91204b745baf1dbd768`
+(на флешке 17 окт 12:41, md5/sha256 сверены обе стороны).
+Протокол: один бут, ручные реконекты НЕ выполнялись.
+Бут НЕ сообщён (и невозможен по данным ниже: роли не изменились, CCS=0, 0 событий шины).
+
+## Транскрипция (OCR фото; «X A B Y» в начале кадра = кнопки устройства/охват фото, не экран)
+
+```
+RP6 DIAG31: TYPE-C ROLE SWAP
+[T] start up=5.57s
+>>> BEFORE <<<
+[6] typec:
+  power_role=[source] sink
+  data_role=[host] device
+  orientation=normal
+  power_operation_mode=usb_power_delivery
+  partner=PRESENT
+[P] vbat=4023196 vusb=5060000
+[X] portsc: xhci-hcd.0.auto/port01=0x000002a0{CCS=0 PLS=RxDetect CSC=0 CEC=0 PLC=0 SPD=0}
+            xhci-hcd.0.auto/port02=0x000002a0{CCS=0 PLS=RxDetect CSC=0 CEC=0 PLC=0 SPD=0}
+[E2] pc=0 nd=0 ef=0
+>>> STEP 1: power_role source->sink->source <<<
+[T1] current=[source] sink
+[T1] rc_sink=1 err=/usr/bin/dracut-initqueue: line 49: echo: write error: Communication error on send
+[T1] during_sink: role=[source] sink vusb=5064000
+[T1] rc_source=0 err=none
+[T1] after_source: role=[source] sink
+>>> STEP 2: data_role host->device->host <<<
+[T2] current=[host] device
+[T2] rc_device=1 err=/usr/bin/dracut-initqueue: line 60: echo: write error: Connection timed out
+[T2] rc_host=1 err=/usr/bin/dracut-initqueue: line 63: echo: write error: Connection timed out
+[T2] after=[host] device
+>>> AFTER <<<
+[6] typec:  (без изменений: [source]/[host]/normal/usb_power_delivery/partner=PRESENT)
+[P] vbat=4020471 vusb=5062000
+[X] portsc: оба порта 0x000002a0 (CCS=0 PLS=RxDetect)
+[E2] pc=0 nd=0 ef=0
+[S] final role=source OK
+[T] done up=27.16s
+RP6 DIAG31: ROLE SWAP COMPLETE
+```
+
+Примечания к транскрипции:
+- `port_type` в [6] отсутствует **как ожидается**: атрибут существует в class.c (`dev_attr_port_type`,
+  `port_type_store` :1860, список :2042), НО `typec_attr_is_visible` (class.c:2068-2071) возвращает
+  режим **0** (невидим), если драйвер не даёт `ops->port_type_set`; `ucsi_ops` (ucsi.c:1794-1797)
+  содержит только `.dr_set`/`.pr_set` ⇒ файла нет ⇒ `[ -f ]`-гард блока молчит. Не провал пробы.
+  DRP-статус порта доказан двумя другими путями: двухстрочный `power_role` `[source] sink`
+  печатается только при `port->cap->type == TYPEC_PORT_DRP` (class.c:1851-1853) и запись прошла
+  гейт `port->port_type != TYPEC_PORT_DRP → -EOPNOTSUPP` (class.c:1829-1834).
+- Строки `[X] portsc` в формате `0x000002a0{CCS=0 PLS=RxDetect CSC=0 CEC=0 PLC=0 SPD=0}` = вывод
+  awk-декодера `psc_decode` блока — **awk работал на устройстве** (см. разбор «отзыва» ниже).
+
+## Код-маппинг (linux/ v7.2.6, локальный клон)
+
+### 1. Все гейты store прошли — рычаг доходит до ядра UCSI (ветка (a) «гейт» отклонена)
+`power_role_store` (class.c:1807-1844):
+- (1) `ops->pr_set` = `ucsi_pr_swap` есть (ucsi.c:1794-1797) — иначе -EOPNOTSUPP;
+- (2) `port->pwr_opmode != TYPEC_PWR_MODE_PD → -EIO` (class.c:1819-1822) — **прошёл**: получено
+  -ECOMM, а не -EIO; фото: `power_operation_mode=usb_power_delivery`;
+- (3) разбор роли (1824-1826);
+- (4) `port->port_type != TYPEC_PORT_DRP → -EOPNOTSUPP` (1829-1834) — **прошёл**;
+- (5) `pr_set(port, ret)` = `ucsi_pr_swap` → там и образовалась ошибка.
+`data_role_store` → `ucsi_dr_swap`: партнёр есть (`con->partner` — иначе -ENOTCONN, ucsi.c:1711-1714).
+
+### 2. rc_sink=1, «Communication error on send» = -ECOMM(70), источник — ОШИБОЧНЫЙ СТАТУС ППМ
+- **errno-маппинг доказан эмпирически:** `/usr/bin/sh` в initramfs = симлинк 4 Б `bash`
+  (`usr/bin/bash` в cpio, aarch64); формат сообщения `dracut-initqueue: line N: echo: write error: …`
+  = bash; строка `Communication error on send` найдена в `usr/lib64/libc.so.6` (aarch64 glibc,
+  main-cpio сплайс-образа) среди **соседей errlist**: ENOPKG(65) «Package not installed»,
+  ENONET(66) «Machine is not on the network», ENOLINK(67) «Link has been severed», EADV(68),
+  ESRMNT(69), **ECOMM(70) «Communication error on send»**, EPROTO(71) «Protocol error»,
+  EMULTI(72) «Multihop attempted». (Это НЕ «Input/output error»=EIO(5) и НЕ «Connection timed out»=
+  ETIMEDOUT(110) — у каждого своя строка; фото-строка sink и data-строки различаются.)
+- **Единственный источник -ECOMM во всём typec-дереве** — `ucsi_read_error()`,
+  `case UCSI_ERROR_CC_COMMUNICATION_ERR: return -ECOMM;` (ucsi.c:185-186; бит = BIT(4), ucsi.h:229).
+  Путь: `ucsi_pr_swap` (ucsi.c:1760-1770: PWR_DIR≠SINK ⇒ команда
+  `UCSI_SET_PDR|ROLE(SINK)|ACCEPT_ROLE_SWAPS`) → `ucsi_role_cmd` → `ucsi_send_command` →
+  `ucsi_send_command_common` (ucsi.c:226-266): `ucsi_run_command` вернул CCI с битом
+  `UCSI_CCI_ERROR` (BIT(30), ucsi.h:59) ⇒ `ucsi_read_error` (вызов :261) ⇒ PPM по
+  `UCSI_GET_ERROR_STATUS` отчитал **ровно BIT(4)** (switch по точному значению; если бы стояло
+  несколько бит — default → -EIO; других swap-бит — PARTNER_REJECTED_SWAP BIT(9) ucsi.h:234,
+  PPM_POLICY_CONFLICT BIT(11) :236, SWAP_REJECTED BIT(12) :237 — нет).
+- **Интерпретация:** команда ДОШЛА до PPM/ADSP (glink-транспорт жив: PPM выполнил команду и
+  ответил), PPM поставил CCI_ERROR и сообщил статус «CC communication error» — попытка
+  source→sink завершилась ошибкой на CC-линии. Role swap — это PD-переговоры с партнёром;
+  наша флешка — пассивный UFP без PD-контроллера, участвовать в свапе не может; при этом
+  **PPM видит партнёра НЕ как UFP/DFP** (см. п.3) — т.е. «USB2-партнёр», с которым PD-свап
+  невозможен в принципе. Дополнительно (P-06): tcpc_cfg ADSP (`en-src=0 en-snk=1`) внутренне
+  противоречит фактической source-работе — политика PPM подозрительна. В любом случае:
+  отказ — на стороне ADSP-файрвара, не AP.
+
+### 3. rc_source=0 = kernel NO-OP, а не «PPM принял source»
+`ucsi_pr_swap` (ucsi.c:1760-1763): `cur_role = UCSI_CONSTAT(con, PWR_DIR); if (cur_role == role)
+goto out_unlock;` — PWR_DIR в состоянии PPM **уже SOURCE** (PPM действительно сортит VBUS) ⇒
+запись `source` вернула 0, не отправив НИ ОДНОЙ команды. (В самом `power_role_store` no-op'а
+нет — он всегда вызывает `pr_set`; short-circuit в `ucsi_pr_swap`.)
+
+### 4. rc_device=rc_host=1, «Connection timed out» = -ETIMEDOUT: PPM не завершил SET_UOR
+`ucsi_dr_swap` (ucsi.c:1702-1744):
+- short-circuit по `PARTNER_TYPE` (:1716-1721: DFP(1)+DEVICE или UFP(2)+HOST → no-op rc=0)
+  **не сработал ни на одной записи** (обе ушли в PPM) ⇒ PPM-`PARTNER_TYPE` ∉ {DFP, UFP} ⇒
+  = 0 (USB2) или ≥3 (CABLE/DEBUG/AUDIO, ucsi.h:361-366) — для пассивной флешки разумно
+  **0 = USB2**: PPM классифицирует партнёра как legacy USB2-устройство (без PD) — согласуется
+  с п.2 (PPM не может вести PD-свап с «USB2-партнёром»).
+- `SET_UOR|ROLE|ACCEPT` → `ucsi_role_cmd` (:1728). Два кандидата на -ETIMEDOUT:
+  (a) таймаут ВНУТРИ `ucsi_send_command`: ожидание `UCSI_TIMEOUT_MS=10000` в
+      `ucsi_sync_control_common` (ucsi.c:29, :93-96) — PPM не завершил команду; тогда
+      `ucsi_role_cmd` (:1687-1697) выполнил recovery: `ucsi_reset_ppm()` +
+      `SET_NOTIFICATION_ENABLE` + `ucsi_reset_connector(con, true)`;
+  (b) команда завершилась БЕЗ ошибки, но `wait_for_completion_timeout(&con->complete,
+      UCSI_SWAP_TIMEOUT_MS=5000)` (:1734-1736, константа :38) не дождались нотификации PPM
+      (complete срабатывает только по POWER_DIR_CHANGE :1490-1491 / PARTNER_CHANGE :1525-1526).
+- **Тайминг фото:** блок 5.57→27.16 = 21.59 с; сплепы 6 с; снимки ~2-3 с ⇒ 4 записи ≈ 13-15 с.
+  Вариант (a)+(a) (10+10 с) не вписывается (блок был бы ~28 с); вписывается 5+10 (a) или 5+5 (b).
+  Точная атрибуция неразличима по фото (OCR-таймстемпы) — **закрыть dmesg-захватом в dbg32**
+  (в прогоне J dmesg вокруг свапа не целился — блок минимальный).
+
+### 5. Итог бута
+Роли не изменились (`[source]/[host]` до и после); VBUS не падал (5060→5064→5062 мВ —
+свап не выполнен, PPM держит контракт); CCS=0 на обоих портах (0x2a0, PLS=RxDetect);
+`pc=0 nd=0 ef=0`; `[S] final role=source OK` (safety-net не понадобился — порт и так остался
+source). Бута нет и быть не могло: ни CC-edge, ни пере-маршрутизации D+/D− не произошло.
+
+## Вердикт
+
+Ветка **(b) в уточнённой форме**: рычаг T ДОХОДИТ до PPM (все AP-гейты прошли, glink-транспорт
+жив, PPM отвечает на команды), но **PPM/ADSP не выполняет свап ролей**:
+- `SET_PDR(SNK)` → PPM: CCI_ERROR + статус `UCSI_ERROR_CC_COMMUNICATION_ERR` (BIT(4)) → -ECOMM(70);
+- `SET_UOR`×2 → PPM не завершает (нет completion/нотификации) → -ETIMEDOUT;
+- `source` — no-op ядра (PWR_DIR уже SOURCE), VBUS/роли не изменились.
+
+Интерпретация: power role swap = PD-переговоры с партнёром; пассивная флешка (без PD) не может
+в них участвовать, и PPM-вид партнёра — «USB2» (не UFP) — согласуется с этим; при этом tcpc_cfg
+ADSP (en-src=0/en-snk=1, P-06) противоречит фактической source-работе порта. Блокер — на стороне
+ADSP-файрвара (PPM/TCPC), не AP.
+
+**Все AP-side рычаги исчерпаны:** B (E/F), B′ (E/F), B″ (E/F), C (F), H (P, прогон H), T (I/J).
+**Следующий шаг — dbg32 = репак `adsp_dtb.mbn` (`tcpc_cfg en-src=1/en-snk=0`, P-06)** — теперь с
+острее гипотезой: поведение PPM (и CC-ошибка свапа, и cold-boot-энумерация) может управляться
+именно tcpc_cfg. Обязательные доработки блока dbg32: (1) **dmesg-захват вокруг свапа**
+(`dmesg | grep -iE 'ucsi|pmic_glink|PPM|role|swap|error'` — в J контекст ECOMM в ядре потерян;
+также атрибуция 5s/10s по п.4); (2) `[UL]` pmic_pdcharger_ulog (ADSP-side лог).
+Риск — ADSP не поднимется (держать бэкап; фолбэк-образ = текущий dbg31).
+
+## Разбор «отзыва» (17 окт, пользователь) — оба «фикса» не нужны
+
+Отзыв писался как будто dbg31 ещё не отбушен; прогон J уже выполнен, и фото опровергает обе
+«критики»:
+
+1. **«awk нет в initramfs» (§6.2) — опровергнуто дважды:** (1) `usr/bin/awk` (и `usr/bin/sed`)
+   **есть** в main-cpio сплайс-образа (проверено по cpio 17 окт; отсутствует `head`/`wc`/`date`
+   — эта часть §6.2 верна); (2) строки `[X] portsc` на фото — **сам вывод awk** `psc_decode`
+   (формат `0x000002a0{CCS=0 PLS=RxDetect CSC=0 CEC=0 PLC=0 SPD=0}`), т.е. awk реально отработал
+   на устройстве. §6.2 исправлен с доказательством. (Отзыв также не точно описывает сырой
+   формат файла: он `0x%08x Speed=%d Link=… <флаги>`, токен «CCS» только при бит0=1 —
+   `xhci_decode_portsc` xhci.h:2402, xhci-debugfs.c:326-340; не влияет на решение.)
+2. **Предложенный синтаксис `E=$(echo sink > "$PR" 2>&1); rc=$?` — хуже исходного:** `2>&1` ПОСЛЕ
+   `> "$PR"` направляет stderr в ФАЙЛ, а не в capture ⇒ `E` всегда пуст, а при ошибке текст
+   ошибки дописывается В sysfs-файл (мусор после `sink\n` в store). Доказано локально (bash,
+   `/dev/full`): форма отзыва → `E=[] rc=1`; форма образа `E=$( { echo …; } 2>&1 ); rc=$?` →
+   `E` поймал текст. На устройстве форма образа поймала текст — это и есть строки `err=…`
+   на фото. (Собственно, «критическая ошибка» не реализовалась: портsc на месте, err= на месте.)
+
+Вывод: пересборка по отзыву не требуется; образ на флешке (dbg31) корректен и отбушен.

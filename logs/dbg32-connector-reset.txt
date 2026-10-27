@@ -1,0 +1,90 @@
+Прогон K — dbg32 (UCSI CONNECTOR_RESET), 17 окт 2026
+Протокол: один бут, флешка втыкалась холодно, ручных реконектов НЕ выполнялось.
+Бута НЕТ (со слов пользователя).
+Фото OCR (транскрипция пользователя; известные артефакты OCR этого фото: «BPG» = «RP6»,
+«[G]» = «[6]», «[T]» = «[R]», «cf» = «ef», «rsp-cat:» = «rsp=cat:», «[   ][dmesg» = «[D] dmesg»).
+
+BEFORE <<<
+[6] typec: power_role=[source] sink| data_role=[host] device| orientation=normal| power_operation_mode=usb_power_delivery| partner=PRESENT
+[P] vusb=5070000
+[X] portsc: xhci-hcd.0.auto/port01=0x000002a0(CCS=0 PLS=RxDetect CSC=0 CEC=0 PLC=0 SPD=0) xhci-hcd.0.auto/port02=0x000002a0(CCS=0 PLS=RxDetect CSC=0 CEC=0 PLC=0 SPD=0)
+[E2] pc=0 nd=0 ef=0
+[R] dev-pmic_glink.ucsi.0 cmd-file=/sys/kernel/debug/usb/ucsi/pmic_glink.ucsi.0/command
+[R] cmd=0x00010003 rc=0 err=none rsp=0x00000000000000000000000000000000
+[R] after: new-dev=0 ccs1=0 vusb=5064000 partner=PRESENT
+[R] cmd=0x00800003* rc=1 err=/usr/bin/dracut-initqueue: line 86: echo: write error: Connection timed out rsp=cat: /sys/kernel/debug/usb/ucsi/pmic_glink.ucsi.0/response: No such file or directory
+[R] after: new-dev=0 ccs1=0 vusb=5066000 partner=PRESENT
+[R] cmd=0x00020003 rc=0 err=none rsp=0x00000000000000000000000000000000
+[R] after: new-dev=0 ccs1=0 vusb=5063000 partner=PRESENT
+AFTER <<<
+[6] typec: power_role=[source] sink| data_role=[host] device| orientation=normal| power_operation_mode=usb_power_delivery| partner=PRESENT
+[P] vusb=5064000
+[X] portsc: xhci-hcd.0.auto/port01=0x000002a0(CCS=0 PLS=RxDetect CSC=0 CEC=0 PLC=0 SPD=0) xhci-hcd.0.auto/port02=0x000002a0(CCS=0 PLS=RxDetect CSC=0 CEC=0 PLC=0 SPD=0)
+[E2] pc=0 nd=0 ef=0
+[D] dmesg (attribution, tail-16):
+[     0.064314] /pmic-glink/connector@0: Fixed dependency cycle(s) with /soc@0/phy@88e8000
+[     0.064445] /pmic-glink/connector@0: Fixed dependency cycle(s) with /soc@0/usb@a600000
+[     0.064669] /pmic-glink/connector@0: Fixed dependency cycle(s) with /usb0-sbu-mux
+[     0.064922] /usb0-sbu-mux: Fixed dependency cycle(s) with /pmic-glink/connector@0
+[     0.096963] WARNING: drivers/clk/qcom/clk-rcg2.c:136 at update_config+0xdc/0x100, CPUs7: swapper/0/1
+[     0.096188] CPU: 7 UID: 0 PID: 1 Comm: swapper/0 Tainted: G S                  7.2.6 #1 PREEMPT
+[     0.204027] qcom_pmic_glink pmic-glink: Failed to create device link (0x180) with supplier 88c0000.phy for /pmic-glink/connector@0
+[     0.308653] qcom_pmic_glink pmic-glink: Failed to create device link (0x180) with supplier a600000.usb for /pmic-glink/connector@0
+[     0.307680] qcom_pmic_glink pmic-glink: Failed to create device link (0x180) with supplier usb0-sbu-mux for /pmic-glink/connector@0
+[     0.931014] systemd[1]: Reached target swap.target - Swaps.
+[UL] adsp ulog (tail-6, cut-200):
+NONE (пусто: ADSP не логирует / канал ещё не поднят)
+[S] final role=source partner=PRESENT OK
+[R] done up=28.08s
+===== RP6 DIAG32: CONNECTOR_RESET COMPLETE =====
+
+* На фото «cmd=0x00000003» — почти наверняка OCR-пропуск «8» от «0x00800003»: цикл блока
+  был ровно `for c in 0x00010003 0x00800003 0x00020003` (repack_adsp_dbg32.py:133),
+  и на том же фото другие OCR-пропуски (BPG/[G]/[T]/cf).
+
+РАЗБОР (код v7.2.6 + данные):
+- 0x00010003 (port0): PPM ПРИНЯЛ (rc=0, CCI завершена, rsp=32 нуля), ЭФФЕКТ НУЛЕВОЙ:
+  нового attach нет, VBUS не падал (5064000), port-событий нет, CCS=0, partner=PRESENT
+  (без флэпа). PPM «принял» reset, но attach не перезапускал (CC-активности ноль).
+- 0x00800003 (port0): PPM НЕ ЗАВЕРШИЛ команду — 10-с CCI-таймаут → -ETIMEDOUT(110)
+  «Connection timed out» (errno 110 по glibc errlist в initramfs).
+  В этот момент файл `response` ПРОПАЛ: «cat: …/response: No such file or directory».
+  Код-объяснение:
+  (1) CCI-timeout-путь `ucsi_sync_control_common` (ucsi.c:65-118) МОЛЧАЛ: нет dev_err,
+      нет PPM-reset — только -ETIMEDOUT + clear_bit ⇒ отсутствие «Timeout in command»
+      в dmesg ОЖИДАЕМО (в отличие от предположения в разборе J, у 7.2.6 таймаут-путь
+      ничего не печатает);
+  (2) debugfs ucsi уничтожается только в `ucsi_unregister` → `ucsi_debugfs_unregister`
+      (ucsi.c:2361-2374; глобальный `ucsi_debugfs_exit` — только в module_exit, а ucsi
+      здесь BUILTIN ⇒ на per-device dentry и смотрим);
+  (3) `ucsi_unregister` вызывает `pmic_glink_ucsi_register` (ucsi_glink.c:313-328) при
+      `pd_running=false`; `pd_running` ставится `pmic_glink_ucsi_pdr_notify`
+      (ucsi_glink.c:350-359) на смене PDR-состояния (pmic_glink_state_notify_clients,
+      pmic_glink.c:215-230).
+  ⇒ сервис charger-PD ADSP (PDR) УШЁЛ В DOWN и ВЕРНУЛСЯ В UP: PDR DOWN →
+    ucsi_unregister (debugfs исчез, typec-порт удалён) → PDR UP → ucsi_register
+    (debugfs создан заново, порт создан заново, partner пере-детектирован PRESENT).
+    Т.е. ADSP/PPM упал или завис на data-reset-команде — ТРЕТЬЕ проявление
+    неисправности PPM (после J: отказ свапа CC_COMMUNICATION_ERR и незавершение SET_UOR).
+- 0x00020003 (port1): принят (rc=0, rsp=нуля) — устройство уже пере-зарегистрировано
+  (re-probe уложился в ~4 с: sleep 4 после cmd2); эффект снова нулевой
+  (new-dev=0, ccs1=0, vusb=5063000, partner=PRESENT).
+- [D] dmesg (узкий grep 'ucsi|pmic_glink|PPM|role|swap|connector|New USB device|Port
+  change|unable to enumerate', tail-16): НИ ОДНОЙ строки после 0.93 с — только ранний
+  fw_devlink «Fixed dependency cycle» (0.06-0.09 с), clk-rcg2 WARNING,
+  «Failed to create device link (0x180)» (0.2-0.3 с) и systemd swap.target (0.93 с).
+  ⚠️ ГРЕП НЕ ПОКРЫВАЛ remoteproc* СТРОКИ — crash/restart ADSP (если был) ВЫПАЛ ИЗ
+  ЗАХВАТА ⇒ слепая зона закрывается полным err-захватом dbg33 (dmesg -l 3).
+- [UL] NONE — ADSP за весь блок ничего о коннекторе не залогировал.
+- ВЕРДИКТ: UCSI CONNECTOR_RESET (в любой из присланных форм) порт НЕ открывает:
+  plain = no-op у PPM (принял, CCI завершена, attach не пере-запущен), bit23 =
+  зависание PPM + PDR down/up. Все AP-side рычаги исчерпаны (B, B′, B″, C, H, T, R)
+  ⇒ остаётся ADSP-сторона: dbg34 = репак adsp_dtb.mbn (tcpc_cfg en-src=1/en-snk=0, P-06).
+- Решение пользователя 17 окт (после K): «убери сброс, давай попробуем убрать
+  usb-role-switch, и будем мониторить все err» ⇒ dbg33 = наблюдательный образ БЕЗ
+  рычагов + полный err-захват. usb-role-switch УБРАН ИЗ АКТИВНОГО DTB ещё сплайсом
+  dbg12 (оба rp6-DTB; прогоны E–K шли БЕЗ него: [X] dt-usb role-switch=no (E/F);
+  dbg10 несплайснутый = defer есть, dbg12+ = defer нет, ABL неизменён ⇒ наличие
+  свойства в активном дереве трекает сплайс, а не ABL) ⇒ «попробовать убрать» =
+  новый эксперимент не несёт; dbg33 печатает [DT]-строку с конфигурацией активного
+  дерева (dr_mode/usb-role-switch/extcon/status) — доказательство на экране.
