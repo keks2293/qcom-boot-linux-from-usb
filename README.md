@@ -71,6 +71,7 @@ window around the attach. See
 - [docs/TEST_METHOD.md](docs/TEST_METHOD.md) — how tests were performed
 - [docs/RESULTS.md](docs/RESULTS.md) — results from dbg50/dbg51
 - [docs/FULL_SYSTEM_COLDPLUG_TEST.md](docs/FULL_SYSTEM_COLDPLUG_TEST.md) — full-system test (remaining measurement)
+- [diagrams/architecture.md](diagrams/architecture.md) — system architecture: what is where (AP/ADSP/hardware layers, the data path and where it is gated, what is identical vs different between the working and failing environments, the lever map)
 - [diagrams/pm-chain.md](diagrams/pm-chain.md) — PM chain and RPM blockers
 
 ## Scripts
