@@ -72,6 +72,8 @@ window around the attach. See
 - [docs/RESULTS.md](docs/RESULTS.md) — results from dbg50/dbg51
 - [docs/FULL_SYSTEM_COLDPLUG_TEST.md](docs/FULL_SYSTEM_COLDPLUG_TEST.md) — full-system test (remaining measurement)
 - [diagrams/architecture.md](diagrams/architecture.md) — system architecture: what is where (AP/ADSP/hardware layers, the data path and where it is gated, what is identical vs different between the working and failing environments, the lever map)
+- [diagrams/icm-state-machine.md](diagrams/icm-state-machine.md) — ICM charger state machine inside the PPM firmware: states, the `ncp_stby` wedge, exit conditions, where the exit inputs come from, the ULog fingerprint
+- [diagrams/charger-type-chain.md](diagrams/charger-type-chain.md) — charger type chain: PM8550B CC/APSD hardware → IRQ dispatcher → charger detection → ICM inputs; levers on the chain; object and function maps (vaddrs)
 - [diagrams/pm-chain.md](diagrams/pm-chain.md) — PM chain and RPM blockers
 
 ## Scripts

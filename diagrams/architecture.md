@@ -134,6 +134,8 @@ USB PHY-port chain**. Both are measurable, neither was measured.
 
 - ADSP internals with vaddrs and evidence: [../docs/ADSP_RE.md](../docs/ADSP_RE.md)
 - PPM config values, container layout, patch recipe: [../docs/ADSP_CONFIG.md](../docs/ADSP_CONFIG.md)
+- ICM charger state machine (the wedge state, exit conditions, fingerprint): [icm-state-machine.md](icm-state-machine.md)
+- Charger type chain (PMIC HW → dispatcher → detection → ICM inputs, levers): [charger-type-chain.md](charger-type-chain.md)
 - PM chain / runtime-PM blockers: [pm-chain.md](pm-chain.md)
 - Hypotheses, run table, actor hunt: [../docs/INVESTIGATION.md](../docs/INVESTIGATION.md)
 - Raw evidence: [../logs/](../logs/) (initramfs runs), [../logs/adsp-re/](../logs/adsp-re/) (firmware RE)
