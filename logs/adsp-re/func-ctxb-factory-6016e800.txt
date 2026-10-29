@@ -1,0 +1,158 @@
+# ctxB object creation — the boot-time one-shot chain (excerpts)
+# Evidence: singleton factory 0x6016e800 (*0x60338c40 occupied -> 0x202 EEXIST; else
+# alloc(0x108) -> *0x60338c40, memset 0x60086ad0, callr ctor 0x6016a7c0(ctxB, 0x7));
+# the two wrapper call sites 0x60044810 / 0x60059b90 (r0 = ##0x6016a7c0; r1 = 0x7;
+# call 0x6016e800); the stage-dispatch registrations (stage = ctx->+0x340, default 3:
+# stage==3 -> 0x6002e0b0, stage==4 -> 0x6004eca0); battmngr_init 0x6002ad50 called
+# from the same service-table init that opens the property channel (0x6012b204 +
+# 0x6012b020); constructor tail (vtable fill, +0xc0 = notify 0x6016c070, post-init
+# calls 0x6016c960/0x6016cba0/0x6016c120).
+# => the charger-type check object is created exactly once at ADSP boot; the runtime
+# "charger_type updated" can only arrive as a property-service push.
+
+--- singleton factory 0x6016e800 (full):
+1061755: 6016e800:	02 c0 9d a0	a09dc002 { 	allocframe(#0x10) }
+1061756: 6016e804:	fe e0 9e a7	a79ee0fe { 	memw(r30+#-0x8) = r0 }
+1061757: 6016e808:	fd e1 9e a7	a79ee1fd { 	memw(r30+#-0xc) = r1 }
+1061758: 6016e80c:	31 4e 03 06	06034e31 { 	immext(#0x60338c40)
+1061759: 6016e810:	02 c0 80 49	4980c002   	r2 = memw(##0x60338c40) }
+1061760: 6016e814:	00 c0 02 75	7502c000 { 	p0 = cmp.eq(r2,#0x0) }
+1061761: 6016e818:	00 c0 c0 6b	6bc0c000 { 	p0 = not(p0) }
+1061762: 6016e81c:	0e c0 00 5c	5c00c00e { 	if (p0) jump:nt 0x6016e838 <PT_LOAD#19+0x16e838> }
+1061763: 6016e820:	02 c0 00 58	5800c002 { 	jump 0x6016e824 <PT_LOAD#19+0x16e824> }
+1061764: 6016e824:	c2 ff 9e 97	979effc2 { 	r2 = memw(r30+#-0x8) }
+1061765: 6016e828:	00 c0 02 75	7502c000 { 	p0 = cmp.eq(r2,#0x0) }
+1061766: 6016e82c:	00 c0 c0 6b	6bc0c000 { 	p0 = not(p0) }
+1061767: 6016e830:	0c c0 00 5c	5c00c00c { 	if (p0) jump:nt 0x6016e848 <PT_LOAD#19+0x16e848> }
+1061768: 6016e834:	02 c0 00 58	5800c002 { 	jump 0x6016e838 <PT_LOAD#19+0x16e838> }
+1061769: 6016e838:	c2 ff fe bf	bffeffc2 { 	r2 = add(r30,#-0x2) }
+1061770: 6016e83c:	08 40 00 00	00004008 { 	immext(#0x200)
+1061771: 6016e840:	02 c0 22 3c	3c22c002   	memh(r2+#0x0) = ##0x202 }
+1061772: 6016e844:	36 c0 00 58	5800c036 { 	jump 0x6016e8b0 <PT_LOAD#19+0x16e8b0> }
+1061773: 6016e848:	00 e1 00 78	7800e100 { 	r0 = #0x108 }
+1061774: 6016e84c:	ea ed e2 5b	5be2edea { 	call 0x60084420 <PT_LOAD#19+0x84420> }
+1061775: 6016e850:	31 4e 03 06	06034e31 { 	immext(#0x60338c40)
+1061776: 6016e854:	00 c0 80 48	4880c000   	memw(##0x60338c40) = r0 }
+1061777: 6016e858:	31 4e 03 06	06034e31 { 	immext(#0x60338c40)
+1061778: 6016e85c:	02 c0 80 49	4980c002   	r2 = memw(##0x60338c40) }
+1061779: 6016e860:	00 c0 02 75	7502c000 { 	p0 = cmp.eq(r2,#0x0) }
+1061780: 6016e864:	00 c0 c0 6b	6bc0c000 { 	p0 = not(p0) }
+1061781: 6016e868:	0c c0 00 5c	5c00c00c { 	if (p0) jump:nt 0x6016e880 <PT_LOAD#19+0x16e880> }
+1061782: 6016e86c:	02 c0 00 58	5800c002 { 	jump 0x6016e870 <PT_LOAD#19+0x16e870> }
+1061783: 6016e870:	c2 ff fe bf	bffeffc2 { 	r2 = add(r30,#-0x2) }
+1061784: 6016e874:	08 40 00 00	00004008 { 	immext(#0x200)
+1061785: 6016e878:	00 c0 22 3c	3c22c000   	memh(r2+#0x0) = ##0x200 }
+1061786: 6016e87c:	1a c0 00 58	5800c01a { 	jump 0x6016e8b0 <PT_LOAD#19+0x16e8b0> }
+
+--- wrapper call site 1 in stage-3 batch (0x60044810..0x60044834):
+756607: 60044810:	01 c0 9d a0	a09dc001 { 	allocframe(#0x8) }
+756608: 60044814:	c2 ff fe bf	bffeffc2 { 	r2 = add(r30,#-0x2) }
+756609: 60044818:	00 c0 22 3c	3c22c000 { 	memh(r2+#0x0) = #0x0 }
+756610: 6004481c:	9f 5a 01 06	06015a9f { 	immext(#0x6016a7c0)
+756611: 60044820:	00 c0 00 78	7800c000   	r0 = ##0x6016a7c0 }
+756612: 60044824:	e1 c0 00 78	7800c0e1 { 	r1 = #0x7 }
+756613: 60044828:	ec cf 25 5a	5a25cfec { 	call 0x6016e800 <PT_LOAD#19+0x16e800> }
+756614: 6004482c:	ff e0 5e a7	a75ee0ff { 	memh(r30+#-0x2) = r0 }
+756615: 60044830:	e0 ff 5e 97	975effe0 { 	r0 = memh(r30+#-0x2) }
+756616: 60044834:	1e c0 1e 96	961ec01e { 	dealloc_return }
+756617: 60044838:	00 c0 00 7f	7f00c000 { 	nop }
+756618: 6004483c:	00 c0 00 7f	7f00c000 { 	nop }
+756619: 60044840:	01 c0 9d a0	a09dc001 { 	allocframe(#0x8) }
+
+--- wrapper call site 2 in stage-4 batch (0x60059b90..0x60059bb4):
+778335: 60059b90:	01 c0 9d a0	a09dc001 { 	allocframe(#0x8) }
+778336: 60059b94:	c2 ff fe bf	bffeffc2 { 	r2 = add(r30,#-0x2) }
+778337: 60059b98:	00 c0 22 3c	3c22c000 { 	memh(r2+#0x0) = #0x0 }
+778338: 60059b9c:	9f 5a 01 06	06015a9f { 	immext(#0x6016a7c0)
+778339: 60059ba0:	00 c0 00 78	7800c000   	r0 = ##0x6016a7c0 }
+778340: 60059ba4:	e1 c0 00 78	7800c0e1 { 	r1 = #0x7 }
+778341: 60059ba8:	2c e6 22 5a	5a22e62c { 	call 0x6016e800 <PT_LOAD#19+0x16e800> }
+778342: 60059bac:	ff e0 5e a7	a75ee0ff { 	memh(r30+#-0x2) = r0 }
+778343: 60059bb0:	e0 ff 5e 97	975effe0 { 	r0 = memh(r30+#-0x2) }
+778344: 60059bb4:	1e c0 1e 96	961ec01e { 	dealloc_return }
+778345: 60059bb8:	00 c0 00 7f	7f00c000 { 	nop }
+778346: 60059bbc:	00 c0 00 7f	7f00c000 { 	nop }
+778347: 60059bc0:	01 c0 9d a0	a09dc001 { 	allocframe(#0x8) }
+
+--- stage-dispatch: stage==3 registration (0x6002b168..0x6002b194):
+730580: 6002b164:	02 c0 00 58	5800c002 { 	jump 0x6002b168 <PT_LOAD#19+0x2b168> }
+730581: 6002b168:	14 60 02 06	06026014 { 	immext(#0x60280500)
+730582: 6002b16c:	02 c7 00 78	7800c702   	r2 = ##0x60280538 }
+730583: 6002b170:	82 4b 00 06	06004b82 { 	immext(#0x6002e080)
+730584: 6002b174:	30 c0 42 3c	3c42c030   	memw(r2+#0x0) = ##0x6002e0b0 }
+730585: 6002b178:	14 60 02 06	06026014 { 	immext(#0x60280500)
+730586: 6002b17c:	82 c7 00 78	7800c782   	r2 = ##0x6028053c }
+730587: 6002b180:	cf 4c 00 06	06004ccf { 	immext(#0x600333c0)
+730588: 6002b184:	00 c0 42 3c	3c42c000   	memw(r2+#0x0) = ##0x600333c0 }
+730589: 6002b188:	15 60 02 06	06026015 { 	immext(#0x60280540)
+
+--- stage-dispatch: stage==4 registration (0x6002b394..0x6002b3c0):
+730719: 6002b390:	02 c0 00 58	5800c002 { 	jump 0x6002b394 <PT_LOAD#19+0x2b394> }
+730720: 6002b394:	14 60 02 06	06026014 { 	immext(#0x60280500)
+730721: 6002b398:	02 c7 00 78	7800c702   	r2 = ##0x60280538 }
+730722: 6002b39c:	b2 53 00 06	060053b2 { 	immext(#0x6004ec80)
+730723: 6002b3a0:	20 c0 42 3c	3c42c020   	memw(r2+#0x0) = ##0x6004eca0 }
+730724: 6002b3a4:	14 60 02 06	06026014 { 	immext(#0x60280500)
+730725: 6002b3a8:	82 c7 00 78	7800c782   	r2 = ##0x6028053c }
+730726: 6002b3ac:	06 54 00 06	06005406 { 	immext(#0x60050180)
+730727: 6002b3b0:	30 c0 42 3c	3c42c030   	memw(r2+#0x0) = ##0x600501b0 }
+730728: 6002b3b4:	15 60 02 06	06026015 { 	immext(#0x60280540)
+
+--- battmngr_init call in service-table init (0x60025cfc..0x60025d04):
+725176: 60025cf4:	bb 55 02 06	060255bb { 	immext(#0x60256ec0)
+725177: 60025cf8:	00 3c 42 6a	6a423c00   	r2 = ##0x60256ee4; 	allocframe(#0x0) }
+725178: 60025cfc:	2a 68 00 5a	5a00682a { 	call 0x6002ad50 <PT_LOAD#19+0x2ad50>
+725179: 60025d00:	b5 4a 00 06	06004ab5   	immext(#0x6002ad40)
+725180: 60025d04:	10 c0 42 3c	3c42c010   	memw(r2+#0x0) = ##0x6002ad50 }
+725181: 60025d08:	bb 55 02 06	060255bb { 	immext(#0x60256ec0)
+725182: 60025d0c:	22 c4 00 78	7800c422   	r2 = ##0x60256ee1 }
+
+--- constructor: +0xc0 = notify 0x6016c070 (0x6016a9d0..0x6016a9d8):
+1057774: 6016a9cc:	e2 ff 9e 97	979effe2 { 	r2 = memw(r30+#-0x4) }
+1057775: 6016a9d0:	01 5b 01 06	06015b01 { 	immext(#0x6016c040)
+1057776: 6016a9d4:	30 d8 42 3c	3c42d830   	memw(r2+#0xc0) = ##0x6016c070 }
+1057777: 6016a9d8:	e2 ff 9e 97	979effe2 { 	r2 = memw(r30+#-0x4) }
+1057778: 6016a9dc:	04 5b 01 06	06015b04 { 	immext(#0x6016c100)
+
+--- constructor tail: vtable end + post-init calls (0x6016aa38..0x6016aabc):
+1057805: 6016aa48:	22 5b 01 06	06015b22 { 	immext(#0x6016c880)
+1057806: 6016aa4c:	20 dd 42 3c	3c42dd20   	memw(r2+#0xe8) = ##0x6016c8a0 }
+1057807: 6016aa50:	e2 ff 9e 97	979effe2 { 	r2 = memw(r30+#-0x4) }
+1057808: 6016aa54:	80 dd 42 3c	3c42dd80 { 	memw(r2+#0xec) = #0x0 }
+1057809: 6016aa58:	e2 ff 9e 97	979effe2 { 	r2 = memw(r30+#-0x4) }
+1057810: 6016aa5c:	00 de 42 3c	3c42de00 { 	memw(r2+#0xf0) = #0x0 }
+1057811: 6016aa60:	e2 ff 9e 97	979effe2 { 	r2 = memw(r30+#-0x4) }
+1057812: 6016aa64:	80 de 42 3c	3c42de80 { 	memw(r2+#0xf4) = #0x0 }
+1057813: 6016aa68:	e2 ff 9e 97	979effe2 { 	r2 = memw(r30+#-0x4) }
+1057814: 6016aa6c:	00 df 42 3c	3c42df00 { 	memw(r2+#0xf8) = #0x0 }
+1057815: 6016aa70:	e2 ff 9e 97	979effe2 { 	r2 = memw(r30+#-0x4) }
+1057816: 6016aa74:	80 df 42 3c	3c42df80 { 	memw(r2+#0xfc) = #0x0 }
+1057817: 6016aa78:	e2 ff 9e 97	979effe2 { 	r2 = memw(r30+#-0x4) }
+1057818: 6016aa7c:	24 5b 01 06	06015b24 { 	immext(#0x6016c900)
+1057819: 6016aa80:	03 c2 00 78	7800c203   	r3 = ##0x6016c910 }
+1057820: 6016aa84:	40 c3 82 a1	a182c340 { 	memw(r2+#0x100) = r3 }
+1057821: 6016aa88:	e0 ff 9e 97	979effe0 { 	r0 = memw(r30+#-0x4) }
+1057822: 6016aa8c:	6a cf 00 5a	5a00cf6a { 	call 0x6016c960 <PT_LOAD#19+0x16c960> }
+1057823: 6016aa90:	fb e0 5e a7	a75ee0fb { 	memh(r30+#-0xa) = r0 }
+1057824: 6016aa94:	e0 ff 9e 97	979effe0 { 	r0 = memw(r30+#-0x4) }
+1057825: 6016aa98:	84 d0 00 5a	5a00d084 { 	call 0x6016cba0 <PT_LOAD#19+0x16cba0> }
+1057826: 6016aa9c:	62 ff 7e 97	977eff62 { 	r2 = memuh(r30+#-0xa) }
+1057827: 6016aaa0:	02 c0 22 f1	f122c002 { 	r2 = or(r2,r0) }
+1057828: 6016aaa4:	fb e2 5e a7	a75ee2fb { 	memh(r30+#-0xa) = r2 }
+1057829: 6016aaa8:	e0 ff 9e 97	979effe0 { 	r0 = memw(r30+#-0x4) }
+1057830: 6016aaac:	01 c0 00 78	7800c001 { 	r1 = #0x0 }
+1057831: 6016aab0:	38 cb 00 5a	5a00cb38 { 	call 0x6016c120 <PT_LOAD#19+0x16c120> }
+1057832: 6016aab4:	62 ff 7e 97	977eff62 { 	r2 = memuh(r30+#-0xa) }
+1057833: 6016aab8:	02 c0 22 f1	f122c002 { 	r2 = or(r2,r0) }
+1057834: 6016aabc:	fb e2 5e a7	a75ee2fb { 	memh(r30+#-0xa) = r2 }
+1057835: 6016aac0:	60 ff 5e 97	975eff60 { 	r0 = memh(r30+#-0xa) }
+1057836: 6016aac4:	1e c0 1e 96	961ec01e { 	dealloc_return }
+1057837: 6016aac8:	00 c0 00 7f	7f00c000 { 	nop }
+1057838: 6016aacc:	00 c0 00 7f	7f00c000 { 	nop }
+1057839: 6016aad0:	02 c0 9d a0	a09dc002 { 	allocframe(#0x10) }
+1057840: 6016aad4:	fe e0 9e a7	a79ee0fe { 	memw(r30+#-0x8) = r0 }
+1057841: 6016aad8:	c2 fe fe bf	bffefec2 { 	r2 = add(r30,#-0xa) }
+1057842: 6016aadc:	00 c0 22 3c	3c22c000 { 	memh(r2+#0x0) = #0x0 }
+1057843: 6016aae0:	a2 fe fe bf	bffefea2 { 	r2 = add(r30,#-0xb) }
+1057844: 6016aae4:	00 c0 02 3c	3c02c000 { 	memb(r2+#0x0) = #0x0 }
+1057845: 6016aae8:	c0 ff 9e 97	979effc0 { 	r0 = memw(r30+#-0x8) }

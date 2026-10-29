@@ -51,16 +51,73 @@ ICM ncp_stby:  flag(T, ctxB) + chgr_stat + vbat → exit
 PPM opens the USB data path → D+/D- → snps eUSB2 HS PHY → xHCI
 ```
 
-## Who writes the type byte (open question)
+## The type byte: final verdict (static)
 
 | Site | What it does | Status |
 |---|---|---|
-| init `0x6019ffe4` | `memh(##0x603391b8) = (hw & 0xfff0) \| 4` | the only direct write found; the type byte itself is preserved |
+| init `0x6019ffe4` | `memh(##0x603391b8) = (hw & 0xfff0) \| 4` | the **only** write to the type region in the whole disassembly; the type byte itself is preserved (BSS: 0) |
 | clone `0x601bebc0` | copies byte0 + byte1 + +0x8 from a template | called only from `ufcs_init` @0x601be4b0 (per-input slots 0x603396a0 + n·0x1b8) — dead end |
-| APSD result path (candidate) | `battmngr_tech_scpq_chg_r1_get_usb_port_detection` → `PmSchgUsb_GetApsdStatus` / `PmSchgUsb_GetApsdResultStatus` (pm_usb.c); log `apsd_result = %d`; also `PmicTccPlatform_Schg_PDPhy_R1_HW_GetLegacyCableStatus (… apsd_result=%d)` | the mechanism exists in the code; the write of the type byte / property 0x2606 is not yet located |
+| APSD result path | `battmngr_tech_scpq_chg_r1_get_usb_port_detection` → `PmSchgUsb_GetApsdStatus` / `PmSchgUsb_GetApsdResultStatus` (pm_usb.c); log `apsd_result = %d`; `PmicTccPlatform_Schg_PDPhy_R1_HW_GetLegacyCableStatus (… apsd_result=%d)` | the mechanism exists in the code; **no write of the type byte / property 0x2606 located** (0x2606 = PMIC-backed read-only) |
 
-If nothing writes `T`, it stays 0 → "otherwise" branch → flag = 1 forever.
-Same wedge.
+**`T` is static boot config — nothing rewrites it at runtime.** If `T` keeps
+its initial 0, the "otherwise" branch fires → flag = 1 forever. Same wedge.
+
+The *dynamic* part of the chain is **not** the type byte but **property
+0x270b** (charger type / cable-state bits), which the ICM flag function reads
+for valid `T` values (bit 4 = PD types, bit 5 = USB types, bit 7 =
+notify/cable-state). Its value lives in the **central property service**
+(see below); the ADSP holds no local copy and never sets it with a visible id.
+
+## The property layer: RPC to a central property service
+
+```
+ADSP client (ICM / charger stack)                 central property service
+─────────────────────────────────                 (endpoint not distinguishable
+                                                  from the disassembly)
+  GET  0x60169a00(obj, id, &out)
+   └─ state 1: registry lookup 0x60192f40
+        match by table_ptr (ids/tables/entries in BSS:
+        0x60338c69/74/70, entries 0x60338cf0, 0x18 B each)
+        lock (entry+8) → payload 24 B ────────►   stores / computes values
+        (RPC cmd 0x107 via 0x6012b138)            for all clients
+  SET  0x6016a150(obj, id, …)   (~200 callers from
+   └─ state 1: registry SET 0x60192d30              the charger stack, id passed
+        lookup + masked value merge                 dynamically in a register →
+        ─────────────────────────────►              a 0x270b SET is possible but
+        (same RPC cmd 0x107 via 0x601933f0)         statically invisible)
+
+  channel handle: global 0x6024c170 (family 0x6012b008–0x6012b200, the only
+  user); opened at boot (0x6012b020: open {hi=2, lo=4}); commands:
+  0x101, 0x103, 0x104, 0x107 (property access, GET and SET), 0x10a (ACK),
+  0x10b (fire-and-forget), 0x10c
+
+  ◄────────────────────────────────────────────  PUSH: change notifications
+  RX handler 0x6012afc8:                            (callback model)
+   loop { read 48 B @0x600072a0; ACK 0x10a;
+          cb = buf[4]; callr cb(buf[0], buf+8, buf+0x28) }
+        └─ … → ctxB->+0xc0 notify 0x6016c070
+             (GET 0x270b → post events 0x7e42 / 0x7ee5)
+             └─ the "charger_type updated" event the ICM waits for
+```
+
+Boot order (all in the service-table init, fn 0x60025bc0 area):
+`0x6012b204` (RX registration, cb 0x6012b280 on cmd 0x103, second channel
+global 0x6032cf0c) → `0x6012b020` (channel open + RX handler 0x6012afc8
+registration) → `battmngr_init` 0x6002ad50 → client object (0x798 B,
+`*0x60256ee8`) → stage dispatch 0x6002b030 (stage = ctx->+0x340, default 3)
+→ init batch (stage 3: 0x6002e0b0 / stage 4: 0x6004eca0) → **singleton
+factory 0x6016e800** → ctxB (0x108 B, `*0x60338c40`, ctor 0x6016a7c0). The
+factory returns 0x202 (EEXIST) on repeat ⇒ the ctxB object is created
+**exactly once at ADSP boot**; no re-creation at runtime.
+
+**So "who pulls the charger type" (final answer):** the value is held and
+updated on the property-service side; the ADSP only GETs it and reacts to its
+pushes. The trigger that makes the service re-evaluate and push a 0x270b
+update is a **behavioral/timing event sequence of the AP-side USB/charger
+stack** in the working environment — not statically identifiable (ADSP
+endpoint opaque; AP-side actor hunt negative in all four zones: dracut
+config/modules, kernel modules, udev rules, userspace daemons). Only the
+full-system cold-plug / fresh-edge measurements can capture it.
 
 ## Levers on this chain
 
@@ -101,11 +158,11 @@ Same wedge.
 | `icm_ctx` | 0x603390ec | — | +0x0 event base; +0xc state (1/2/3/4); +0x10 → state-obj 0x60339110; +0x14 → screening fn 0x601a00e0; +0x1c → ChgIcmCfg 0x603391b8 |
 | `ChgIcmCfg` | 0x603391b8 | 440 B | +0x0 count nibble; **+0x1 type T**; +0x14 changed; +0x20, +0x24 data |
 | `ctxA` (heap) | \*0x60334ab8 | 0x7c | +0x0 obj-type=7; +0x1 (prop 0x105: 0x32/0x47); +0x15 (prop 0x103); +0x19 threshold select; +0x24 enable; **+0x4c = chgr_stat fn 0x601486d0** |
-| `ctxB` (heap) | \*0x60338c40 | 0x108 | +0x1, +0x15 (==1 → property 0x270b path); +0x1c/+0x20/+0x34 data words (ICM queries 0x6016d2f0/0x6016d350/0x6016d550); **+0xc0 = notify method 0x6016c070**; +0xc4 = 0x6016c120 |
+| `ctxB` (heap) | \*0x60338c40 | 0x108 | +0x0 (byte), +0x15 (==1 → property 0x270b path); **+0x1c/+0x20/+0x24 = 0x270b bit-check methods** 0x6016aad0/0x6016ab40/0x6016abb0 (`GET(0x270b) & 0x10/0x20/0x80`), reached via `callr` indirections 0x6016d2f0/0x6016d350; **+0xc0 = notify method 0x6016c070**; +0x100 = 0x6016c910. Created once at boot: singleton factory 0x6016e800 (ctor 0x6016a7c0) from the battmngr stage-dispatch init batch (0x60044810 / 0x60059b90) |
 | ICM globals | 0x603391e8…0x60339214 | — | 0x603391e8/ea config handles; 0x60339200 threshold (0x898/0x1130); 0x60339204 UV/OC flag; 0x60339208 obj->+0x20 copy; **0x60339214 type-updated flag** |
 | charger_detection | 0x60334bac…0x60334be0 | — | 0x60334b58 input count; 0x60334b5c+0x14·in bPlugIn; 0x60334bb0…0xbc UFCS config/handles; 0x60334be0 registered callback |
 | per-input type table | 0x60256ef0 | stride 0x14 | evaluate selector (2/3/other) |
-| property system | — | — | get/subscribe `0x60169a00(obj, id, &out)`; set `0x6016a150`; event post `0x6016a4c0` |
+| property system | — | — | client: get `0x60169a00(obj, id, &out)` / set `0x6016a150` (dispatch on `obj->+0x2`); registry (BSS): count 0x60338c69, ids 0x60338c74, tables 0x60338c70, entries 0x60338cf0 (match by table_ptr); registry GET 0x60192f40 / SET 0x60192d30; event post `0x6016a4c0`. **Engine = RPC**: channel handle 0x6024c170 (family 0x6012b008–0x6012b200), cmd 0x107 = property access (GET+SET, 24 B payload), 0x10a = ACK, 0x10b/0x10c; open 0x6012b020; RX push handler 0x6012afc8 (callback model) |
 
 ## Function map (vaddrs)
 
@@ -130,6 +187,19 @@ Same wedge.
 | `PmSchgUsb_SetRerunApsd` (pm_usb.c) | 0x600978e0 |
 | dpm_usbc resume | 0x600d1dc0 (→ 0x600d25e4) |
 | config key lookup | 0x60084be0 |
+| property GET wrapper (ICM) | 0x60169a00 (state 1 → 0x60192f40) |
+| property SET wrapper (ICM) | 0x6016a150 (state 1 → 0x6016a208 → 0x60192d30) |
+| property registry GET / SET | 0x60192f40 / 0x60192d30 |
+| property RPC: 0x107 access / 0x10a ACK / 0x10b / 0x10c | 0x6012b138 / 0x6012b008 / 0x6012b1c8 / 0x6012b1e8 |
+| property channel open + RX registration | 0x6012b020 (open), 0x6012b204 (RX cb 0x6012b280) |
+| property RX push handler (callback model) | 0x6012afc8 |
+| ctxB bit-check methods (0x270b & 0x10 / 0x20 / 0x80) | 0x6016aad0 / 0x6016ab40 / 0x6016abb0 |
+| ctxB notify (0x270b bit 7 → events 0x7e42/0x7ee5) | 0x6016c070 |
+| ctxB constructor / singleton factory | 0x6016a7c0 / 0x6016e800 |
+| per-port 0x270b getters (second property chain) | 0x600a83f0 / 0x600a9exx (→ 0x60081910 → 0x60081790 → 0x60082060, global 0x60283620) |
+| battmngr_init (top-level boot init) | 0x6002ad50 (← service-table init 0x60025cfc) |
+| client object creation + stage dispatch | 0x6002a770 / 0x6002b030 (stage = ctx->+0x340, default 3) |
+| stage init batches (contain the ctxB factory) | 0x6002e0b0 (stage 3) / 0x6004eca0 (stage 4) |
 
 ## Cross-references
 

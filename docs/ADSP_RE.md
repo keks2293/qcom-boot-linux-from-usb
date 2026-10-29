@@ -211,6 +211,145 @@ open question is purely **AP-side**: what does the AP send over glink (charger-t
 intents, ULOG config type-0x19, battmgr notifications) in the initramfs environment vs
 a full system? That is an unmeasured gap and the next measurement target.
 
+## Charger type and the property system (final model)
+
+Later rounds answered "who pulls the charger type". The mechanism is now fully mapped;
+the remaining unknown is behavioral, not static.
+
+### The type byte T is static boot config
+
+The type byte `T` (ChgIcmCfg @0x603391b8+1, read by the ICM flag function through the
+global pointer @0x60339210, written **once** in the constructor @0x601a12c0 ← ICM init
+@0x6019fe90) has **zero runtime writes** in the whole disassembly (only the init
+@0x6019ffe4, which preserves it). `chgr_stat` (property 0x2606) is **PMIC-backed and
+read-only** in the ADSP code (no setter). So "who pulls the charger type" is **not** a
+runtime ADSP actor: the type is fixed by boot configuration (HW/FDT), and the dynamic
+"charger present / type changed" information comes from the PMIC and is triggered by
+AP-side USB/PD activity.
+
+### Property 0x270b: every reference is a GET
+
+A whole-file scan (code immediates + data const-words, both byte orders) finds exactly
+**six** references to property id 0x270b and **all six are GETs**; there is **no SET**
+with a visible id:
+
+| Site | Context |
+|---|---|
+| 0x6016aaec (fn 0x6016aad0) | ctxB->+0x1c: `GET(0x270b) → out & 0x10` (bit 4 = PD-type present) |
+| 0x6016ab5c (fn 0x6016ab40) | ctxB->+0x20: `GET(0x270b) → out & 0x20` (bit 5 = USB-type present) — the ICM "type updated" check for T∈{2..16,19} |
+| 0x6016abcc (fn 0x6016abb0) | ctxB->+0x24: `GET(0x270b) → out & 0x80` (bit 7 = notify/cable-state) |
+| 0x6016c0a4 (fn 0x6016c070) | ctxB->+0xc0 notify: `GET(0x270b)` → payload = (out>>7 & 1) ? 2 : 1 → post events 0x7e42 / 0x7ee5 (1 ref each, no other subscribers) |
+| 0x600a84c4 / 0x600a9e94 (fn 0x600a83f0) | per-port getters (callr-only; port index > 0xa → error 0x202; per-port table 0x60325419 + idx·0x1c) via a **second** property chain 0x60081910 → 0x60081790 → 0x60082060 (global 0x60283620, not the ICM registry) |
+
+The registry id-tables themselves are BSS (runtime), so ids exist only as code
+immediates in the GETs above.
+
+### `icm_ncp_stby_init` @0x601a1320 — the full wedge logic
+
+Decoded in full ([`func-icm-ncp-stby-init-601a1320.txt`](../logs/adsp-re/func-icm-ncp-stby-init-601a1320.txt)):
+
+- `T = *(*(0x60339210) + 1)`; `chgr_stat` = getter @0x601479b0 → byte.
+- **chgr_stat switch:** 3 → `icm->+0xc = 3` (normal); 4 → vbat getter @0x60147e90,
+  vbat ≤ 0x2647 (9799 mV) → `icm->+0xc = 3`; 5 → mask accumulator @0x6016e2d0(ctx,8,0);
+  7 → @0x6016e2d0(ctx,3,0x1388) + @0x6016d930(ctx,0x1004) (thresholds 0x1388 = 5000,
+  0x1004 = 4100 mV); otherwise nothing.
+- **Flag recompute only when `icm->+0xc == 2`** (already in ncp_stby):
+  - `T ∈ {21,22,23}` → flag = `!(0x270b & 0x10)` (via ctxB->+0x1c)
+  - `T ∈ {2..16,19}` → flag = `!(0x270b & 0x20)` (via ctxB->+0x20)
+  - `T ∈ {0,1,17,18,20}` or `T > 23` → **flag = 1 + ULog warn** and `icm->+0xc = 2`
+    (the wedge)
+  - flag = 0 → `0x60339214 = 0`
+- The warn log (ULog-gated) is the **firmware original, typo and all**:
+
+  ```
+  Warn: %s: icm_ncp_stby_init: keeps in icm_ncp_stby utill charger_type updated
+  ```
+
+  (fmt string @0x60238d14, name @0x60238d62). In words: **the ICM stays in ncp_stby
+  until the property service pushes a 0x270b (charger_type) update.**
+
+### The property system is an RPC to a central property service
+
+The ICM/charger property stack does not store property values locally — it talks to a
+central property service over a channel (handle global @0x6024c170; the whole family
+0x6012b008–0x6012b200 is the only user of that global):
+
+- **Command inventory:** 0x101, open `{hi=2, lo=4}` (fn 0x6012b020), 0x103, 0x104,
+  **0x107 = property access (GET and SET share it; direction in payload)** (fn
+  0x6012b138, 24-byte payload via the dispatch walker 0x60007480/0x6000748c),
+  **0x10a = ACK**, 0x10b (fire-and-forget 64-bit message, fn 0x6012b1c8),
+  0x10c (fn 0x6012b1e8).
+- **Boot initialization:** the service-table init (fn 0x60025bc0 area) registers the RX
+  handler and opens the channel (0x6012b204: RX cb 0x6012b280 on cmd 0x103, second
+  channel global 0x6032cf0c; 0x6012b020: `if (channel == -1) channel = send(open)`).
+- **RX handler 0x6012afc8 = callback-push model**
+  ([`func-property-rx-callback-6012afc8.txt`](../logs/adsp-re/func-property-rx-callback-6012afc8.txt)):
+  loop { read 48-byte message @0x600072a0; ACK 0x10a; `cb = buf[4]; callr cb(buf[0],
+  buf+8, buf+0x28)` } — i.e. **the service pushes change notifications with a
+  callback pointer in the message**. That push is exactly the "charger_type updated"
+  event the ICM waits for.
+- **Local registry (BSS):** count @0x60338c69 (≤16), ids @0x60338c74, tables
+  @0x60338c70, entries @0x60338cf0 (0x18 B: word0 = table_ptr, +8 = lock); entries are
+  matched **by table_ptr, not by id**. Register 0x60191de0 ← single caller 0x601698c4
+  (ICM-object init); GET 0x60192f40 (registry lookup + lock + RPC 0x107 at 0x60193270);
+  SET 0x60192d30 (registry lookup, **masked value merge**
+  `out = (out & mask) | (new & ~mask)`, then RPC 0x107 at 0x6019388c via 0x601933f0)
+  ← single caller 0x6016a208 (state-1 branch of the SET wrapper 0x6016a150, which has
+  ~200 callers from the charger stack with the id passed dynamically in a register).
+- The ICM GET wrapper 0x60169a00 dispatches on `obj->+0x2`: 0 → vtable+0x0,
+  1 → id-transformed registry GET, 2/3 → vtable+0x14.
+
+**Where the service lives** (local ADSP service vs a remote DSP endpoint) is not
+distinguishable from the disassembly; it does not block the fix.
+
+### The ctxB object is a boot-time one-shot
+
+The charger-type check object `ctxB` (\*0x60338c40, 0x108 B) is created **exactly once
+at ADSP boot**:
+
+```
+service-table init (0x60025bc0 area)
+  ├─ property service: RX registration 0x6012b204 + channel open 0x6012b020
+  └─ battmngr_init 0x6002ad50        (strings "battmngr_platform_init",
+                                       "battmngr_plat_scpqchg_qbg_r1_init")
+     └─ 0x6002a770: client object alloc(0x798) → *0x60256ee8
+        └─ stage dispatch 0x6002b030 (stage = ctx->+0x340, default 3,
+            platform-byte override @0x6002a0f0)
+           ├─ stage 3 → init batch 0x6002e0b0 ─┐
+           └─ stage 4 → init batch 0x6004eca0 ─┤ both contain the factory:
+                                               │ 0x60044810 / 0x60059b90
+                                               ▼
+                    singleton factory 0x6016e800
+                      *0x60338c40 occupied → 0x202 EEXIST
+                      else alloc(0x108) → *0x60338c40, memset,
+                      callr ctor 0x6016a7c0(ctxB, 0x7)
+                        ctxB: +0x1c = 0x6016aad0 (&0x10),
+                              +0x20 = 0x6016ab40 (&0x20),
+                              +0x24 = 0x6016abb0 (&0x80),
+                              +0xc0 = 0x6016c070 (notify)
+```
+
+No re-creation or re-registration at runtime. So the runtime "charger_type updated"
+can only arrive as a **property-service push** (RX callback → … → ctxB->+0xc0). See
+[`func-ctxb-factory-6016e800.txt`](../logs/adsp-re/func-ctxb-factory-6016e800.txt).
+
+### Final answer to "who pulls the charger type?"
+
+- **Found (the mechanism, fully):** the wedge is `icm_ncp_stby_init` waiting for a
+  0x270b update push from the central property service; the value is held/computed on
+  the service side; ADSP never SETs it with a visible id (all six visible refs are
+  GETs; a SET via the dynamic-id path is possible — the registry SET is the same RPC —
+  and statically invisible, but it demonstrably does not happen in the failing
+  environment, or the push would have arrived and the wedge would have cleared).
+- **Not found (and not statically findable):** the concrete trigger that makes the
+  property service re-evaluate and push 0x270b. On the ADSP side the endpoint is
+  opaque; on the AP side the static actor hunt is negative in all four zones (dracut
+  config/modules, kernel modules, udev rules, userspace daemons).
+- **Conclusion:** the trigger is a **behavioral / timing event sequence** of the
+  AP-side USB/charger stack in the working (full-system) environment — only
+  measurement can identify it. That is the role of the full-system cold-plug fork test
+  and the fresh-edge test (see below).
+
 ## Trigger table (consolidated)
 
 | # | Trigger | Source | Status |
@@ -230,13 +369,16 @@ registry in [`cross-firmware-compare.txt`](../logs/adsp-re/cross-firmware-compar
 
 ## Remaining hypotheses and next steps
 
-With the ADSP-side flag wall removed, the candidates narrow to:
+With the ADSP-side flag wall removed and the property system mapped, the candidates
+narrow to:
 
-1. **AP-side measurement (primary):** determine what the AP sends over glink in the
-   initramfs environment vs a full system — charger-type intents, ULOG config
-   type-0x19, battmgr notifications. The ADSP side is proven unconditional, so any
-   difference in behavior must originate on the AP side (or in the absence of an AP
-   event that would normally re-trigger detection).
+1. **AP-side measurement (primary):** the wedge waits for a property-service
+   **push** of the charger-type update (0x270b). The trigger for that push is a
+   behavioral/timing event sequence of the AP-side USB/charger stack — identify it by
+   capturing the AP activity in the window before successful enumeration in the
+   working (full-system) environment: the full-system cold-plug fork test (pre-plug +
+   cold-plug, dmesg window [T−2 s, T], typec/power_supply/udevadm) plus the fresh-edge
+   test (boot without the stick, plug in after 5–10 s).
 2. **Fresh-edge window:** the replug-timing correlation (≤ ~24.7 s works, ≥ ~38 s
    fails; ~30 s boundary) points to a PPM/BC1.2 classification window. See
    [ADSP_CONFIG.md](ADSP_CONFIG.md#timer--replug-correlation).

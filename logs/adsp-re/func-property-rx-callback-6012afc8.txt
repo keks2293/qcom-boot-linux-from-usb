@@ -1,0 +1,143 @@
+# property service RX push handler + channel open (excerpts)
+# Evidence: RX handler 0x6012afc8 = loop { read 48-byte message 0x600072a0(48, buf);
+# ACK cmd 0x10a (0x6012b008); cb = buf[4]; callr cb(buf[0], buf+8, buf+0x28) } — the
+# service PUSHES change notifications with a callback pointer in the message.
+# Channel open 0x6012b020: if handle @0x6024c170 == -1 -> send open {hi=2, lo=4} and
+# store the returned handle; then registers the RX handler (0x6000e784, ctx
+# 0x6032cf08). 0x6012b204 = RX registration for the second channel (global
+# 0x6032cf0c, cb 0x6012b280 on cmd 0x103).
+
+--- RX push handler 0x6012afc8 (full: read/ACK/callr cb):
+992621: 6012afc8:	70 1c f4 eb	ebf41c70 { 	memd(r29+#-0x10) = r17:16; 	allocframe(#0x38) }
+992622: 6012afcc:	08 2c 02 2b	2b022c08 { 	r2 = #0x30; 	r16 = add(r29,#0x0) }
+992623: 6012afd0:	68 61 db 5b	5bdb6168 { 	call 0x600072a0 <PT_LOAD#19+0x72a0>
+992624: 6012afd4:	00 e0 30 73	7330e000   	r1:0 = combine(#0x0,r16) }
+992625: 6012afd8:	18 40 00 5a	5a004018 { 	call 0x6012b008 <PT_LOAD#19+0x12b008>
+992626: 6012afdc:	00 c0 70 70	7070c000   	r0 = r16 }
+992627: 6012afe0:	12 c0 40 10	1040c012 { 	p0 = cmp.eq(r0,#0x0); if (!p0.new) jump:nt 0x6012b004 <PT_LOAD#19+0x12b004> }
+992628: 6012afe4:	23 40 9d 91	919d4023 { 	r3 = memw(r29+#0x4)
+992629: 6012afe8:	f4 c0 32 24	2432c0f4   	if (cmp.eq(r3.new,#0x0)) jump:nt 0x6012afcc <PT_LOAD#19+0x12afcc> }
+992630: 6012afec:	04 40 1d b0	b01d4004 { 	r4 = add(r29,#0x0)
+992631: 6012aff0:	00 40 3d 91	913d4000   	r0 = memub(r29+#0x0)
+992632: 6012aff4:	42 c1 9d 91	919dc142   	r2 = memw(r29+#0x28) }
+992633: 6012aff8:	01 41 04 b0	b0044101 { 	r1 = add(r4,#0x8)
+992634: 6012affc:	00 c0 a3 50	50a3c000   	callr r3 }
+992635: 6012b000:	e6 ff ff 59	59ffffe6 { 	jump 0x6012afcc <PT_LOAD#19+0x12afcc> }
+992636: 6012b004:	40 1f 34 3e	3e341f40 { 	r17:16 = memd(r29+#0x30); 	dealloc_return }
+992637: 6012b008:	02 40 60 70	70604002 { 	r2 = r0
+992638: 6012b00c:	05 53 02 06	06025305   	immext(#0x6024c140)
+992639: 6012b010:	03 c6 80 49	4980c603   	r3 = memw(##0x6024c170) }
+992640: 6012b014:	04 40 00 00	00004004 { 	immext(#0x100)
+992641: 6012b018:	40 61 23 73	73236140   	r1:0 = combine(##0x10a,r3)
+992642: 6012b01c:	50 c0 00 58	5800c050   	jump 0x6012b0b4 <PT_LOAD#19+0x12b0b4> }
+
+--- channel open 0x6012b020 (open cmd + handle store + RX registration):
+992643: 6012b020:	60 1c f4 eb	ebf41c60 { 	memd(r29+#-0x10) = r17:16; 	allocframe(#0x30) }
+992644: 6012b024:	05 53 02 06	06025305 { 	immext(#0x6024c140)
+992645: 6012b028:	00 dc 91 9b	9b91dc00   	r0 = memw(r17=##0x6024c170) }
+992646: 6012b02c:	53 48 02 06	06024853 { 	immext(#0x602214c0)
+992647: 6012b030:	a2 61 00 7e	7e0061a2   	if (p0.new) r2 = ##0x602214cd
+992648: 6012b034:	0c e0 c0 11	11c0e00c   	p0 = cmp.eq(r0,#-0x1); if (!p0.new) jump:t 0x6012b044 <PT_LOAD#19+0x12b044> }
+992649: 6012b038:	3e 40 00 5a	5a00403e { 	call 0x6012b0b4 <PT_LOAD#19+0x12b0b4>
+992650: 6012b03c:	40 c0 02 7c	7c02c040   	r1:0 = combine(#0x2,#0x4) }
+992651: 6012b040:	00 c0 91 a1	a191c000 { 	memw(r17+#0x0) = r0 }
+992652: 6012b044:	36 c1 c0 11	11c0c136 { 	p0 = cmp.gt(r0,#-0x1); if (!p0.new) jump:nt 0x6012b0b0 <PT_LOAD#19+0x12b0b0> }
+992653: 6012b048:	1c 4b 03 06	06034b1c { 	immext(#0x6032c700)
+992654: 6012b04c:	e2 41 00 78	780041e2   	r2 = ##0x6032c70f
+992655: 6012b050:	90 40 1d b0	b01d4090   	r16 = add(r29,#0x4)
+992656: 6012b054:	00 c2 1d 3c	3c1dc200   	memb(r29+#0x4) = #0x0 }
+992657: 6012b058:	02 7f 22 76	76227f02 { 	r2 = and(r2,#-0x8)
+992658: 6012b05c:	00 78 00 00	00007800   	immext(#0xe0000)
+992659: 6012b060:	80 42 5d 3c	3c5d4280   	memw(r29+#0x14) = ##0xe0000
+992660: 6012b064:	00 c9 3d 3c	3c3dc900   	memh(r29+#0x24) = #0x0 }
+992661: 6012b068:	53 48 02 06	06024853 { 	immext(#0x602214c0)
+992662: 6012b06c:	c0 62 30 73	733062c0   	r1:0 = combine(##0x602214d6,r16)
+992663: 6012b070:	82 28 02 69	69022882   	r2 = #0x10; 	memw(r29+#0x20) = r2 }
+992664: 6012b074:	fc 7b ff 0f	0fff7bfc { 	immext(#0xfffeff00)
+992665: 6012b078:	00 43 5d 3c	3c5d4300   	memw(r29+#0x18) = ##-0x10100
+992666: 6012b07c:	1f 40 00 00	0000401f   	immext(#0x7c0)
+992667: 6012b080:	b8 c3 5d 3c	3c5dc3b8   	memw(r29+#0x1c) = ##0x7f8 }
+992668: 6012b084:	6e c0 db 5b	5bdbc06e { 	call 0x60003160 <PT_LOAD#19+0x3160> }
+992669: 6012b088:	3c 4b 03 06	06034b3c { 	immext(#0x6032cf00)
+992670: 6012b08c:	00 61 10 73	73106100   	r1:0 = combine(r16,##0x6032cf08)
+992671: 6012b090:	bf 4a 01 06	06014abf   	immext(#0x6012afc0)
+992672: 6012b094:	02 c0 84 7c	7c84c002   	r3:2 = combine(#0x0,##0x6012afc8) }
+992673: 6012b098:	76 5b dc 5b	5bdc5b76 { 	call 0x6000e784 <PT_LOAD#19+0xe784>
+992674: 6012b09c:	80 c9 1d 3c	3c1dc980   	memb(r29+#0x13) = #0x0 }
+992675: 6012b0a0:	00 40 00 75	75004000 { 	p0 = cmp.eq(r0,#0x0)
+992676: 6012b0a4:	00 c0 91 47	4791c000   	if (!p0.new) r0 = memw(r17+#0x0) }
+992677: 6012b0a8:	0e 77 fe 0f	0ffe770e { 	immext(#0xffedc380)
+992678: 6012b0ac:	30 c0 20 5d	5d20c030   	if (!p0) call 0x60007440 <PT_LOAD#19+0x7440> }
+992679: 6012b0b0:	40 1f 2c 3e	3e2c1f40 { 	r17:16 = memd(r29+#0x28); 	dealloc_return }
+992680: 6012b0b4:	04 40 60 70	70604004 { 	r4 = r0
+992681: 6012b0b8:	02 c1 02 f5	f502c102   	r3:2 = combine(r2,r1) }
+992682: 6012b0bc:	00 60 04 73	73046000 { 	r1:0 = combine(r4,#0x0)
+992683: 6012b0c0:	e8 e1 db 59	59dbe1e8   	jump 0x6000748c <PT_LOAD#19+0x748c> }
+992684: 6012b0c4:	04 40 00 00	00004004 { 	immext(#0x100)
+992685: 6012b0c8:	02 60 00 73	73006002   	r3:2 = combine(r0,##0x100)
+992686: 6012b0cc:	00 3c 14 70	70143c00   	r4 = r1; 	allocframe(#0x0) }
+992687: 6012b0d0:	de 61 db 5b	5bdb61de { 	call 0x6000748c <PT_LOAD#19+0x748c>
+992688: 6012b0d4:	00 40 00 78	78004000   	r0 = #0x0
+992689: 6012b0d8:	05 53 02 06	06025305   	immext(#0x6024c140)
+992690: 6012b0dc:	01 c6 80 49	4980c601   	r1 = memw(##0x6024c170) }
+992691: 6012b0e0:	40 3f 00 56	56003f40 { 	r0 = zxth(r0); 	dealloc_return }
+992692: 6012b0e4:	02 40 60 70	70604002 { 	r2 = r0
+992693: 6012b0e8:	05 53 02 06	06025305   	immext(#0x6024c140)
+992694: 6012b0ec:	00 46 80 49	49804600   	r0 = memw(##0x6024c170)
+992695: 6012b0f0:	00 c0 9d a0	a09dc000   	allocframe(#0x0) }
+992696: 6012b0f4:	e0 7f ff 5b	5bff7fe0 { 	call 0x6012b0b4 <PT_LOAD#19+0x12b0b4>
+992697: 6012b0f8:	21 e0 00 78	7800e021   	r1 = #0x101 }
+992698: 6012b0fc:	40 3f 00 56	56003f40 { 	r0 = zxth(r0); 	dealloc_return }
+992699: 6012b100:	02 40 60 70	70604002 { 	r2 = r0
+992700: 6012b104:	05 53 02 06	06025305   	immext(#0x6024c140)
+
+--- second-channel RX registration 0x6012b204 (cb 0x6012b280, cmd 0x103):
+992764: 6012b204:	02 42 00 78	78004202 { 	r2 = #0x10
+992765: 6012b208:	60 1c f4 eb	ebf41c60   	memd(r29+#-0x10) = r17:16; 	allocframe(#0x30) }
+992766: 6012b20c:	90 c0 1d b0	b01dc090 { 	r16 = add(r29,#0x4) }
+992767: 6012b210:	53 48 02 06	06024853 { 	immext(#0x602214c0)
+992768: 6012b214:	20 64 30 73	73306420   	r1:0 = combine(##0x602214e1,r16)
+992769: 6012b218:	00 42 1d 3c	3c1d4200   	memb(r29+#0x4) = #0x0
+992770: 6012b21c:	80 c3 5d 3c	3c5dc380   	memw(r29+#0x1c) = #0x0 }
+992771: 6012b220:	00 78 0f 00	000f7800 { 	immext(#0xfe0000)
+992772: 6012b224:	80 42 5d 3c	3c5d4280   	memw(r29+#0x14) = ##0xfe0000
+992773: 6012b228:	fc 7b ff 0f	0fff7bfc   	immext(#0xfffeff00)
+992774: 6012b22c:	00 c3 5d 3c	3c5dc300   	memw(r29+#0x18) = ##-0x10100 }
+992775: 6012b230:	00 44 5d 3c	3c5d4400 { 	memw(r29+#0x20) = #0x0
+992776: 6012b234:	00 c9 3d 3c	3c3dc900   	memh(r29+#0x24) = #0x0 }
+992777: 6012b238:	94 ff da 5b	5bdaff94 { 	call 0x60003160 <PT_LOAD#19+0x3160> }
+992778: 6012b23c:	53 48 02 06	06024853 { 	immext(#0x602214c0)
+992779: 6012b240:	42 46 00 78	78004642   	r2 = ##0x602214f2
+992780: 6012b244:	40 40 02 7c	7c024040   	r1:0 = combine(#0x2,#0x4)
+992781: 6012b248:	80 c9 1d 3c	3c1dc980   	memb(r29+#0x13) = #0x0 }
+992782: 6012b24c:	20 40 00 00	00004020 { 	immext(#0x800)
+992783: 6012b250:	80 43 5d 3c	3c5d4380   	memw(r29+#0x1c) = ##0x800
+992784: 6012b254:	00 ca 1d 3c	3c1dca00   	memb(r29+#0x14) = #0x0 }
+992785: 6012b258:	22 40 00 5a	5a004022 { 	call 0x6012b29c <PT_LOAD#19+0x12b29c>
+992786: 6012b25c:	9e c5 3d 3c	3c3dc59e   	memh(r29+#0x16) = #0x1e }
+992787: 6012b260:	3c 4b 03 06	06034b3c { 	immext(#0x6032cf00)
+992788: 6012b264:	e4 42 00 78	780042e4   	r4 = ##0x6032cf17
+992789: 6012b268:	3c 4b 03 06	06034b3c   	immext(#0x6032cf00)
+992790: 6012b26c:	0c c0 80 48	4880c00c   	memw(##0x6032cf0c) = r0 }
+992791: 6012b270:	ca 4a 01 06	06014aca { 	immext(#0x6012b280)
+992792: 6012b274:	02 40 96 7c	7c964002   	r3:2 = combine(#0x0,##0x6012b2ac)
+992793: 6012b278:	81 30 00 2c	2c003081   	r0 = add(r29,#0x0); 	r1 = r16 }
+992794: 6012b27c:	84 5a dc 5b	5bdc5a84 { 	call 0x6000e784 <PT_LOAD#19+0xe784>
+992795: 6012b280:	04 7f 24 76	76247f04   	r4 = and(r4,#-0x8)
+992796: 6012b284:	08 d2 bd a1	a1bdd208   	memw(r29+#0x20) = r4.new }
+992797: 6012b288:	54 48 02 06	06024854 { 	immext(#0x60221500)
+992798: 6012b28c:	80 65 80 7e	7e806580   	if (!p0.new) r0 = ##0x6022152c
+992799: 6012b290:	08 c0 40 10	1040c008   	p0 = cmp.eq(r0,#0x0); if (!p0.new) jump:nt 0x6012b298 <PT_LOAD#19+0x12b298> }
+992800: 6012b294:	40 1f 2c 3e	3e2c1f40 { 	r17:16 = memd(r29+#0x28); 	dealloc_return }
+992801: 6012b298:	26 cf dc 5b	5bdccf26 { 	call 0x6000d0e4 <PT_LOAD#19+0xd0e4> }
+992802: 6012b29c:	04 40 60 70	70604004 { 	r4 = r0
+992803: 6012b2a0:	02 c1 02 f5	f502c102   	r3:2 = combine(r2,r1) }
+992804: 6012b2a4:	00 60 04 73	73046000 { 	r1:0 = combine(r4,#0x0)
+992805: 6012b2a8:	f4 e0 db 59	59dbe0f4   	jump 0x6000748c <PT_LOAD#19+0x748c> }
+992806: 6012b2ac:	03 c0 9d a0	a09dc003 { 	allocframe(#0x18) }
+992807: 6012b2b0:	82 40 1d b0	b01d4082 { 	r2 = add(r29,#0x4)
+992808: 6012b2b4:	61 60 00 78	78006061   	r1 = #0x103
+992809: 6012b2b8:	3c 4b 03 06	06034b3c   	immext(#0x6032cf00)
+992810: 6012b2bc:	80 c1 80 49	4980c180   	r0 = memw(##0x6032cf0c) }
+992811: 6012b2c0:	ee ff ff 5b	5bffffee { 	call 0x6012b29c <PT_LOAD#19+0x12b29c> }
+992812: 6012b2c4:	08 c0 00 10	1000c008 { 	p0 = cmp.eq(r0,#0x0); if (p0.new) jump:nt 0x6012b2d4 <PT_LOAD#19+0x12b2d4> }

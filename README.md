@@ -66,7 +66,7 @@ window around the attach. See
 ## Documentation
 
 - [docs/INVESTIGATION.md](docs/INVESTIGATION.md) — idea, hypotheses, attempts, replug window, key code facts
-- [docs/ADSP_RE.md](docs/ADSP_RE.md) — PPM/ADSP firmware reverse engineering (wedge state, trigger map, glink RX, the "flag wall" refutation)
+- [docs/ADSP_RE.md](docs/ADSP_RE.md) — PPM/ADSP firmware reverse engineering (wedge state, trigger map, glink RX, the "flag wall" refutation, the final charger-type/property model)
 - [docs/ADSP_CONFIG.md](docs/ADSP_CONFIG.md) — `adsp_dtb.mbn` container layout, PPM config values, the 1-byte `apsd-rerun-cfg` patch recipe
 - [docs/TEST_METHOD.md](docs/TEST_METHOD.md) — how tests were performed
 - [docs/RESULTS.md](docs/RESULTS.md) — results from dbg50/dbg51
