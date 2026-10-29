@@ -18,6 +18,16 @@ Instead of guessing kernel fixes, custom `KERNEL` images with in-block diagnosti
 
 All images were verified byte-for-byte against a known base (Android boot image header invariants, initramfs cpio diff limited to `dracut-initqueue`, sha1 id recalculated).
 
+In parallel, the PPM/ADSP firmware (`adsp.mbn` + `adsp_dtb.mbn`) was reverse
+engineered: full Hexagon disassembly, string→code xrefs, function extraction,
+and a byte-verified catalog of the PPM device-tree configuration
+([docs/ADSP_RE.md](docs/ADSP_RE.md), [docs/ADSP_CONFIG.md](docs/ADSP_CONFIG.md)).
+Key outcome: the firmware's charger-detection and glink-intent processing is
+**not** gated by any AP-ready runtime flag (the suspected "flag wall" turned
+out to be ULog logging controls), and the PPM config ships with
+`apsd-rerun-cfg = 0` while the firmware contains the full APSD re-run
+mechanism — a 1-byte config patch candidate.
+
 ## Key result (dbg51)
 
 The **L2/runtime-PM class of the `a600000.usb` glue + `xhci-hcd.0.auto` chain is closed**. The wedge (`CCS=0`, no `new high-speed/super-speed`) is observed across all tested PM states.
@@ -37,13 +47,27 @@ Also refuted along the way:
 
 UCSI 2.0 spec cross-check: PPM is the spec term "Platform Policy Manager"; the spec requires a `CONNECTOR_RESET` hard reset to "go through a disconnect-connect sequence", but on this device the plain reset is a no-op — the PPM firmware deviates from the spec (fourth observed refusal, after the role-swap `-ECOMM`, the `SET_*` `-EOPNOTSUPP` set, and the Data-Reset hang).
 
-Remaining focus is **early port classification by PPM/BC1.2 on the ADSP side** (`icm_ncp_stby` until charger type updated).
+Remaining focus is **early port classification by PPM/BC1.2 on the ADSP side**
+(`icm_ncp_stby` until charger type updated). The firmware RE removed the
+"runtime flag" hypothesis: the ADSP processes charger-detection events and
+glink intents unconditionally, so the difference between the working and dead
+environments must originate on the **AP side** (what is sent over glink in
+initramfs vs a full system) or in the absence of a fresh CC edge. Two cheap
+candidates remain: the `apsd-rerun-cfg` 0→1 config patch (1 byte + hash slot,
+recipe in [docs/ADSP_CONFIG.md](docs/ADSP_CONFIG.md)) and the fresh-edge
+window (≤ ~30 s after power-on replug works, ≥ ~38 s fails).
 
-**Next step (no new image needed):** the full-system cold-plug test with a fork — boot with the flash drive pre-plugged vs cold-plugged after boot, and compare enumeration, `usb_type` (`Unknown` vs `SDP/DCP/PD`), and the dmesg window around the attach. See [docs/FULL_SYSTEM_COLDPLUG_TEST.md](docs/FULL_SYSTEM_COLDPLUG_TEST.md).
+**Next step (no new image needed):** the full-system cold-plug test with a
+fork — boot with the flash drive pre-plugged vs cold-plugged after boot, and
+compare enumeration, `usb_type` (`Unknown` vs `SDP/DCP/PD`), and the dmesg
+window around the attach. See
+[docs/FULL_SYSTEM_COLDPLUG_TEST.md](docs/FULL_SYSTEM_COLDPLUG_TEST.md).
 
 ## Documentation
 
-- [docs/INVESTIGATION.md](docs/INVESTIGATION.md) — idea, hypotheses, attempts, key code facts
+- [docs/INVESTIGATION.md](docs/INVESTIGATION.md) — idea, hypotheses, attempts, replug window, key code facts
+- [docs/ADSP_RE.md](docs/ADSP_RE.md) — PPM/ADSP firmware reverse engineering (wedge state, trigger map, glink RX, the "flag wall" refutation)
+- [docs/ADSP_CONFIG.md](docs/ADSP_CONFIG.md) — `adsp_dtb.mbn` container layout, PPM config values, the 1-byte `apsd-rerun-cfg` patch recipe
 - [docs/TEST_METHOD.md](docs/TEST_METHOD.md) — how tests were performed
 - [docs/RESULTS.md](docs/RESULTS.md) — results from dbg50/dbg51
 - [docs/FULL_SYSTEM_COLDPLUG_TEST.md](docs/FULL_SYSTEM_COLDPLUG_TEST.md) — full-system test (remaining measurement)
@@ -52,11 +76,13 @@ Remaining focus is **early port classification by PPM/BC1.2 on the ADSP side** (
 ## Scripts
 
 - [scripts/full-system-coldplug-test.sh](scripts/full-system-coldplug-test.sh) — run on full system after boot
+- [scripts/adsp-re/](scripts/adsp-re/) — firmware RE toolchain (disassembly dump, function extractor, vaddr→string resolver, ELF map)
 - [scripts/README.md](scripts/README.md) — usage
 
 ## Logs
 
-Raw logs and screen captures can be placed in [`logs/`](logs/).
+- [`logs/`](logs/) — raw/near-raw evidence from initramfs diagnostic runs
+- [`logs/adsp-re/`](logs/adsp-re/) — disassembly excerpts and xref evidence for every RE claim
 
 ## Author
 

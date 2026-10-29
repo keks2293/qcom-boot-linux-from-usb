@@ -1,0 +1,72 @@
+# ULog client init for "BATTMAN" + setter functions (adsp.mbn)
+#
+# fn @0x60080dc0..0x60080e34 (ULog client init, 30 L):
+#   - 0x60080dd0: *(##0x60256f64) = 0x4000                  (ULog client struct field)
+#   - call 0x60021cfc(client=0x60256f60, name="BATTMAN ULog" vaddr 0x601f95d5,
+#                     tag=0x10301, r4=1, r5=2)              (client registration)
+#   - call 0x600222dc(client, "Content-Type: text/tagged-log-1.0;" vaddr 0x601f95b2)
+#   - 0x60080e14: r2 = -1 (0xFFFFFFFF)
+#   - 0x60080e18: r1 = 0x3F
+#   - 0x60080e24: memd(##0x60256f78) = r1:0   --> ULog ENABLE MASK = 0x3F_FFFFFFFF
+#   - 0x60080e30: *(##0x60256f80) = 3          --> ULog LEVEL = 3
+#
+# fn @0x60080e40..0x60080e58 (setter, 7 L):  memb(##0x6024a660) = arg0 (verbosity counter)
+# fn @0x60080e60..0x60080e80 (setter, 9 L):  memd(##0x60256f78) = *(dw at arg0) (enable mask)
+#
+# Sole caller of the init fn: 0x6002ad78, inside BattMngr_init @0x6002ad50..0x6002b028
+# (name string "BattMngr_init" vaddr 0x601ddaee). So the mask/level defaults are set
+# at BattMngr init, i.e. at ADSP boot — NOT at any AP-ready handoff.
+=== fn @0x60080dc0 (ULog client init):
+ 818411: 60080dc0:	00 c0 9d a0	a09dc000 { 	allocframe(#0x0) }
+ 818412: 60080dc4:	bd 55 02 06	060255bd { 	immext(#0x60256f40)
+ 818413: 60080dc8:	82 c4 00 78	7800c482   	r2 = ##0x60256f64 }
+ 818414: 60080dcc:	00 41 00 00	00004100 { 	immext(#0x4000)
+ 818415: 60080dd0:	00 c0 42 3c	3c42c000   	memw(r2+#0x0) = ##0x4000 }
+ 818416: 60080dd4:	bd 55 02 06	060255bd { 	immext(#0x60256f40)
+ 818417: 60080dd8:	00 c4 00 78	7800c400   	r0 = ##0x60256f60 }
+ 818418: 60080ddc:	bd 55 02 06	060255bd { 	immext(#0x60256f40)
+ 818419: 60080de0:	82 c4 80 49	4980c482   	r2 = memw(##0x60256f64) }
+ 818420: 60080de4:	57 7e 01 06	06017e57 { 	immext(#0x601f95c0)
+ 818421: 60080de8:	a1 c2 00 78	7800c2a1   	r1 = ##0x601f95d5 }
+ 818422: 60080dec:	0c 44 00 00	0000440c { 	immext(#0x10300)
+ 818423: 60080df0:	23 c0 00 78	7800c023   	r3 = ##0x10301 }
+ 818424: 60080df4:	24 c0 00 78	7800c024 { 	r4 = #0x1 }
+ 818425: 60080df8:	45 c0 00 78	7800c045 { 	r5 = #0x2 }
+ 818426: 60080dfc:	80 c7 f4 5b	5bf4c780 { 	call 0x60021cfc <PT_LOAD#19+0x21cfc> }
+ 818427: 60080e00:	bd 55 02 06	060255bd { 	immext(#0x60256f40)
+ 818428: 60080e04:	00 c4 80 49	4980c400   	r0 = memw(##0x60256f60) }
+ 818429: 60080e08:	56 7e 01 06	06017e56 { 	immext(#0x601f9580)
+ 818430: 60080e0c:	41 c6 00 78	7800c641   	r1 = ##0x601f95b2 }
+ 818431: 60080e10:	66 ca f4 5b	5bf4ca66 { 	call 0x600222dc <PT_LOAD#19+0x222dc> }
+ 818432: 60080e14:	e2 ff df 78	78dfffe2 { 	r2 = #-0x1 }
+ 818433: 60080e18:	e1 c7 00 78	7800c7e1 { 	r1 = #0x3f }
+ 818434: 60080e1c:	00 c0 62 70	7062c000 { 	r0 = r2 }
+ 818435: 60080e20:	bd 55 02 06	060255bd { 	immext(#0x60256f40)
+ 818436: 60080e24:	38 c0 c0 48	48c0c038   	memd(##0x60256f78) = r1:0 }
+ 818437: 60080e28:	be 55 02 06	060255be { 	immext(#0x60256f80)
+ 818438: 60080e2c:	02 c0 00 78	7800c002   	r2 = ##0x60256f80 }
+ 818439: 60080e30:	03 c0 42 3c	3c42c003 { 	memw(r2+#0x0) = #0x3 }
+ 818440: 60080e34:	1e c0 1e 96	961ec01e { 	dealloc_return }
+
+=== fn @0x60080e40 (verbosity-counter setter):
+ 818443: 60080e40:	01 c0 9d a0	a09dc001 { 	allocframe(#0x8) }
+ 818444: 60080e44:	02 c0 60 70	7060c002 { 	r2 = r0 }
+ 818445: 60080e48:	ff e0 1e a7	a71ee0ff { 	memb(r30+#-0x1) = r0 }
+ 818446: 60080e4c:	e2 ff 3e 97	973effe2 { 	r2 = memub(r30+#-0x1) }
+ 818447: 60080e50:	99 52 02 06	06025299 { 	immext(#0x6024a640)
+ 818448: 60080e54:	20 c2 00 48	4800c220   	memb(##0x6024a660) = r2 }
+ 818449: 60080e58:	1e c0 1e 96	961ec01e { 	dealloc_return }
+
+=== fn @0x60080e60 (enable-mask setter):
+ 818451: 60080e60:	01 c0 9d a0	a09dc001 { 	allocframe(#0x8) }
+ 818452: 60080e64:	ff e0 9e a7	a79ee0ff { 	memw(r30+#-0x4) = r0 }
+ 818453: 60080e68:	e2 ff 9e 97	979effe2 { 	r2 = memw(r30+#-0x4) }
+ 818454: 60080e6c:	21 c0 82 91	9182c021 { 	r1 = memw(r2+#0x4) }
+ 818455: 60080e70:	02 c0 82 91	9182c002 { 	r2 = memw(r2+#0x0) }
+ 818456: 60080e74:	00 c0 62 70	7062c000 { 	r0 = r2 }
+ 818457: 60080e78:	bd 55 02 06	060255bd { 	immext(#0x60256f40)
+ 818458: 60080e7c:	38 c0 c0 48	48c0c038   	memd(##0x60256f78) = r1:0 }
+ 818459: 60080e80:	1e c0 1e 96	961ec01e { 	dealloc_return }
+
+=== caller site (inside BattMngr_init):
+730329:6002ad78:	24 f0 0a 5a	5a0af024 { 	call 0x60080dc0 <PT_LOAD#19+0x80dc0> }

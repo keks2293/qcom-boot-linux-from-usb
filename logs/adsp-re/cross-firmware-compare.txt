@@ -1,0 +1,63 @@
+# Cross-firmware comparison: is there a "fixed" public PPM configuration?
+
+## sm8550 family — all 7 public variants carry ONE identical PPM-FDT payload
+
+adsp_dtb.mbn container (16184 B) md5 per variant:
+
+  variant        adsp_dtb.mbn md5
+  rp6            395b86387251969f32e974d616c085be   [== stock Armada image == this repo]
+  rpnova         61bb2ca3a8925c254c7156a8d73b2d6f
+  odin2          c345a53cb4640adc54cbfd0173917d25
+  odin2mini      2b05f32580f10c55dc30cfeb4f80a317
+  odin2portal    4ce6afda37d23eff3c94fa33faa83809
+  thor           ac0de90f2ec09e20cfa94cfdc8d0e464
+  ayaneo         8bddcc9f4ff3650735849570f8af4010
+
+The FDT payload (8315 B at MBN offset 208) is byte-identical in all 7:
+
+  md5 f7c72c64f8f7e0a75e5791ed973ea766  (verified by extracting the payload
+  from each container / each dtc-readable copy; the dtc dump in
+  ppm-fdt-rp6.dts is that payload)
+
+=> the containers differ (per-variant certificate/signature data) but the
+   PPM configuration is ONE. There is no "working variant" to copy from.
+
+## sm8550 adsp.mbn (PPM code, 28494168 B for rp6) md5 per variant:
+
+  rp6            535b2f806f1e87a4a063827c81270968   [== stock Armada image]
+  rpnova         ead79976cdb18a19ed39aac3da7380ee
+  odin2          824b9e96936bea096645a1309111ae2e
+  odin2mini      1051ea7a24f7d65e43bd499e1876272f
+  odin2portal    826ab9328d092b7b33af8b3d0769a140
+  thor           18a7c4ff43785ea9546ecc2ae97b4be6
+
+(ayaneo adsp.mbn: not extracted in this comparison; the FDT payload was.)
+
+=> the ADSP firmware is NOT a differentiator between the working full-system
+   environment and the dead initramfs environment (stock image == repo copy).
+
+## SM8650 (kaanapali, newer SoC): PPM config is NOT in adsp_dtb.mbn but in soccp_dtb.mbn
+
+  apemost soccp_dtb.mbn md5 2010e354412627e7ad8115f6b5af8bbd (94008 B; FDT @0x1000, 82912 B)
+  apemost adsp_dtb.mbn md5 621f262cce497c6a5edd8f64eec593d8 (5 FDTs, none of them PPM)
+
+The SM8650 uses a NEWER struct generation (byte-order/struct-ver differ,
+e.g. chg_det_cfg/en-apsd-pwr [01000000] vs rp6 [00000001]), so numeric 1:1
+value comparison is invalid. The byte-order-invariant levers are IDENTICAL:
+
+  property                    rp6 (sm8550)    kaanapali (sm8650)
+  chg_det_cfg/apsd-rerun-cfg  0               0
+  chg_det_cfg/dam-hc-override 0               0
+  ucsi_cap_cfg/attributes     0x4046          0x4046
+
+## SM8380 (yihyun, older stack): adsp_dtbs.elf md5 15d6de354257b604af13138a2589d725 (73528 B)
+
+  old battman layout (/sw/core/pmic/battman/{charger_cfg,gauge_cfg,platform_cfg,usbpd_cfg});
+  chg_det_cfg/apsd-rerun-cfg DOES NOT EXIST in that stack => nothing to compare.
+  (ucsi_cap_cfg_{uefi,hlos}.attributes = 0x4046, tcpc_cfg_*.en-port-cfg-ovr = 0 — same as rp6.)
+
+## Conclusion
+
+No public firmware (sm8550 x7, sm8650, sm8380) has apsd-rerun-cfg=1 or any
+other "fixed" variant of the levers under investigation. The newest SoC
+(SM8650) still ships apsd-rerun-cfg=0.

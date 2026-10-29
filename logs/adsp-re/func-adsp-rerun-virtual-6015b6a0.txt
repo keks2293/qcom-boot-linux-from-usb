@@ -1,0 +1,35 @@
+# function enclosing site 6015b6a0  (lines 1042211..1042243, 33 lines)
+# start vaddr 6015b6a0   end vaddr 6015b720
+1042211: 6015b6a0:	02 c0 9d a0	a09dc002 { 	allocframe(#0x10) }
+1042212: 6015b6a4:	04 c0 63 70	7063c004 { 	r4 = r3 }
+1042213: 6015b6a8:	04 c0 62 70	7062c004 { 	r4 = r2 }
+1042214: 6015b6ac:	04 c0 61 70	7061c004 { 	r4 = r1 }
+1042215: 6015b6b0:	fe e0 9e a7	a79ee0fe { 	memw(r30+#-0x8) = r0 }
+1042216: 6015b6b4:	f7 e1 1e a7	a71ee1f7 { 	memb(r30+#-0x9) = r1 }
+1042217: 6015b6b8:	f6 e2 1e a7	a71ee2f6 { 	memb(r30+#-0xa) = r2 }
+1042218: 6015b6bc:	f5 e3 1e a7	a71ee3f5 { 	memb(r30+#-0xb) = r3 }
+1042219: 6015b6c0:	c2 ff 9e 97	979effc2 { 	r2 = memw(r30+#-0x8) }
+1042220: 6015b6c4:	00 c0 02 75	7502c000 { 	p0 = cmp.eq(r2,#0x0) }
+1042221: 6015b6c8:	12 c0 00 5c	5c00c012 { 	if (p0) jump:nt 0x6015b6ec <PT_LOAD#19+0x15b6ec> }
+1042222: 6015b6cc:	02 c0 00 58	5800c002 { 	jump 0x6015b6d0 <PT_LOAD#19+0x15b6d0> }
+1042223: 6015b6d0:	c2 ff 9e 97	979effc2 { 	r2 = memw(r30+#-0x8) }
+1042224: 6015b6d4:	c2 c1 82 91	9182c1c2 { 	r2 = memw(r2+#0x38) }
+1042225: 6015b6d8:	fc e2 9e a7	a79ee2fc { 	memw(r30+#-0x10) = r2 }
+1042226: 6015b6dc:	00 c0 02 75	7502c000 { 	p0 = cmp.eq(r2,#0x0) }
+1042227: 6015b6e0:	00 c0 c0 6b	6bc0c000 { 	p0 = not(p0) }
+1042228: 6015b6e4:	0c c0 00 5c	5c00c00c { 	if (p0) jump:nt 0x6015b6fc <PT_LOAD#19+0x15b6fc> }
+1042229: 6015b6e8:	02 c0 00 58	5800c002 { 	jump 0x6015b6ec <PT_LOAD#19+0x15b6ec> }
+1042230: 6015b6ec:	c2 ff fe bf	bffeffc2 { 	r2 = add(r30,#-0x2) }
+1042231: 6015b6f0:	08 40 00 00	00004008 { 	immext(#0x200)
+1042232: 6015b6f4:	02 c0 22 3c	3c22c002   	memh(r2+#0x0) = ##0x202 }
+1042233: 6015b6f8:	12 c0 00 58	5800c012 { 	jump 0x6015b71c <PT_LOAD#19+0x15b71c> }
+1042234: 6015b6fc:	84 ff 9e 97	979eff84 { 	r4 = memw(r30+#-0x10) }
+1042235: 6015b700:	c0 ff 9e 97	979effc0 { 	r0 = memw(r30+#-0x8) }
+1042236: 6015b704:	e1 fe 3e 97	973efee1 { 	r1 = memub(r30+#-0x9) }
+1042237: 6015b708:	c2 fe 3e 97	973efec2 { 	r2 = memub(r30+#-0xa) }
+1042238: 6015b70c:	a3 fe 3e 97	973efea3 { 	r3 = memub(r30+#-0xb) }
+1042239: 6015b710:	00 c0 a4 50	50a4c000 { 	callr r4 }
+1042240: 6015b714:	ff e0 5e a7	a75ee0ff { 	memh(r30+#-0x2) = r0 }
+1042241: 6015b718:	02 c0 00 58	5800c002 { 	jump 0x6015b71c <PT_LOAD#19+0x15b71c> }
+1042242: 6015b71c:	e0 ff 5e 97	975effe0 { 	r0 = memh(r30+#-0x2) }
+1042243: 6015b720:	1e c0 1e 96	961ec01e { 	dealloc_return }

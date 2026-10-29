@@ -1,0 +1,62 @@
+# String xref sample (adsp.mbn, rp6)
+# Method: xref = grep '##0x<vaddr>' text_all.txt ; vaddr = 0x60000000 + (fileoff - 0xa93000)
+# (strings file offset -> vaddr mapping per PT_LOAD#19: file[0xa93000:0xcd67c4] <-> vaddr[0x60000000:0x602437c4])
+
+## icm_ncp_stby (wedge state):
+$ grep -n "icm_ncp_stby" adsp_strings.txt | head -6
+49867:0xccbd12 8`Warn: %s: icm_ncp_stby_init: keeps in icm_ncp_stby utill charger_type updated
+49868:0xccbd62 icm_ncp_stby_init
+49869:0xccbd74 ERROR: %s: icm_ncp_stby_init ERROR: status=%d
+49870:0xccbda2 Warn: %s: icm_ncp_stby_main: keeps in icm_ncp_stby utill charger_type updated
+49871:0xccbdf0 icm_ncp_stby_main
+49872:0xccbe02 ERROR: %s: icm_ncp_stby_main ERROR: status=%d
+
+## xref of the "keeps in icm_ncp_stby utill charger_type updated" WARN message (fileoff 0xccbda2 -> vaddr 0x60238da2):
+$ grep -n "##0x60238da2" text_all.txt
+1114153:601a1ab8:	42 c4 00 78	7800c442   	r2 = ##0x60238da2 }
+
+## xref of name "PmicTccPlatform_Schg_PDPhy_R1_IRQ_Setup" (fileoff 0xcae9b3 -> vaddr 0x6021b9b3):
+$ grep -n "##0x6021b9b3" text_all.txt
+975081:60119db8:	33 c0 42 3c	3c42c033   	memw(r2+#0x0) = ##0x6021b9b3 }
+975159:60119ef0:	33 c0 42 3c	3c42c033   	memw(r2+#0x0) = ##0x6021b9b3 }
+975267:6011a0a0:	33 c0 42 3c	3c42c033   	memw(r2+#0x0) = ##0x6021b9b3 }
+975331:6011a1a0:	33 c0 42 3c	3c42c033   	memw(r2+#0x0) = ##0x6021b9b3 }
+975382:6011a26c:	33 c0 42 3c	3c42c033   	memw(r2+#0x0) = ##0x6021b9b3 }
+
+## xref of name "smb139x_irq_setup" (fileoff 0xcc3dca -> vaddr 0x60230dca):
+$ grep -n "##0x60230dca" text_all.txt
+1069091:60175aa0:	0a c0 42 3c	3c42c00a   	memw(r2+#0x0) = ##0x60230dca }
+
+## xref of name "PmicTccPlatform_Init" (fileoff 0xca8e73 -> vaddr 0x60215e73):
+$ grep -n "##0x60215e73" text_all.txt | head -4
+959683:6010ad20:	33 c0 42 3c	3c42c033   	memw(r2+#0x0) = ##0x60215e73 }
+959806:6010af0c:	33 c0 42 3c	3c42c033   	memw(r2+#0x0) = ##0x60215e73 }
+959862:6010afec:	33 c0 42 3c	3c42c033   	memw(r2+#0x0) = ##0x60215e73 }
+959904:6010b094:	33 c0 42 3c	3c42c033   	memw(r2+#0x0) = ##0x60215e73 }
+
+## name string "pmic_glink_rx_intent_req" (fileoff 0xc8da63 -> vaddr 0x601faa63):
+$ grep -n "##0x601faa63" text_all.txt
+826581:60088d68:	23 c0 42 3c	3c42c023   	memw(r2+#0x0) = ##0x601faa63 }
+826631:60088e30:	23 c0 42 3c	3c42c023   	memw(r2+#0x0) = ##0x601faa63 }
+# both xrefs are inside the glink RX intent handler @0x60088cd0..0x60088e70
+# (see func-glink-rx-60088cd0.txt). Log fmt strings: 0x601faa25
+# ("...rx intent req_size:%d"), 0x601faa7c ("...rx intent failed:%d").
+
+## name string "pmic_glink_ulog_process_rx_data" (fileoff 0xc8d866 -> vaddr 0x601fa866):
+$ grep -n "##0x601fa866" text_all.txt
+825890:6008829c:	26 c0 42 3c	3c42c026   	memw(r2+#0x0) = ##0x601fa866 }
+825960:600883b4:	26 c0 42 3c	3c42c026   	memw(r2+#0x0) = ##0x601fa866 }
+826109:60088608:	26 c0 42 3c	3c42c026   	memw(r2+#0x0) = ##0x601fa866 }
+# all inside the glink ULOG RX processor @0x600872f0..0x60088960
+# (see func-ulog-rx-processor-type19-600872f0.txt)
+
+## ULog client init name "BATTMAN ULog" (fileoff 0xc8c5d5 -> vaddr 0x601f95d5):
+$ grep -n "##0x601f95d5" text_all.txt
+818421:60080de8:	a1 c2 00 78	7800c2a1   	r1 = ##0x601f95d5 }
+# inside the ULog client init fn @0x60080dc0 (see func-ulog-init-60080dc0.txt)
+
+## name string "BattMngr_init" (fileoff 0xc70aee -> vaddr 0x601ddaee):
+$ grep -n "##0x601ddaee" text_all.txt
+730463:6002af90:	2e c0 42 3c	3c42c02e   	memw(r2+#0x0) = ##0x601ddaee }
+730487:6002aff0:	2e c0 42 3c	3c42c02e   	memw(r2+#0x0) = ##0x601ddaee }
+# inside BattMngr_init fn @0x6002ad50 — the sole caller of the ULog client init

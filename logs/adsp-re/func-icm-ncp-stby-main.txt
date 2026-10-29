@@ -1,0 +1,46 @@
+# icm_ncp_stby_main @0x601a1790 — the wedge state (excerpt of a 526-line function)
+# Evidence: state gate (field_c == 2), jump table (events 7..0x18, event 24 = periodic tick),
+# "keeps in icm_ncp_stby utill charger_type updated" WARN log xref and its ULog gate.
+# NOTE: the globals 0x60256f78/0x6024a668/0x6024a660 gate ONLY this WARN log
+# (ULog logging controls); the functional state write memb(r2+#0xc) = #0x2 in the
+# jumptable arms runs unconditionally. See ulog-flag-globals-write-sites.txt.
+
+--- prologue + state gate (allocframe .. cmp.eq(#2) .. jumptable .. jumpr):
+1113951: 601a1790:	07 c0 9d a0	a09dc007 { 	allocframe(#0x38) }
+1113952: 601a1794:	fe e0 9e a7	a79ee0fe { 	memw(r30+#-0x8) = r0 }
+1113953: 601a1798:	fd e1 9e a7	a79ee1fd { 	memw(r30+#-0xc) = r1 }
+1113954: 601a179c:	42 fe fe bf	bffefe42 { 	r2 = add(r30,#-0xe) }
+601a17e4:	62 ff 9e 97	979eff62 { 	r2 = memw(r30+#-0x14) }
+601a17e8:	82 c1 02 91	9102c182 { 	r2 = memb(r2+#0xc) }
+601a17ec:	40 c0 02 75	7502c040 { 	p0 = cmp.eq(r2,#0x2) }
+601a17f0:	0a c0 00 5c	5c00c00a { 	if (p0) jump:nt 0x601a1804 <PT_LOAD#19+0x1a1804> }
+601a17f4:	02 c0 00 58	5800c002 { 	jump 0x601a17f8 <PT_LOAD#19+0x1a17f8> }
+601a17f8:	22 ff 7e 97	977eff22 { 	r2 = memuh(r30+#-0xe) }
+601a17fc:	ff e2 5e a7	a75ee2ff { 	memh(r30+#-0x2) = r2 }
+601a1800:	0e c2 00 58	5800c20e { 	jump 0x601a1c1c <PT_LOAD#19+0x1a1c1c> }
+601a1804:	42 ff 9e 97	979eff42 { 	r2 = memw(r30+#-0x18) }
+601a1808:	02 c0 22 91	9122c002 { 	r2 = memub(r2+#0x0) }
+601a180c:	22 ff e2 bf	bfe2ff22 { 	r2 = add(r2,#-0x7) }
+601a1810:	f4 e2 9e a7	a79ee2f4 { 	memw(r30+#-0x30) = r2 }
+601a1814:	20 c2 82 75	7582c220 { 	p0 = cmp.gtu(r2,#0x11) }
+601a1818:	b0 c0 00 5c	5c00c0b0 { 	if (p0) jump:nt 0x601a1978 <PT_LOAD#19+0x1a1978> }
+601a181c:	82 fe 9e 97	979efe82 { 	r2 = memw(r30+#-0x30) }
+601a1820:	33 4e 02 06	06024e33 { 	immext(#0x60238cc0)
+601a1824:	02 f0 82 9d	9d82f002   	r2 = memw(r2<<#0x2+##0x60238cc0) }
+601a1828:	00 c0 82 52	5282c000 { 	jumpr r2 }
+
+--- log site: xref of the WARN message (name 0x60238df0 / msg 0x60238da2) inside icm_ncp_stby_main:
+601a1aac:	37 4e 02 06	06024e37 { 	immext(#0x60238dc0)
+601a1ab0:	30 c0 42 3c	3c42c030   	memw(r2+#0x0) = ##0x60238df0 }
+601a1ab4:	36 4e 02 06	06024e36 { 	immext(#0x60238d80)
+601a1ab8:	42 c4 00 78	7800c442   	r2 = ##0x60238da2 }
+601a1abc:	21 c0 00 78	7800c021 { 	r1 = #0x1 }
+601a1ac0:	ac ef cc 5b	5bccefac { 	call 0x60007a18 <PT_LOAD#19+0x7a18> }
+
+--- log gates (globals read around the log site, repeated at 4 jumptable arms):
+176:1114124: 601a1a44:	00 c7 c0 49	49c0c700   	r1:0 = memd(##0x60256f78) }
+189:1114137: 601a1a78:	02 c4 20 49	4920c402   	r2 = memub(##0x6024a660) }
+251:1114199: 601a1b70:	00 c7 c0 49	49c0c700   	r1:0 = memd(##0x60256f78) }
+264:1114212: 601a1ba4:	02 c4 20 49	4920c402   	r2 = memub(##0x6024a660) }
+375:1114323: 601a1d60:	00 c7 c0 49	49c0c700   	r1:0 = memd(##0x60256f78) }
+388:1114336: 601a1d94:	02 c4 20 49	4920c402   	r2 = memub(##0x6024a660) }

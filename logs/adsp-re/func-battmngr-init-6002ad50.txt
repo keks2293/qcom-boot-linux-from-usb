@@ -1,0 +1,194 @@
+# BattMngr_init @0x6002ad50..0x6002b028 (183 L) — the sole caller of the ULog client init
+#
+# Evidence for the init chain: BattMngr_init -> ULog client init @0x60080dc0
+# (call site 0x6002ad78). So the ULog enable-mask/level defaults
+# (mask 0x3FFFFFFFFF, level 3) are established at ADSP boot (BattMngr init),
+# not at any AP-ready handoff. The fn also fills the vtable @0x602805xx.
+# Name string: "BattMngr_init" vaddr 0x601ddaee (fileoff 0xc70aee),
+# xrefs @0x6002af90 / @0x6002aff0 (both inside this fn).
+ 730319: 6002ad50:	03 c0 9d a0	a09dc003 { 	allocframe(#0x18) }
+ 730320: 6002ad54:	82 ff fe bf	bffeff82 { 	r2 = add(r30,#-0x4) }
+ 730321: 6002ad58:	00 c0 22 3c	3c22c000 { 	memh(r2+#0x0) = #0x0 }
+ 730322: 6002ad5c:	fa ca 0b 5a	5a0bcafa { 	call 0x60084350 <PT_LOAD#19+0x84350> }
+ 730323: 6002ad60:	fe e0 5e a7	a75ee0fe { 	memh(r30+#-0x4) = r0 }
+ 730324: 6002ad64:	c2 ff 5e 97	975effc2 { 	r2 = memh(r30+#-0x4) }
+ 730325: 6002ad68:	00 c0 02 75	7502c000 { 	p0 = cmp.eq(r2,#0x0) }
+ 730326: 6002ad6c:	06 c0 00 5c	5c00c006 { 	if (p0) jump:nt 0x6002ad78 <PT_LOAD#19+0x2ad78> }
+ 730327: 6002ad70:	02 c0 00 58	5800c002 { 	jump 0x6002ad74 <PT_LOAD#19+0x2ad74> }
+ 730328: 6002ad74:	d2 c0 00 58	5800c0d2 { 	jump 0x6002af18 <PT_LOAD#19+0x2af18> }
+ 730329: 6002ad78:	24 f0 0a 5a	5a0af024 { 	call 0x60080dc0 <PT_LOAD#19+0x80dc0> }
+ 730330: 6002ad7c:	f2 ef 0a 5a	5a0aeff2 { 	call 0x60080d60 <PT_LOAD#19+0x80d60> }
+ 730331: 6002ad80:	70 d0 0b 5a	5a0bd070 { 	call 0x60084e60 <PT_LOAD#19+0x84e60> }
+ 730332: 6002ad84:	e0 c1 00 75	7500c1e0 { 	p0 = cmp.eq(r0,#0xf) }
+ 730333: 6002ad88:	0e c0 00 5c	5c00c00e { 	if (p0) jump:nt 0x6002ada4 <PT_LOAD#19+0x2ada4> }
+ 730334: 6002ad8c:	02 c0 00 58	5800c002 { 	jump 0x6002ad90 <PT_LOAD#19+0x2ad90> }
+ 730335: 6002ad90:	68 d0 0b 5a	5a0bd068 { 	call 0x60084e60 <PT_LOAD#19+0x84e60> }
+ 730336: 6002ad94:	00 c2 00 75	7500c200 { 	p0 = cmp.eq(r0,#0x10) }
+ 730337: 6002ad98:	00 c0 c0 6b	6bc0c000 { 	p0 = not(p0) }
+ 730338: 6002ad9c:	0c c0 00 5c	5c00c00c { 	if (p0) jump:nt 0x6002adb4 <PT_LOAD#19+0x2adb4> }
+ 730339: 6002ada0:	02 c0 00 58	5800c002 { 	jump 0x6002ada4 <PT_LOAD#19+0x2ada4> }
+ 730340: 6002ada4:	37 52 02 06	06025237 { 	immext(#0x60248dc0)
+ 730341: 6002ada8:	02 c1 00 78	7800c102   	r2 = ##0x60248dc8 }
+ 730342: 6002adac:	00 c0 02 3c	3c02c000 { 	memb(r2+#0x0) = #0x0 }
+ 730343: 6002adb0:	02 c0 00 58	5800c002 { 	jump 0x6002adb4 <PT_LOAD#19+0x2adb4> }
+ 730344: 6002adb4:	37 52 02 06	06025237 { 	immext(#0x60248dc0)
+ 730345: 6002adb8:	02 c1 00 49	4900c102   	r2 = memb(##0x60248dc8) }
+ 730346: 6002adbc:	00 c0 02 75	7502c000 { 	p0 = cmp.eq(r2,#0x0) }
+ 730347: 6002adc0:	a6 c0 00 5c	5c00c0a6 { 	if (p0) jump:nt 0x6002af0c <PT_LOAD#19+0x2af0c> }
+ 730348: 6002adc4:	02 c0 00 58	5800c002 { 	jump 0x6002adc8 <PT_LOAD#19+0x2adc8> }
+ 730349: 6002adc8:	b4 d0 0b 5a	5a0bd0b4 { 	call 0x60084f30 <PT_LOAD#19+0x84f30> }
+ 730350: 6002adcc:	fe e0 5e a7	a75ee0fe { 	memh(r30+#-0x4) = r0 }
+ 730351: 6002add0:	c2 ff 5e 97	975effc2 { 	r2 = memh(r30+#-0x4) }
+ 730352: 6002add4:	00 c0 02 75	7502c000 { 	p0 = cmp.eq(r2,#0x0) }
+ 730353: 6002add8:	06 c0 00 5c	5c00c006 { 	if (p0) jump:nt 0x6002ade4 <PT_LOAD#19+0x2ade4> }
+ 730354: 6002addc:	02 c0 00 58	5800c002 { 	jump 0x6002ade0 <PT_LOAD#19+0x2ade0> }
+ 730355: 6002ade0:	9c c0 00 58	5800c09c { 	jump 0x6002af18 <PT_LOAD#19+0x2af18> }
+ 730356: 6002ade4:	6e dd 0b 5a	5a0bdd6e { 	call 0x600868c0 <PT_LOAD#19+0x868c0> }
+ 730357: 6002ade8:	fe e0 5e a7	a75ee0fe { 	memh(r30+#-0x4) = r0 }
+ 730358: 6002adec:	c2 ff 5e 97	975effc2 { 	r2 = memh(r30+#-0x4) }
+ 730359: 6002adf0:	00 c0 02 75	7502c000 { 	p0 = cmp.eq(r2,#0x0) }
+ 730360: 6002adf4:	06 c0 00 5c	5c00c006 { 	if (p0) jump:nt 0x6002ae00 <PT_LOAD#19+0x2ae00> }
+ 730361: 6002adf8:	02 c0 00 58	5800c002 { 	jump 0x6002adfc <PT_LOAD#19+0x2adfc> }
+ 730362: 6002adfc:	8e c0 00 58	5800c08e { 	jump 0x6002af18 <PT_LOAD#19+0x2af18> }
+ 730363: 6002ae00:	e8 f2 0a 5a	5a0af2e8 { 	call 0x600813d0 <PT_LOAD#19+0x813d0> }
+ 730364: 6002ae04:	fe e0 5e a7	a75ee0fe { 	memh(r30+#-0x4) = r0 }
+ 730365: 6002ae08:	c2 ff 5e 97	975effc2 { 	r2 = memh(r30+#-0x4) }
+ 730366: 6002ae0c:	00 c0 02 75	7502c000 { 	p0 = cmp.eq(r2,#0x0) }
+ 730367: 6002ae10:	06 c0 00 5c	5c00c006 { 	if (p0) jump:nt 0x6002ae1c <PT_LOAD#19+0x2ae1c> }
+ 730368: 6002ae14:	02 c0 00 58	5800c002 { 	jump 0x6002ae18 <PT_LOAD#19+0x2ae18> }
+ 730369: 6002ae18:	80 c0 00 58	5800c080 { 	jump 0x6002af18 <PT_LOAD#19+0x2af18> }
+ 730370: 6002ae1c:	8a f9 0a 5a	5a0af98a { 	call 0x60082130 <PT_LOAD#19+0x82130> }
+ 730371: 6002ae20:	fe e0 5e a7	a75ee0fe { 	memh(r30+#-0x4) = r0 }
+ 730372: 6002ae24:	c2 ff 5e 97	975effc2 { 	r2 = memh(r30+#-0x4) }
+ 730373: 6002ae28:	00 c0 02 75	7502c000 { 	p0 = cmp.eq(r2,#0x0) }
+ 730374: 6002ae2c:	06 c0 00 5c	5c00c006 { 	if (p0) jump:nt 0x6002ae38 <PT_LOAD#19+0x2ae38> }
+ 730375: 6002ae30:	02 c0 00 58	5800c002 { 	jump 0x6002ae34 <PT_LOAD#19+0x2ae34> }
+ 730376: 6002ae34:	72 c0 00 58	5800c072 { 	jump 0x6002af18 <PT_LOAD#19+0x2af18> }
+ 730377: 6002ae38:	fc dc 0c 5a	5a0cdcfc { 	call 0x6008e830 <PT_LOAD#19+0x8e830> }
+ 730378: 6002ae3c:	fe e0 5e a7	a75ee0fe { 	memh(r30+#-0x4) = r0 }
+ 730379: 6002ae40:	c2 ff 5e 97	975effc2 { 	r2 = memh(r30+#-0x4) }
+ 730380: 6002ae44:	00 c0 02 75	7502c000 { 	p0 = cmp.eq(r2,#0x0) }
+ 730381: 6002ae48:	06 c0 00 5c	5c00c006 { 	if (p0) jump:nt 0x6002ae54 <PT_LOAD#19+0x2ae54> }
+ 730382: 6002ae4c:	02 c0 00 58	5800c002 { 	jump 0x6002ae50 <PT_LOAD#19+0x2ae50> }
+ 730383: 6002ae50:	64 c0 00 58	5800c064 { 	jump 0x6002af18 <PT_LOAD#19+0x2af18> }
+ 730384: 6002ae54:	1e f0 0a 5a	5a0af01e { 	call 0x60080e90 <PT_LOAD#19+0x80e90> }
+ 730385: 6002ae58:	b4 c5 0b 5a	5a0bc5b4 { 	call 0x600839c0 <PT_LOAD#19+0x839c0> }
+ 730386: 6002ae5c:	fe e0 5e a7	a75ee0fe { 	memh(r30+#-0x4) = r0 }
+ 730387: 6002ae60:	c2 ff 5e 97	975effc2 { 	r2 = memh(r30+#-0x4) }
+ 730388: 6002ae64:	00 c0 02 75	7502c000 { 	p0 = cmp.eq(r2,#0x0) }
+ 730389: 6002ae68:	06 c0 00 5c	5c00c006 { 	if (p0) jump:nt 0x6002ae74 <PT_LOAD#19+0x2ae74> }
+ 730390: 6002ae6c:	02 c0 00 58	5800c002 { 	jump 0x6002ae70 <PT_LOAD#19+0x2ae70> }
+ 730391: 6002ae70:	54 c0 00 58	5800c054 { 	jump 0x6002af18 <PT_LOAD#19+0x2af18> }
+ 730392: 6002ae74:	1e c0 0b 5a	5a0bc01e { 	call 0x60082eb0 <PT_LOAD#19+0x82eb0> }
+ 730393: 6002ae78:	fe e0 5e a7	a75ee0fe { 	memh(r30+#-0x4) = r0 }
+ 730394: 6002ae7c:	c2 ff 5e 97	975effc2 { 	r2 = memh(r30+#-0x4) }
+ 730395: 6002ae80:	00 c0 02 75	7502c000 { 	p0 = cmp.eq(r2,#0x0) }
+ 730396: 6002ae84:	0a c0 00 5c	5c00c00a { 	if (p0) jump:nt 0x6002ae98 <PT_LOAD#19+0x2ae98> }
+ 730397: 6002ae88:	02 c0 00 58	5800c002 { 	jump 0x6002ae8c <PT_LOAD#19+0x2ae8c> }
+ 730398: 6002ae8c:	c2 ff 7e 97	977effc2 { 	r2 = memuh(r30+#-0x4) }
+ 730399: 6002ae90:	ff e2 5e a7	a75ee2ff { 	memh(r30+#-0x2) = r2 }
+ 730400: 6002ae94:	c8 c0 00 58	5800c0c8 { 	jump 0x6002b024 <PT_LOAD#19+0x2b024> }
+ 730401: 6002ae98:	54 fe ff 5b	5bfffe54 { 	call 0x6002ab40 <PT_LOAD#19+0x2ab40> }
+ 730402: 6002ae9c:	fe e0 5e a7	a75ee0fe { 	memh(r30+#-0x4) = r0 }
+ 730403: 6002aea0:	c2 ff 5e 97	975effc2 { 	r2 = memh(r30+#-0x4) }
+ 730404: 6002aea4:	00 c0 02 75	7502c000 { 	p0 = cmp.eq(r2,#0x0) }
+ 730405: 6002aea8:	0a c0 00 5c	5c00c00a { 	if (p0) jump:nt 0x6002aebc <PT_LOAD#19+0x2aebc> }
+ 730406: 6002aeac:	02 c0 00 58	5800c002 { 	jump 0x6002aeb0 <PT_LOAD#19+0x2aeb0> }
+ 730407: 6002aeb0:	c2 ff 7e 97	977effc2 { 	r2 = memuh(r30+#-0x4) }
+ 730408: 6002aeb4:	ff e2 5e a7	a75ee2ff { 	memh(r30+#-0x2) = r2 }
+ 730409: 6002aeb8:	b6 c0 00 58	5800c0b6 { 	jump 0x6002b024 <PT_LOAD#19+0x2b024> }
+ 730410: 6002aebc:	5a fc ff 5b	5bfffc5a { 	call 0x6002a770 <PT_LOAD#19+0x2a770> }
+ 730411: 6002aec0:	bb 55 02 06	060255bb { 	immext(#0x60256ec0)
+ 730412: 6002aec4:	02 c5 80 49	4980c502   	r2 = memw(##0x60256ee8) }
+ 730413: 6002aec8:	02 c0 82 91	9182c002 { 	r2 = memw(r2+#0x0) }
+ 730414: 6002aecc:	fd e2 9e a7	a79ee2fd { 	memw(r30+#-0xc) = r2 }
+ 730415: 6002aed0:	bb 55 02 06	060255bb { 	immext(#0x60256ec0)
+ 730416: 6002aed4:	02 c5 80 49	4980c502   	r2 = memw(##0x60256ee8) }
+ 730417: 6002aed8:	02 cc 62 b0	b062cc02 { 	r2 = add(r2,#0x660) }
+ 730418: 6002aedc:	fe e2 9e a7	a79ee2fe { 	memw(r30+#-0x8) = r2 }
+ 730419: 6002aee0:	80 fe fe bf	bffefe80 { 	r0 = add(r30,#-0xc) }
+ 730420: 6002aee4:	ce c8 14 5a	5a14c8ce { 	call 0x600cc080 <PT_LOAD#19+0xcc080> }
+ 730421: 6002aee8:	d4 ee 0a 5a	5a0aeed4 { 	call 0x60080c90 <PT_LOAD#19+0x80c90> }
+ 730422: 6002aeec:	3a f0 0b 5a	5a0bf03a { 	call 0x60088f60 <PT_LOAD#19+0x88f60> }
+ 730423: 6002aef0:	fe e0 5e a7	a75ee0fe { 	memh(r30+#-0x4) = r0 }
+ 730424: 6002aef4:	76 df 0b 5a	5a0bdf76 { 	call 0x60086de0 <PT_LOAD#19+0x86de0> }
+ 730425: 6002aef8:	1c d0 0c 5a	5a0cd01c { 	call 0x6008cf30 <PT_LOAD#19+0x8cf30> }
+ 730426: 6002aefc:	c2 ff 7e 97	977effc2 { 	r2 = memuh(r30+#-0x4) }
+ 730427: 6002af00:	02 c0 22 f1	f122c002 { 	r2 = or(r2,r0) }
+ 730428: 6002af04:	fe e2 5e a7	a75ee2fe { 	memh(r30+#-0x4) = r2 }
+ 730429: 6002af08:	02 c0 00 58	5800c002 { 	jump 0x6002af0c <PT_LOAD#19+0x2af0c> }
+ 730430: 6002af0c:	c2 ff 7e 97	977effc2 { 	r2 = memuh(r30+#-0x4) }
+ 730431: 6002af10:	ff e2 5e a7	a75ee2ff { 	memh(r30+#-0x2) = r2 }
+ 730432: 6002af14:	88 c0 00 58	5800c088 { 	jump 0x6002b024 <PT_LOAD#19+0x2b024> }
+ 730433: 6002af18:	02 c0 00 58	5800c002 { 	jump 0x6002af1c <PT_LOAD#19+0x2af1c> }
+ 730434: 6002af1c:	bd 55 02 06	060255bd { 	immext(#0x60256f40)
+ 730435: 6002af20:	82 c7 20 49	4920c782   	r2 = memub(##0x60256f7c) }
+ 730436: 6002af24:	00 c0 02 85	8502c000 { 	p0 = tstbit(r2,#0x0) }
+ 730437: 6002af28:	0e c0 00 5c	5c00c00e { 	if (p0) jump:nt 0x6002af44 <PT_LOAD#19+0x2af44> }
+ 730438: 6002af2c:	02 c0 00 58	5800c002 { 	jump 0x6002af30 <PT_LOAD#19+0x2af30> }
+ 730439: 6002af30:	99 52 02 06	06025299 { 	immext(#0x6024a640)
+ 730440: 6002af34:	82 c5 20 49	4920c582   	r2 = memub(##0x6024a66c) }
+ 730441: 6002af38:	00 c0 02 85	8502c000 { 	p0 = tstbit(r2,#0x0) }
+ 730442: 6002af3c:	6c c0 20 5c	5c20c06c { 	if (!p0) jump:nt 0x6002b014 <PT_LOAD#19+0x2b014> }
+ 730443: 6002af40:	02 c0 00 58	5800c002 { 	jump 0x6002af44 <PT_LOAD#19+0x2af44> }
+ 730444: 6002af44:	02 c0 00 58	5800c002 { 	jump 0x6002af48 <PT_LOAD#19+0x2af48> }
+ 730445: 6002af48:	99 52 02 06	06025299 { 	immext(#0x6024a640)
+ 730446: 6002af4c:	02 c6 20 49	4920c602   	r2 = memub(##0x6024a670) }
+ 730447: 6002af50:	40 c0 42 75	7542c040 { 	p0 = cmp.gt(r2,#0x2) }
+ 730448: 6002af54:	00 c0 c0 6b	6bc0c000 { 	p0 = not(p0) }
+ 730449: 6002af58:	28 c0 00 5c	5c00c028 { 	if (p0) jump:nt 0x6002afa8 <PT_LOAD#19+0x2afa8> }
+ 730450: 6002af5c:	02 c0 00 58	5800c002 { 	jump 0x6002af60 <PT_LOAD#19+0x2af60> }
+ 730451: 6002af60:	02 c0 00 58	5800c002 { 	jump 0x6002af64 <PT_LOAD#19+0x2af64> }
+ 730452: 6002af64:	c1 ff 5e 97	975effc1 { 	r1 = memh(r30+#-0x4) }
+ 730453: 6002af68:	6e 77 01 06	0601776e { 	immext(#0x601ddb80)
+ 730454: 6002af6c:	00 c3 00 78	7800c300   	r0 = ##0x601ddb98 }
+ 730455: 6002af70:	74 e8 fb 5b	5bfbe874 { 	call 0x60008058 <PT_LOAD#19+0x8058> }
+ 730456: 6002af74:	02 c0 00 58	5800c002 { 	jump 0x6002af78 <PT_LOAD#19+0x2af78> }
+ 730457: 6002af78:	bd 55 02 06	060255bd { 	immext(#0x60256f40)
+ 730458: 6002af7c:	00 c3 80 49	4980c300   	r0 = memw(##0x60256f58) }
+ 730459: 6002af80:	c3 ff 5e 97	975effc3 { 	r3 = memh(r30+#-0x4) }
+ 730460: 6002af84:	02 c0 7d 70	707dc002 { 	r2 = r29 }
+ 730461: 6002af88:	01 c3 82 a1	a182c301 { 	memw(r2+#0x4) = r3 }
+ 730462: 6002af8c:	6b 77 01 06	0601776b { 	immext(#0x601ddac0)
+ 730463: 6002af90:	2e c0 42 3c	3c42c02e   	memw(r2+#0x0) = ##0x601ddaee }
+ 730464: 6002af94:	6a 77 01 06	0601776a { 	immext(#0x601dda80)
+ 730465: 6002af98:	22 c4 00 78	7800c422   	r2 = ##0x601ddaa1 }
+ 730466: 6002af9c:	41 c0 00 78	7800c041 { 	r1 = #0x2 }
+ 730467: 6002afa0:	3c e5 fb 5b	5bfbe53c { 	call 0x60007a18 <PT_LOAD#19+0x7a18> }
+ 730468: 6002afa4:	34 c0 00 58	5800c034 { 	jump 0x6002b00c <PT_LOAD#19+0x2b00c> }
+ 730469: 6002afa8:	99 52 02 06	06025299 { 	immext(#0x6024a640)
+ 730470: 6002afac:	02 c4 20 49	4920c402   	r2 = memub(##0x6024a660) }
+ 730471: 6002afb0:	40 c0 42 75	7542c040 { 	p0 = cmp.gt(r2,#0x2) }
+ 730472: 6002afb4:	00 c0 c0 6b	6bc0c000 { 	p0 = not(p0) }
+ 730473: 6002afb8:	28 c0 00 5c	5c00c028 { 	if (p0) jump:nt 0x6002b008 <PT_LOAD#19+0x2b008> }
+ 730474: 6002afbc:	02 c0 00 58	5800c002 { 	jump 0x6002afc0 <PT_LOAD#19+0x2afc0> }
+ 730475: 6002afc0:	02 c0 00 58	5800c002 { 	jump 0x6002afc4 <PT_LOAD#19+0x2afc4> }
+ 730476: 6002afc4:	c1 ff 5e 97	975effc1 { 	r1 = memh(r30+#-0x4) }
+ 730477: 6002afc8:	6e 77 01 06	0601776e { 	immext(#0x601ddb80)
+ 730478: 6002afcc:	80 c4 00 78	7800c480   	r0 = ##0x601ddba4 }
+ 730479: 6002afd0:	44 e8 fb 5b	5bfbe844 { 	call 0x60008058 <PT_LOAD#19+0x8058> }
+ 730480: 6002afd4:	02 c0 00 58	5800c002 { 	jump 0x6002afd8 <PT_LOAD#19+0x2afd8> }
+ 730481: 6002afd8:	bd 55 02 06	060255bd { 	immext(#0x60256f40)
+ 730482: 6002afdc:	00 c4 80 49	4980c400   	r0 = memw(##0x60256f60) }
+ 730483: 6002afe0:	c3 ff 5e 97	975effc3 { 	r3 = memh(r30+#-0x4) }
+ 730484: 6002afe4:	02 c0 7d 70	707dc002 { 	r2 = r29 }
+ 730485: 6002afe8:	01 c3 82 a1	a182c301 { 	memw(r2+#0x4) = r3 }
+ 730486: 6002afec:	6b 77 01 06	0601776b { 	immext(#0x601ddac0)
+ 730487: 6002aff0:	2e c0 42 3c	3c42c02e   	memw(r2+#0x0) = ##0x601ddaee }
+ 730488: 6002aff4:	6a 77 01 06	0601776a { 	immext(#0x601dda80)
+ 730489: 6002aff8:	22 c4 00 78	7800c422   	r2 = ##0x601ddaa1 }
+ 730490: 6002affc:	41 c0 00 78	7800c041 { 	r1 = #0x2 }
+ 730491: 6002b000:	0c e5 fb 5b	5bfbe50c { 	call 0x60007a18 <PT_LOAD#19+0x7a18> }
+ 730492: 6002b004:	02 c0 00 58	5800c002 { 	jump 0x6002b008 <PT_LOAD#19+0x2b008> }
+ 730493: 6002b008:	02 c0 00 58	5800c002 { 	jump 0x6002b00c <PT_LOAD#19+0x2b00c> }
+ 730494: 6002b00c:	02 c0 00 58	5800c002 { 	jump 0x6002b010 <PT_LOAD#19+0x2b010> }
+ 730495: 6002b010:	02 c0 00 58	5800c002 { 	jump 0x6002b014 <PT_LOAD#19+0x2b014> }
+ 730496: 6002b014:	02 c0 00 58	5800c002 { 	jump 0x6002b018 <PT_LOAD#19+0x2b018> }
+ 730497: 6002b018:	c2 ff 7e 97	977effc2 { 	r2 = memuh(r30+#-0x4) }
+ 730498: 6002b01c:	ff e2 5e a7	a75ee2ff { 	memh(r30+#-0x2) = r2 }
+ 730499: 6002b020:	02 c0 00 58	5800c002 { 	jump 0x6002b024 <PT_LOAD#19+0x2b024> }
+ 730500: 6002b024:	e0 ff 5e 97	975effe0 { 	r0 = memh(r30+#-0x2) }
+ 730501: 6002b028:	1e c0 1e 96	961ec01e { 	dealloc_return }
+
+--- the call to ULog client init:
+730329:6002ad78:	24 f0 0a 5a	5a0af024 { 	call 0x60080dc0 <PT_LOAD#19+0x80dc0> }

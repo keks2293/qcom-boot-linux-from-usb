@@ -1,0 +1,126 @@
+# glink RX intent handler @0x60088cd0..0x60088e70 (105 L) — pmic_glink_rx_intent_req
+# Evidence: intent processing is UNCONDITIONAL; the ULog globals (0x60256f78 bit0 /
+# 0x6024a668 bit0 / 0x6024a660 counter) gate ONLY the log calls, not the processing.
+#
+# Control flow:
+#   prologue: save arg0/arg1/arg2; local ret-slot = 0
+#   [log gate 1] (mask_bit0 || default_bit0) && counter > 2
+#       -> ULog INFO "…pmic_glink_rx_intent_req:: rx intent req_size:%d"
+#          (name str vaddr 0x601faa63; fmt ref 0x601faa1c)
+#   store intent (arg2) into r29->+0x4, log module name 0x601faa63
+#   call 0x601343e0(arg0, 0, arg2)            <-- UNCONDITIONAL functional processing
+#   ret-slot = result
+#   if result == 0 -> ret-slot = 1 (success), return
+#   [log gate 2] (mask_bit0 || default_bit0) && counter > 0
+#       -> ULog ERROR "…pmic_glink_rx_intent_req:: rx intent failed:%d"
+#          (name str vaddr 0x601faa63; fmt vaddr 0x601faa7c)
+#   ret-slot = 0 (failure), return
+#
+# The three "flag" globals are ULog logging controls (see ulog-flag-globals-write-sites.txt).
+# function enclosing site 60088d68  (lines 826543..826647, 105 lines)
+# start vaddr 60088cd0   end vaddr 60088e70
+ 826543: 60088cd0:	04 c0 9d a0	a09dc004 { 	allocframe(#0x20) }
+ 826544: 60088cd4:	fe e0 9e a7	a79ee0fe { 	memw(r30+#-0x8) = r0 }
+ 826545: 60088cd8:	fd e1 9e a7	a79ee1fd { 	memw(r30+#-0xc) = r1 }
+ 826546: 60088cdc:	fc e2 9e a7	a79ee2fc { 	memw(r30+#-0x10) = r2 }
+ 826547: 60088ce0:	e2 fd fe bf	bffefde2 { 	r2 = add(r30,#-0x11) }
+ 826548: 60088ce4:	00 c0 02 3c	3c02c000 { 	memb(r2+#0x0) = #0x0 }
+ 826549: 60088ce8:	02 c0 00 58	5800c002 { 	jump 0x60088cec <PT_LOAD#19+0x88cec> }
+ 826550: 60088cec:	bd 55 02 06	060255bd { 	immext(#0x60256f40)
+ 826551: 60088cf0:	00 c7 c0 49	49c0c700   	r1:0 = memd(##0x60256f78) }
+ 826552: 60088cf4:	02 c0 60 70	7060c002 { 	r2 = r0 }
+ 826553: 60088cf8:	00 c0 02 85	8502c000 { 	p0 = tstbit(r2,#0x0) }
+ 826554: 60088cfc:	10 c0 00 5c	5c00c010 { 	if (p0) jump:nt 0x60088d1c <PT_LOAD#19+0x88d1c> }
+ 826555: 60088d00:	02 c0 00 58	5800c002 { 	jump 0x60088d04 <PT_LOAD#19+0x88d04> }
+ 826556: 60088d04:	99 52 02 06	06025299 { 	immext(#0x6024a640)
+ 826557: 60088d08:	00 c5 c0 49	49c0c500   	r1:0 = memd(##0x6024a668) }
+ 826558: 60088d0c:	02 c0 60 70	7060c002 { 	r2 = r0 }
+ 826559: 60088d10:	00 c0 02 85	8502c000 { 	p0 = tstbit(r2,#0x0) }
+ 826560: 60088d14:	3a c0 20 5c	5c20c03a { 	if (!p0) jump:nt 0x60088d88 <PT_LOAD#19+0x88d88> }
+ 826561: 60088d18:	02 c0 00 58	5800c002 { 	jump 0x60088d1c <PT_LOAD#19+0x88d1c> }
+ 826562: 60088d1c:	02 c0 00 58	5800c002 { 	jump 0x60088d20 <PT_LOAD#19+0x88d20> }
+ 826563: 60088d20:	99 52 02 06	06025299 { 	immext(#0x6024a640)
+ 826564: 60088d24:	02 c4 20 49	4920c402   	r2 = memub(##0x6024a660) }
+ 826565: 60088d28:	40 c0 42 75	7542c040 { 	p0 = cmp.gt(r2,#0x2) }
+ 826566: 60088d2c:	00 c0 c0 6b	6bc0c000 { 	p0 = not(p0) }
+ 826567: 60088d30:	28 c0 00 5c	5c00c028 { 	if (p0) jump:nt 0x60088d80 <PT_LOAD#19+0x88d80> }
+ 826568: 60088d34:	02 c0 00 58	5800c002 { 	jump 0x60088d38 <PT_LOAD#19+0x88d38> }
+ 826569: 60088d38:	02 c0 00 58	5800c002 { 	jump 0x60088d3c <PT_LOAD#19+0x88d3c> }
+ 826570: 60088d3c:	81 ff 9e 97	979eff81 { 	r1 = memw(r30+#-0x10) }
+ 826571: 60088d40:	a8 7e 01 06	06017ea8 { 	immext(#0x601faa00)
+ 826572: 60088d44:	80 c3 00 78	7800c380   	r0 = ##0x601faa1c }
+ 826573: 60088d48:	88 f9 ef 5b	5beff988 { 	call 0x60008058 <PT_LOAD#19+0x8058> }
+ 826574: 60088d4c:	02 c0 00 58	5800c002 { 	jump 0x60088d50 <PT_LOAD#19+0x88d50> }
+ 826575: 60088d50:	bd 55 02 06	060255bd { 	immext(#0x60256f40)
+ 826576: 60088d54:	00 c4 80 49	4980c400   	r0 = memw(##0x60256f60) }
+ 826577: 60088d58:	83 ff 9e 97	979eff83 { 	r3 = memw(r30+#-0x10) }
+ 826578: 60088d5c:	02 c0 7d 70	707dc002 { 	r2 = r29 }
+ 826579: 60088d60:	01 c3 82 a1	a182c301 { 	memw(r2+#0x4) = r3 }
+ 826580: 60088d64:	a9 7e 01 06	06017ea9 { 	immext(#0x601faa40)
+ 826581: 60088d68:	23 c0 42 3c	3c42c023   	memw(r2+#0x0) = ##0x601faa63 }
+ 826582: 60088d6c:	a8 7e 01 06	06017ea8 { 	immext(#0x601faa00)
+ 826583: 60088d70:	02 c5 00 78	7800c502   	r2 = ##0x601faa28 }
+ 826584: 60088d74:	41 c0 00 78	7800c041 { 	r1 = #0x2 }
+ 826585: 60088d78:	50 f6 ef 5b	5beff650 { 	call 0x60007a18 <PT_LOAD#19+0x7a18> }
+ 826586: 60088d7c:	02 c0 00 58	5800c002 { 	jump 0x60088d80 <PT_LOAD#19+0x88d80> }
+ 826587: 60088d80:	02 c0 00 58	5800c002 { 	jump 0x60088d84 <PT_LOAD#19+0x88d84> }
+ 826588: 60088d84:	02 c0 00 58	5800c002 { 	jump 0x60088d88 <PT_LOAD#19+0x88d88> }
+ 826589: 60088d88:	02 c0 00 58	5800c002 { 	jump 0x60088d8c <PT_LOAD#19+0x88d8c> }
+ 826590: 60088d8c:	c0 ff 9e 97	979effc0 { 	r0 = memw(r30+#-0x8) }
+ 826591: 60088d90:	82 ff 9e 97	979eff82 { 	r2 = memw(r30+#-0x10) }
+ 826592: 60088d94:	01 c0 00 78	7800c001 { 	r1 = #0x0 }
+ 826593: 60088d98:	24 db 15 5a	5a15db24 { 	call 0x601343e0 <PT_LOAD#19+0x1343e0> }
+ 826594: 60088d9c:	ef e0 1e a7	a71ee0ef { 	memb(r30+#-0x11) = r0 }
+ 826595: 60088da0:	e2 fd 1e 97	971efde2 { 	r2 = memb(r30+#-0x11) }
+ 826596: 60088da4:	00 c0 02 75	7502c000 { 	p0 = cmp.eq(r2,#0x0) }
+ 826597: 60088da8:	5c c0 00 5c	5c00c05c { 	if (p0) jump:nt 0x60088e60 <PT_LOAD#19+0x88e60> }
+ 826598: 60088dac:	02 c0 00 58	5800c002 { 	jump 0x60088db0 <PT_LOAD#19+0x88db0> }
+ 826599: 60088db0:	02 c0 00 58	5800c002 { 	jump 0x60088db4 <PT_LOAD#19+0x88db4> }
+ 826600: 60088db4:	bd 55 02 06	060255bd { 	immext(#0x60256f40)
+ 826601: 60088db8:	00 c7 c0 49	49c0c700   	r1:0 = memd(##0x60256f78) }
+ 826602: 60088dbc:	02 c0 60 70	7060c002 { 	r2 = r0 }
+ 826603: 60088dc0:	00 c0 02 85	8502c000 { 	p0 = tstbit(r2,#0x0) }
+ 826604: 60088dc4:	10 c0 00 5c	5c00c010 { 	if (p0) jump:nt 0x60088de4 <PT_LOAD#19+0x88de4> }
+ 826605: 60088dc8:	02 c0 00 58	5800c002 { 	jump 0x60088dcc <PT_LOAD#19+0x88dcc> }
+ 826606: 60088dcc:	99 52 02 06	06025299 { 	immext(#0x6024a640)
+ 826607: 60088dd0:	00 c5 c0 49	49c0c500   	r1:0 = memd(##0x6024a668) }
+ 826608: 60088dd4:	02 c0 60 70	7060c002 { 	r2 = r0 }
+ 826609: 60088dd8:	00 c0 02 85	8502c000 { 	p0 = tstbit(r2,#0x0) }
+ 826610: 60088ddc:	3a c0 20 5c	5c20c03a { 	if (!p0) jump:nt 0x60088e50 <PT_LOAD#19+0x88e50> }
+ 826611: 60088de0:	02 c0 00 58	5800c002 { 	jump 0x60088de4 <PT_LOAD#19+0x88de4> }
+ 826612: 60088de4:	02 c0 00 58	5800c002 { 	jump 0x60088de8 <PT_LOAD#19+0x88de8> }
+ 826613: 60088de8:	99 52 02 06	06025299 { 	immext(#0x6024a640)
+ 826614: 60088dec:	02 c4 20 49	4920c402   	r2 = memub(##0x6024a660) }
+ 826615: 60088df0:	00 c0 42 75	7542c000 { 	p0 = cmp.gt(r2,#0x0) }
+ 826616: 60088df4:	00 c0 c0 6b	6bc0c000 { 	p0 = not(p0) }
+ 826617: 60088df8:	28 c0 00 5c	5c00c028 { 	if (p0) jump:nt 0x60088e48 <PT_LOAD#19+0x88e48> }
+ 826618: 60088dfc:	02 c0 00 58	5800c002 { 	jump 0x60088e00 <PT_LOAD#19+0x88e00> }
+ 826619: 60088e00:	02 c0 00 58	5800c002 { 	jump 0x60088e04 <PT_LOAD#19+0x88e04> }
+ 826620: 60088e04:	e1 fd 1e 97	971efde1 { 	r1 = memb(r30+#-0x11) }
+ 826621: 60088e08:	bb 7e 01 06	06017ebb { 	immext(#0x601faec0)
+ 826622: 60088e0c:	00 c6 00 78	7800c600   	r0 = ##0x601faef0 }
+ 826623: 60088e10:	24 f9 ef 5b	5beff924 { 	call 0x60008058 <PT_LOAD#19+0x8058> }
+ 826624: 60088e14:	02 c0 00 58	5800c002 { 	jump 0x60088e18 <PT_LOAD#19+0x88e18> }
+ 826625: 60088e18:	bd 55 02 06	060255bd { 	immext(#0x60256f40)
+ 826626: 60088e1c:	00 c4 80 49	4980c400   	r0 = memw(##0x60256f60) }
+ 826627: 60088e20:	e3 fd 1e 97	971efde3 { 	r3 = memb(r30+#-0x11) }
+ 826628: 60088e24:	02 c0 7d 70	707dc002 { 	r2 = r29 }
+ 826629: 60088e28:	01 c3 82 a1	a182c301 { 	memw(r2+#0x4) = r3 }
+ 826630: 60088e2c:	a9 7e 01 06	06017ea9 { 	immext(#0x601faa40)
+ 826631: 60088e30:	23 c0 42 3c	3c42c023   	memw(r2+#0x0) = ##0x601faa63 }
+ 826632: 60088e34:	a9 7e 01 06	06017ea9 { 	immext(#0x601faa40)
+ 826633: 60088e38:	82 c7 00 78	7800c782   	r2 = ##0x601faa7c }
+ 826634: 60088e3c:	41 c0 00 78	7800c041 { 	r1 = #0x2 }
+ 826635: 60088e40:	ec f5 ef 5b	5beff5ec { 	call 0x60007a18 <PT_LOAD#19+0x7a18> }
+ 826636: 60088e44:	02 c0 00 58	5800c002 { 	jump 0x60088e48 <PT_LOAD#19+0x88e48> }
+ 826637: 60088e48:	02 c0 00 58	5800c002 { 	jump 0x60088e4c <PT_LOAD#19+0x88e4c> }
+ 826638: 60088e4c:	02 c0 00 58	5800c002 { 	jump 0x60088e50 <PT_LOAD#19+0x88e50> }
+ 826639: 60088e50:	02 c0 00 58	5800c002 { 	jump 0x60088e54 <PT_LOAD#19+0x88e54> }
+ 826640: 60088e54:	e2 ff fe bf	bffeffe2 { 	r2 = add(r30,#-0x1) }
+ 826641: 60088e58:	00 c0 02 3c	3c02c000 { 	memb(r2+#0x0) = #0x0 }
+ 826642: 60088e5c:	08 c0 00 58	5800c008 { 	jump 0x60088e6c <PT_LOAD#19+0x88e6c> }
+ 826643: 60088e60:	e2 ff fe bf	bffeffe2 { 	r2 = add(r30,#-0x1) }
+ 826644: 60088e64:	01 c0 02 3c	3c02c001 { 	memb(r2+#0x0) = #0x1 }
+ 826645: 60088e68:	02 c0 00 58	5800c002 { 	jump 0x60088e6c <PT_LOAD#19+0x88e6c> }
+ 826646: 60088e6c:	e0 ff 3e 97	973effe0 { 	r0 = memub(r30+#-0x1) }
+ 826647: 60088e70:	1e c0 1e 96	961ec01e { 	dealloc_return }

@@ -1,0 +1,167 @@
+# PmSchgUsb_SetRerunApsd @0x600978e0..0x60097adc (pm_usb.c) — full 128-line function
+#
+# Control flow (verified):
+#   status := 0x201
+#   if arg > 0xa:                       # invalid argument
+#       [ULog gate] (mask 0x60256f78 bit0 || default 0x6024a668 bit0) && counter 0x6024a660 > 0
+#           -> log "ERROR: %s: PmSchgUsb_SetRerunApsd: STATUS_ERROR_INVALID_ARGUMENT" (0x601ff2b2)
+#       status = 0x202; return
+#   # ---- functional path (NO flag gates) ----
+#   fn = *(table 0x603255dc + arg*0xc + 0x20)
+#   if fn != NULL: status = callr fn(arg)
+#   if status != 0:
+#       [ULog gate] (same three globals)
+#           -> log "ERROR: %s: PmSchgUsb_SetRerunApsd: Status = 0x%X" (0x601ff30a)
+#   return status
+#
+# => The three "flag" globals (0x60256f78/0x6024a668/0x6024a660) are read ONLY on
+#    the two error paths and gate ONLY the ERROR logs. They are ULog logging
+#    controls (see ulog-flag-globals-write-sites.txt). No functional gate exists.
+--- prologue + arg check (arg > 0xa -> error path at 0x6009790c):
+ 841651: 600978e0:	02 c0 9d a0	a09dc002 { 	allocframe(#0x10) }
+ 841652: 600978e4:	02 c0 60 70	7060c002 { 	r2 = r0 }
+ 841653: 600978e8:	fd e0 1e a7	a71ee0fd { 	memb(r30+#-0x3) = r0 }
+ 841654: 600978ec:	42 ff fe bf	bffeff42 { 	r2 = add(r30,#-0x6) }
+ 841655: 600978f0:	08 40 00 00	00004008 { 	immext(#0x200)
+ 841656: 600978f4:	01 c0 22 3c	3c22c001   	memh(r2+#0x0) = ##0x201 }
+ 841657: 600978f8:	a2 ff 3e 97	973effa2 { 	r2 = memub(r30+#-0x3) }
+ 841658: 600978fc:	40 c1 42 75	7542c140 { 	p0 = cmp.gt(r2,#0xa) }
+ 841659: 60097900:	00 c0 c0 6b	6bc0c000 { 	p0 = not(p0) }
+ 841660: 60097904:	58 c0 00 5c	5c00c058 { 	if (p0) jump:nt 0x600979b4 <PT_LOAD#19+0x979b4> }
+ 841661: 60097908:	02 c0 00 58	5800c002 { 	jump 0x6009790c <PT_LOAD#19+0x9790c> }
+ 841662: 6009790c:	02 c0 00 58	5800c002 { 	jump 0x60097910 <PT_LOAD#19+0x97910> }
+ 841663: 60097910:	bd 55 02 06	060255bd { 	immext(#0x60256f40)
+ 841664: 60097914:	00 c7 c0 49	49c0c700   	r1:0 = memd(##0x60256f78) }
+ 841665: 60097918:	02 c0 60 70	7060c002 { 	r2 = r0 }
+ 841666: 6009791c:	00 c0 02 85	8502c000 { 	p0 = tstbit(r2,#0x0) }
+ 841667: 60097920:	10 c0 00 5c	5c00c010 { 	if (p0) jump:nt 0x60097940 <PT_LOAD#19+0x97940> }
+
+--- error path: ULog gate -> log -> status=0x202 (0x6009790c..0x600979b0):
+ 841668: 60097924:	02 c0 00 58	5800c002 { 	jump 0x60097928 <PT_LOAD#19+0x97928> }
+ 841669: 60097928:	99 52 02 06	06025299 { 	immext(#0x6024a640)
+ 841670: 6009792c:	00 c5 c0 49	49c0c500   	r1:0 = memd(##0x6024a668) }
+ 841671: 60097930:	02 c0 60 70	7060c002 { 	r2 = r0 }
+ 841672: 60097934:	00 c0 02 85	8502c000 { 	p0 = tstbit(r2,#0x0) }
+ 841673: 60097938:	34 c0 20 5c	5c20c034 { 	if (!p0) jump:nt 0x600979a0 <PT_LOAD#19+0x979a0> }
+ 841674: 6009793c:	02 c0 00 58	5800c002 { 	jump 0x60097940 <PT_LOAD#19+0x97940> }
+ 841675: 60097940:	02 c0 00 58	5800c002 { 	jump 0x60097944 <PT_LOAD#19+0x97944> }
+ 841676: 60097944:	99 52 02 06	06025299 { 	immext(#0x6024a640)
+ 841677: 60097948:	02 c4 20 49	4920c402   	r2 = memub(##0x6024a660) }
+ 841678: 6009794c:	00 c0 42 75	7542c000 { 	p0 = cmp.gt(r2,#0x0) }
+ 841679: 60097950:	00 c0 c0 6b	6bc0c000 { 	p0 = not(p0) }
+ 841680: 60097954:	22 c0 00 5c	5c00c022 { 	if (p0) jump:nt 0x60097998 <PT_LOAD#19+0x97998> }
+ 841681: 60097958:	02 c0 00 58	5800c002 { 	jump 0x6009795c <PT_LOAD#19+0x9795c> }
+ 841682: 6009795c:	02 c0 00 58	5800c002 { 	jump 0x60097960 <PT_LOAD#19+0x97960> }
+ 841683: 60097960:	fd 7f 01 06	06017ffd { 	immext(#0x601fff40)
+ 841684: 60097964:	80 c5 00 78	7800c580   	r0 = ##0x601fff6c }
+ 841685: 60097968:	20 f0 ed 5b	5bedf020 { 	call 0x600059a8 <PT_LOAD#19+0x59a8> }
+ 841686: 6009796c:	02 c0 00 58	5800c002 { 	jump 0x60097970 <PT_LOAD#19+0x97970> }
+ 841687: 60097970:	bd 55 02 06	060255bd { 	immext(#0x60256f40)
+ 841688: 60097974:	00 c4 80 49	4980c400   	r0 = memw(##0x60256f60) }
+ 841689: 60097978:	02 c0 7d 70	707dc002 { 	r2 = r29 }
+ 841690: 6009797c:	cb 7f 01 06	06017fcb { 	immext(#0x601ff2c0)
+ 841691: 60097980:	33 c0 42 3c	3c42c033   	memw(r2+#0x0) = ##0x601ff2f3 }
+ 841692: 60097984:	ca 7f 01 06	06017fca { 	immext(#0x601ff280)
+ 841693: 60097988:	42 c6 00 78	7800c642   	r2 = ##0x601ff2b2 }
+ 841694: 6009798c:	21 c0 00 78	7800c021 { 	r1 = #0x1 }
+ 841695: 60097990:	44 c0 ee 5b	5beec044 { 	call 0x60007a18 <PT_LOAD#19+0x7a18> }
+ 841696: 60097994:	02 c0 00 58	5800c002 { 	jump 0x60097998 <PT_LOAD#19+0x97998> }
+ 841697: 60097998:	02 c0 00 58	5800c002 { 	jump 0x6009799c <PT_LOAD#19+0x9799c> }
+ 841698: 6009799c:	02 c0 00 58	5800c002 { 	jump 0x600979a0 <PT_LOAD#19+0x979a0> }
+ 841699: 600979a0:	02 c0 00 58	5800c002 { 	jump 0x600979a4 <PT_LOAD#19+0x979a4> }
+ 841700: 600979a4:	c2 ff fe bf	bffeffc2 { 	r2 = add(r30,#-0x2) }
+ 841701: 600979a8:	08 40 00 00	00004008 { 	immext(#0x200)
+ 841702: 600979ac:	02 c0 22 3c	3c22c002   	memh(r2+#0x0) = ##0x202 }
+ 841703: 600979b0:	94 c0 00 58	5800c094 { 	jump 0x60097ad8 <PT_LOAD#19+0x97ad8> }
+
+--- functional path: fn-ptr lookup (table 0x603255dc, stride 0xc, slot +0x20) + callr (0x600979b4..0x60097a24):
+ 841704: 600979b4:	a2 ff 3e 97	973effa2 { 	r2 = memub(r30+#-0x3) }
+ 841705: 600979b8:	82 c1 02 e0	e002c182 { 	r2 = +mpyi(r2,#0xc) }
+ 841706: 600979bc:	57 49 03 06	06034957 { 	immext(#0x603255c0)
+ 841707: 600979c0:	82 c3 82 91	9182c382   	r2 = memw(r2+##0x603255dc) }
+ 841708: 600979c4:	00 c0 02 75	7502c000 { 	p0 = cmp.eq(r2,#0x0) }
+ 841709: 600979c8:	26 c0 00 5c	5c00c026 { 	if (p0) jump:nt 0x60097a14 <PT_LOAD#19+0x97a14> }
+ 841710: 600979cc:	02 c0 00 58	5800c002 { 	jump 0x600979d0 <PT_LOAD#19+0x979d0> }
+ 841711: 600979d0:	a2 ff 3e 97	973effa2 { 	r2 = memub(r30+#-0x3) }
+ 841712: 600979d4:	82 c1 02 e0	e002c182 { 	r2 = +mpyi(r2,#0xc) }
+ 841713: 600979d8:	57 49 03 06	06034957 { 	immext(#0x603255c0)
+ 841714: 600979dc:	82 c3 82 91	9182c382   	r2 = memw(r2+##0x603255dc) }
+ 841715: 600979e0:	02 c1 82 91	9182c102 { 	r2 = memw(r2+#0x20) }
+ 841716: 600979e4:	00 c0 02 75	7502c000 { 	p0 = cmp.eq(r2,#0x0) }
+ 841717: 600979e8:	14 c0 00 5c	5c00c014 { 	if (p0) jump:nt 0x60097a10 <PT_LOAD#19+0x97a10> }
+ 841718: 600979ec:	02 c0 00 58	5800c002 { 	jump 0x600979f0 <PT_LOAD#19+0x979f0> }
+ 841719: 600979f0:	a0 ff 3e 97	973effa0 { 	r0 = memub(r30+#-0x3) }
+ 841720: 600979f4:	82 c1 00 e0	e000c182 { 	r2 = +mpyi(r0,#0xc) }
+ 841721: 600979f8:	57 49 03 06	06034957 { 	immext(#0x603255c0)
+ 841722: 600979fc:	82 c3 82 91	9182c382   	r2 = memw(r2+##0x603255dc) }
+ 841723: 60097a00:	02 c1 82 91	9182c102 { 	r2 = memw(r2+#0x20) }
+ 841724: 60097a04:	00 c0 a2 50	50a2c000 { 	callr r2 }
+ 841725: 60097a08:	fd e0 5e a7	a75ee0fd { 	memh(r30+#-0x6) = r0 }
+ 841726: 60097a0c:	02 c0 00 58	5800c002 { 	jump 0x60097a10 <PT_LOAD#19+0x97a10> }
+ 841727: 60097a10:	02 c0 00 58	5800c002 { 	jump 0x60097a14 <PT_LOAD#19+0x97a14> }
+ 841728: 60097a14:	a2 ff 5e 97	975effa2 { 	r2 = memh(r30+#-0x6) }
+ 841729: 60097a18:	00 c0 02 75	7502c000 { 	p0 = cmp.eq(r2,#0x0) }
+ 841730: 60097a1c:	58 c0 00 5c	5c00c058 { 	if (p0) jump:nt 0x60097acc <PT_LOAD#19+0x97acc> }
+ 841731: 60097a20:	02 c0 00 58	5800c002 { 	jump 0x60097a24 <PT_LOAD#19+0x97a24> }
+
+--- post-call failure path: status != 0 -> ULog gate -> log -> return (0x60097a28..):
+ 841732: 60097a24:	02 c0 00 58	5800c002 { 	jump 0x60097a28 <PT_LOAD#19+0x97a28> }
+ 841733: 60097a28:	bd 55 02 06	060255bd { 	immext(#0x60256f40)
+ 841734: 60097a2c:	00 c7 c0 49	49c0c700   	r1:0 = memd(##0x60256f78) }
+ 841735: 60097a30:	02 c0 60 70	7060c002 { 	r2 = r0 }
+ 841736: 60097a34:	00 c0 02 85	8502c000 { 	p0 = tstbit(r2,#0x0) }
+ 841737: 60097a38:	10 c0 00 5c	5c00c010 { 	if (p0) jump:nt 0x60097a58 <PT_LOAD#19+0x97a58> }
+ 841738: 60097a3c:	02 c0 00 58	5800c002 { 	jump 0x60097a40 <PT_LOAD#19+0x97a40> }
+ 841739: 60097a40:	99 52 02 06	06025299 { 	immext(#0x6024a640)
+ 841740: 60097a44:	00 c5 c0 49	49c0c500   	r1:0 = memd(##0x6024a668) }
+ 841741: 60097a48:	02 c0 60 70	7060c002 { 	r2 = r0 }
+ 841742: 60097a4c:	00 c0 02 85	8502c000 { 	p0 = tstbit(r2,#0x0) }
+ 841743: 60097a50:	3a c0 20 5c	5c20c03a { 	if (!p0) jump:nt 0x60097ac4 <PT_LOAD#19+0x97ac4> }
+ 841744: 60097a54:	02 c0 00 58	5800c002 { 	jump 0x60097a58 <PT_LOAD#19+0x97a58> }
+ 841745: 60097a58:	02 c0 00 58	5800c002 { 	jump 0x60097a5c <PT_LOAD#19+0x97a5c> }
+ 841746: 60097a5c:	99 52 02 06	06025299 { 	immext(#0x6024a640)
+ 841747: 60097a60:	02 c4 20 49	4920c402   	r2 = memub(##0x6024a660) }
+ 841748: 60097a64:	00 c0 42 75	7542c000 { 	p0 = cmp.gt(r2,#0x0) }
+ 841749: 60097a68:	00 c0 c0 6b	6bc0c000 { 	p0 = not(p0) }
+ 841750: 60097a6c:	28 c0 00 5c	5c00c028 { 	if (p0) jump:nt 0x60097abc <PT_LOAD#19+0x97abc> }
+ 841751: 60097a70:	02 c0 00 58	5800c002 { 	jump 0x60097a74 <PT_LOAD#19+0x97a74> }
+ 841752: 60097a74:	02 c0 00 58	5800c002 { 	jump 0x60097a78 <PT_LOAD#19+0x97a78> }
+ 841753: 60097a78:	a1 ff 7e 97	977effa1 { 	r1 = memuh(r30+#-0x6) }
+ 841754: 60097a7c:	fd 7f 01 06	06017ffd { 	immext(#0x601fff40)
+ 841755: 60097a80:	00 c7 00 78	7800c700   	r0 = ##0x601fff78 }
+ 841756: 60097a84:	ea c2 ee 5b	5beec2ea { 	call 0x60008058 <PT_LOAD#19+0x8058> }
+ 841757: 60097a88:	02 c0 00 58	5800c002 { 	jump 0x60097a8c <PT_LOAD#19+0x97a8c> }
+ 841758: 60097a8c:	bd 55 02 06	060255bd { 	immext(#0x60256f40)
+ 841759: 60097a90:	00 c4 80 49	4980c400   	r0 = memw(##0x60256f60) }
+ 841760: 60097a94:	a3 ff 7e 97	977effa3 { 	r3 = memuh(r30+#-0x6) }
+ 841761: 60097a98:	02 c0 7d 70	707dc002 { 	r2 = r29 }
+ 841762: 60097a9c:	01 c3 82 a1	a182c301 { 	memw(r2+#0x4) = r3 }
+ 841763: 60097aa0:	cb 7f 01 06	06017fcb { 	immext(#0x601ff2c0)
+ 841764: 60097aa4:	33 c0 42 3c	3c42c033   	memw(r2+#0x0) = ##0x601ff2f3 }
+ 841765: 60097aa8:	cc 7f 01 06	06017fcc { 	immext(#0x601ff300)
+ 841766: 60097aac:	42 c1 00 78	7800c142   	r2 = ##0x601ff30a }
+ 841767: 60097ab0:	41 c0 00 78	7800c041 { 	r1 = #0x2 }
+ 841768: 60097ab4:	b2 ff ed 5b	5bedffb2 { 	call 0x60007a18 <PT_LOAD#19+0x7a18> }
+ 841769: 60097ab8:	02 c0 00 58	5800c002 { 	jump 0x60097abc <PT_LOAD#19+0x97abc> }
+ 841770: 60097abc:	02 c0 00 58	5800c002 { 	jump 0x60097ac0 <PT_LOAD#19+0x97ac0> }
+ 841771: 60097ac0:	02 c0 00 58	5800c002 { 	jump 0x60097ac4 <PT_LOAD#19+0x97ac4> }
+ 841772: 60097ac4:	02 c0 00 58	5800c002 { 	jump 0x60097ac8 <PT_LOAD#19+0x97ac8> }
+ 841773: 60097ac8:	02 c0 00 58	5800c002 { 	jump 0x60097acc <PT_LOAD#19+0x97acc> }
+ 841774: 60097acc:	a2 ff 7e 97	977effa2 { 	r2 = memuh(r30+#-0x6) }
+ 841775: 60097ad0:	ff e2 5e a7	a75ee2ff { 	memh(r30+#-0x2) = r2 }
+ 841776: 60097ad4:	02 c0 00 58	5800c002 { 	jump 0x60097ad8 <PT_LOAD#19+0x97ad8> }
+ 841777: 60097ad8:	e0 ff 7e 97	977effe0 { 	r0 = memuh(r30+#-0x2) }
+ 841778: 60097adc:	1e c0 1e 96	961ec01e { 	dealloc_return }
+
+# Log fmt strings:
+#   0x601ff2b2 (fileoff 0xc922b2): "ERROR: %s: PmSchgUsb_SetRerunApsd: STATUS_ERROR_INVALID_ARGUMENT"
+#   0x601ff30a (fileoff 0xc9230a): "ERROR: %s: PmSchgUsb_SetRerunApsd: Status = 0x%X"
+# Name string: 0x601ff2f3 (fileoff 0xc922f3): "PmSchgUsb_SetRerunApsd"
+
+--- sole caller: @0x600d25e4 (arg=7) inside resume fn @0x600d1dc0 (dpm_usbc.c);
+    the resume fn is called from @0x6008b56c. Same resume fn logs
+    "APSD rerun failed during resume" (string fileoff 0xc9ed44 -> vaddr 0x6020bd44) at 0x600d2668.
+$ grep -n "call 0x600978e0" text_all.txt
+901876:600d25e4:	7e e9 f8 5b	5bf8e97e { 	call 0x600978e0 <PT_LOAD#19+0x978e0> }
+$ grep -n "call 0x600d1dc0" text_all.txt
+829142:6008b56c:	2a f4 08 5a	5a08f42a { 	call 0x600d1dc0 <PT_LOAD#19+0xd1dc0> }

@@ -1,0 +1,316 @@
+/dts-v1/;
+
+/ {
+	model = "qcom,kailua-mtp";
+	compatible = "qcom,kailua-mtp", "qcom,kailua", "qcom,mtp";
+	#address-cells = <0x02>;
+	#size-cells = <0x02>;
+
+	soc: soc {
+		#address-cells = <0x01>;
+		#size-cells = <0x01>;
+		phandle = <0x01>;
+	};
+
+	sw: sw {
+		phandle = <0x02>;
+
+		core {
+
+			boot {
+				config = <0x00 0x00 0x00>;
+			};
+
+			pmic {
+
+				battman: battman {
+					phandle = <0x03>;
+
+					platform_config: platform_cfg {
+						struct-ver = <0x01>;
+						plat-id = <0x03>;
+						is-test-mode = <0x00>;
+						test-mode-flag = <0x00>;
+						chg-heartbeat-timer-ms = <0x7530>;
+						dischg-heartbeat-timer-ms = <0x493e0>;
+						poll-timer-ms = <0x9c40>;
+						chg-done-timer-ms = <0x1ac7780>;
+						vbatt-avg-sample-size = <0x02>;
+						en-linear-soc = <0x01>;
+						soc-conv-pt = <0x1f4>;
+						notify-hlos-thr = <0x32>;
+						min-linear-soc = <0x2ee>;
+						wd-timer-ms = <0x40>;
+						gen-test-interface = <0x01>;
+						en-stepchg-jeita = <0x01>;
+						iterm-ma = <0x64>;
+						en-btp = <0x00>;
+						phandle = <0x04>;
+
+						beh_cfg: beh_cfg {
+							beh-debug-board = <0x08>;
+							beh-normal-batt = <0x01>;
+							beh-smart-auth-state = <0x01>;
+							beh-unknown-state = <0x00>;
+							beh-batt-miss-state = <0x10>;
+							beh-invalid-state = <0x02>;
+							beh-afp-state = <0x04>;
+							en-beh = <0x01>;
+							phandle = <0x05>;
+						};
+
+						chg_table_cfg: chg_table_cfg {
+							dbg-rid-cfg = <0x7d0 0x36b0>;
+							normal-rid-cfg = <0x3a98 0x222e0>;
+							smart-rid-cfg = <0x3a980 0x6ddd0>;
+							chg-table-max = <0x02>;
+							phandle = <0x06>;
+						};
+
+						esd_cfg: esd_cfg {
+							esd-timer-ms = <0x00>;
+							esd-voltage-mv = <0x00>;
+							esd-init-soc = <0x00>;
+							esd-feature-en = <0x00>;
+							phandle = <0x07>;
+						};
+
+						batt_auth_cfg: batt_auth_cfg {
+							batt-auth-timeout-s = <0x01>;
+							batt-auth-checktimer-ms = <0xfa>;
+							en-batt-auth = <0x00>;
+							phandle = <0x08>;
+						};
+
+						offmode_cfg: offmode_cfg {
+							off-mode-src-soc-thr = <0x00>;
+							off-mode-src-vbat-thd-delta-mv = <0x00>;
+							off-mode-feature-en = <0x00>;
+							phandle = <0x09>;
+						};
+					};
+
+					charger_config: charger_cfg {
+						phandle = <0x0a>;
+
+						jeita_cfg: jeita_cfg {
+							jeita-alg = <0x01 0x01>;
+							afp-cold-degc = <0xffffffec 0xffffffec>;
+							jeita-hard-cold-degc = <0x00 0x00>;
+							jeita-soft-cold-degc = <0x0a 0x0a>;
+							jeita-soft-warm-degc = <0x2d 0x2d>;
+							jeita-hard-hot-degc = <0x37 0x37>;
+							jeita-hard-hys-degc = <0x01 0x01>;
+							afp-hot-degc = <0x46 0x46>;
+							vflt-nominal-mv = <0x10fe 0x10fe>;
+							fcc-nominal-ma = <0xbb8 0xbb8>;
+							soft-cold-comp-ma = <0x5dc 0x5dc>;
+							soft-cold-comp-mv = <0x12c 0x12c>;
+							soft-hot-comp-ma = <0x5dc 0x5dc>;
+							soft-hot-comp-mv = <0x12c 0x12c>;
+							phandle = <0x0b>;
+						};
+
+						therm_thresh_cfg: therm_thresh_cfg {
+							die-temp-cfg = <0x3c 0x50>;
+							skin-temp-cfg = <0x32 0x37>;
+							conn-temp-cfg = <0x32 0x37>;
+							smb-temp-cfg = <0x3c 0x50>;
+							phandle = <0x0c>;
+						};
+
+						led_cfg: led_cfg {
+							chg-led = <0x03>;
+							done-chg-led = <0x00>;
+							phandle = <0x0d>;
+						};
+
+						pl_chg_cfg: pl_chg_cfg {
+							en-pl-chg-adptr-pwr-uw = <0x00>;
+							pl-chg-slave-max-pwr = <0x00>;
+							en-pl-chg-opt = <0x00>;
+							phandle = <0x0e>;
+						};
+
+						mtc_chg_cfg: mtc_chg_cfg {
+							rechg-soc-delta-pct = <0x05>;
+							rechg-delta-vflt-mv = <0x32>;
+							vflt-comp-mv = <0x64>;
+							iterm-comp-ma = <0x32>;
+							rechg-iterm = <0x12c>;
+							en-aged-batt-comp = <0x00>;
+							phandle = <0x0f>;
+						};
+
+						wls_chg_cfg: wls_chg_cfg {
+							wls-pre-regulator = <0x01>;
+							boost-src = <0x03>;
+							otg-boost-src = <0x03>;
+							ext-gpio-boost = <0x305>;
+							usb-switch = <0x202>;
+							wls-load-switch = <0x203>;
+							wls-tx-cfg = <0x01>;
+							en-wls = <0x01>;
+							phandle = <0x10>;
+						};
+
+						chg_det_cfg: chg_det_cfg {
+							en-apsd-pwr = <0x01>;
+							en-usb-phy-cfg = <0x01>;
+							qc-det-cfg = <0x02>;
+							dam-hc-override = <0x00>;
+							apsd-rerun-cfg = <0x00>;
+							bm-hw-poff-ctrl = <0x03>;
+							phandle = <0x11>;
+						};
+
+						chg_icm_cfg: chg_icm_cfg {
+							force-eoc-5v = <0x00>;
+							ptm-cfg = <0x02>;
+							phandle = <0x12>;
+						};
+
+						chg_idt_cfg: chg_idt_cfg {
+							instance = <0x02>;
+							slave-addr = <0x3b>;
+							phandle = <0x13>;
+						};
+
+						chg_lpd_cfg: chg_lpd_cfg {
+							rsbu-thr-kohm = <0x4e2>;
+							holdoff-time-ms = <0x190>;
+							cooldown-time-s = <0x3c>;
+							mitigation-current-ma = <0x1f4>;
+							phandle = <0x14>;
+						};
+					};
+
+					usbpd_config: usbpd_cfg {
+						phandle = <0x15>;
+
+						ucsi_cap_cfg: ucsi_cap_cfg {
+							attributes = <0x4046>;
+							conn-num = <0x01>;
+							en-alt-mode = <0x00>;
+							bc-ver = <0x120>;
+							pd-ver = <0x300>;
+							typec-ver = <0x130>;
+							phandle = <0x16>;
+						};
+
+						ucsi_conn_cap_cfg: ucsi_conn_cap_cfg {
+							op-mode = <0x00 0x00 0x00 0x00>;
+							provider = <0x01 0x00 0x00 0x00>;
+							consumer = <0x01 0x00 0x00 0x00>;
+							phandle = <0x17>;
+						};
+
+						lpm_cfg: lpm_cfg {
+							port-idx = <0x00 0x01 0x02 0x03>;
+							en-pd = <0x01 0x00 0x00 0x00>;
+							en-pan = <0x01 0x00 0x00 0x00>;
+							phandle = <0x18>;
+						};
+
+						pd_policies_cfg: pd_policies_cfg {
+							snk-cap-size = <0x05>;
+							snk-caps-pdos = <0x2601912c 0x2d12c 0xc0dc2164 0xc1402164 0xc1902164 0x00 0x00>;
+							snk-pwr-eval-alg = <0x00>;
+							src-cap-size = <0x01>;
+							src-caps-pdos = <0x36019096 0x00 0x00 0x00 0x00 0x00 0x00>;
+							dr-swap-policy = <0x03>;
+							pr-swap-policy = <0x03>;
+							en-vconn-swap = <0x01>;
+							en-fr-swap = <0x00>;
+							vdm-ver = <0x01>;
+							en-vdm-altmode = <0x01>;
+							vdm-display-supported-sid = <0xff01>;
+							en-vdm-cable-discovery = <0x01>;
+							pan-ack-tmout-ms = <0x32c8>;
+							snk-max-voltage-mv = <0x53fc>;
+							snk-max-current-ma = <0x1388>;
+							src-max-voltage-mv = <0x1388>;
+							src-max-current-ma = <0x5dc>;
+							phandle = <0x19>;
+						};
+
+						pd_static_info_cfg: pd_static_info_cfg {
+							batt-cap-vid = <0x5c6>;
+							batt-pid = <0x209e>;
+							src-cap-ext-cfg = <0x5c6 0x209e 0x00>;
+							phandle = <0x1a>;
+						};
+
+						tcpc_cfg: tcpc_cfg {
+							dam-gpio-en = <0x00 0x00 0x00 0x00>;
+							dam-pmic-idx = <0x00 0x00 0x00 0x00>;
+							dam-pmic-gpio-num = <0x00 0x00 0x00 0x00>;
+							src-rp-val = <0x01 0x00 0x00 0x00>;
+							en-port-cfg-ovr = <0x00 0x00 0x00 0x00>;
+							en-audio-adap = <0x01 0x00 0x00 0x00>;
+							vbus-rampdown-wait-ms = <0x14 0x00 0x00 0x00>;
+							pmic-idx = <0x07 0x00 0x00 0x00>;
+							en-snk = <0x01 0x00 0x00 0x00>;
+							en-src = <0x00 0x00 0x00 0x00>;
+							en-lpd = <0x01 0x00 0x00 0x00>;
+							phandle = <0x1b>;
+						};
+					};
+
+					gauge_config: gauge_cfg {
+						vph-min-mv = <0xa8c>;
+						fvss-entry-delta-mv = <0x190>;
+						fvss-vbatt-filt-tau-us = <0x2faf080>;
+						fcss-entry-delta-ma = <0x12c>;
+						fcss-ibatt-filt-tau-us = <0x2faf080>;
+						hold-soc-1-pct = <0x01>;
+						cl-learn-min-delta-soc = <0x05>;
+						cl-wt-learn = <0x64>;
+						soh-tbat-range-degc = <0x28 0x14>;
+						soh-soc-range = <0x82 0x3c>;
+						ignore-shdn-soc-param = <0x708 0x0a 0x14 0x64 0x1f4>;
+						qbg-sw-ver = <0x01>;
+						pon-debug-fifo-count = <0x06>;
+						hpm-fifo-len = <0x24>;
+						vbat-cut-off-mv = <0xc1c>;
+						ibatt-cutoff-min-ma = <0x96>;
+						rconn-mohm = <0x00>;
+						ibatt-full-delta-ma = <0xc8>;
+						phandle = <0x1c>;
+					};
+				};
+			};
+		};
+	};
+
+	__symbols__ {
+		soc = "/soc";
+		sw = "/sw";
+		battman = "/sw/core/pmic/battman";
+		platform_config = "/sw/core/pmic/battman/platform_cfg";
+		beh_cfg = "/sw/core/pmic/battman/platform_cfg/beh_cfg";
+		chg_table_cfg = "/sw/core/pmic/battman/platform_cfg/chg_table_cfg";
+		esd_cfg = "/sw/core/pmic/battman/platform_cfg/esd_cfg";
+		batt_auth_cfg = "/sw/core/pmic/battman/platform_cfg/batt_auth_cfg";
+		offmode_cfg = "/sw/core/pmic/battman/platform_cfg/offmode_cfg";
+		charger_config = "/sw/core/pmic/battman/charger_cfg";
+		jeita_cfg = "/sw/core/pmic/battman/charger_cfg/jeita_cfg";
+		therm_thresh_cfg = "/sw/core/pmic/battman/charger_cfg/therm_thresh_cfg";
+		led_cfg = "/sw/core/pmic/battman/charger_cfg/led_cfg";
+		pl_chg_cfg = "/sw/core/pmic/battman/charger_cfg/pl_chg_cfg";
+		mtc_chg_cfg = "/sw/core/pmic/battman/charger_cfg/mtc_chg_cfg";
+		wls_chg_cfg = "/sw/core/pmic/battman/charger_cfg/wls_chg_cfg";
+		chg_det_cfg = "/sw/core/pmic/battman/charger_cfg/chg_det_cfg";
+		chg_icm_cfg = "/sw/core/pmic/battman/charger_cfg/chg_icm_cfg";
+		chg_idt_cfg = "/sw/core/pmic/battman/charger_cfg/chg_idt_cfg";
+		chg_lpd_cfg = "/sw/core/pmic/battman/charger_cfg/chg_lpd_cfg";
+		usbpd_config = "/sw/core/pmic/battman/usbpd_cfg";
+		ucsi_cap_cfg = "/sw/core/pmic/battman/usbpd_cfg/ucsi_cap_cfg";
+		ucsi_conn_cap_cfg = "/sw/core/pmic/battman/usbpd_cfg/ucsi_conn_cap_cfg";
+		lpm_cfg = "/sw/core/pmic/battman/usbpd_cfg/lpm_cfg";
+		pd_policies_cfg = "/sw/core/pmic/battman/usbpd_cfg/pd_policies_cfg";
+		pd_static_info_cfg = "/sw/core/pmic/battman/usbpd_cfg/pd_static_info_cfg";
+		tcpc_cfg = "/sw/core/pmic/battman/usbpd_cfg/tcpc_cfg";
+		gauge_config = "/sw/core/pmic/battman/gauge_cfg";
+	};
+};

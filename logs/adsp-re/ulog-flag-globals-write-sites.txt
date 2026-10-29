@@ -1,0 +1,75 @@
+# The three "runtime flag globals" = ULog logging controls (write-site map)
+#
+# Method: xref = grep '##0x<vaddr>' text_all.txt.
+# GOTCHA: '= ##0xADDR' matches register LOADS (rN = ##...), not memory writes.
+# Direct writes are 'memw/memb/memh/memd(##0xADDR) = ...'.
+#
+# === Global table (semantics resolved from all write sites):
+#
+# vaddr       | kind   | total refs | semantics
+# ------------+--------+------------+----------------------------------------------
+# 0x60256f78  | dw     | 1900       | ULog client ENABLE MASK (bit per log tag)
+# 0x60256f7c  | (up)   | -          | upper word of the mask dw
+# 0x60256f80  | word   | 4          | ULog LEVEL
+# 0x6024a660  | byte   | 3403       | ULog verbosity COUNTER (per-tag threshold)
+# 0x6024a668  | dw     | 1896       | ULog DEFAULT (static) enable mask; bit0 =
+#              |        |            | fallback-enable; 0 direct writes in this build
+# 0x60256f60  | word   | (many)     | ULog client object ptr (arg of every log call)
+#
+# === Direct write sites:
+#
+# 0x60256f78 (enable mask dw) — 3 writes:
+  818436:60080e24:	38 c0 c0 48	48c0c038   	memd(##0x60256f78) = r1:0 }
+  818458:60080e7c:	38 c0 c0 48	48c0c038   	memd(##0x60256f78) = r1:0 }
+  824947:600873e0:	38 c0 c0 48	48c0c038   	memd(##0x60256f78) = r1:0 }
+#   (1) ULog client init @0x60080e24 (fn @0x60080dc0, "BATTMAN ULog"):
+#       r0 = 0xFFFFFFFF, r1 = 0x3F  ->  mask = 0x3F_FFFFFFFF
+#   (2) setter fn @0x60080e7c (fn @0x60080e60): mask = *(dw at arg0)
+#   (3) glink-ULOG RX type-0x19 @0x600873e0 (fn pmic_glink_ulog_process_rx_data):
+#       mask = *(payload+0x10)  <-- AP sets it over glink
+#
+# 0x60256f80 (level) — 2 writes:
+#   (1) ULog client init @0x60080e30 (via register: r2=0x60256f80, memw(r2)=3)
+  818439:60080e30:	03 c0 42 3c	3c42c003 { 	memw(r2+#0x0) = #0x3 }
+#   (2) glink-ULOG RX type-0x19 @0x600873f0:
+  824951:600873f0:	00 c2 80 48	4880c200   	memw(##0x60256f80) = r2 }
+#
+# 0x6024a660 (verbosity counter) — 2 writes:
+  818448:60080e54:	20 c2 00 48	4800c220   	memb(##0x6024a660) = r2 }
+  824955:60087400:	20 c2 00 48	4800c220   	memb(##0x6024a660) = r2 }
+#   (1) setter fn @0x60080e54 (fn @0x60080e40): counter = arg0 (byte)
+#   (2) glink-ULOG RX type-0x19 @0x60087400: counter = level (0x60256f80)
+#
+# 0x6024a668 (default mask) — 0 direct writes (1896 refs, all reads;
+#   bit0 is the "fallback-enable" used in every log gate).
+#
+# === The log-gate pattern (every "gate" site investigated is this):
+#
+#   r1:0 = memd(##0x60256f78)        # enable mask
+#   p0   = tstbit(r0, #0x0)          # bit N of the tag
+#   if (p0) jump:nt L_counter        # mask bit set -> counter check
+#   r1:0 = memd(##0x6024a668)        # default mask
+#   p0   = tstbit(r0, #0x0)
+#   if (!p0) jump L_nolog            # neither set -> no log
+# L_counter: r2 = memub(##0x6024a660)
+#   p0 = cmp.gt(r2, #0x0)            # counter > 0 (or >1, or <=2 variants)
+#   if (p0) jump:nt L_nolog
+#   ... ULog log(...) ...
+# L_nolog:
+#
+# Verified instances: SetRerunApsd error path @0x60097910-0x60097954;
+#   SetRerunApsd post-call fail path @0x60097a28-0x60097a6c;
+#   glink-RX intent handler @0x60088cec-0x60088d30 (INFO) and
+#   @0x60088db4-0x60088df8 (ERROR); icm_ncp_stby_main warn arm
+#   @0x601a1a44-0x601a1a6c (plus extra flag memb(##0x60339214) != 0);
+#   chg-det SM @0x6014e770 / 0x6014e9c8 / 0x6014ebd8 / 0x6014ed34 /
+#   0x6014eddc / 0x6014eeb0 / 0x6014efc8 / 0x6014f1e0 (bit0).
+#
+# === Verdict:
+#   H1 ("HW CC arming / functional processing gated by an AP-ready runtime
+#   flag") is REFUTED as a flag-gate mechanism. In every investigated site
+#   the three globals gate ONLY the ULog logging; the functional code
+#   (state writes, callr dispatch, glink intent processing) runs
+#   unconditionally. The remaining open question is purely AP-side:
+#   what does the AP send over glink (charger-type intents, ULOG config
+#   type-0x19) in the initramfs environment vs a full system?

@@ -1,0 +1,57 @@
+# Call-site map: every trigger path into charger detection / APSD rerun
+# (grep over text_all.txt; one caller per level = event-driven, not free-running)
+
+## 1. charger_detection_inital_detection @0x60152970 (fn starts at 0x60152970)
+$ grep -n "call 0x60152970" text_all.txt
+1028997:6014e828:	a4 e0 00 5a	5a00e0a4 { 	call 0x60152970 <PT_LOAD#19+0x152970> }
+   caller fn @0x6014e590 (call site 0x6014e828):
+$ grep -n "call 0x6014e590" text_all.txt
+1034515:60153e60:	98 d3 ff 5b	5bffd398 { 	call 0x6014e590 <PT_LOAD#19+0x14e590> }
+   caller fn @0x60153e10 (call site 0x60153e60):
+$ grep -n "call 0x60153e10" text_all.txt
+1034392:60153c74:	ce c0 00 5a	5a00c0ce { 	call 0x60153e10 <PT_LOAD#19+0x153e10> }
+   (chain continues upward through the chg-det state machine; entry to the SM = event 0x25, see event-0x25-subscribers.txt)
+
+## 2. "adsp rerun" virtual action @0x6015b6a0 (fn-ptr arg0->field_0x38, callr; NULL -> return 0x202)
+$ grep -n "call 0x6015b6a0" text_all.txt   (9 sites, all inside the chg-det SM 0x6014e..0x60152):
+1029893:6014f628:	3c e0 01 5a	5a01e03c { 	call 0x6015b6a0 <PT_LOAD#19+0x15b6a0> }
+1030169:6014fa78:	14 de 01 5a	5a01de14 { 	call 0x6015b6a0 <PT_LOAD#19+0x15b6a0> }
+1030217:6014fb38:	b4 dd 01 5a	5a01ddb4 { 	call 0x6015b6a0 <PT_LOAD#19+0x15b6a0> }
+1030984:60150734:	b6 d7 01 5a	5a01d7b6 { 	call 0x6015b6a0 <PT_LOAD#19+0x15b6a0> }
+1031040:60150814:	46 d7 01 5a	5a01d746 { 	call 0x6015b6a0 <PT_LOAD#19+0x15b6a0> }
+1032710:6015222c:	3a ca 01 5a	5a01ca3a { 	call 0x6015b6a0 <PT_LOAD#19+0x15b6a0> }
+1032952:601525f4:	56 c8 01 5a	5a01c856 { 	call 0x6015b6a0 <PT_LOAD#19+0x15b6a0> }
+1033448:60152db4:	76 c4 01 5a	5a01c476 { 	call 0x6015b6a0 <PT_LOAD#19+0x15b6a0> }
+1033521:60152ed8:	e4 c3 01 5a	5a01c3e4 { 	call 0x6015b6a0 <PT_LOAD#19+0x15b6a0> }
+
+## 3. EMIT @0x60083f60 sources (see func-emit-60083f60.txt):
+   wrapper @0x60083a50 callers:
+766523:6004e300:	a8 eb 06 5a	5a06eba8 { 	call 0x60083a50 <PT_LOAD#19+0x83a50> }
+781431:6005cbf0:	30 f7 04 5a	5a04f730 { 	call 0x60083a50 <PT_LOAD#19+0x83a50> }
+975218:60119fdc:	3a cd ed 5b	5bedcd3a { 	call 0x60083a50 <PT_LOAD#19+0x83a50> }
+      -> 0x6004e300 in battmngr_plat_irq_scpqchg_qbg_r1_irq_setup @0x6004e260 (fn 0x6004e260..0x6004e4d8)
+      -> 0x6005cbf0 in unnamed fn @0x6005cbb0 (fn 0x6005cbb0..0x6005cd48)
+      -> 0x60119fdc in PmicTccPlatform_Schg_PDPhy_R1_IRQ_Setup @0x60119d20 (fn 0x60119d20..0x6011a2cc)
+   wrapper @0x60169730 callers:
+1069230:60175ccc:	32 dd fe 5b	5bfedd32 { 	call 0x60169730 <PT_LOAD#19+0x169730> }
+      -> 0x60175ccc in smb139x_irq_setup @0x60175990 (fn 0x60175990..0x60175d78)
+
+## 4. USB suspend->resume path (dpm_usbc.c):
+   resume fn @0x600d1dc0 -> SetRerunApsd(7) at 0x600d25e4 (see func-setrerun-apsd-600978e0.txt)
+
+## 5. Periodic/autonomous APSD rerun = DEAD CODE (0 code refs in this build):
+   PmSchgMisc_SetAiclPeriodicRerun / SetAiclRerunTimeCfg / set_hw_aicl_rerun(_timer):
+$ grep -c "PmSchgMisc_SetAiclPeriodicRerun" text_all.txt  -> 0 (name string exists, no ## xref)
+
+## 6. glink RX entry (AP-originated) — the ADSP side is UNCONDITIONAL:
+   pmic_glink_rx_intent_req handler @0x60088cd0..0x60088e70:
+     - ULog-gated INFO log "rx intent req_size:%d" (name str vaddr 0x601faa63)
+     - call 0x601343e0(arg0, 0, arg2)  <-- UNCONDITIONAL (QDI "queue intent")
+     - result == 0 -> return 1; else ULog-gated ERROR log "rx intent failed:%d" -> return 0
+     (see func-glink-rx-60088cd0.txt)
+   pmic_glink_ulog_process_rx_data @0x600872f0..0x60088960:
+     - parses glink-ULOG stream (magic 0x800a; type 0x18/0x19/0x23)
+     - type-0x19 = set ULog mask (0x60256f78) + level (0x60256f80) + counter (0x6024a660)
+       from the AP (see func-ulog-rx-processor-type19-600872f0.txt)
+   => The "flag" globals gate ONLY ULog logging (see ulog-flag-globals-write-sites.txt).
+      Intent/ULOG processing itself is not flag-gated on the ADSP side.

@@ -1,6 +1,38 @@
 # Logs
 
-Raw/near-raw evidence from initramfs diagnostic runs (screen/ULOG captures). These are small excerpts kept as proof for key claims.
+Raw/near-raw evidence from initramfs diagnostic runs (screen/ULOG captures)
+and from the PPM/ADSP firmware reverse engineering. These are small excerpts
+kept as proof for key claims.
+
+## Firmware RE evidence: [`adsp-re/`](adsp-re/)
+
+Disassembly excerpts and xref dumps from `adsp.mbn` (rp6) and `adsp_dtb.mbn`.
+Every claim in [`../docs/ADSP_RE.md`](../docs/ADSP_RE.md) /
+[`../docs/ADSP_CONFIG.md`](../docs/ADSP_CONFIG.md) has a file here. Method:
+xref = `grep '##0x<vaddr>' text_all.txt`; writes =
+`memw/memb/memh/memd(##0xADDR) = …`. Tools in
+[`../scripts/adsp-re/`](../scripts/adsp-re/).
+
+| File | What it proves |
+|---|---|
+| `elfmap-adsp-mbn.txt` | PHDR map; PT_LOAD#19 file↔vaddr mapping |
+| `ppm-fdt-rp6.dts` | dtc dump of the PPM FDT payload (8315 B @MBN+208) — 216 properties |
+| `strings-xref-sample.txt` | string→code xref method + the glink/ULog/BattMngr name-string xrefs |
+| `func-icm-ncp-stby-main.txt` | the wedge state: event dispatcher, state gate `==2`, jump table (event 24 = tick), WARN log xref + its ULog gate |
+| `func-setrerun-apsd-600978e0.txt` | `PmSchgUsb_SetRerunApsd` full 128 L: functional path has NO flag gate; the ULog globals gate only the two error logs |
+| `func-adsp-rerun-virtual-6015b6a0.txt` | "adsp rerun" virtual action (fn-ptr `field_0x38`, NULL→0x202) |
+| `event-0x25-subscribers.txt` | the 9 subscribers of the port/CC broadcast event 0x25 |
+| `func-event-bus-register-60084740.txt` | event-bus registration fn (handler/event/ctx/pool args, sentinel, registry globals) |
+| `func-emit-60083f60.txt` | the EMIT (broadcast source) prologue + gate |
+| `func-emit-callback-600a5be0.txt` | the isolated emit callback |
+| `func-arming-tcc-init-6010ac50.txt` | `PmicTccPlatform_Init`: PMIC-ID gate, method-table fill; 0 direct callers (runtime pointer table) |
+| `call-sites-trigger-map.txt` | every trigger path into charger detection / APSD rerun (one caller per level; glink RX entry; dead-code periodic rerun) |
+| `func-glink-rx-60088cd0.txt` | glink intent RX handler: processing UNCONDITIONAL (QDI queue intent), ULog gates only the logs |
+| `func-ulog-init-60080dc0.txt` | ULog client init ("BATTMAN ULog"): sets mask `0x3FFFFFFF`/level 3; setter fns; sole caller = `BattMngr_init` (ADSP boot) |
+| `func-ulog-rx-processor-type19-600872f0.txt` | `pmic_glink_ulog_process_rx_data`: AP sets ULog mask/level over glink (type-0x19) |
+| `func-battmngr-init-6002ad50.txt` | `BattMngr_init` (183 L) — the sole caller of the ULog client init |
+| `ulog-flag-globals-write-sites.txt` | **the headline**: full write-site map of the three "flag" globals = ULog logging controls; the log-gate pattern; H1 refuted |
+| `cross-firmware-compare.txt` | md5 registry: FDT payload byte-identical in all 7 sm8550 variants; sm8650/sm8380 comparison; no "fixed" config exists |
 
 ## Files
 

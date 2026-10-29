@@ -1,0 +1,97 @@
+# PmicTccPlatform_Init @0x6010ac50 — HW CC path arming is a RUNTIME init (excerpt of a 291-line function)
+# Evidence: PMIC-ID byte gate (0x32/0x47/0x4c), module method-table fill (PDPhy IRQ Setup at +0x6350),
+# "Platform init function pointer is NULL" check, and 0 direct callers + 0 fn-ptr refs
+# (=> invoked via a runtime pointer table; the arming gate is not statically readable).
+
+--- prologue + null check:
+ 959631: 6010ac50:	04 c0 9d a0	a09dc004 { 	allocframe(#0x20) }
+ 959632: 6010ac54:	fe e0 9e a7	a79ee0fe { 	memw(r30+#-0x8) = r0 }
+ 959633: 6010ac58:	c2 fe fe bf	bffefec2 { 	r2 = add(r30,#-0xa) }
+ 959634: 6010ac5c:	00 c0 22 3c	3c22c000 { 	memh(r2+#0x0) = #0x0 }
+ 959635: 6010ac60:	c2 ff 9e 97	979effc2 { 	r2 = memw(r30+#-0x8) }
+ 959636: 6010ac64:	00 c0 02 75	7502c000 { 	p0 = cmp.eq(r2,#0x0) }
+ 959637: 6010ac68:	00 c0 c0 6b	6bc0c000 { 	p0 = not(p0) }
+ 959638: 6010ac6c:	0c c0 00 5c	5c00c00c { 	if (p0) jump:nt 0x6010ac84 <PT_LOAD#19+0x10ac84> }
+ 959639: 6010ac70:	02 c0 00 58	5800c002 { 	jump 0x6010ac74 <PT_LOAD#19+0x10ac74> }
+ 959640: 6010ac74:	c2 ff fe bf	bffeffc2 { 	r2 = add(r30,#-0x2) }
+ 959641: 6010ac78:	08 40 00 00	00004008 { 	immext(#0x200)
+ 959642: 6010ac7c:	03 c0 22 3c	3c22c003   	memh(r2+#0x0) = ##0x203 }
+ 959643: 6010ac80:	2a c2 00 58	5800c22a { 	jump 0x6010b0d4 <PT_LOAD#19+0x10b0d4> }
+ 959644: 6010ac84:	c0 ff 9e 97	979effc0 { 	r0 = memw(r30+#-0x8) }
+ 959645: 6010ac88:	2c c2 00 5a	5a00c22c { 	call 0x6010b0e0 <PT_LOAD#19+0x10b0e0> }
+ 959646: 6010ac8c:	fb e0 5e a7	a75ee0fb { 	memh(r30+#-0xa) = r0 }
+
+--- PMIC-ID gate + method-table fill (+0x6348 .. +0x6364):
+ 959701: 6010ad68:	c2 ff 9e 97	979effc2 { 	r2 = memw(r30+#-0x8) }
+ 959702: 6010ad6c:	89 41 00 00	00004189 { 	immext(#0x6240)
+ 959703: 6010ad70:	22 c3 02 91	9102c322   	r2 = memb(r2+##0x6259) }
+ 959704: 6010ad74:	20 c5 02 75	7502c520 { 	p0 = cmp.eq(r2,#0x29) }
+ 959705: 6010ad78:	2a c0 00 5c	5c00c02a { 	if (p0) jump:nt 0x6010adcc <PT_LOAD#19+0x10adcc> }
+ 959706: 6010ad7c:	02 c0 00 58	5800c002 { 	jump 0x6010ad80 <PT_LOAD#19+0x10ad80> }
+ 959707: 6010ad80:	c2 ff 9e 97	979effc2 { 	r2 = memw(r30+#-0x8) }
+ 959708: 6010ad84:	89 41 00 00	00004189 { 	immext(#0x6240)
+ 959709: 6010ad88:	22 c3 02 91	9102c322   	r2 = memb(r2+##0x6259) }
+ 959710: 6010ad8c:	40 c6 02 75	7502c640 { 	p0 = cmp.eq(r2,#0x32) }
+ 959711: 6010ad90:	1e c0 00 5c	5c00c01e { 	if (p0) jump:nt 0x6010adcc <PT_LOAD#19+0x10adcc> }
+ 959712: 6010ad94:	02 c0 00 58	5800c002 { 	jump 0x6010ad98 <PT_LOAD#19+0x10ad98> }
+ 959713: 6010ad98:	c2 ff 9e 97	979effc2 { 	r2 = memw(r30+#-0x8) }
+ 959714: 6010ad9c:	89 41 00 00	00004189 { 	immext(#0x6240)
+ 959715: 6010ada0:	22 c3 02 91	9102c322   	r2 = memb(r2+##0x6259) }
+ 959716: 6010ada4:	e0 c8 02 75	7502c8e0 { 	p0 = cmp.eq(r2,#0x47) }
+ 959717: 6010ada8:	12 c0 00 5c	5c00c012 { 	if (p0) jump:nt 0x6010adcc <PT_LOAD#19+0x10adcc> }
+ 959718: 6010adac:	02 c0 00 58	5800c002 { 	jump 0x6010adb0 <PT_LOAD#19+0x10adb0> }
+ 959719: 6010adb0:	c2 ff 9e 97	979effc2 { 	r2 = memw(r30+#-0x8) }
+ 959720: 6010adb4:	89 41 00 00	00004189 { 	immext(#0x6240)
+ 959721: 6010adb8:	22 c3 02 91	9102c322   	r2 = memb(r2+##0x6259) }
+ 959722: 6010adbc:	80 c9 02 75	7502c980 { 	p0 = cmp.eq(r2,#0x4c) }
+ 959723: 6010adc0:	00 c0 c0 6b	6bc0c000 { 	p0 = not(p0) }
+ 959724: 6010adc4:	56 c0 00 5c	5c00c056 { 	if (p0) jump:nt 0x6010ae70 <PT_LOAD#19+0x10ae70> }
+ 959725: 6010adc8:	02 c0 00 58	5800c002 { 	jump 0x6010adcc <PT_LOAD#19+0x10adcc> }
+ 959726: 6010adcc:	c2 ff 9e 97	979effc2 { 	r2 = memw(r30+#-0x8) }
+ 959727: 6010add0:	fe 42 01 06	060142fe { 	immext(#0x6010bf80)
+ 959728: 6010add4:	03 c2 00 78	7800c203   	r3 = ##0x6010bf90 }
+ 959729: 6010add8:	8d 41 00 00	0000418d { 	immext(#0x6340)
+ 959730: 6010addc:	08 c3 82 a1	a182c308   	memw(r2+##0x6348) = r3 }
+ 959731: 6010ade0:	c2 ff 9e 97	979effc2 { 	r2 = memw(r30+#-0x8) }
+ 959732: 6010ade4:	0c 43 01 06	0601430c { 	immext(#0x6010c300)
+ 959733: 6010ade8:	03 c6 00 78	7800c603   	r3 = ##0x6010c330 }
+ 959734: 6010adec:	8d 41 00 00	0000418d { 	immext(#0x6340)
+ 959735: 6010adf0:	0c c3 82 a1	a182c30c   	memw(r2+##0x634c) = r3 }
+ 959736: 6010adf4:	c2 ff 9e 97	979effc2 { 	r2 = memw(r30+#-0x8) }
+ 959737: 6010adf8:	74 46 01 06	06014674 { 	immext(#0x60119d00)
+ 959738: 6010adfc:	03 c4 00 78	7800c403   	r3 = ##0x60119d20 }
+ 959739: 6010ae00:	8d 41 00 00	0000418d { 	immext(#0x6340)
+ 959740: 6010ae04:	10 c3 82 a1	a182c310   	memw(r2+##0x6350) = r3 }
+ 959741: 6010ae08:	c2 ff 9e 97	979effc2 { 	r2 = memw(r30+#-0x8) }
+ 959742: 6010ae0c:	10 43 01 06	06014310 { 	immext(#0x6010c400)
+ 959743: 6010ae10:	03 c4 00 78	7800c403   	r3 = ##0x6010c420 }
+ 959744: 6010ae14:	8d 41 00 00	0000418d { 	immext(#0x6340)
+ 959745: 6010ae18:	14 c3 82 a1	a182c314   	memw(r2+##0x6354) = r3 }
+ 959746: 6010ae1c:	c2 ff 9e 97	979effc2 { 	r2 = memw(r30+#-0x8) }
+ 959747: 6010ae20:	52 43 01 06	06014352 { 	immext(#0x6010d480)
+ 959748: 6010ae24:	03 c4 00 78	7800c403   	r3 = ##0x6010d4a0 }
+ 959749: 6010ae28:	8d 41 00 00	0000418d { 	immext(#0x6340)
+ 959750: 6010ae2c:	18 c3 82 a1	a182c318   	memw(r2+##0x6358) = r3 }
+ 959751: 6010ae30:	c2 ff 9e 97	979effc2 { 	r2 = memw(r30+#-0x8) }
+ 959752: 6010ae34:	81 43 01 06	06014381 { 	immext(#0x6010e040)
+ 959753: 6010ae38:	03 c6 00 78	7800c603   	r3 = ##0x6010e070 }
+ 959754: 6010ae3c:	8d 41 00 00	0000418d { 	immext(#0x6340)
+ 959755: 6010ae40:	1c c3 82 a1	a182c31c   	memw(r2+##0x635c) = r3 }
+ 959756: 6010ae44:	c2 ff 9e 97	979effc2 { 	r2 = memw(r30+#-0x8) }
+ 959757: 6010ae48:	f1 43 01 06	060143f1 { 	immext(#0x6010fc40)
+ 959758: 6010ae4c:	03 c4 00 78	7800c403   	r3 = ##0x6010fc60 }
+ 959759: 6010ae50:	8d 41 00 00	0000418d { 	immext(#0x6340)
+ 959760: 6010ae54:	20 c3 82 a1	a182c320   	memw(r2+##0x6360) = r3 }
+ 959761: 6010ae58:	c2 ff 9e 97	979effc2 { 	r2 = memw(r30+#-0x8) }
+ 959762: 6010ae5c:	02 44 01 06	06014402 { 	immext(#0x60110080)
+ 959763: 6010ae60:	03 c6 00 78	7800c603   	r3 = ##0x601100b0 }
+ 959764: 6010ae64:	8d 41 00 00	0000418d { 	immext(#0x6340)
+ 959765: 6010ae68:	24 c3 82 a1	a182c324   	memw(r2+##0x6364) = r3 }
+
+--- name/log strings (fileoff -> vaddr):
+    0xca8e73 PmicTccPlatform_Init
+    0xca8e88 Info: %s: PmicTccPlatform_Init::Platform configured for PortIndex %d on PmicModel %d
+    0xca8f34 ERROR: %s: PmicTccPlatform_Init::ERROR::Platform init function pointer is NULL
+
+# xref count of the name string (vaddr 0x60215e73) — 3 log sites, all inside this function:
+4

@@ -1,0 +1,52 @@
+# EMIT: event broadcast fn @0x60083f60 (212 lines) + virtual-call helper @0x600842b0 (13 lines)
+
+--- EMIT @0x60083f60 prologue: gate byte 0x60283a61, object global 0x60283a7c:
+ 821587: 60083f60:	05 c0 9d a0	a09dc005 { 	allocframe(#0x28) }
+ 821588: 60083f64:	06 c0 63 70	7063c006 { 	r6 = r3 }
+ 821589: 60083f68:	06 c0 61 70	7061c006 { 	r6 = r1 }
+ 821590: 60083f6c:	06 c0 60 70	7060c006 { 	r6 = r0 }
+ 821591: 60083f70:	fd e0 1e a7	a71ee0fd { 	memb(r30+#-0x3) = r0 }
+ 821592: 60083f74:	fc e1 1e a7	a71ee1fc { 	memb(r30+#-0x4) = r1 }
+ 821593: 60083f78:	fe e2 9e a7	a79ee2fe { 	memw(r30+#-0x8) = r2 }
+ 821594: 60083f7c:	f7 e3 1e a7	a71ee3f7 { 	memb(r30+#-0x9) = r3 }
+ 821595: 60083f80:	fc e4 9e a7	a79ee4fc { 	memw(r30+#-0x10) = r4 }
+ 821596: 60083f84:	fb e5 9e a7	a79ee5fb { 	memw(r30+#-0x14) = r5 }
+ 821597: 60083f88:	62 fd fe bf	bffefd62 { 	r2 = add(r30,#-0x15) }
+ 821598: 60083f8c:	00 c0 02 3c	3c02c000 { 	memb(r2+#0x0) = #0x0 }
+ 821599: 60083f90:	82 fc fe bf	bffefc82 { 	r2 = add(r30,#-0x1c) }
+ 821600: 60083f94:	00 c0 42 3c	3c42c000 { 	memw(r2+#0x0) = #0x0 }
+ 821601: 60083f98:	e9 60 02 06	060260e9 { 	immext(#0x60283a40)
+ 821602: 60083f9c:	22 c4 00 49	4900c422   	r2 = memb(##0x60283a61) }
+ 821603: 60083fa0:	00 c0 02 75	7502c000 { 	p0 = cmp.eq(r2,#0x0) }
+ 821604: 60083fa4:	0e c0 00 5c	5c00c00e { 	if (p0) jump:nt 0x60083fc0 <PT_LOAD#19+0x83fc0> }
+ 821605: 60083fa8:	02 c0 00 58	5800c002 { 	jump 0x60083fac <PT_LOAD#19+0x83fac> }
+    ... (dispatch through the registry; object load at 0x60084014 / 0x60084188):
+ 821632: 60084014:	80 c7 80 49	4980c780   	r0 = memw(##0x60283a7c) }
+ 821725: 60084188:	80 c7 80 49	4980c780   	r0 = memw(##0x60283a7c) }
+
+--- helper @0x600842b0 (full function):
+ 821799: 600842b0:	01 c0 9d a0	a09dc001 { 	allocframe(#0x8) }
+ 821800: 600842b4:	ff e0 9e a7	a79ee0ff { 	memw(r30+#-0x4) = r0 }
+ 821801: 600842b8:	fe e1 9e a7	a79ee1fe { 	memw(r30+#-0x8) = r1 }
+ 821802: 600842bc:	e2 ff 9e 97	979effe2 { 	r2 = memw(r30+#-0x4) }
+ 821803: 600842c0:	22 c0 c2 8c	8cc2c022 { 	r2 = clrbit(r2,#0x0) }
+ 821804: 600842c4:	ff e2 9e a7	a79ee2ff { 	memw(r30+#-0x4) = r2 }
+ 821805: 600842c8:	e1 ff 9e 97	979effe1 { 	r1 = memw(r30+#-0x4) }
+ 821806: 600842cc:	22 c0 81 91	9181c022 { 	r2 = memw(r1+#0x4) }
+ 821807: 600842d0:	83 c0 82 91	9182c083 { 	r3 = memw(r2+#0x10) }
+ 821808: 600842d4:	c2 ff 9e 97	979effc2 { 	r2 = memw(r30+#-0x8) }
+ 821809: 600842d8:	60 c0 00 78	7800c060 { 	r0 = #0x3 }
+ 821810: 600842dc:	00 c0 a3 50	50a3c000 { 	callr r3 }
+ 821811: 600842e0:	1e c0 1e 96	961ec01e { 	dealloc_return }
+
+# Decoded: helper clears bit0 of arg0, then fn = *(*(arg0+4)+0x10); callr fn(3, arg0, arg1).
+# EMIT itself: obj = *(global 0x60283a7c); calls helper with (obj, event-arg).
+
+--- the 3 direct callers of EMIT (grep "call 0x60083f60" text_all.txt):
+821333:60083b68:	fc c1 00 5a	5a00c1fc { 	call 0x60083f60 <PT_LOAD#19+0x83f60> }
+856197:600a5c28:	9c f1 fb 5b	5bfbf19c { 	call 0x60083f60 <PT_LOAD#19+0x83f60> }
+1056598:6016976c:	fa d3 e3 5b	5be3d3fa { 	call 0x60083f60 <PT_LOAD#19+0x83f60> }
+
+# (a) @0x60083b68 inside wrapper fn @0x60083a50
+# (b) @0x600a5c28 inside isolated fn @0x600a5be0 (0 refs anywhere — registered callback only)
+# (c) @0x6016976c inside wrapper fn @0x60169730

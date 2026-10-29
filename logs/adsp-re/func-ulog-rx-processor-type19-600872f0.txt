@@ -1,0 +1,71 @@
+# pmic_glink_ulog_process_rx_data @0x600872f0..0x60088960 (~1437 L) — EXCERPT
+# (glink ULOG RX stream processor; name string vaddr 0x601fa866, fileoff 0xc8d866)
+#
+# Parses the glink-ULOG stream from the AP. Per message: magic 0x800a (struct+0x0),
+# type field (struct+0x8): 0x18 / 0x19 / 0x23.
+#
+# Type-0x19 arm (shown below) = "set ULog mask + level from AP":
+#   mask    = *(payload+0x10) -> memd(##0x60256f78)   (ULog enable mask, doubleword)
+#   level   = *(payload+0x18) -> memw(##0x60256f80)   (ULog level)
+#   counter = level           -> memb(##0x6024a660)   (ULog verbosity counter)
+#   then re-applies via 0x6002d850(level) + 0x6002d940(mask) + client table 0x60324f10.
+#
+# => The ULog "flag" globals are reconfigurable BY THE AP over glink at runtime.
+#    They are logging controls, not AP-ready / HW-arming flags.
+#
+# --- type dispatch + type-0x19 arm (magic check -> global writes):
+60087368:	e2 ff 9e 97	979effe2 { 	r2 = memw(r30+#-0x4) }
+6008736c:	02 c0 82 91	9182c002 { 	r2 = memw(r2+#0x0) }
+60087370:	00 42 00 00	00004200 { 	immext(#0x8000)
+60087374:	40 c1 02 75	7502c140   	p0 = cmp.eq(r2,##0x800a) }
+60087378:	00 c0 c0 6b	6bc0c000 { 	p0 = not(p0) }
+6008737c:	24 c0 01 5c	5c01c024 { 	if (p0) jump:nt 0x600877c4 <PT_LOAD#19+0x877c4> }
+60087380:	02 c0 00 58	5800c002 { 	jump 0x60087384 <PT_LOAD#19+0x87384> }
+60087384:	e2 ff 9e 97	979effe2 { 	r2 = memw(r30+#-0x4) }
+60087388:	42 c0 82 91	9182c042 { 	r2 = memw(r2+#0x8) }
+6008738c:	74 e2 9e a5	a59ee274 { 	memw(r30+#-0xa30) = r2 }
+60087390:	00 c3 02 75	7502c300 { 	p0 = cmp.eq(r2,#0x18) }
+60087394:	b0 c0 00 5c	5c00c0b0 { 	if (p0) jump:nt 0x600874f4 <PT_LOAD#19+0x874f4> }
+60087398:	02 c0 00 58	5800c002 { 	jump 0x6008739c <PT_LOAD#19+0x8739c> }
+6008739c:	82 ee 9e 95	959eee82 { 	r2 = memw(r30+#-0xa30) }
+600873a0:	20 c3 02 75	7502c320 { 	p0 = cmp.eq(r2,#0x19) }
+600873a4:	0c c0 00 5c	5c00c00c { 	if (p0) jump:nt 0x600873bc <PT_LOAD#19+0x873bc> }
+600873a8:	02 c0 00 58	5800c002 { 	jump 0x600873ac <PT_LOAD#19+0x873ac> }
+600873ac:	82 ee 9e 95	959eee82 { 	r2 = memw(r30+#-0xa30) }
+600873b0:	60 c4 02 75	7502c460 { 	p0 = cmp.eq(r2,#0x23) }
+600873b4:	52 e0 00 5c	5c00e052 { 	if (p0) jump:nt 0x60087658 <PT_LOAD#19+0x87658> }
+600873b8:	02 c2 00 58	5800c202 { 	jump 0x600877bc <PT_LOAD#19+0x877bc> }
+600873bc:	e2 ff 9e 97	979effe2 { 	r2 = memw(r30+#-0x4) }
+600873c0:	90 e2 9e a5	a59ee290 { 	memw(r30+#-0x9c0) = r2 }
+600873c4:	02 f2 9e 95	959ef202 { 	r2 = memw(r30+#-0x9c0) }
+600873c8:	00 c0 02 75	7502c000 { 	p0 = cmp.eq(r2,#0x0) }
+600873cc:	92 c0 00 5c	5c00c092 { 	if (p0) jump:nt 0x600874f0 <PT_LOAD#19+0x874f0> }
+600873d0:	02 c0 00 58	5800c002 { 	jump 0x600873d4 <PT_LOAD#19+0x873d4> }
+600873d4:	02 f2 9e 95	959ef202 { 	r2 = memw(r30+#-0x9c0) }
+600873d8:	40 c0 c2 91	91c2c040 { 	r1:0 = memd(r2+#0x10) }
+600873dc:	bd 55 02 06	060255bd { 	immext(#0x60256f40)
+600873e0:	38 c0 c0 48	48c0c038   	memd(##0x60256f78) = r1:0 }
+600873e4:	02 f2 9e 95	959ef202 { 	r2 = memw(r30+#-0x9c0) }
+600873e8:	c2 c0 82 91	9182c0c2 { 	r2 = memw(r2+#0x18) }
+600873ec:	be 55 02 06	060255be { 	immext(#0x60256f80)
+600873f0:	00 c2 80 48	4880c200   	memw(##0x60256f80) = r2 }
+600873f4:	be 55 02 06	060255be { 	immext(#0x60256f80)
+600873f8:	02 c0 80 49	4980c002   	r2 = memw(##0x60256f80) }
+600873fc:	99 52 02 06	06025299 { 	immext(#0x6024a640)
+60087400:	20 c2 00 48	4800c220   	memb(##0x6024a660) = r2 }
+60087404:	be 55 02 06	060255be { 	immext(#0x60256f80)
+60087408:	00 c0 80 49	4980c000   	r0 = memw(##0x60256f80) }
+6008740c:	22 f2 f4 5b	5bf4f222 { 	call 0x6002d850 <PT_LOAD#19+0x2d850> }
+60087410:	bd 55 02 06	060255bd { 	immext(#0x60256f40)
+60087414:	00 c7 c0 49	49c0c700   	r1:0 = memd(##0x60256f78) }
+60087418:	02 c0 60 70	7060c002 { 	r2 = r0 }
+6008741c:	92 e2 9e a5	a59ee292 { 	memw(r30+#-0x9b8) = r2 }
+60087420:	bd 55 02 06	060255bd { 	immext(#0x60256f40)
+60087424:	82 c7 80 49	4980c782   	r2 = memw(##0x60256f7c) }
+60087428:	00 e0 22 73	7322e000 { 	r1:0 = combine(#0x0,r2) }
+6008742c:	02 c0 60 70	7060c002 { 	r2 = r0 }
+60087430:	93 e2 9e a5	a59ee293 { 	memw(r30+#-0x9b4) = r2 }
+60087434:	00 c9 7e bf	bf7ec900 { 	r0 = add(r30,#-0x9b8) }
+60087438:	84 f2 f4 5b	5bf4f284 { 	call 0x6002d940 <PT_LOAD#19+0x2d940> }
+6008743c:	3c 49 03 06	0603493c { 	immext(#0x60324f00)
+60087440:	02 c2 80 49	4980c202   	r2 = memw(##0x60324f10) }

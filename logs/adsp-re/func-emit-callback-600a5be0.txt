@@ -1,0 +1,23 @@
+# function enclosing site 600a5be0  (lines 856179..856199, 21 lines)
+# start vaddr 600a5be0   end vaddr 600a5c30
+ 856179: 600a5be0:	02 c0 9d a0	a09dc002 { 	allocframe(#0x10) }
+ 856180: 600a5be4:	03 c1 1e b0	b01ec103 { 	r3 = add(r30,#0x8) }
+ 856181: 600a5be8:	03 c0 60 70	7060c003 { 	r3 = r0 }
+ 856182: 600a5bec:	ff e0 1e a7	a71ee0ff { 	memb(r30+#-0x1) = r0 }
+ 856183: 600a5bf0:	fe e1 9e a7	a79ee1fe { 	memw(r30+#-0x8) = r1 }
+ 856184: 600a5bf4:	fd e2 9e a7	a79ee2fd { 	memw(r30+#-0xc) = r2 }
+ 856185: 600a5bf8:	e2 ff 3e 97	973effe2 { 	r2 = memub(r30+#-0x1) }
+ 856186: 600a5bfc:	4c 49 03 06	0603494c { 	immext(#0x60325300)
+ 856187: 600a5c00:	a2 fe 22 9d	9d22fea2   	r2 = memub(r2<<#0x3+##0x60325339) }
+ 856188: 600a5c04:	03 c1 3e 91	913ec103 { 	r3 = memub(r30+#0x8) }
+ 856189: 600a5c08:	02 c3 02 f3	f302c302 { 	r2 = add(r2,r3) }
+ 856190: 600a5c0c:	f3 e2 1e a7	a71ee2f3 { 	memb(r30+#-0xd) = r2 }
+ 856191: 600a5c10:	61 fe 3e 97	973efe61 { 	r1 = memub(r30+#-0xd) }
+ 856192: 600a5c14:	62 c0 9e 91	919ec062 { 	r2 = memw(r30+#0xc) }
+ 856193: 600a5c18:	03 c2 3e 91	913ec203 { 	r3 = memub(r30+#0x10) }
+ 856194: 600a5c1c:	c4 ff 9e 97	979effc4 { 	r4 = memw(r30+#-0x8) }
+ 856195: 600a5c20:	a5 ff 9e 97	979effa5 { 	r5 = memw(r30+#-0xc) }
+ 856196: 600a5c24:	00 c0 00 78	7800c000 { 	r0 = #0x0 }
+ 856197: 600a5c28:	9c f1 fb 5b	5bfbf19c { 	call 0x60083f60 <PT_LOAD#19+0x83f60> }
+ 856198: 600a5c2c:	00 c0 c0 70	70c0c000 { 	r0 = zxth(r0) }
+ 856199: 600a5c30:	1e c0 1e 96	961ec01e { 	dealloc_return }
