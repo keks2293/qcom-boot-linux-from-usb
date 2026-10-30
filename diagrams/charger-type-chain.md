@@ -115,12 +115,14 @@ updated on the property-service side; the ADSP only GETs it and reacts to its
 pushes. The ADSP-side re-evaluation actor is now **named**: the DPM USB-C state
 handler `dpm_usbc` @0x600d1dc0, driven by an AP **pmic_glink** message
 (handler 0x60088eb0 ← 0x60089bc0) and calling `SetRerunApsd(7)` — but that path
-is **gated by `apsd-rerun-cfg`** (=0 stock → no-op). What is still not decoded
-is the AP-side actor that sends the pmic_glink message, the exact DPM state, and
-the config check site; the AP-side static hunt is negative in all four zones
-(dracut config/modules, kernel modules, udev rules, userspace daemons). Only the
-full-system cold-plug / fresh-edge measurements can capture the behavioral
-difference. See the [trigger-chain section](../docs/ADSP_RE.md#the-setrerunapsd-trigger-chain-pmic_glink--dpm_usbc).
+is **gated by `apsd-rerun-cfg`** (=0 stock → no-op). The AP side of **that**
+channel (which glink message drives `dpm_usbc`) is not yet identified, but the
+AP-side actor of the **UCSI doorbell path** (the four commands 0x03/0x09/0x0b/
+0x10 that ring the PMIC doorbell bit 0x20) is **named**: the in-kernel UCSI
+core (`ucsi.c` + `ucsi_glink.c`) — there is no userspace actor, and the core is
+present in every environment (active or deferred depending on the DTB). See
+[ppm-ucsi-command-flow.md](ppm-ucsi-command-flow.md) and the
+[trigger-chain section](../docs/ADSP_RE.md#the-setrerunapsd-trigger-chain-pmic_glink--dpm_usbc).
 
 ## Levers on this chain
 

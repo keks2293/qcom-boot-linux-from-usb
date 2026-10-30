@@ -411,13 +411,156 @@ can only arrive as a **property-service push** (RX callback → … → ctxB->+0
   `SetRerunApsd` branch; (2) the specific pmic_glink message that drives it; (3) the
   exact `apsd-rerun-cfg` check site (FDT-only config, walked at runtime); (4) whether
   the AP's pmic_glink activity in the failing (initramfs) environment reaches that
-  state at all. The AP-side static actor hunt remains negative in all four zones
-  (dracut config/modules, kernel modules, udev rules, userspace daemons).
-- **Conclusion:** the ADSP mechanism is now fully named and the `apsd-rerun-cfg`
-  patch is backed by it. The remaining unknown is behavioral: whether the AP drives
-  the DPM to the rerun state in the failing vs working environment — only
-  measurement can settle it. That is the role of the full-system cold-plug fork test
-  and the fresh-edge test (see below).
+  state at all.
+- **AP-side actor (now named):** the userspace actor hunt was negative in all four
+  zones (dracut config/modules, kernel modules, udev rules, userspace daemons)
+  because the actor is not userspace: it is the **in-kernel UCSI core**
+  (`ucsi.c` + `ucsi_glink.c`), which exists in every environment and sends the four
+  PMIC-doorbell commands itself (0x03/0x09/0x0b/0x10) — see
+  [the UCSI/PPM command protocol section](#the-ucsi-ppm-command-protocol-ap--adsp).
+- **Conclusion:** the ADSP mechanism and the AP actor are both fully named, and the
+  `apsd-rerun-cfg` patch is backed by the ADSP mechanism. The remaining unknown is
+  the PPM/PMIC **state** in the failing environment (port misclassification + no
+  fresh CC edge + `icm_ncp_stby` wedge) — only measurement can settle it. That is
+  the role of the fresh-edge test (see below).
+
+## The UCSI/PPM command protocol: AP ↔ ADSP
+
+### There is no vendor renumbering — the AP speaks plain UCSI
+
+The PPM dispatch table reconstructed from the disassembly (below) uses the
+**standard UCSI command numbers** — they match kernel
+`drivers/usb/typec/ucsi/ucsi.h:112-144` (v7.2.6) 1:1:
+
+| # | Name | # | Name |
+|---|---|---|---|
+| 0x01 | PPM_RESET | 0x0d | GET_CAM_SUPPORTED |
+| 0x02 | CANCEL | 0x0e | GET_CURRENT_CAM |
+| 0x03 | CONNECTOR_RESET | 0x0f | SET_NEW_CAM |
+| 0x04 | ACK_CC_CI | 0x10 | GET_PDOS |
+| 0x05 | SET_NOTIFICATION_ENABLE | 0x11 | GET_CABLE_PROPERTY |
+| 0x06 | GET_CAPABILITY | 0x12 | GET_CONNECTOR_STATUS |
+| 0x07 | GET_CONNECTOR_CAPABILITY | 0x13 | GET_ERROR_STATUS |
+| 0x08 | SET_CCOM | 0x14 | SET_POWER_LEVEL |
+| 0x09 | SET_UOR | 0x15 | GET_PD_MESSAGE |
+| 0x0a | SET_PDM | 0x16 | GET_ATTENTION_VDO |
+| 0x0b | SET_PDR | 0x18 | GET_CAM_CS |
+| 0x0c | GET_ALTERNATE_MODES | 0x1c..0x22 | SET_SINK_PATH / SET_PDOS / READ_POWER_LEVEL / SET_USB / GET_LPM_PPM_INFO |
+
+The public QTI vendor driver `ucsi_qti_glink.c` (OnePlus SM8850 tree) also
+passes the core commands through without remapping (sync =
+`ucsi_sync_control_common` / `UCSI_MESSAGE_OUT`, async = `UCSI_CONTROL`
+write; owner 32779; buffer 48 B v1 / 528 B v2) — the same shape as the
+upstream `ucsi_glink.c`.
+
+Command word layout (`ucsi.h:146-154`): bits[7:0] = command, bits[23:16] =
+connector number, **bit 23 = CONNECTOR_RESET hard flag** (v1.0: hard reset;
+v2.0: data reset).
+
+### The dispatch table (from the disassembly)
+
+RX handler `ppm_ucsi_mailbox_write` @0x600d60d0 (glink opcode **0x12** =
+`UC_UCSI_WRITE_BUF_REQ`; the UCSI service's glink peer is the AP): gate
+`memb(0x603286b4)` (UCSI-enable — set by the ADSP itself at service
+registration, single write-site @0x600d39a8, never cleared ⇒ set in both
+environments, **not** a discriminator), copies cmd(8 B) → 0x60328688 and
+data(16 B) → 0x603286a0, logs the raw command byte, and — for **every**
+write — also rings the PMIC (op 0x16, see below).
+
+Dispatcher @0x600d4830 (vtable slot `svc->+0x24`):
+`idx = memub(0x60328688) - 2`, bounds 0..0x11, jump table 0x6020c29c
+(18 entries, commands 0x02..0x13):
+
+| cmd | handler | note |
+|---|---|---|
+| 0x03 | 0x600d8620 | CONNECTOR_RESET (decoded below) |
+| 0x04 | 0x600d7230 | ACK_CC_CI |
+| 0x09 | 0x600d87f0 | SET_UOR — **rings the PMIC doorbell** |
+| 0x0b | 0x600d8f30 | SET_PDR — **rings the PMIC doorbell** |
+| 0x0c | 0x600d96d0 | GET_ALTERNATE_MODES |
+| 0x10 | 0x600d7fb0 | GET_PDOS — **rings the PMIC doorbell** |
+| 0x02, 0x05, 0x06, 0x07, 0x0d, 0x0e, 0x12, 0x13 | 0x600d4948 → 0x600d75e0 | "immediate" group: sub-table 0x6020c304 (18 entries, sub-idx = cmd−2, stub 0x600d7f7c); real handlers: 0x02→0x600d7f6c, 0x05→0x600d7634, 0x06→0x600d7820, 0x07→0x600d790c, 0x0d→0x600d7f4c, 0x0e→0x600d7f5c, **0x12 GET_CONNECTOR_STATUS→0x600d7b54**, **0x13 GET_ERROR_STATUS→0x600d7e88** |
+| 0x08, 0x0a, 0x0f, 0x11 | 0x600d4a74 | error |
+
+Evidence: [`logs/adsp-re/ppm-ucsi-dispatch-table.txt`](../logs/adsp-re/ppm-ucsi-dispatch-table.txt).
+
+### Exactly four commands ring the PMIC doorbell
+
+`ppm_set_request_to_lpm` @0x600da6d0 ("Relay OPM request to LPM") has
+**exactly four callers in the whole firmware**:
+
+| caller fn | command | call site |
+|---|---|---|
+| 0x600d7fb0 | 0x10 GET_PDOS | 0x600d83a8 |
+| 0x600d8620 | 0x03 CONNECTOR_RESET | 0x600d87c4 |
+| 0x600d87f0 | 0x09 SET_UOR | 0x600d8e64 |
+| 0x600d8f30 | 0x0b SET_PDR | 0x600d9550 |
+
+Chain: `0x600da6d0 → 0x600ccb80` (per-port, stride 0xf8, handles @0x60325f94+,
+maxports @0x60325dcc) `→ 0x600da940 → 0x6019cd40(handle, 0x20) → 0x600810b0
+→ 0x60003094(handle, 0x20)` = glink **doorbell to the PMIC**: OR bit 0x20
+into the 64-bit shared command bitmap (CAS) + `trap0(#0x11)`.
+`0x60003094` has a single caller (0x600810b0). Every UCSI write
+additionally rings op **0x16** from the RX handler (0x600cc190(handle, 0xb)
+→ 0x6019cd40(handle, 0x16) → 0x600810b0 → 0x60003094). Evidence:
+[`logs/adsp-re/ppm-doorbell-callers.txt`](../logs/adsp-re/ppm-doorbell-callers.txt).
+
+### The CONNECTOR_RESET handler (0x600d8620), fully decoded
+
+NULL ctx → 0x203; `port = memub(cmd_buf+2) & 0x7f`, valid 1..4 else 0x202;
+log `"Info: %s: CONNECTOR_RESET: Port[%d], HardReset=%d"` (fmt 0x6020d6ef,
+name 0x6020d721: `ppm_proccess_connector_reset_command`, typo verbatim);
+`ctx->+0x1ca = hard ? 0x0a : 0x09`; `ctx->+0x1c8 = 1`; `ctx->+0x1c9 = port−1`;
+**`call 0x600da6d0`** (the doorbell chain); mailbox op 7 (0x600d5c20);
+`ctx->+5 = 4`; return 0. The handler is elementary: it does **not** touch
+CC/ICM state directly — it records the reset state and relays an OPM
+request to the PMIC. Evidence:
+[`logs/adsp-re/func-connector-reset-600d8620.txt`](../logs/adsp-re/func-connector-reset-600d8620.txt).
+
+### The AP-side actor: the in-kernel UCSI core
+
+The client that sends these commands is the **UCSI core** (`ucsi.c` +
+`ucsi_glink.c`, all `=y`) — there is no userspace daemon and no separate
+glink client. The core itself sends all four doorbell commands:
+
+| command | site (ucsi.c, v7.2.6) | condition |
+|---|---|---|
+| SET_UOR (0x09) | `ucsi_dr_swap` :1725-1728, via `typec_set_data_role` from `ucsi_partner_change` :1334-1348 | **only if `PARTNER_TYPE` ∈ {UFP, CABLE, CABLE_AND_UFP, DFP}**; `PARTNER_TYPE = 0` (USB2) → `default: break` → not sent |
+| SET_PDR (0x0b) | `ucsi_pr_swap` :1767-1770 | power-role swap request |
+| GET_PDOS (0x10) | `ucsi_register_partner` :1279-1280 → `ucsi_read_pdos` :873 | **only if `PWR_OPMODE == PD`** |
+| CONNECTOR_RESET (0x03) | recovery path `ucsi_role_cmd` :1687-1697 → `ucsi_reset_connector` :1594-1606 (plus PPM_RESET 0x01 + SET_NOTIFICATION_ENABLE via the async `UCSI_CONTROL` write, `ucsi_glink.c:190`) | after **any** role command returns `-ETIMEDOUT` |
+
+Whether the core is **active or deferred** is set by the device tree, not
+by the environment: with the `usb-role-switch` property absent (spliced
+diagnostic images, dbg12+) the full handshake completes and the core runs
+the commands above; with the property present (un-spliced stock/CI images,
+including the working full-system environment) `ucsi_register_port` gets
+`-EPROBE_DEFER` (empty role-switch class, no registrant on this board),
+retries 100 × 100 ms, gives up with `"PPM init failed, stop trying"`, and
+the AP stops sending UCSI commands (only the boot-time `UCSI_PPM_RESET`
+storm remains — 0x01 is not a doorbell command).
+
+Consequence for the diagnosis: in the **active** initramfs runs (dbg31/32)
+the UCSI core fires the doorbell commands — the PPM processed them
+(refused with `UCSI_ERROR_CC_COMMUNICATION_ERR` or timed out, which is an
+answer, not silence; GET_PDOS fired at boot because the state already
+showed `power_operation_mode=usb_power_delivery`; the manual
+CONNECTOR_RESET completed including the doorbell) — **and the wedge still
+persists**. In the **deferred** working full-system environment the AP
+sends no doorbell commands at all, and enumeration works via **PPM
+autonomy on the fresh CC edge**. The discriminator is therefore **not** the
+presence or absence of an AP actor but the **PPM/PMIC state**: in the
+failing environment the stick was attached before the PPM started (no
+fresh CC edge after that), the port is misclassified (`PARTNER_TYPE = 0`,
+USB2 — so the core itself stops sending SET_UOR), role commands are
+refused with a CC communication error, and the ICM stays in
+`icm_ncp_stby` until the charger type is updated
+([charger-type-chain.md](../diagrams/charger-type-chain.md)). A fresh CC
+edge (replug ≤ ~24.7 s, cold plug) or a PMIC-side re-run
+(`apsd-rerun-cfg`) is what re-arms detection. `qcom_pmic_typec`
+(CONFIG_TYPEC_QCOM_PMIC) is not an actor on this board: its OF-match is
+`qcom,pm8150b-typec` / `qcom,pmi632-typec` only — neither node exists in
+the RP6 device tree (the active connector is `/pmic-glink/connector@0`).
 
 ## Trigger table (consolidated)
 
@@ -438,16 +581,21 @@ registry in [`cross-firmware-compare.txt`](../logs/adsp-re/cross-firmware-compar
 
 ## Remaining hypotheses and next steps
 
-With the ADSP-side flag wall removed and the property system mapped, the candidates
-narrow to:
+With the ADSP-side flag wall removed, the property system mapped and the AP
+actor named (the in-kernel UCSI core — see
+[the UCSI/PPM command protocol section](#the-ucsi-ppm-command-protocol-ap--adsp)),
+the candidates narrow to:
 
-1. **AP-side measurement (primary):** the wedge waits for a property-service
-   **push** of the charger-type update (0x270b). The trigger for that push is a
-   behavioral/timing event sequence of the AP-side USB/charger stack — identify it by
-   capturing the AP activity in the window before successful enumeration in the
-   working (full-system) environment: the full-system cold-plug fork test (pre-plug +
-   cold-plug, dmesg window [T−2 s, T], typec/power_supply/udevadm) plus the fresh-edge
-   test (boot without the stick, plug in after 5–10 s).
+1. **PPM/PMIC state in the failing environment (primary):** the UCSI core
+   fires the same doorbell commands (0x03/0x09/0x0b/0x10) in both
+   environments, but in the failing one the port is misclassified
+   (`PARTNER_TYPE = 0`, USB2), role commands are refused with
+   `UCSI_ERROR_CC_COMMUNICATION_ERR`, and the ICM waits for a charger-type
+   update push that never comes. The fresh CC edge is what re-arms
+   detection — measure it with the fresh-edge test (boot without the stick,
+   plug in after 5–10 s). The full-system pre-plug vs post-plug fork test is
+   no longer available (full boot on the device is not possible) and is
+   superseded by this test.
 2. **Fresh-edge window:** the replug-timing correlation (≤ ~24.7 s works, ≥ ~38 s
    fails; ~30 s boundary) points to a PPM/BC1.2 classification window. See
    [ADSP_CONFIG.md](ADSP_CONFIG.md#timer--replug-correlation).
@@ -455,7 +603,3 @@ narrow to:
    that is disabled by config. A 1-byte FDT patch (+ `sha384` recompute) is the
    candidate config fix. See
    [ADSP_CONFIG.md](ADSP_CONFIG.md#the-1-byte-patch-recipe-verified-by-trial-patch).
-
-The decisive low-cost experiment remains the full-system cold-plug fork test
-(pre-plug vs post-plug) to capture what the AP does at the moment of enumeration —
-see [FULL_SYSTEM_COLDPLUG_TEST.md](FULL_SYSTEM_COLDPLUG_TEST.md).

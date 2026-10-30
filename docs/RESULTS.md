@@ -70,9 +70,31 @@ Findings:
 - **`modules.builtin`**: lists `typec_ucsi.ko` and `ucsi_glink.ko` as built-in; `qcom_battmgr` and `qcom_q6v5_*` are not built-in (they are `=m`).
 - Battery power-supply attributes (`qcom-battmgr-usb`, `battery`, `qcom-battmgr-wls`) are alive and readable in every initramfs run (dbg48–dbg51: VBUS 5057000–5069000 uV) — the module is loaded and probing successfully, so the "missing module" hypothesis is refuted.
 
+## dbg31/dbg32 — UCSI command re-decode (word layout)
+
+With the command word layout known (`bits[7:0]` = command, `bits[23:16]` =
+connector number, `bit 23` = CONNECTOR_RESET hard flag; kernel
+`ucsi.h:146-154`) the manual UCSI commands of the two AP-side experiment
+runs re-decode as:
+
+| run | word | decode | result |
+|---|---|---|---|
+| dbg32 (K) | `0x00010003` | CONNECTOR_RESET, port 1 | rc=0; handler completed **including the PMIC doorbell** — no visible effect (no fresh CC event to re-detect; port misclassified as `PARTNER_TYPE=0` USB2) |
+| dbg32 (K) | `0x00800003` | CONNECTOR_RESET + hard flag, port `0x80 & 0x7f` = **0 → invalid** | confounded: the hang was a reset of a **nonexistent port** (handler rejects port 0), not a clean hard-reset measurement |
+| dbg32 (K) | `0x00020003` | CONNECTOR_RESET, port 2 | no-op |
+| dbg31 (J) | SET_PDR (sink) | power-role swap | PPM error `UCSI_ERROR_CC_COMMUNICATION_ERR` (bit 4) → `-ECOMM` (the only kernel source of `-ECOMM` is `ucsi_read_error`, `ucsi.c:185-186`) |
+| dbg31 (J) | SET_UOR ×2 | data-role swap | PPM never completes → `-ETIMEDOUT` (this also triggered the kernel recovery path: PPM_RESET 0x01 + SET_NOTIFICATION_ENABLE + CONNECTOR_RESET) |
+
+Both runs prove the glink UCSI channel is alive in the initramfs environment
+(the PPM answers — with errors or completion), and the UCSI core is active
+(spliced DTB: full handshake, `partner=PRESENT`, `power_operation_mode=usb_power_delivery`
+at BEFORE, so the automatic GET_PDOS had already fired at boot). The wedge
+persists regardless — see
+[diagrams/ppm-ucsi-command-flow.md](../diagrams/ppm-ucsi-command-flow.md#why-dbg31dbg32-looked-dead-even-though-the-actor-is-present).
+
 ## Evidence logs (raw excerpts)
 
 - [`logs/dbg31-role-swap-refused.txt`](../logs/dbg31-role-swap-refused.txt) — PPM/ADSP rejects role swaps (`SET_PDR` `-ECOMM`, `SET_UOR` `-ETIMEDOUT`)
-- [`logs/dbg32-connector-reset.txt`](../logs/dbg32-connector-reset.txt) — `CONNECTOR_RESET` no-op or causes PDR down/up
+- [`logs/dbg32-connector-reset.txt`](../logs/dbg32-connector-reset.txt) — `CONNECTOR_RESET` rc=0 no-op; the second variant was a reset of invalid port 0 (re-decoded, above)
 - [`logs/dbg49-adsp-icm-ncp-stby.txt`](../logs/dbg49-adsp-icm-ncp-stby.txt) — ADSP stuck in `icm_ncp_stby` until charger type updated
 - [`logs/dbg51-rpm-no-suspend.txt`](../logs/dbg51-rpm-no-suspend.txt) — RPM idle returns `-EAGAIN`/`-EBUSY`, chain cannot suspend

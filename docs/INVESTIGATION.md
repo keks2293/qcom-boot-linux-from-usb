@@ -16,7 +16,7 @@ Understand why a USB flash drive fails to enumerate on cold-plug when booting in
 | ID | Hypothesis | Status | Notes |
 |---|---|---|---|
 | P-01 | XBL/ABL handoff leaves controller/PHY in bad state | Mostly ruled out | ADSP restart showed re-attach events but no enumeration |
-| P-06 | ADSP/PPM BC1.2 classification blocks data path until charger type updated | **Strong candidate** | `icm_ncp_stby_main: keeps in icm_ncp_stby until charger type updated`, `chgr_stat=7`, `charger_present=0`. PPM = "Platform Policy Manager" (UCSI 2.0 spec term); `icm_ncp_stby` is an ADSP-internal state (NCP = "No Charging Port", BC1.2) — not publicly documented anywhere else. Firmware RE (see below) pinned the re-trigger paths: a fresh CC edge, USB suspend→resume (dead, tied to ADSP restart), or a charger-detection SM event (event 0x25 broadcast; HW IRQ **or** AP glink). The ADSP side processes all of them unconditionally — the remaining gap is AP-side |
+| P-06 | ADSP/PPM BC1.2 classification blocks data path until charger type updated | **Strong candidate** | `icm_ncp_stby_main: keeps in icm_ncp_stby until charger type updated`, `chgr_stat=7`, `charger_present=0`. PPM = "Platform Policy Manager" (UCSI 2.0 spec term); `icm_ncp_stby` is an ADSP-internal state (NCP = "No Charging Port", BC1.2) — not publicly documented anywhere else. Firmware RE (see below) pinned the re-trigger paths: a fresh CC edge, USB suspend→resume (dead, tied to ADSP restart), or a charger-detection SM event (event 0x25 broadcast; HW IRQ **or** AP glink). The ADSP side processes all of them unconditionally. The AP actor is now **named**: the in-kernel UCSI core (`ucsi.c` + `ucsi_glink.c`) is the only AP↔PPM client in **every** environment (it fires the four PMIC-doorbell commands 0x03/0x09/0x0b/0x10 when active — spliced images — and is deferred when the DTB keeps the `usb-role-switch` property — stock/CI, including the working full system) — so the discriminator is the PPM/PMIC **state** in the failing environment (port misclassified as USB2, role commands refused, no fresh CC edge), not a missing actor. See [diagrams/ppm-ucsi-command-flow.md](../diagrams/ppm-ucsi-command-flow.md) |
 | H1 | HW CC arming / functional processing gated by an AP-ready runtime flag in the ADSP firmware | **Refuted (RE)** | The three "runtime flag globals" (ULog enable mask / level / verbosity counter) are **ULog logging controls**. Full write-site analysis: set at ADSP boot (`BattMngr_init` → ULog client init, mask `0x3FFFFFFF`, level 3) and reconfigurable by the AP over glink (ULOG type-0x19). Every "gate" site investigated is a log gate; the functional code (state writes, `callr` dispatch, glink intent processing) runs unconditionally |
 | L2/PM | Glue/XHCI enter runtime suspend/L2 and block enumeration | **Closed (dbg51)** | Observed in all tested PM states; blocked by root-hub autosuspend policy and child counts |
 | battmgr | Missing `qcom_battmgr` module in initramfs prevents BC1.2 classification | **Refuted (code + disk)** | `qcom_battmgr.ko` is already present in the CI initramfs (dracut `--no-hostonly`) and is auto-loaded by udev via `alias auxiliary:pmic_glink.power-supply qcom_battmgr`; battery psys are alive in every initramfs run (dbg48). Explicit `add_drivers` changes nothing |
@@ -65,13 +65,23 @@ correlation, not a proof: the mechanism is a PPM/BC1.2 classification window,
 and the candidate fix is the `apsd-rerun-cfg` 0→1 config patch
 ([ADSP_CONFIG.md](ADSP_CONFIG.md#the-1-byte-patch-recipe-verified-by-trial-patch)).
 
-## Actor hunt: statically negative in all 4 zones
+## Actor hunt: negative in userspace, positive in the kernel
 
 The question "what actor re-triggers PPM in the working environment?" was
 searched statically in all four zones that could contain one:
 
-1. **AP kernel** (v7.2.6): no driver writes a "re-detect" trigger; the UCSI
-   path only carries role/power commands (all refused or no-op on this device)
+1. **AP kernel** (v7.2.6): **actor found here** — the UCSI core
+   (`drivers/usb/typec/ucsi/ucsi.c` + `ucsi_glink.c`, all `=y`) sends the
+   four PMIC-doorbell commands itself: SET_UOR (0x09) on partner connect,
+   but **only if the PPM classifies the partner as PD-capable**
+   (`PARTNER_TYPE` ∈ {UFP, CABLE, CABLE_AND_UFP, DFP}); SET_PDR (0x0b) on
+   power-role swap; GET_PDOS (0x10) at partner registration, **only if
+   `PWR_OPMODE == PD`**; CONNECTOR_RESET (0x03) as the recovery path after
+   any role command times out (plus PPM_RESET 0x01 + SET_NOTIFICATION_ENABLE).
+   On this device the role/power commands are refused or no-op — but the
+   commands *do* reach the PPM (it answers with errors/timeouts), and the
+   doorbell fires for all four
+   ([diagrams/ppm-ucsi-command-flow.md](../diagrams/ppm-ucsi-command-flow.md))
 2. **initramfs userspace** (stock dracut cpio, fully extracted: 3092 records,
    655 modules, 62 udev rules, 140 systemd units): no actor touches
    `typec`/`usb_role`/glink for re-trigger; the `armada-adsp` dracut module is
@@ -83,11 +93,25 @@ searched statically in all four zones that could contain one:
    edge, USB suspend→resume, event 0x25 broadcast) — no free-running/periodic
    mechanism in this build (the periodic APSD rerun is dead code, 0 refs)
 
+The hunt was negative in all userspace zones because the actor is a **kernel
+built-in that exists in every environment** (initramfs, full system,
+third-party rootfs) — "add a service to the initramfs" is a non-sequitur:
+both the UCSI glink service (ADSP side, registered at ADSP boot in both
+environments) and the UCSI client (kernel side) are already present.
+
 Consequence: the difference between the working (full system, late replug)
-and dead (initramfs) environments is most likely **what the AP sends over
-glink** (charger-type intents, ULOG config, battmgr notifications) — an
-unmeasured gap; the decisive experiment is the full-system pre-plug vs
-post-plug fork ([FULL_SYSTEM_COLDPLUG_TEST.md](FULL_SYSTEM_COLDPLUG_TEST.md)).
+and dead (initramfs) environments is **not a missing actor**. The UCSI core
+fires the same doorbell commands in both; the discriminator is the
+**PPM/PMIC state** in the failing environment — the stick was attached
+before the PPM started (no fresh CC edge after that), the port is
+misclassified (`PARTNER_TYPE = 0`, USB2, so the core itself stops sending
+SET_UOR), role commands are refused with
+`UCSI_ERROR_CC_COMMUNICATION_ERR`, and the ICM stays in `icm_ncp_stby`
+until the charger type is updated. The decisive cheap experiment is the
+fresh-edge test: boot without the stick, plug it in 5–10 s after boot
+(the full-system pre-plug vs post-plug fork
+([FULL_SYSTEM_COLDPLUG_TEST.md](FULL_SYSTEM_COLDPLUG_TEST.md)) is no longer
+runnable — full boot on the device is not possible).
 
 ## PPM/ADSP firmware reverse engineering
 
@@ -144,6 +168,6 @@ Consequence: the "missing `qcom_battmgr` module" hypothesis is refuted — the m
 ## UCSI 2.0 spec findings (usb.org)
 
 - **PPM = Platform Policy Manager**: "the combination of hardware and firmware and any vendor-provided OS software that provides the interface to all the USB Type-C connectors on the platform". On RP6 the PPM is the ADSP firmware behind the pmic-glink/UCSI-glink channel.
-- **`CONNECTOR_RESET` reset type (bit 23): 0 = Hard Reset (default), 1 = Data Reset.** For a hard reset the spec says the connector "shall go through a disconnect-connect sequence". In dbg32 the plain reset command returned success with an all-zero response and produced **no** disconnect-connect, no VBUS dip, no re-attach — the PPM firmware deviates from the spec. The Data-Reset variant hung the PPM (timeout) with a PDR down/up cycle.
+- **`CONNECTOR_RESET` reset type (bit 23): 0 = Hard Reset (default), 1 = Data Reset.** For a hard reset the spec says the connector "shall go through a disconnect-connect sequence". In dbg32 the plain reset command returned success with an all-zero response and produced **no** disconnect-connect, no VBUS dip, no re-attach — the PPM firmware deviates from the spec. *Re-decoded with the command word layout (bit 23 = hard flag, bits[23:16] = connector number):* the second dbg32 variant `0x00800003` was a reset with the hard flag **and connector number 0 — an invalid port** (the PPM handler rejects port 0), so the observed hang is a confounded experiment, not a clean hard-reset measurement; no valid-port hard-reset test was run.
 - **CC communication error = bit 4** of the `GET_ERROR_STATUS` data — exactly what the PPM reported when the role-swap commands of dbg31 were rejected (`-ECOMM`).
 - **`icm_ncp_stby` is not publicly documented** (web search: only this repository matches). It is an ADSP-internal state; NCP ("No Charging Port") is a BC1.2 port-detection state. The fingerprint `keeps in icm_ncp_stby until charger type updated` is the PPM waiting for BC1.2 classification to complete.

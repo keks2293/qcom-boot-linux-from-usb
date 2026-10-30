@@ -13,13 +13,16 @@ cross-referenced to the doc/evidence that proves it.
 │                                                                              │
 │  userspace:   initramfs (dracut)              full system (armada rootfs)    │
 │               "linux usb" boot mode           normal boot                    │
-│               └─ no actor touches typec/ucsi/glink (4-zone static hunt)      │
+│                └─ NO userspace actor: AP actor = in-kernel UCSI core          │
 │                                                                              │
 │  kernel drivers (all =y unless noted):                                        │
 │   USB data:  a600000.usb (dwc3 glue) → xhci-hcd.0.auto → usb1/usb2 hubs      │
 │              dwc3-qcom, snps eUSB2 HS PHY (+ PM8550B repeater)               │
-│   USB-C:     ucsi + ucsi_glink (UCSI-over-glink client)                      │
-│              qcom_pmic_tcpm (=y), usb-role-switch (never registered on RP6)  │
+│    USB-C:     ucsi + ucsi_glink — the AP↔PPM client: UCSI core (in-kernel)    │
+│               sends the 4 PMIC-doorbell cmds (0x03/0x09/0x0b/0x10) itself;    │
+│               active or deferred per DTB (see ppm-ucsi-command-flow.md)       │
+│               qcom_pmic_tcpm (=y; never probes: pm8150b/pmi632 only);         │
+│               usb-role-switch (never registered on RP6)                       │
 │   ADSP link: pmic_glink (glink host), qcom_q6v5_pas (=m, starts ADSP)        │
 │              qcom_battmgr (=m; auto-loaded in initramfs via modalias)         │
 │   firmware files (initramfs, passive pack, dracut module armada-adsp):        │
@@ -78,11 +81,14 @@ plug stick → CC edge → PM8550B CC → HW IRQ → ADSP charger-detection SM
 ```
 
 The gate is the first hop: **classification is done entirely by ADSP + hardware;
-the AP is not in the loop**. A fresh CC edge is what starts detection. In the
-failing environment the stick is already in the port when PPM starts (~3.4 s
-after kernel boot) — there is no edge after that, detection never starts,
-`charger_type` is never updated, ICM stays in `icm_ncp_stby` and the data path
-stays closed. ADSP fingerprint of the wedge (ULOG):
+the AP is not in the loop** — the in-kernel UCSI core (the only AP↔PPM client,
+[ppm-ucsi-command-flow.md](ppm-ucsi-command-flow.md)) fires its four PMIC-doorbell
+commands in the active initramfs runs and the wedge still persists, while in the
+working full-system environment (UCSI deferred) the AP sends none at all. A fresh
+CC edge is what starts detection. In the failing environment the stick is already
+in the port when PPM starts (~3.4 s after kernel boot) — there is no edge after
+that, detection never starts, `charger_type` is never updated, ICM stays in
+`icm_ncp_stby` and the data path stays closed. ADSP fingerprint of the wedge (ULOG):
 
 ```
 icm_ncp_stby_main: keeps in icm_ncp_stby until charger type updated
@@ -97,15 +103,21 @@ power-on and fails **≥ ~38 s** (boundary numerically matches the PPM config
 [../docs/ADSP_CONFIG.md](../docs/ADSP_CONFIG.md) and
 [../docs/INVESTIGATION.md](../docs/INVESTIGATION.md)).
 
-## What is identical in both environments (not discriminators)
+## What is identical — or ruled out — in both environments (not discriminators)
 
 | Factor | initramfs (failing) | full system (working) |
 |---|---|---|
 | ADSP firmware | `adsp.mbn`/`adsp_dtb.mbn` md5-verified | identical (stock == repo == all 7 public sm8550 variants) |
 | ADSP bring-up | from initramfs firmware pack, ~3.4 s | from initramfs firmware pack (stock initramfs also carries it), ~3.4 s |
 | userspace actors | none (static hunt, all 4 zones) | none (same hunt) |
-| UCSI client | deferred (`usb-role-switch` in DTB → `-EPROBE_DEFER`, "PPM init failed, stop trying") | deferred as well (predicted: stock DTB has the property; check: `ls /sys/class/typec/`) |
+| UCSI client (in-kernel core) | **present and active** in the spliced diagnostic images (full handshake, partner=PRESENT, doorbell commands fire); **present but deferred** in the un-spliced CI image ("PPM init failed, stop trying") | present but deferred (predicted: stock DTB has the `usb-role-switch` property; check: `ls /sys/class/typec/` empty) |
 | AP-side USB data path | all builtin, up since ~0.5 s | same |
+
+Note on the UCSI row: the client (in-kernel UCSI core) is present in **every**
+environment; only its *mode* (active vs deferred) varies with the device tree.
+Neither mode is the discriminator — the active mode was measured directly
+(doorbell commands fire, wedge persists) and the deferred mode is the one the
+working environment runs.
 
 ## What differs (candidate discriminators, unmeasured)
 
@@ -113,12 +125,15 @@ power-on and fails **≥ ~38 s** (boundary numerically matches the PPM config
 |---|---|---|---|
 | CC edge at the moment of interest | stick pre-plugged: no edge after PPM start | cold-plug **after** boot: fresh edge while PPM is up | the leading model; T (plug time) never measured |
 | BATT client (`qcom_battmgr`) | ACTIVE (auto-loaded via modalias in every initramfs run) | likely DEAD (stale `modules.builtin` says builtin, boot kernel has `=m` → modprobe no-ops) | inverted direction — its absence in the working env makes it an unlikely trigger; check: `ls /sys/class/power_supply/` |
-| what the AP sends over glink | BATT notifications + UCSI (dead) + ULOG | unknown | the ADSP side processes everything unconditionally (RE); the AP-side difference is the open measurement — see below |
+| what the AP sends over glink (UCSI) | active: the in-kernel UCSI core fires the 4 doorbell commands (0x03/0x09/0x0b/0x10) — measured: refused/no-op, wedge persists | deferred: none after the boot-time reset storm (predicted) | the AP actor is **named and characterized** (in-kernel UCSI core, no userspace actor) — it is **not** the discriminator |
 
 Consequence: the difference between the environments is **not a userspace
-actor and not the firmware** — it is either the **fresh CC edge** (HW, the
-leading candidate) or **what the AP sends over glink / how the AP re-arms the
-USB PHY-port chain**. Both are measurable, neither was measured.
+actor and not the firmware**, and — now that the AP actor is named and the
+active-UCSI runs are measured — **not what the AP sends over glink** either.
+It is the **PPM/PMIC state at the moment of interest**, which in the leading
+model is set by the **fresh CC edge** (HW): no edge after PPM start (or only
+outside the ~30 s classification window) → the port is never classified →
+`icm_ncp_stby` wedge → data path closed.
 
 ## Where the levers are
 
@@ -126,7 +141,7 @@ USB PHY-port chain**. Both are measurable, neither was measured.
 |---|---|---|
 | `apsd-rerun-cfg` 0→1 (1 byte @MBN+2443 + hash slot @12624) | `adsp_dtb.mbn` (PPM config FDT) | recipe verified by trial patch; not yet tested on device (dbg52 candidate) |
 | fresh CC edge (replug / late plug) | hardware | works ≤ ~24.7 s, fails ≥ ~38 s |
-| UCSI SET/RESET levers | AP → glink → PPM | all measured: refused or no-op (SET → `-ECOMM`/`-ETIMEDOUT`, CONNECTOR_RESET → no-op) |
+| UCSI SET/RESET levers (AP UCSI core → glink → PPM) | AP kernel | all measured: the PMIC doorbell **does** fire for all four commands, but the effect is gated by PPM/PMIC state — SET → `-ECOMM`/`-ETIMEDOUT`, CONNECTOR_RESET → rc=0 no-op (no fresh CC event to re-detect) |
 | AP PM / runtime-PM of the USB chain | AP kernel | closed (dbg51: wedge coexists with every PM state) |
 | XBL/ABL handoff | boot | rejected (dbg45: XBL never touched USB in the failing boot) |
 
@@ -136,6 +151,7 @@ USB PHY-port chain**. Both are measurable, neither was measured.
 - PPM config values, container layout, patch recipe: [../docs/ADSP_CONFIG.md](../docs/ADSP_CONFIG.md)
 - ICM charger state machine (the wedge state, exit conditions, fingerprint): [icm-state-machine.md](icm-state-machine.md)
 - Charger type chain (PMIC HW → dispatcher → detection → ICM inputs, levers): [charger-type-chain.md](charger-type-chain.md)
+- UCSI/PPM command flow (AP UCSI core → glink → PPM dispatcher → PMIC doorbell; the 4 doorbell commands; active vs deferred): [ppm-ucsi-command-flow.md](ppm-ucsi-command-flow.md)
 - PM chain / runtime-PM blockers: [pm-chain.md](pm-chain.md)
 - Hypotheses, run table, actor hunt: [../docs/INVESTIGATION.md](../docs/INVESTIGATION.md)
 - Raw evidence: [../logs/](../logs/) (initramfs runs), [../logs/adsp-re/](../logs/adsp-re/) (firmware RE)

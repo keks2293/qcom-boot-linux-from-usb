@@ -45,23 +45,26 @@ Also refuted along the way:
 - **Missing `qcom_battmgr` module** — the module is already in the CI initramfs (dracut `--no-hostonly`) and is auto-loaded by udev; battery psys are alive in every initramfs run
 - **VBUS regulator cycle as a fresh-edge generator** — no VBUS regulator node exists in the RP6 device tree (the driver matches only `qcom,pm8150b-vbus-reg`, an RP5-family node); the 5 V output is generated on the ADSP/PMIC side, so no AP-side lever exists
 
-UCSI 2.0 spec cross-check: PPM is the spec term "Platform Policy Manager"; the spec requires a `CONNECTOR_RESET` hard reset to "go through a disconnect-connect sequence", but on this device the plain reset is a no-op — the PPM firmware deviates from the spec (fourth observed refusal, after the role-swap `-ECOMM`, the `SET_*` `-EOPNOTSUPP` set, and the Data-Reset hang).
+UCSI 2.0 spec cross-check: PPM is the spec term "Platform Policy Manager"; the spec requires a `CONNECTOR_RESET` hard reset to "go through a disconnect-connect sequence", but on this device the plain reset is a no-op — the PPM firmware deviates from the spec (after the role-swap `-ECOMM` and the `SET_*` `-EOPNOTSUPP` set; the second dbg32 reset variant re-decodes to an *invalid port 0*, so the observed hang is a confounded experiment — see [docs/RESULTS.md](docs/RESULTS.md#dbg31dbg32--ucsi-command-re-decode-word-layout)).
 
 Remaining focus is **early port classification by PPM/BC1.2 on the ADSP side**
 (`icm_ncp_stby` until charger type updated). The firmware RE removed the
-"runtime flag" hypothesis: the ADSP processes charger-detection events and
-glink intents unconditionally, so the difference between the working and dead
-environments must originate on the **AP side** (what is sent over glink in
-initramfs vs a full system) or in the absence of a fresh CC edge. Two cheap
-candidates remain: the `apsd-rerun-cfg` 0→1 config patch (1 byte + hash slot,
-recipe in [docs/ADSP_CONFIG.md](docs/ADSP_CONFIG.md)) and the fresh-edge
+"runtime flag" hypothesis and named both ends of the AP↔PPM link: the AP
+actor is the **in-kernel UCSI core** (`ucsi.c` + `ucsi_glink.c`, no userspace
+daemon), which fires the four PMIC-doorbell commands (0x03/0x09/0x0b/0x10)
+itself — and in the *active* initramfs runs it does exactly that, with the
+wedge persisting anyway. The difference between the working and dead
+environments is therefore the **PPM/PMIC state** (no fresh CC edge after PPM
+start, port misclassified, `icm_ncp_stby` wedge), not a missing actor. Two
+cheap candidates remain: the `apsd-rerun-cfg` 0→1 config patch (1 byte + hash
+slot, recipe in [docs/ADSP_CONFIG.md](docs/ADSP_CONFIG.md)) and the fresh-edge
 window (≤ ~30 s after power-on replug works, ≥ ~38 s fails).
 
-**Next step (no new image needed):** the full-system cold-plug test with a
-fork — boot with the flash drive pre-plugged vs cold-plugged after boot, and
-compare enumeration, `usb_type` (`Unknown` vs `SDP/DCP/PD`), and the dmesg
-window around the attach. See
-[docs/FULL_SYSTEM_COLDPLUG_TEST.md](docs/FULL_SYSTEM_COLDPLUG_TEST.md).
+**Next step (no new image needed):** the fresh-edge test — boot **without**
+the flash drive, plug it in 5–10 s after boot, and observe whether it
+enumerates (the full-system pre-plug vs post-plug fork
+([docs/FULL_SYSTEM_COLDPLUG_TEST.md](docs/FULL_SYSTEM_COLDPLUG_TEST.md)) is no
+longer runnable: a full boot on the device is not possible).
 
 ## Documentation
 
@@ -74,6 +77,7 @@ window around the attach. See
 - [diagrams/architecture.md](diagrams/architecture.md) — system architecture: what is where (AP/ADSP/hardware layers, the data path and where it is gated, what is identical vs different between the working and failing environments, the lever map)
 - [diagrams/icm-state-machine.md](diagrams/icm-state-machine.md) — ICM charger state machine inside the PPM firmware: states, the `ncp_stby` wedge, exit conditions, where the exit inputs come from, the ULog fingerprint
 - [diagrams/charger-type-chain.md](diagrams/charger-type-chain.md) — charger type chain: PM8550B CC/APSD hardware → IRQ dispatcher → charger detection → ICM inputs; levers on the chain; object and function maps (vaddrs)
+- [diagrams/ppm-ucsi-command-flow.md](diagrams/ppm-ucsi-command-flow.md) — UCSI/PPM command flow: the AP↔PPM protocol (plain UCSI, no renumbering), the in-kernel UCSI core as the only AP actor (active vs deferred), the 4 PMIC-doorbell commands, the full PPM dispatch table, why the AP-side experiments stayed no-op
 - [diagrams/pm-chain.md](diagrams/pm-chain.md) — PM chain and RPM blockers
 
 ## Scripts

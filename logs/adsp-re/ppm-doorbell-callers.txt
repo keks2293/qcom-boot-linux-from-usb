@@ -1,0 +1,26 @@
+# Callers of ppm_set_request_to_lpm 0x600da6d0 — full enumeration
+#
+# ppm_set_request_to_lpm (log: "Relay OPM request to LPM", fmt 0x6020d08e)
+# is the LPM-request relay that ends in the glink doorbell to the PMIC:
+#   0x600da6d0 -> 0x600ccb80 (per-port, stride 0xf8) -> 0x600da940
+#   -> 0x6019cd40(handle, 0x20) -> 0x600810b0 -> 0x60003094(handle, 0x20)
+#      (OR bit 0x20 into the 64-bit shared cmd bitmap, CAS + trap0(#0x11))
+#
+# grep 'call 0x600da6d0' text_all.txt — exactly 4 hits in the whole firmware:
+
+  in fn 0x600d7fb0 (0x10 GET_PDOS):  600d83a8:	94 d1 00 5a	5a00d194 { 	call 0x600da6d0 <PT_LOAD#19+0xda6d0> }
+  in fn 0x600d8620 (0x03 CONNECTOR_RESET):  600d87c4:	86 cf 00 5a	5a00cf86 { 	call 0x600da6d0 <PT_LOAD#19+0xda6d0> }
+  in fn 0x600d87f0 (0x09 SET_UOR):  600d8e64:	36 cc 00 5a	5a00cc36 { 	call 0x600da6d0 <PT_LOAD#19+0xda6d0> }
+  in fn 0x600d8f30 (0x0b SET_PDR):  600d9550:	c0 c8 00 5a	5a00c8c0 { 	call 0x600da6d0 <PT_LOAD#19+0xda6d0> }
+
+# These are the ONLY PPM commands that ring the LPM->PMIC doorbell (bit 0x20).
+# Every UCSI write additionally rings op 0x16 in the RX handler 0x600d60d0
+# (0x600cc190(handle, 0xb) -> 0x6019cd40(handle, 0x16) -> 0x600810b0 -> 0x60003094).
+
+# Callers of the doorbell primitive 0x60003094 (grep 'call 0x60003094'):
+  in fn 0x600810b0:  600810e8:	d6 cf f0 5b	5bf0cfd6 { 	call 0x60003094 <PT_LOAD#19+0x3094> }
+  ... total 1 hits (all inside 0x600810b0, the single wrapper;
+  0x600810b0 is reached from 0x6019cd40 (per-port dispatch) and from the
+  RX path 0x600cc190 (op 0x16) — see docs/ADSP_RE.md)
+
+Source: stock RP6 adsp.mbn, llvm-objdump --triple=hexagon (scripts/adsp-re/dump_adsp.sh).
