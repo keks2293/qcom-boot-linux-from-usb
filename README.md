@@ -1,10 +1,10 @@
 # qcom-boot-linux-from-usb
 
-Investigation into why USB flash drives fail to enumerate during cold-plug boot in `linux usb` mode on the **Retroid Pocket 6 (QCS8550 / SM8550)** with **Armada OS**.
+Investigation into why USB flash drives fail to enumerate in `linux usb` mode on the **Retroid Pocket 6 (QCS8550 / SM8550)** with **Armada OS** — the target case being a drive connected **before power-on (pre-plug)**, which is how USB boot is actually used.
 
 ## Problem statement
 
-When booting from USB (ABL `linux usb`) and cold-plugging a USB flash drive in the initramfs (dracut), the device is not enumerated on the USB bus. The same flash drive enumerates fine when booted from the internal storage and cold-plugged.
+When booting from USB (ABL `linux usb`), a USB flash drive that is **connected before power-on (pre-plug)** is not enumerated on the USB bus during the initramfs (dracut) stage, so the boot cannot find its root on the drive. The same drive, in the same pre-plugged state, enumerates fine when the device boots the full system from internal storage (measured on the device). Cold-plug (plugging after boot) also fails in the initramfs, but **pre-plug is the case that must work** — in the real world the drive is already in the port at power-on, and asking the user to replug it is not an acceptable workaround.
 
 ## Approach
 
@@ -52,19 +52,41 @@ Remaining focus is **early port classification by PPM/BC1.2 on the ADSP side**
 "runtime flag" hypothesis and named both ends of the AP↔PPM link: the AP
 actor is the **in-kernel UCSI core** (`ucsi.c` + `ucsi_glink.c`, no userspace
 daemon), which fires the four PMIC-doorbell commands (0x03/0x09/0x0b/0x10)
-itself — and in the *active* initramfs runs it does exactly that, with the
-wedge persisting anyway. The difference between the working and dead
-environments is therefore the **PPM/PMIC state** (no fresh CC edge after PPM
-start, port misclassified, `icm_ncp_stby` wedge), not a missing actor. Two
-cheap candidates remain: the `apsd-rerun-cfg` 0→1 config patch (1 byte + hash
-slot, recipe in [docs/ADSP_CONFIG.md](docs/ADSP_CONFIG.md)) and the fresh-edge
-window (≤ ~30 s after power-on replug works, ≥ ~38 s fails).
+itself. That actor does **not** discriminate the environments: in the *active*
+initramfs runs it fires those commands and the wedge persists, while in the
+*working* full system the core is deferred (no doorbell commands) and
+enumeration still works. The **pre-plug** case sharpens the open question:
+with the drive connected before power-on there is **no fresh CC edge after the
+PPM starts** (~3.4 s) in *either* environment, yet the full system enumerates
+the drive and the initramfs does not — so the fresh-CC-edge mechanism that
+explains the cold-plug/replug cases **cannot** explain the working pre-plug
+case. Whatever makes the full system re-classify a pre-plugged port is still
+unidentified, and that run has **no logs** — the measurement gap to close.
 
-**Next step (no new image needed):** the fresh-edge test — boot **without**
-the flash drive, plug it in 5–10 s after boot, and observe whether it
-enumerates (the full-system pre-plug vs post-plug fork
-([docs/FULL_SYSTEM_COLDPLUG_TEST.md](docs/FULL_SYSTEM_COLDPLUG_TEST.md)) is no
-longer runnable: a full boot on the device is not possible).
+## Goals
+
+1. **Make USB boot work with the drive pre-plugged** (connected before
+   power-on): the drive must enumerate during the initramfs so the boot can
+   find its root on it. A replug / fresh-edge workaround is **not** acceptable
+   — the drive is already in the port at power-on.
+2. **Identify what the full system does** to enumerate a pre-plugged drive
+   (it works there, but was never logged). That behavior is the target to
+   replicate — or replace with the `apsd-rerun-cfg` 0→1 config patch (1 byte +
+   hash slot, recipe in [docs/ADSP_CONFIG.md](docs/ADSP_CONFIG.md)) — in the
+   initramfs.
+
+The replug-timing correlation (≤ ~30 s after power-on works, ≥ ~38 s fails) is
+kept as supporting evidence of a PPM/BC1.2 classification window, not as the
+fix.
+
+**Next step (no new image needed):** capture the missing measurement — a
+full-system **pre-plug** boot (drive connected before power-on) with logging
+([docs/FULL_SYSTEM_COLDPLUG_TEST.md](docs/FULL_SYSTEM_COLDPLUG_TEST.md),
+`scripts/full-system-coldplug-test.sh`): when the drive enumerates (T)
+relative to PPM start (~3.4 s) and switch-root, the `usb_type` (SDP/DCP/PD vs
+`Unknown`), the PM state of the `a600000.usb` / `xhci` chain, and the AP-side
+glink/UCSI/battmgr activity in the window before enumeration. That identifies
+the re-classification trigger to replicate in the initramfs.
 
 ## Documentation
 

@@ -587,15 +587,18 @@ actor named (the in-kernel UCSI core — see
 the candidates narrow to:
 
 1. **PPM/PMIC state in the failing environment (primary):** the UCSI core
-   fires the same doorbell commands (0x03/0x09/0x0b/0x10) in both
-   environments, but in the failing one the port is misclassified
+   fires the doorbell commands (0x03/0x09/0x0b/0x10) in the active initramfs
+   runs and is deferred (sends none) in the full system — yet only the full
+   system enumerates. In the failing environment the port is misclassified
    (`PARTNER_TYPE = 0`, USB2), role commands are refused with
    `UCSI_ERROR_CC_COMMUNICATION_ERR`, and the ICM waits for a charger-type
-   update push that never comes. The fresh CC edge is what re-arms
-   detection — measure it with the fresh-edge test (boot without the stick,
-   plug in after 5–10 s). The full-system pre-plug vs post-plug fork test is
-   no longer available (full boot on the device is not possible) and is
-   superseded by this test.
+   update push that never comes. The target case is **pre-plug** (drive
+   connected before power-on): there is no fresh CC edge after the PPM starts
+   in *either* environment, so the fresh-edge mechanism (item 2) cannot
+   explain why the full system still enumerates a pre-plugged drive. The
+   decisive measurement is the **full-system pre-plug fork test** (a full
+   boot, drive pre-plugged, with logging) — it works on the device today but
+   has no logs; capturing it identifies the re-classification trigger.
 2. **Fresh-edge window:** the replug-timing correlation (≤ ~24.7 s works, ≥ ~38 s
    fails; ~30 s boundary) points to a PPM/BC1.2 classification window. See
    [ADSP_CONFIG.md](ADSP_CONFIG.md#timer--replug-correlation).

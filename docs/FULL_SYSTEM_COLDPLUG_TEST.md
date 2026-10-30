@@ -1,29 +1,32 @@
 # Cell II — Full System Test
 
-Run this on a **full system boot** (boot from internal storage, normal boot) with a flash drive **cold-plugged after login/boot completes**. Do **not** use the initramfs debug images for this test.
+Run this on a **full system boot** (boot from internal storage, normal boot). Do **not** use the initramfs debug images for this test. There are two variants; **pre-plug is the primary one** — it is the target case (the drive connected before power-on) that already works on the device and must be captured:
+
+- **Pre-plug (primary):** the flash drive is connected **before power-on**; the system boots normally with it in the port.
+- **Post-plug / cold-plug (secondary):** boot **without** the drive, then plug it in after boot.
 
 ## Purpose
 
-Determine whether PPM/BC1.2 classification differs between initramfs and full system:
-- Does full system report `usb_type` as `SDP/DCP/PD` instead of `Unknown`?
-- What happens around enumeration time `[T-2s, T]`?
-- What are PM states of `a600000.usb` and `xhci-hcd.0.auto`?
+Identify what the full system does to enumerate a **pre-plugged** drive — the behavior the initramfs is missing. Specifically:
+- Does the full system report `usb_type` as `SDP/DCP/PD` instead of `Unknown`?
+- When does the pre-plugged drive enumerate (T) relative to PPM start (~3.4 s) and switch-root?
+- What happens in the dmesg window before/around enumeration (`[T-2s, T]`)?
+- What are the PM states of `a600000.usb` and `xhci-hcd.0.auto`?
 
-## Procedure
+## Procedure (pre-plug, primary)
 
-1. Boot to full system
-2. Open terminal as root/user with access to sysfs
-3. Have a stopwatch/log ready
-4. Cold-plug USB flash drive (before starting captures if desired)
-5. Run the script below and capture full output
+1. Connect the flash drive **before power-on**.
+2. Boot to the full system (it should enumerate the drive — that is the known-good case).
+3. Open a terminal with access to sysfs.
+4. Run the script below and capture full output (the boot-time enumeration is already in `dmesg`).
 
 ## Script
 
-Use [`scripts/cell-ii.sh`](../scripts/cell-ii.sh).
+Use [`scripts/full-system-coldplug-test.sh`](../scripts/full-system-coldplug-test.sh).
 
 ```bash
-chmod +x scripts/cell-ii.sh
-./scripts/cell-ii.sh > cell-ii-$(date +%Y%m%d-%H%M%S).log 2>&1
+chmod +x scripts/full-system-coldplug-test.sh
+./scripts/full-system-coldplug-test.sh > full-system-coldplug-test-$(date +%Y%m%d-%H%M%S).log 2>&1
 ```
 
 ## What to look for

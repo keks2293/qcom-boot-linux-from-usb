@@ -2,7 +2,21 @@
 
 ## Goal
 
-Understand why a USB flash drive fails to enumerate on cold-plug when booting in `linux usb` mode into the initramfs on RP6/QCS8550, while enumerating fine from a full system boot with cold-plug.
+The target case is **pre-plug**: a USB flash drive connected **before power-on**, booted in `linux usb` mode into the initramfs on RP6/QCS8550. It is not enumerated on the USB bus, so the boot cannot find its root on the drive. In the same pre-plugged state the drive **does** enumerate from a full system boot (measured on the device, without logs). Cold-plug (plugging after boot) also fails in the initramfs, but pre-plug is the case that must work.
+
+Concretely:
+
+1. **Make pre-plug enumerate in `linux usb` mode** — the drive is already in the
+   port at power-on, so a replug / fresh-edge workaround is **not** acceptable;
+   the fix must work with the drive connected before power-on.
+2. **Identify what the full system does** to enumerate a pre-plugged drive. The
+   full-system pre-plug run works but was never logged, so the mechanism is
+   unknown. Note the constraint that rules out the leading hypothesis: with the
+   drive pre-plugged there is **no fresh CC edge after the PPM starts** (~3.4 s)
+   in *either* environment, yet only the full system enumerates — so the
+   fresh-CC-edge mechanism (which explains the cold-plug/replug cases) cannot
+   be the full explanation. The missing piece is the full-system pre-plug
+   measurement (see the fork test below).
 
 ## Methodology
 
@@ -99,19 +113,27 @@ third-party rootfs) — "add a service to the initramfs" is a non-sequitur:
 both the UCSI glink service (ADSP side, registered at ADSP boot in both
 environments) and the UCSI client (kernel side) are already present.
 
-Consequence: the difference between the working (full system, late replug)
-and dead (initramfs) environments is **not a missing actor**. The UCSI core
-fires the same doorbell commands in both; the discriminator is the
-**PPM/PMIC state** in the failing environment — the stick was attached
-before the PPM started (no fresh CC edge after that), the port is
-misclassified (`PARTNER_TYPE = 0`, USB2, so the core itself stops sending
+Consequence: the difference between the working (full system) and dead
+(initramfs) environments is **not a missing actor**. The UCSI core fires the
+same doorbell commands in the active initramfs runs and is deferred (sends
+none) in the full system — yet only the full system enumerates. The
+discriminator is the **PPM/PMIC state** in the failing environment — the port
+is misclassified (`PARTNER_TYPE = 0`, USB2, so the core itself stops sending
 SET_UOR), role commands are refused with
 `UCSI_ERROR_CC_COMMUNICATION_ERR`, and the ICM stays in `icm_ncp_stby`
-until the charger type is updated. The decisive cheap experiment is the
-fresh-edge test: boot without the stick, plug it in 5–10 s after boot
-(the full-system pre-plug vs post-plug fork
-([FULL_SYSTEM_COLDPLUG_TEST.md](FULL_SYSTEM_COLDPLUG_TEST.md)) is no longer
-runnable — full boot on the device is not possible).
+until the charger type is updated.
+
+The **pre-plug** target case is the sharper problem. With the drive connected
+before power-on there is **no fresh CC edge after the PPM starts** in *either*
+environment, yet the full system enumerates and the initramfs does not — so
+the fresh-CC-edge mechanism (the replug window: ≤ ~30 s works, ≥ ~38 s fails)
+cannot be the whole story. The decisive experiment is therefore **not** the
+fresh-edge test but the **full-system pre-plug fork**
+([FULL_SYSTEM_COLDPLUG_TEST.md](FULL_SYSTEM_COLDPLUG_TEST.md)): a full boot
+with the drive pre-plugged, captured with logging (T of enumeration vs PPM
+start / switch-root, `usb_type`, PM chain state, AP glink/UCSI/battmgr
+activity before enumeration). That run works on the device today but has no
+logs — capturing it is the next step.
 
 ## PPM/ADSP firmware reverse engineering
 

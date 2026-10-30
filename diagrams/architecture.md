@@ -123,17 +123,20 @@ working environment runs.
 
 | Factor | initramfs (failing) | full system (working) | Status |
 |---|---|---|---|
-| CC edge at the moment of interest | stick pre-plugged: no edge after PPM start | cold-plug **after** boot: fresh edge while PPM is up | the leading model; T (plug time) never measured |
+| CC edge at the moment of interest | pre-plug target: no edge after PPM start | pre-plug target: **also** no edge after PPM start — yet it enumerates | **not** a discriminator in the pre-plug case (the full system works with no fresh edge); the ≤ ~30 s window only covers the cold-plug/replug cases |
 | BATT client (`qcom_battmgr`) | ACTIVE (auto-loaded via modalias in every initramfs run) | likely DEAD (stale `modules.builtin` says builtin, boot kernel has `=m` → modprobe no-ops) | inverted direction — its absence in the working env makes it an unlikely trigger; check: `ls /sys/class/power_supply/` |
 | what the AP sends over glink (UCSI) | active: the in-kernel UCSI core fires the 4 doorbell commands (0x03/0x09/0x0b/0x10) — measured: refused/no-op, wedge persists | deferred: none after the boot-time reset storm (predicted) | the AP actor is **named and characterized** (in-kernel UCSI core, no userspace actor) — it is **not** the discriminator |
 
 Consequence: the difference between the environments is **not a userspace
 actor and not the firmware**, and — now that the AP actor is named and the
 active-UCSI runs are measured — **not what the AP sends over glink** either.
-It is the **PPM/PMIC state at the moment of interest**, which in the leading
-model is set by the **fresh CC edge** (HW): no edge after PPM start (or only
-outside the ~30 s classification window) → the port is never classified →
-`icm_ncp_stby` wedge → data path closed.
+It is the **PPM/PMIC state at the moment of interest**. In the cold-plug /
+replug cases that state is set by the **fresh CC edge** (the ~30 s window),
+but in the **pre-plug target case there is no fresh edge in either
+environment** and the full system still enumerates — so the mechanism that
+re-arms classification for a pre-plugged port is **not yet identified**. That
+is the open question: capture the full-system pre-plug run (it works but has
+no logs) to see what re-arms it there.
 
 ## Where the levers are
 
