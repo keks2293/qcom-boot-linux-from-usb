@@ -112,19 +112,22 @@ factory returns 0x202 (EEXIST) on repeat ⇒ the ctxB object is created
 
 **So "who pulls the charger type" (final answer):** the value is held and
 updated on the property-service side; the ADSP only GETs it and reacts to its
-pushes. The trigger that makes the service re-evaluate and push a 0x270b
-update is a **behavioral/timing event sequence of the AP-side USB/charger
-stack** in the working environment — not statically identifiable (ADSP
-endpoint opaque; AP-side actor hunt negative in all four zones: dracut
-config/modules, kernel modules, udev rules, userspace daemons). Only the
-full-system cold-plug / fresh-edge measurements can capture it.
+pushes. The ADSP-side re-evaluation actor is now **named**: the DPM USB-C state
+handler `dpm_usbc` @0x600d1dc0, driven by an AP **pmic_glink** message
+(handler 0x60088eb0 ← 0x60089bc0) and calling `SetRerunApsd(7)` — but that path
+is **gated by `apsd-rerun-cfg`** (=0 stock → no-op). What is still not decoded
+is the AP-side actor that sends the pmic_glink message, the exact DPM state, and
+the config check site; the AP-side static hunt is negative in all four zones
+(dracut config/modules, kernel modules, udev rules, userspace daemons). Only the
+full-system cold-plug / fresh-edge measurements can capture the behavioral
+difference. See the [trigger-chain section](../docs/ADSP_RE.md#the-setrerunapsd-trigger-chain-pmic_glink--dpm_usbc).
 
 ## Levers on this chain
 
 | # | Lever | Where | State |
 |---|---|---|---|
 | 1 | fresh CC edge (replug / late plug) | hardware | works ≤ ~24.7 s after power-on, fails ≥ ~38 s |
-| 2 | USB-resume → APSD rerun | ADSP: dpm_usbc resume @0x600d1dc0 → 0x600d25e4 → `PmSchgUsb_SetRerunApsd` @0x600978e0; failure log "APSD rerun failed during resume" (dpm_usbc.c) | path present in code; whether the failing environment ever triggers a resume is unmeasured |
+| 2 | DPM USB-C rerun | AP **pmic_glink** → handler 0x60088eb0 → 0x60089bc0 → `dpm_usbc` @0x600d1dc0 → 0x600d25e4 → `PmSchgUsb_SetRerunApsd` @0x600978e0 (per-port method `*(0x603255dc+7·0xc)+0x20`; NULL → no-op) | **GATED** by `apsd-rerun-cfg` (=0 stock → no-op). Chain fully traced (single-caller); exact DPM state + pmic_glink message + config check site not yet decoded |
 | 3 | `apsd-rerun-cfg` 0→1 (dbg52 candidate) | `adsp_dtb.mbn` FDT: property record @MBN+0x980 (name via string-table offset 0x52f → "apsd-rerun-cfg"), value word @0x988 = 0x00000000; patch byte @0x98b + sha384 slot @12624 (49 bytes total) | recipe byte-verified by trial patch (TZ accepted the recomputed hash); not yet tested on device |
 | 4 | ICM initial-detection status | ADSP: `charger_detection_inital_detection` @0x60152970 reads "adsp rerun status" (getter 0x6009dca0; second status 0x6009d9b0); log "charger_detection_inital_detection: adsp rerun status=0x%X" | needs a device run with ADSP ulog |
 

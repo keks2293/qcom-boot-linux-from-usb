@@ -97,6 +97,62 @@ The periodic/autonomous APSD rerun
 (`PmSchgMisc_SetAiclPeriodicRerun` / `SetAiclRerunTimeCfg` /
 `set_hw_aicl_rerun(_timer)`) is **dead code** in this build (0 code refs).
 
+### The `SetRerunApsd` trigger chain: pmic_glink → dpm_usbc
+
+The single caller of `SetRerunApsd` (the `arg=7` call @0x600d25e4 inside
+`dpm_usbc` @0x600d1dc0) is now fully traced **upstream** — every link is a
+single caller / single data reference, no vtable indirection, so the call
+graph is closed:
+
+```
+AP pmic_glink message
+  → pmic_glink notification handler 0x60088eb0
+      (registered as a callback by the "pmic_glink" registration fn,
+       string @0x601faee3, via the generic callback-register 0x6000e784)
+  → 0x60089bc0   (large handler, allocframe #0xf0; lazily allocates the
+      DPM USB-C objects 0x60325100/0x603250fc)
+  → dpm_usbc 0x600d1dc0   (DPM USB-C state handler; reads the state byte
+      object->+4, proceeds only while state <= 3)
+      [one state branch, 0x600d25c8..]:
+        memb(##0x6024bec4) = 1      (a "rerun requested" flag)
+        call 0x600d1890
+        r0 = #0x7
+        call SetRerunApsd 0x600978e0   @0x600d25e4
+  → *(0x603255dc + 7*0xc) + 0x20   (per-port APSD rerun method; NULL → no-op)
+  → APSD re-run → charger type re-detected → property 0x270b updated → push
+  → icm_ncp_stby_init exits the wedge
+```
+
+Key facts (from the disassembly):
+
+- `dpm_usbc` @0x600d1dc0 is a **state handler** (not a one-shot constructor):
+  it reads `object->+4` and only continues while `state <= 3` (else returns
+  0x203). Its **only** caller is @0x6008b56c (inside 0x60089bc0).
+- `SetRerunApsd` is a **no-op when the per-port rerun method is not
+  registered**: it validates `port <= 0xa`, then reads the per-port table
+  `0x603255dc + port*0xc`; if the entry or its `+0x20` method is NULL it
+  returns without doing anything (bail-outs @0x600979c8 / 0x600979e8).
+- The per-port table `0x603255dc` (BSS) is **only read** in the disassembly
+  (all references in the `PmSchgUsb`/pm_usb.c region 0x60097xxx); it is
+  populated indirectly at boot. The most plausible meaning of
+  `apsd-rerun-cfg = 0` (FDT, MBN+2440) is that with the config off the
+  per-port rerun method is **never registered**, so `SetRerunApsd` is a
+  no-op. The exact config check site is **not located** (the config keys are
+  FDT-only — absent from adsp.mbn; the firmware walks the FDT at runtime) —
+  a remaining ceiling.
+
+**Consequence:** the ADSP-side actor that re-evaluates the charger type is
+**named** — the DPM USB-C state handler `dpm_usbc`, driven by an AP
+**pmic_glink** message and gated by `apsd-rerun-cfg`. The `apsd-rerun-cfg
+0→1` patch (see [ADSP_CONFIG.md](ADSP_CONFIG.md#the-1-byte-patch-recipe-verified-by-trial-patch))
+is therefore the config that **enables this concrete path**, not an anonymous
+lever. What is still not decoded: (1) the exact DPM state value that reaches
+the `SetRerunApsd` branch, (2) the specific pmic_glink message that drives it,
+(3) whether in the failing (initramfs) environment the AP's pmic_glink
+activity reaches that state at all (the BATT-load inversion,
+[INVESTIGATION.md](INVESTIGATION.md), decides this — the full-system
+cold-plug fork test).
+
 ### Event 0x25: the port/CC-status broadcast
 
 Charger-detection enters via **event 0x25 (37)** = a port/CC-status broadcast. There are
@@ -341,13 +397,26 @@ can only arrive as a **property-service push** (RX callback → … → ctxB->+0
   GETs; a SET via the dynamic-id path is possible — the registry SET is the same RPC —
   and statically invisible, but it demonstrably does not happen in the failing
   environment, or the push would have arrived and the wedge would have cleared).
-- **Not found (and not statically findable):** the concrete trigger that makes the
-  property service re-evaluate and push 0x270b. On the ADSP side the endpoint is
-  opaque; on the AP side the static actor hunt is negative in all four zones (dracut
-  config/modules, kernel modules, udev rules, userspace daemons).
-- **Conclusion:** the trigger is a **behavioral / timing event sequence** of the
-  AP-side USB/charger stack in the working (full-system) environment — only
-  measurement can identify it. That is the role of the full-system cold-plug fork test
+- **Found (the ADSP actor, named):** the charger type is re-evaluated by the **DPM
+  USB-C state handler `dpm_usbc` @0x600d1dc0**, which — driven by an AP
+  **pmic_glink** message (handler 0x60088eb0 ← 0x60089bc0) and in the appropriate
+  DPM state — calls `SetRerunApsd(7)` → per-port APSD rerun → re-detection → 0x270b
+  update → push. This path is **gated by `apsd-rerun-cfg`** (=0 in stock, so
+  `SetRerunApsd` is a no-op). See
+  [the trigger-chain section](#the-setrerunapsd-trigger-chain-pmic_glink--dpm_usbc).
+  The second path is the CC-edge-driven `charger_detection_event_handler`
+  @0x6014eab0 (needs a fresh physical edge). In the failing environment neither
+  fires (no fresh edge + `apsd-rerun-cfg`=0) → the wedge.
+- **Not found (remaining ceiling):** (1) the exact DPM state value that reaches the
+  `SetRerunApsd` branch; (2) the specific pmic_glink message that drives it; (3) the
+  exact `apsd-rerun-cfg` check site (FDT-only config, walked at runtime); (4) whether
+  the AP's pmic_glink activity in the failing (initramfs) environment reaches that
+  state at all. The AP-side static actor hunt remains negative in all four zones
+  (dracut config/modules, kernel modules, udev rules, userspace daemons).
+- **Conclusion:** the ADSP mechanism is now fully named and the `apsd-rerun-cfg`
+  patch is backed by it. The remaining unknown is behavioral: whether the AP drives
+  the DPM to the rerun state in the failing vs working environment — only
+  measurement can settle it. That is the role of the full-system cold-plug fork test
   and the fresh-edge test (see below).
 
 ## Trigger table (consolidated)
@@ -355,7 +424,7 @@ can only arrive as a **property-service push** (RX callback → … → ctxB->+0
 | # | Trigger | Source | Status |
 |---|---|---|---|
 | 1 | fresh CC edge (attach) | HW (physical) | OUT — cold-plug = plugged before power-on; cannot re-plug |
-| 2 | USB suspend→resume | AP PM → dpm_usbc.c @0x600d1dc0 → `SetRerunApsd(7)` | DEAD — tied to PDR/SSR (ADSP restart; run V) |
+| 2 | DPM USB-C rerun | AP **pmic_glink** → handler 0x60088eb0 → 0x60089bc0 → `dpm_usbc` @0x600d1dc0 → `SetRerunApsd(7)` | **GATED** by `apsd-rerun-cfg` (FDT, =0 in stock → `SetRerunApsd` no-op). Chain fully traced; exact DPM state + pmic_glink message + config check site not yet decoded; whether the AP reaches that state in the failing env = full-system fork test |
 | 3 | charger-detection SM event | event 0x25 broadcast (HW CC IRQ **or** AP glink/UCSI) | **OPEN** — sources pinned (HW IRQ setup + glink RX); ADSP-side flag gates eliminated (ULog-only) |
 | 4 | periodic/autonomous | `SetAiclPeriodicRerun` / `SetAiclRerunTimeCfg` / `set_hw_aicl_rerun` | DEAD CODE (0 refs) |
 

@@ -1,7 +1,9 @@
 # property service RX push handler + channel open (excerpts)
-# Evidence: RX handler 0x6012afc8 = loop { read 48-byte message 0x600072a0(48, buf);
-# ACK cmd 0x10a (0x6012b008); cb = buf[4]; callr cb(buf[0], buf+8, buf+0x28) } — the
-# service PUSHES change notifications with a callback pointer in the message.
+# Evidence: RX push handler 0x6012afc8 = loop { memset via 0x600072a0 (len 0x30;
+# 0x600072a0 is a vsplatb+fill memset helper, NOT a queue read — the message bytes
+# arrive in the frame via the RPC callback); ACK cmd 0x10a (0x6012b008);
+# cb = *(buf+4); callr cb(buf[0], buf+8, *(buf+0x28)) } — the service PUSHES change
+# notifications with a callback pointer in the frame.
 # Channel open 0x6012b020: if handle @0x6024c170 == -1 -> send open {hi=2, lo=4} and
 # store the returned handle; then registers the RX handler (0x6000e784, ctx
 # 0x6032cf08). 0x6012b204 = RX registration for the second channel (global
