@@ -55,4 +55,4 @@ Collected data included:
 
 ## Full-system test (cell(ii))
 
-For comparison with initramfs behavior, run [`scripts/cell-ii.sh`](../scripts/cell-ii.sh) on a full system boot (internal storage) after cold-plugging the USB flash drive. This captures PM state, `usb_type`, modules, typec paths, dmesg/journalctl, and RPM traces if available.
+For comparison with initramfs behavior, run [`scripts/full-system-coldplug-test.sh`](../scripts/full-system-coldplug-test.sh) on a full system boot (internal storage). The primary variant is **pre-plug**: connect the flash drive before power-on. This captures PM state, `usb_type`, modules, typec paths, dmesg/journalctl, and RPM traces if available. Measured result: [`docs/FULL_SYSTEM_PREPLUG_RESULT.md`](FULL_SYSTEM_PREPLUG_RESULT.md).

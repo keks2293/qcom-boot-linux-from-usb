@@ -2,16 +2,24 @@
 
 ## full-system-coldplug-test.sh
 
-Run on full system (internal boot) after cold-plugging USB flash drive.
+Run on a full system boot (internal storage). The primary variant is
+**pre-plug** (drive connected before power-on); post-plug/cold-plug is the
+secondary variant.
 
 ```bash
 chmod +x full-system-coldplug-test.sh
 ./full-system-coldplug-test.sh > full-system-coldplug-test.log 2>&1
+# optional: OUTDIR=/tmp/out ./full-system-coldplug-test.sh
 ```
 
+The sysfs controller paths are discovered dynamically (`soc@0/a600000.usb`,
+`xhci-hcd.<N>.auto`), because the old hard-coded
+`/sys/devices/platform/a600000.usb/xhci-hcd.0.auto` paths do not exist on
+kernel 7.2.6.
+
 Collects:
-- PM state of `a600000.usb` and `xhci-hcd.0.auto`
-- `usb_type` from `qcom-battmgr-usb` (key)
+- PM state of `a600000.usb`, `xhci-hcd.<N>.auto` and the root hubs
+- `usb_type` from every power supply that exposes it (key)
 - modules, typec/role paths
 - dmesg/journalctl around enumeration
 - RPM trace tail if available

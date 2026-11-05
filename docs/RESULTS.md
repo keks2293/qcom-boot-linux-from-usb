@@ -1,5 +1,26 @@
 # Results
 
+## Cell II — full-system pre-plug (2026-11-05)
+
+Full-system boot (internal storage) with the dock and drive connected before
+power-on: the drive enumerated at **16.99 s**, 13 s after switch-root and
+**4.4 s after the ADSP `charger_pd` PDR** (10.41 s), when the xHCI host came up
+(14.81 s).
+
+- `qcom-battmgr-usb/usb_type` = **SDP** (current; `Unknown` in the initramfs)
+- UCSI port present and PD-negotiated: `data_role=host`, `power_role=sink`,
+  9 V contract; `qcom_battmgr` is loaded (the "likely dead in full system"
+  prediction is refuted)
+- PM state matches the predicted working values (`glue=auto/active/5000`,
+  `xhci=on/active/0`); L2 remains closed
+- Ordering difference vs the initramfs: full system host bring-up **after**
+  the `charger_pd` PDR (10.41 → 14.81 s); initramfs USB events at
+  2.716/3.182 s and PDR at 3.498 s (host events **before** the PDR), after
+  which no new bus events occur
+
+Details, caveats and the next falsifiable test (host re-probe inside the
+≤30 s window): [FULL_SYSTEM_PREPLUG_RESULT.md](FULL_SYSTEM_PREPLUG_RESULT.md).
+
 ## dbg50 — Invalid
 
 Image: `KERNEL.ci-5d953ca-dbg50`

@@ -53,15 +53,19 @@ Remaining focus is **early port classification by PPM/BC1.2 on the ADSP side**
 actor is the **in-kernel UCSI core** (`ucsi.c` + `ucsi_glink.c`, no userspace
 daemon), which fires the four PMIC-doorbell commands (0x03/0x09/0x0b/0x10)
 itself. That actor does **not** discriminate the environments: in the *active*
-initramfs runs it fires those commands and the wedge persists, while in the
-*working* full system the core is deferred (no doorbell commands) and
-enumeration still works. The **pre-plug** case sharpens the open question:
-with the drive connected before power-on there is **no fresh CC edge after the
-PPM starts** (~3.4 s) in *either* environment, yet the full system enumerates
-the drive and the initramfs does not — so the fresh-CC-edge mechanism that
-explains the cold-plug/replug cases **cannot** explain the working pre-plug
-case. Whatever makes the full system re-classify a pre-plugged port is still
-unidentified, and that run has **no logs** — the measurement gap to close.
+initramfs runs it fires those commands and the wedge persists, and in the
+*working* full system the core is **also active** (measured 2026-11-05:
+`port0` + partner, 9 V PD contract) and enumeration still works. The
+**pre-plug** case sharpens the open question: with the drive connected before
+power-on there is **no fresh CC edge after the PPM starts** (~3.4 s) in
+*either* environment, yet the full system enumerates the drive and the
+initramfs does not — so the fresh-CC-edge mechanism that explains the
+cold-plug/replug cases **cannot** explain the working pre-plug case. The
+full-system pre-plug boot is now captured: the xHCI host comes up **after**
+the ADSP `charger_pd` PDR (10.41 s → 14.81 s) and the drive enumerates at
+16.99 s, while in the initramfs the USB events (2.716/3.182 s) precede the PDR
+(3.498 s) and nothing re-arms the port afterwards. That ordering is the
+current candidate; the causal test is a host re-probe inside the ≤30 s window.
 
 ## Goals
 
@@ -79,14 +83,15 @@ The replug-timing correlation (≤ ~30 s after power-on works, ≥ ~38 s fails) 
 kept as supporting evidence of a PPM/BC1.2 classification window, not as the
 fix.
 
-**Next step (no new image needed):** capture the missing measurement — a
-full-system **pre-plug** boot (drive connected before power-on) with logging
-([docs/FULL_SYSTEM_COLDPLUG_TEST.md](docs/FULL_SYSTEM_COLDPLUG_TEST.md),
-`scripts/full-system-coldplug-test.sh`): when the drive enumerates (T)
-relative to PPM start (~3.4 s) and switch-root, the `usb_type` (SDP/DCP/PD vs
-`Unknown`), the PM state of the `a600000.usb` / `xhci` chain, and the AP-side
-glink/UCSI/battmgr activity in the window before enumeration. That identifies
-the re-classification trigger to replicate in the initramfs.
+**Captured 2026-11-05 (full-system pre-plug):** the missing measurement now
+exists — `usb_type` is **SDP** (not `Unknown`), the port is PD-negotiated
+(`data_role=host`, `power_role=sink`), and the xHCI host comes up **after** the
+ADSP `charger_pd` PDR (14.81 s vs 10.41 s), unlike the initramfs where the host
+events happen before the PDR (3.50 s). See
+[docs/FULL_SYSTEM_PREPLUG_RESULT.md](docs/FULL_SYSTEM_PREPLUG_RESULT.md) for
+the timeline, the contradicted predictions (`qcom_battmgr` is loaded; UCSI is
+active in the full system) and the next falsifiable test (re-probe the host
+inside the ≤30 s window).
 
 ## Documentation
 
@@ -95,7 +100,8 @@ the re-classification trigger to replicate in the initramfs.
 - [docs/ADSP_CONFIG.md](docs/ADSP_CONFIG.md) — `adsp_dtb.mbn` container layout, PPM config values, the 1-byte `apsd-rerun-cfg` patch recipe
 - [docs/TEST_METHOD.md](docs/TEST_METHOD.md) — how tests were performed
 - [docs/RESULTS.md](docs/RESULTS.md) — results from dbg50/dbg51
-- [docs/FULL_SYSTEM_COLDPLUG_TEST.md](docs/FULL_SYSTEM_COLDPLUG_TEST.md) — full-system test (remaining measurement)
+- [docs/FULL_SYSTEM_COLDPLUG_TEST.md](docs/FULL_SYSTEM_COLDPLUG_TEST.md) — full-system test procedure
+- [docs/FULL_SYSTEM_PREPLUG_RESULT.md](docs/FULL_SYSTEM_PREPLUG_RESULT.md) — measured full-system pre-plug result (2026-11-05)
 - [diagrams/architecture.md](diagrams/architecture.md) — system architecture: what is where (AP/ADSP/hardware layers, the data path and where it is gated, what is identical vs different between the working and failing environments, the lever map)
 - [diagrams/icm-state-machine.md](diagrams/icm-state-machine.md) — ICM charger state machine inside the PPM firmware: states, the `ncp_stby` wedge, exit conditions, where the exit inputs come from, the ULog fingerprint
 - [diagrams/charger-type-chain.md](diagrams/charger-type-chain.md) — charger type chain: PM8550B CC/APSD hardware → IRQ dispatcher → charger detection → ICM inputs; levers on the chain; object and function maps (vaddrs)

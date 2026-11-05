@@ -1,0 +1,238 @@
+[INFO] Output dir: /tmp/opencode/rp6-script-out
+=== FULL-SYSTEM-COLDPLUG-TEST START Thu Nov  5 22:17:34 +08 2026 ===
+
+### (0) Environment / boot
+model:      Retroid Pocket 6
+kernel:     Linux armada 7.2.6 #1 SMP PREEMPT Fri Oct  9 12:18:51 UTC 2026 aarch64 GNU/Linux
+boot:       2026-11-05 21:51:07  (up up 26 minutes)
+cmdline:    ostree=/ostree/boot.1/default/34d7969129f068943c4e123a35bc6e25680bdfb4f24d274d56333824a20bc988/0 root=UUID=6c512adc-c48e-434b-9f36-d7a016a7edd5 rw boot=UUID=24f4f3d0-4a5c-429d-9490-4b7a819b7d7c rootwait console=tty0 quiet loglevel=3 allow_mismatched_32bit_el0 fw_devlink.strict=1 pcie_ports=compat psi=1 cgroup_disable=pressure cgroup.memory=nokmem,nosocket cpufreq.default_governor=schedutil swiotlb=8192 rootflags=subvol=/root,noatime,compress=zstd:1
+root:       composefs overlay
+
+### (1) PM state of USB chain (paths discovered dynamically)
+glue: /sys/devices/platform/soc@0/a600000.usb
+xhci: /sys/devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto
+== /sys/devices/platform/soc@0/a600000.usb
+  power/control:                 auto
+  power/runtime_status:          active
+  power/autosuspend_delay_ms:    5000
+  power/wakeup:                  MISSING
+== /sys/devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto
+  power/control:                 on
+  power/runtime_status:          active
+  power/autosuspend_delay_ms:    0
+  power/wakeup:                  disabled
+== /sys/devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1
+  power/control:                 auto
+  power/runtime_status:          active
+  power/autosuspend_delay_ms:    0
+== /sys/devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb2
+  power/control:                 auto
+  power/runtime_status:          suspended
+  power/autosuspend_delay_ms:    0
+
+### (2) USB type (key; the bracketed value is the current one)
+qcom-battmgr-usb: Unknown [SDP] DCP CDP ACA C PD PD_DRP PD_PPS BrickID
+ucsi-source-psy-pmic_glink.ucsi.01: C [PD] PD_PPS
+
+### (3) Power supplies / role
+battery
+qcom-battmgr-usb
+qcom-battmgr-wls
+ucsi-source-psy-pmic_glink.ucsi.01
+== battery
+  type:                          Battery
+  voltage_now:                   4404476
+  current_now:                   0
+== qcom-battmgr-usb
+  type:                          USB
+  online:                        1
+  usb_type:                      Unknown [SDP] DCP CDP ACA C PD PD_DRP PD_PPS BrickID
+  voltage_now:                   5225000
+  current_now:                   566000
+  input_current_limit:           1500000
+== qcom-battmgr-wls
+  type:                          Wireless
+  online:                        0
+  voltage_now:                   -1000
+  current_now:                   412000
+== ucsi-source-psy-pmic_glink.ucsi.01
+  type:                          USB
+  online:                        1
+  usb_type:                      C [PD] PD_PPS
+  voltage_now:                   0
+  current_now:                   1500000
+  /sys/class/typec/port0/data_role: [host] device
+  /sys/class/typec/port0/power_role: source [sink]
+  /sys/class/typec/port0/power_operation_mode: usb_power_delivery
+  /sys/class/typec/port0/vconn_source: no
+  /sys/class/usb_role/a600000.usb-role-switch/role: host
+
+### (4) Loaded modules
+qcom_q6v5_pas          45056  0
+qcom_pil_info          12288  1 qcom_q6v5_pas
+qcom_q6v5              16384  1 qcom_q6v5_pas
+qcom_sysmon            24576  2 qcom_q6v5_pas,qcom_q6v5
+qcom_battmgr           24576  0
+qcom_common            16384  2 qcom_hv_haptics,qcom_q6v5_pas
+
+### (5) Boot / enumeration timeline
+478:[    0.131793] usbcore: registered new interface driver usb-storage
+583:[    0.301969] qcom_pmic_glink pmic-glink: Failed to create device link (0x180) with supplier 88e8000.phy for /pmic-glink/connector@0
+603:[    0.378602] qcom_pmic_glink pmic-glink: Failed to create device link (0x180) with supplier a600000.usb for /pmic-glink/connector@0
+683:[    0.599550] sd 0:0:0:2: [sdc] Attached SCSI disk
+684:[    0.599700] sd 0:0:0:1: [sdb] Attached SCSI disk
+691:[    0.602637] sd 0:0:0:4: [sde] Attached SCSI disk
+693:[    0.603752] sd 0:0:0:0: [sda] Attached SCSI disk
+704:[    0.618937] sd 0:0:0:3: [sdd] Attached SCSI disk
+705:[    0.618980] sd 0:0:0:5: [sdf] Attached SCSI disk
+842:[    3.135922] qcom_pmic_glink pmic-glink: Failed to create device link (0x180) with supplier usb0-sbu-mux for /pmic-glink/connector@0
+987:[    9.966521] remoteproc remoteproc0: powering up adsp
+993:[   10.354916] remoteproc remoteproc0: remote processor adsp is now up
+1004:[   10.409606] PDR: Indication received from msm/adsp/charger_pd, state: 0x1fffffff, trans-id: 1
+1032:[   14.813572] xhci-hcd xhci-hcd.2.auto: xHCI Host Controller
+1033:[   14.813610] xhci-hcd xhci-hcd.2.auto: new USB bus registered, assigned bus number 1
+1034:[   14.816086] xhci-hcd xhci-hcd.2.auto: hcc params 0x0110ffc5 hci version 0x110 quirks 0x0000808020000810
+1035:[   14.816154] xhci-hcd xhci-hcd.2.auto: irq 194, io mem 0x0a600000
+1036:[   14.816299] xhci-hcd xhci-hcd.2.auto: xHCI Host Controller
+1037:[   14.816310] xhci-hcd xhci-hcd.2.auto: new USB bus registered, assigned bus number 2
+1038:[   14.816321] xhci-hcd xhci-hcd.2.auto: Host supports USB 3.1 Enhanced SuperSpeed
+1043:[   15.065426] usb 1-1: new high-speed USB device number 2 using xhci-hcd
+1057:[   15.805396] usb 1-1.2: new high-speed USB device number 4 using xhci-hcd
+1059:[   15.967114] usb-storage 1-1.2:1.0: USB Mass Storage device detected
+1060:[   15.968159] scsi host1: usb-storage 1-1.2:1.0
+1061:[   16.037404] usb 1-1.3: new high-speed USB device number 5 using xhci-hcd
+1069:[   16.973434] usb 1-1.3.2: new high-speed USB device number 6 using xhci-hcd
+1076:[   17.030435] sd 1:0:0:0: [sdg] Attached SCSI disk
+1096:[   17.877484] usb 1-1.3.5: new high-speed USB device number 8 using xhci-hcd
+
+### (6) journalctl kernel (classification-relevant)
+894:Nov 05 21:51:38 armada kernel: synth uevent: /devices/platform/pmic-glink/pmic_glink.power-supply.0/power_supply/qcom-battmgr-usb: failed to send uevent
+895:Nov 05 21:51:38 armada kernel: power_supply qcom-battmgr-usb: uevent: failed to send synthetic uevent: -11
+896:Nov 05 21:51:38 armada kernel: synth uevent: /devices/platform/pmic-glink/pmic_glink.power-supply.0/power_supply/qcom-battmgr-wls: failed to send uevent
+897:Nov 05 21:51:38 armada kernel: power_supply qcom-battmgr-wls: uevent: failed to send synthetic uevent: -11
+1004:Nov 05 21:51:40 armada kernel: PDR: Indication received from msm/adsp/charger_pd, state: 0x1fffffff, trans-id: 1
+1043:Nov 05 21:51:45 armada kernel: usb 1-1: new high-speed USB device number 2 using xhci-hcd
+1057:Nov 05 21:51:46 armada kernel: usb 1-1.2: new high-speed USB device number 4 using xhci-hcd
+1061:Nov 05 21:51:46 armada kernel: usb 1-1.3: new high-speed USB device number 5 using xhci-hcd
+1069:Nov 05 21:51:47 armada kernel: usb 1-1.3.2: new high-speed USB device number 6 using xhci-hcd
+1096:Nov 05 21:51:48 armada kernel: usb 1-1.3.5: new high-speed USB device number 8 using xhci-hcd
+
+### (7) TypeC / usb_role / typec_mux
+== /sys/class/typec
+total 0
+lrwxrwxrwx 1 root root 0 Nov  5 22:13 port0 -> ../../devices/platform/pmic-glink/pmic_glink.ucsi.0/typec/port0
+lrwxrwxrwx 1 root root 0 Nov  5 22:13 port0-partner -> ../../devices/platform/pmic-glink/pmic_glink.ucsi.0/typec/port0/port0-partner
+== /sys/class/usb_role
+total 0
+lrwxrwxrwx 1 root root 0 Nov  5 22:13 a600000.usb-role-switch -> ../../devices/platform/soc@0/a600000.usb/usb_role/a600000.usb-role-switch
+== /sys/class/typec_mux
+total 0
+lrwxrwxrwx 1 root root 0 Nov  5 22:13 88e8000.phy-mux -> ../../devices/platform/soc@0/88e8000.phy/typec_mux/88e8000.phy-mux
+lrwxrwxrwx 1 root root 0 Nov  5 22:13 88e8000.phy-switch -> ../../devices/platform/soc@0/88e8000.phy/typec_mux/88e8000.phy-switch
+lrwxrwxrwx 1 root root 0 Nov  5 22:13 usb0-sbu-mux-mux -> ../../devices/platform/usb0-sbu-mux/typec_mux/usb0-sbu-mux-mux
+lrwxrwxrwx 1 root root 0 Nov  5 22:13 usb0-sbu-mux-switch -> ../../devices/platform/usb0-sbu-mux/typec_mux/usb0-sbu-mux-switch
+
+### (8) USB devices
+lsusb not installed; sysfs list:
+1-0:1.0
+1-1
+1-1.1
+1-1.1:1.0
+1-1.2
+1-1.2:1.0
+1-1.3
+1-1.3.2
+1-1.3.2:1.0
+1-1.3.2:1.1
+1-1.3.2:1.2
+1-1.3.2:1.3
+1-1.3.4
+1-1.3.4:1.0
+1-1.3.4:1.1
+1-1.3.5
+1-1.3.5:1.0
+1-1.3:1.0
+1-1:1.0
+2-0:1.0
+usb1
+usb2
+1-1  214b:7250  480  USB2.0 HUB
+1-1.1  25a4:9311  12  USB C Video Adaptor      
+1-1.2  0dd8:0562  480  Netac MobileDataStar
+1-1.3  0424:2734  480  USB2734
+1-1.3.2  0c45:0256  480  IO Type 68 Magnetic BL
+1-1.3.4  25a7:fa07  12  2.4G Wireless Receiver
+1-1.3.5  0424:274b  480  Hub Controller
+usb1  1d6b:0002  480  xHCI Host Controller
+usb2  1d6b:0003  10000  xHCI Host Controller
+
+### (9) RPM trace (if available)
+tracing not mounted
+
+### (10) Kernel config
+CONFIG_QRTR=y
+CONFIG_QRTR_SMD=y
+CONFIG_QRTR_TUN=y
+CONFIG_QRTR_MHI=y
+CONFIG_USB_DWC3=y
+# CONFIG_USB_DWC3_ULPI is not set
+# CONFIG_USB_DWC3_HOST is not set
+# CONFIG_USB_DWC3_GADGET is not set
+CONFIG_USB_DWC3_DUAL_ROLE=y
+CONFIG_USB_DWC3_EXYNOS=y
+CONFIG_USB_DWC3_PCI=y
+CONFIG_USB_DWC3_HAPS=y
+CONFIG_USB_DWC3_KEYSTONE=y
+CONFIG_USB_DWC3_MESON_G12A=y
+CONFIG_USB_DWC3_OF_SIMPLE=y
+CONFIG_USB_DWC3_QCOM=y
+CONFIG_USB_DWC3_IMX8MP=y
+CONFIG_USB_DWC3_IMX=y
+CONFIG_USB_DWC3_XILINX=y
+CONFIG_USB_DWC3_AM62=y
+CONFIG_USB_DWC3_RTK=y
+CONFIG_USB_DWC3_GENERIC_PLAT=y
+CONFIG_USB_DWC3_APPLE=y
+# CONFIG_USB_DWC3_GOOGLE is not set
+CONFIG_TYPEC=y
+CONFIG_TYPEC_TCPM=y
+CONFIG_TYPEC_TCPCI=m
+CONFIG_TYPEC_RT1711H=m
+CONFIG_TYPEC_MT6360=m
+CONFIG_TYPEC_TCPCI_MAXIM=m
+CONFIG_TYPEC_FUSB302=m
+CONFIG_TYPEC_QCOM_PMIC=y
+CONFIG_TYPEC_UCSI=y
+CONFIG_UCSI_CCG=m
+# CONFIG_UCSI_ACPI is not set
+# CONFIG_UCSI_STM32G0 is not set
+CONFIG_UCSI_PMIC_GLINK=y
+CONFIG_CROS_EC_UCSI=m
+# CONFIG_UCSI_LENOVO_YOGA_C630 is not set
+# CONFIG_UCSI_HUAWEI_GAOKUN is not set
+CONFIG_TYPEC_TPS6598X=m
+# CONFIG_TYPEC_ANX7411 is not set
+# CONFIG_TYPEC_RT1719 is not set
+CONFIG_TYPEC_HD3SS3220=m
+# CONFIG_TYPEC_STUSB160X is not set
+# CONFIG_TYPEC_WUSB3801 is not set
+CONFIG_TYPEC_MUX_FSA4480=y
+CONFIG_TYPEC_MUX_GPIO_SBU=m
+# CONFIG_TYPEC_MUX_PI3USB30532 is not set
+CONFIG_TYPEC_MUX_IT5205=m
+CONFIG_TYPEC_MUX_NB7VPQ904M=y
+CONFIG_TYPEC_MUX_PS883X=m
+CONFIG_TYPEC_MUX_PTN36502=m
+# CONFIG_TYPEC_MUX_TUSB1046 is not set
+CONFIG_TYPEC_MUX_WCD939X_USBSS=m
+CONFIG_TYPEC_DP_ALTMODE=m
+# CONFIG_TYPEC_NVIDIA_ALTMODE is not set
+# CONFIG_TYPEC_TBT_ALTMODE is not set
+CONFIG_USB_ROLE_SWITCH=y
+CONFIG_CROS_EC_TYPEC_ALTMODES=y
+CONFIG_CROS_EC_TYPEC=m
+CONFIG_CROS_TYPEC_SWITCH=m
+CONFIG_PHY_ROCKCHIP_TYPEC=y
+
+=== FULL-SYSTEM-COLDPLUG-TEST END Thu Nov  5 22:17:35 +08 2026 ===
+[INFO] All output in /tmp/opencode/rp6-script-out

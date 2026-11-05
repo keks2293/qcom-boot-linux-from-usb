@@ -2,21 +2,22 @@
 
 ## Goal
 
-The target case is **pre-plug**: a USB flash drive connected **before power-on**, booted in `linux usb` mode into the initramfs on RP6/QCS8550. It is not enumerated on the USB bus, so the boot cannot find its root on the drive. In the same pre-plugged state the drive **does** enumerate from a full system boot (measured on the device, without logs). Cold-plug (plugging after boot) also fails in the initramfs, but pre-plug is the case that must work.
+The target case is **pre-plug**: a USB flash drive connected **before power-on**, booted in `linux usb` mode into the initramfs on RP6/QCS8550. It is not enumerated on the USB bus, so the boot cannot find its root on the drive. In the same pre-plugged state the drive **does** enumerate from a full system boot; that run was captured with logging on 2026-11-05 ([FULL_SYSTEM_PREPLUG_RESULT.md](FULL_SYSTEM_PREPLUG_RESULT.md)). Cold-plug (plugging after boot) also fails in the initramfs, but pre-plug is the case that must work.
 
 Concretely:
 
 1. **Make pre-plug enumerate in `linux usb` mode** — the drive is already in the
    port at power-on, so a replug / fresh-edge workaround is **not** acceptable;
    the fix must work with the drive connected before power-on.
-2. **Identify what the full system does** to enumerate a pre-plugged drive. The
-   full-system pre-plug run works but was never logged, so the mechanism is
-   unknown. Note the constraint that rules out the leading hypothesis: with the
-   drive pre-plugged there is **no fresh CC edge after the PPM starts** (~3.4 s)
-   in *either* environment, yet only the full system enumerates — so the
+2. **Identify what the full system does** to enumerate a pre-plugged drive. Note
+   the constraint that rules out the leading hypothesis: with the drive
+   pre-plugged there is **no fresh CC edge after the PPM starts** (~3.4 s) in
+   *either* environment, yet only the full system enumerates — so the
    fresh-CC-edge mechanism (which explains the cold-plug/replug cases) cannot
-   be the full explanation. The missing piece is the full-system pre-plug
-   measurement (see the fork test below).
+   be the full explanation. The measured full-system pre-plug run narrows it to
+   a **host bring-up ordering** difference: the full system's xHCI host comes up
+   after the `charger_pd` PDR, the initramfs's USB events precede it and nothing
+   re-arms the port afterwards. Confirming that causally is the next experiment.
 
 ## Methodology
 
@@ -30,7 +31,7 @@ Concretely:
 | ID | Hypothesis | Status | Notes |
 |---|---|---|---|
 | P-01 | XBL/ABL handoff leaves controller/PHY in bad state | Mostly ruled out | ADSP restart showed re-attach events but no enumeration |
-| P-06 | ADSP/PPM BC1.2 classification blocks data path until charger type updated | **Strong candidate** | `icm_ncp_stby_main: keeps in icm_ncp_stby until charger type updated`, `chgr_stat=7`, `charger_present=0`. PPM = "Platform Policy Manager" (UCSI 2.0 spec term); `icm_ncp_stby` is an ADSP-internal state (NCP = "No Charging Port", BC1.2) — not publicly documented anywhere else. Firmware RE (see below) pinned the re-trigger paths: a fresh CC edge, USB suspend→resume (dead, tied to ADSP restart), or a charger-detection SM event (event 0x25 broadcast; HW IRQ **or** AP glink). The ADSP side processes all of them unconditionally. The AP actor is now **named**: the in-kernel UCSI core (`ucsi.c` + `ucsi_glink.c`) is the only AP↔PPM client in **every** environment (it fires the four PMIC-doorbell commands 0x03/0x09/0x0b/0x10 when active — spliced images — and is deferred when the DTB keeps the `usb-role-switch` property — stock/CI, including the working full system) — so the discriminator is the PPM/PMIC **state** in the failing environment (port misclassified as USB2, role commands refused, no fresh CC edge), not a missing actor. See [diagrams/ppm-ucsi-command-flow.md](../diagrams/ppm-ucsi-command-flow.md) |
+| P-06 | ADSP/PPM BC1.2 classification blocks data path until charger type updated | **Strong candidate** | `icm_ncp_stby_main: keeps in icm_ncp_stby until charger type updated`, `chgr_stat=7`, `charger_present=0`. PPM = "Platform Policy Manager" (UCSI 2.0 spec term); `icm_ncp_stby` is an ADSP-internal state (NCP = "No Charging Port", BC1.2) — not publicly documented anywhere else. Firmware RE (see below) pinned the re-trigger paths: a fresh CC edge, USB suspend→resume (dead, tied to ADSP restart), or a charger-detection SM event (event 0x25 broadcast; HW IRQ **or** AP glink). The ADSP side processes all of them unconditionally. The AP actor is now **named**: the in-kernel UCSI core (`ucsi.c` + `ucsi_glink.c`) is the only AP↔PPM client in **every** environment (it fires the four PMIC-doorbell commands 0x03/0x09/0x0b/0x10 when active — spliced images — and was also measured **active in the full system** on 2026-11-05, so active-vs-deferred is not the discriminator) — the discriminator is the PPM/PMIC **state** in the failing environment (port misclassified as USB2, role commands refused, no fresh CC edge), not a missing actor. See [diagrams/ppm-ucsi-command-flow.md](../diagrams/ppm-ucsi-command-flow.md) |
 | H1 | HW CC arming / functional processing gated by an AP-ready runtime flag in the ADSP firmware | **Refuted (RE)** | The three "runtime flag globals" (ULog enable mask / level / verbosity counter) are **ULog logging controls**. Full write-site analysis: set at ADSP boot (`BattMngr_init` → ULog client init, mask `0x3FFFFFFF`, level 3) and reconfigurable by the AP over glink (ULOG type-0x19). Every "gate" site investigated is a log gate; the functional code (state writes, `callr` dispatch, glink intent processing) runs unconditionally |
 | L2/PM | Glue/XHCI enter runtime suspend/L2 and block enumeration | **Closed (dbg51)** | Observed in all tested PM states; blocked by root-hub autosuspend policy and child counts |
 | battmgr | Missing `qcom_battmgr` module in initramfs prevents BC1.2 classification | **Refuted (code + disk)** | `qcom_battmgr.ko` is already present in the CI initramfs (dracut `--no-hostonly`) and is auto-loaded by udev via `alias auxiliary:pmic_glink.power-supply qcom_battmgr`; battery psys are alive in every initramfs run (dbg48). Explicit `add_drivers` changes nothing |
@@ -114,26 +115,29 @@ both the UCSI glink service (ADSP side, registered at ADSP boot in both
 environments) and the UCSI client (kernel side) are already present.
 
 Consequence: the difference between the working (full system) and dead
-(initramfs) environments is **not a missing actor**. The UCSI core fires the
-same doorbell commands in the active initramfs runs and is deferred (sends
-none) in the full system — yet only the full system enumerates. The
-discriminator is the **PPM/PMIC state** in the failing environment — the port
-is misclassified (`PARTNER_TYPE = 0`, USB2, so the core itself stops sending
-SET_UOR), role commands are refused with
-`UCSI_ERROR_CC_COMMUNICATION_ERR`, and the ICM stays in `icm_ncp_stby`
-until the charger type is updated.
+(initramfs) environments is **not a missing actor**. The UCSI core is active in
+the spliced initramfs runs (same doorbell commands fire) and was also measured
+**active in the full system** (2026-11-05: `port0` + partner, PD contract,
+`data_role=host`) — yet only the full system enumerates, so UCSI active-vs-
+deferred is not the discriminator either. The discriminator is the **PPM/PMIC
+state** in the failing environment — the port is misclassified
+(`PARTNER_TYPE = 0`, USB2, so the core itself stops sending SET_UOR), role
+commands are refused with `UCSI_ERROR_CC_COMMUNICATION_ERR`, and the ICM stays
+in `icm_ncp_stby` until the charger type is updated.
 
 The **pre-plug** target case is the sharper problem. With the drive connected
 before power-on there is **no fresh CC edge after the PPM starts** in *either*
 environment, yet the full system enumerates and the initramfs does not — so
 the fresh-CC-edge mechanism (the replug window: ≤ ~30 s works, ≥ ~38 s fails)
-cannot be the whole story. The decisive experiment is therefore **not** the
-fresh-edge test but the **full-system pre-plug fork**
-([FULL_SYSTEM_COLDPLUG_TEST.md](FULL_SYSTEM_COLDPLUG_TEST.md)): a full boot
-with the drive pre-plugged, captured with logging (T of enumeration vs PPM
-start / switch-root, `usb_type`, PM chain state, AP glink/UCSI/battmgr
-activity before enumeration). That run works on the device today but has no
-logs — capturing it is the next step.
+cannot be the whole story. The full-system pre-plug fork was captured on
+2026-11-05 ([FULL_SYSTEM_PREPLUG_RESULT.md](FULL_SYSTEM_PREPLUG_RESULT.md)):
+the port is classified (`usb_type=[SDP]`, PD contract), and the xHCI host comes
+up **after** the ADSP `charger_pd` PDR (10.41 s → 14.81 s), while in the
+initramfs the USB port-change events (2.716/3.182 s) precede the PDR (3.498 s)
+and no later bus events occur. The resulting candidate is that host-controller
+bring-up after the charger service is ready is the re-arming event; the next
+step is the falsifiable test — re-probe `dwc3-qcom` + `xhci-hcd` inside the
+≤30 s window in the initramfs and check whether the drive enumerates.
 
 ## PPM/ADSP firmware reverse engineering
 

@@ -533,12 +533,18 @@ glink client. The core itself sends all four doorbell commands:
 Whether the core is **active or deferred** is set by the device tree, not
 by the environment: with the `usb-role-switch` property absent (spliced
 diagnostic images, dbg12+) the full handshake completes and the core runs
-the commands above; with the property present (un-spliced stock/CI images,
-including the working full-system environment) `ucsi_register_port` gets
-`-EPROBE_DEFER` (empty role-switch class, no registrant on this board),
-retries 100 × 100 ms, gives up with `"PPM init failed, stop trying"`, and
-the AP stops sending UCSI commands (only the boot-time `UCSI_PPM_RESET`
-storm remains — 0x01 is not a doorbell command).
+the commands above; with the property present and an empty role-switch class
+(un-spliced stock/CI initramfs images) `ucsi_register_port` gets
+`-EPROBE_DEFER`, retries 100 × 100 ms, gives up with
+`"PPM init failed, stop trying"`, and the AP stops sending UCSI commands
+(only the boot-time `UCSI_PPM_RESET` storm remains — 0x01 is not a doorbell
+command).
+
+The earlier inference that the **full system** is deferred is **refuted by
+measurement** (2026-11-05): the full-system boot has
+`/sys/class/typec/port0` + `port0-partner`, a registered `usb_role` switch,
+`power_operation_mode=usb_power_delivery` and a 9 V PD contract, so the UCSI
+core is **active** there too.
 
 Consequence for the diagnosis: in the **active** initramfs runs (dbg31/32)
 the UCSI core fires the doorbell commands — the PPM processed them
@@ -546,9 +552,9 @@ the UCSI core fires the doorbell commands — the PPM processed them
 answer, not silence; GET_PDOS fired at boot because the state already
 showed `power_operation_mode=usb_power_delivery`; the manual
 CONNECTOR_RESET completed including the doorbell) — **and the wedge still
-persists**. In the **deferred** working full-system environment the AP
-sends no doorbell commands at all, and enumeration works via **PPM
-autonomy on the fresh CC edge**. The discriminator is therefore **not** the
+persists**. In the measured full-system environment the core is active as
+well and enumeration works, so active-vs-deferred UCSI and the presence of
+`qcom_battmgr` are both ruled out. The discriminator is therefore **not** the
 presence or absence of an AP actor but the **PPM/PMIC state**: in the
 failing environment the stick was attached before the PPM started (no
 fresh CC edge after that), the port is misclassified (`PARTNER_TYPE = 0`,
@@ -556,8 +562,9 @@ USB2 — so the core itself stops sending SET_UOR), role commands are
 refused with a CC communication error, and the ICM stays in
 `icm_ncp_stby` until the charger type is updated
 ([charger-type-chain.md](../diagrams/charger-type-chain.md)). A fresh CC
-edge (replug ≤ ~24.7 s, cold plug) or a PMIC-side re-run
-(`apsd-rerun-cfg`) is what re-arms detection. `qcom_pmic_typec`
+edge (replug ≤ ~24.7 s, cold plug), a host-controller bring-up after the
+charger service is ready (the measured full-system ordering), or a PMIC-side
+re-run (`apsd-rerun-cfg`) is what re-arms detection. `qcom_pmic_typec`
 (CONFIG_TYPEC_QCOM_PMIC) is not an actor on this board: its OF-match is
 `qcom,pm8150b-typec` / `qcom,pmi632-typec` only — neither node exists in
 the RP6 device tree (the active connector is `/pmic-glink/connector@0`).
@@ -587,18 +594,22 @@ actor named (the in-kernel UCSI core — see
 the candidates narrow to:
 
 1. **PPM/PMIC state in the failing environment (primary):** the UCSI core
-   fires the doorbell commands (0x03/0x09/0x0b/0x10) in the active initramfs
-   runs and is deferred (sends none) in the full system — yet only the full
-   system enumerates. In the failing environment the port is misclassified
-   (`PARTNER_TYPE = 0`, USB2), role commands are refused with
-   `UCSI_ERROR_CC_COMMUNICATION_ERR`, and the ICM waits for a charger-type
-   update push that never comes. The target case is **pre-plug** (drive
-   connected before power-on): there is no fresh CC edge after the PPM starts
-   in *either* environment, so the fresh-edge mechanism (item 2) cannot
+   is active in the initramfs runs and **also active in the measured full
+   system** (2026-11-05), yet only the full system enumerates — so the
+   discriminator is not the AP actor or UCSI mode. In the failing environment
+   the port is misclassified (`PARTNER_TYPE = 0`, USB2), role commands are
+   refused with `UCSI_ERROR_CC_COMMUNICATION_ERR`, and the ICM waits for a
+   charger-type update push that never comes. The target case is **pre-plug**
+   (drive connected before power-on): there is no fresh CC edge after the PPM
+   starts in *either* environment, so the fresh-edge mechanism (item 2) cannot
    explain why the full system still enumerates a pre-plugged drive. The
-   decisive measurement is the **full-system pre-plug fork test** (a full
-   boot, drive pre-plugged, with logging) — it works on the device today but
-   has no logs; capturing it identifies the re-classification trigger.
+   full-system pre-plug fork was captured on 2026-11-05
+   ([FULL_SYSTEM_PREPLUG_RESULT.md](FULL_SYSTEM_PREPLUG_RESULT.md)): the port
+   is classified (`usb_type=[SDP]`, PD contract) and the xHCI host comes up
+   **after** the `charger_pd` PDR (10.41 s → 14.81 s), unlike the initramfs
+   (USB events 2.716/3.182 s before the PDR at 3.498 s). The next step is the
+   falsifiable test: re-probe `dwc3-qcom` + `xhci-hcd` inside the ≤30 s window
+   in the initramfs and check whether the drive enumerates.
 2. **Fresh-edge window:** the replug-timing correlation (≤ ~24.7 s works, ≥ ~38 s
    fails; ~30 s boundary) points to a PPM/BC1.2 classification window. See
    [ADSP_CONFIG.md](ADSP_CONFIG.md#timer--replug-correlation).

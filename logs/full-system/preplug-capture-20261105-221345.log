@@ -1,0 +1,209 @@
+=== RP6 full-system PRE-PLUG capture ===
+Thu Nov  5 22:13:45 +08 2026
+2026-11-05 21:51:07
+up 22 minutes
+Linux armada 7.2.6 #1 SMP PREEMPT Fri Oct  9 12:18:51 UTC 2026 aarch64 GNU/Linux
+Retroid Pocket 6
+repo: 5f6440d Restate the goals around the real use case: pre-plug (drive connected before pow
+
+--- pre-plug / boot timeline (kernel) ---
+583:[    0.301969] qcom_pmic_glink pmic-glink: Failed to create device link (0x180) with supplier 88e8000.phy for /pmic-glink/connector@0
+603:[    0.378602] qcom_pmic_glink pmic-glink: Failed to create device link (0x180) with supplier a600000.usb for /pmic-glink/connector@0
+842:[    3.135922] qcom_pmic_glink pmic-glink: Failed to create device link (0x180) with supplier usb0-sbu-mux for /pmic-glink/connector@0
+987:[    9.966521] remoteproc remoteproc0: powering up adsp
+993:[   10.354916] remoteproc remoteproc0: remote processor adsp is now up
+1004:[   10.409606] PDR: Indication received from msm/adsp/charger_pd, state: 0x1fffffff, trans-id: 1
+1032:[   14.813572] xhci-hcd xhci-hcd.2.auto: xHCI Host Controller
+1033:[   14.813610] xhci-hcd xhci-hcd.2.auto: new USB bus registered, assigned bus number 1
+1034:[   14.816086] xhci-hcd xhci-hcd.2.auto: hcc params 0x0110ffc5 hci version 0x110 quirks 0x0000808020000810
+1035:[   14.816154] xhci-hcd xhci-hcd.2.auto: irq 194, io mem 0x0a600000
+1036:[   14.816299] xhci-hcd xhci-hcd.2.auto: xHCI Host Controller
+1037:[   14.816310] xhci-hcd xhci-hcd.2.auto: new USB bus registered, assigned bus number 2
+1038:[   14.816321] xhci-hcd xhci-hcd.2.auto: Host supports USB 3.1 Enhanced SuperSpeed
+1043:[   15.065426] usb 1-1: new high-speed USB device number 2 using xhci-hcd
+1059:[   15.967114] usb-storage 1-1.2:1.0: USB Mass Storage device detected
+1060:[   15.968159] scsi host1: usb-storage 1-1.2:1.0
+1070:[   16.990164] scsi 1:0:0:0: Direct-Access     Netac    MobileDataStar   1101 PQ: 0 ANSI: 6
+1076:[   17.030435] sd 1:0:0:0: [sdg] Attached SCSI disk
+
+--- any USB disconnect / re-enumeration after boot ---
+1043:[   15.065426] usb 1-1: new high-speed USB device number 2 using xhci-hcd
+
+--- PM state: actual sysfs paths ---
+== /sys/devices/platform/soc@0/a600000.usb
+   power/control:             auto
+   power/runtime_status:      active
+   power/autosuspend_delay_ms: 5000
+   power/runtime_enabled:     cat: /sys/devices/platform/soc@0/a600000.usb/power/runtime_enabled: No such file or directory
+   power/wakeup:              cat: /sys/devices/platform/soc@0/a600000.usb/power/wakeup: No such file or directory
+== /sys/devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto
+   power/control:             on
+   power/runtime_status:      active
+   power/autosuspend_delay_ms: 0
+   power/runtime_enabled:     cat: /sys/devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/power/runtime_enabled: No such file or directory
+   power/wakeup:              disabled
+== /sys/devices/platform/soc@0/a600000.usb/usb1 MISSING
+== /sys/devices/platform/soc@0/a600000.usb/usb2 MISSING
+
+--- power supplies ---
+total 0
+lrwxrwxrwx 1 root root 0 Nov  5 22:12 battery -> ../../devices/platform/pmic-glink/pmic_glink.power-supply.0/power_supply/battery
+lrwxrwxrwx 1 root root 0 Nov  5 22:11 qcom-battmgr-usb -> ../../devices/platform/pmic-glink/pmic_glink.power-supply.0/power_supply/qcom-battmgr-usb
+lrwxrwxrwx 1 root root 0 Nov  5 22:12 qcom-battmgr-wls -> ../../devices/platform/pmic-glink/pmic_glink.power-supply.0/power_supply/qcom-battmgr-wls
+lrwxrwxrwx 1 root root 0 Nov  5 22:12 ucsi-source-psy-pmic_glink.ucsi.01 -> ../../devices/platform/pmic-glink/pmic_glink.ucsi.0/power_supply/ucsi-source-psy-pmic_glink.ucsi.01
+== battery
+   type:                  Battery
+   voltage_now:           4420047
+   current_now:           206181
+== qcom-battmgr-usb
+   type:                  USB
+   online:                1
+   usb_type:              Unknown [SDP] DCP CDP ACA C PD PD_DRP PD_PPS BrickID
+   voltage_now:           9030000
+   current_now:           256000
+   input_current_limit:   2440000
+== qcom-battmgr-wls
+   type:                  Wireless
+   online:                0
+   voltage_now:           4000
+   current_now:           244000
+== ucsi-source-psy-pmic_glink.ucsi.01
+   type:                  USB
+   online:                1
+   usb_type:              C [PD] PD_PPS
+   voltage_now:           0
+   current_now:           1500000
+
+--- typec / usb_role / typec_mux ---
+== /sys/class/typec
+total 0
+lrwxrwxrwx 1 root root 0 Nov  5 22:13 port0 -> ../../devices/platform/pmic-glink/pmic_glink.ucsi.0/typec/port0
+lrwxrwxrwx 1 root root 0 Nov  5 22:13 port0-partner -> ../../devices/platform/pmic-glink/pmic_glink.ucsi.0/typec/port0/port0-partner
+== /sys/class/usb_role
+total 0
+lrwxrwxrwx 1 root root 0 Nov  5 22:13 a600000.usb-role-switch -> ../../devices/platform/soc@0/a600000.usb/usb_role/a600000.usb-role-switch
+== /sys/class/typec_mux
+total 0
+lrwxrwxrwx 1 root root 0 Nov  5 22:13 88e8000.phy-mux -> ../../devices/platform/soc@0/88e8000.phy/typec_mux/88e8000.phy-mux
+lrwxrwxrwx 1 root root 0 Nov  5 22:13 88e8000.phy-switch -> ../../devices/platform/soc@0/88e8000.phy/typec_mux/88e8000.phy-switch
+lrwxrwxrwx 1 root root 0 Nov  5 22:13 usb0-sbu-mux-mux -> ../../devices/platform/usb0-sbu-mux/typec_mux/usb0-sbu-mux-mux
+lrwxrwxrwx 1 root root 0 Nov  5 22:13 usb0-sbu-mux-switch -> ../../devices/platform/usb0-sbu-mux/typec_mux/usb0-sbu-mux-switch
+== /sys/class/typec/port0
+== /sys/class/typec/port0-partner
+
+--- relevant modules ---
+qcom_q6v5_pas          45056  0
+qcom_pil_info          12288  1 qcom_q6v5_pas
+qcom_q6v5              16384  1 qcom_q6v5_pas
+qcom_sysmon            24576  2 qcom_q6v5_pas,qcom_q6v5
+qcom_battmgr           24576  0
+qcom_common            16384  2 qcom_hv_haptics,qcom_q6v5_pas
+
+--- USB tree ---
+/bin/bash: line 43: lsusb: command not found
+
+--- RPM tracing ---
+tracing not mounted
+
+--- kernel config ---
+CONFIG_QRTR=y
+CONFIG_QRTR_SMD=y
+CONFIG_QRTR_TUN=y
+CONFIG_QRTR_MHI=y
+CONFIG_USB_DWC3=y
+# CONFIG_USB_DWC3_ULPI is not set
+# CONFIG_USB_DWC3_HOST is not set
+# CONFIG_USB_DWC3_GADGET is not set
+CONFIG_USB_DWC3_DUAL_ROLE=y
+CONFIG_USB_DWC3_EXYNOS=y
+CONFIG_USB_DWC3_PCI=y
+CONFIG_USB_DWC3_HAPS=y
+CONFIG_USB_DWC3_KEYSTONE=y
+CONFIG_USB_DWC3_MESON_G12A=y
+CONFIG_USB_DWC3_OF_SIMPLE=y
+CONFIG_USB_DWC3_QCOM=y
+CONFIG_USB_DWC3_IMX8MP=y
+CONFIG_USB_DWC3_IMX=y
+CONFIG_USB_DWC3_XILINX=y
+CONFIG_USB_DWC3_AM62=y
+CONFIG_USB_DWC3_RTK=y
+CONFIG_USB_DWC3_GENERIC_PLAT=y
+CONFIG_USB_DWC3_APPLE=y
+# CONFIG_USB_DWC3_GOOGLE is not set
+CONFIG_TYPEC=y
+CONFIG_TYPEC_TCPM=y
+CONFIG_TYPEC_TCPCI=m
+CONFIG_TYPEC_RT1711H=m
+CONFIG_TYPEC_MT6360=m
+CONFIG_TYPEC_TCPCI_MAXIM=m
+CONFIG_TYPEC_FUSB302=m
+CONFIG_TYPEC_QCOM_PMIC=y
+CONFIG_TYPEC_UCSI=y
+CONFIG_UCSI_CCG=m
+# CONFIG_UCSI_ACPI is not set
+# CONFIG_UCSI_STM32G0 is not set
+CONFIG_UCSI_PMIC_GLINK=y
+CONFIG_CROS_EC_UCSI=m
+# CONFIG_UCSI_LENOVO_YOGA_C630 is not set
+# CONFIG_UCSI_HUAWEI_GAOKUN is not set
+CONFIG_TYPEC_TPS6598X=m
+# CONFIG_TYPEC_ANX7411 is not set
+# CONFIG_TYPEC_RT1719 is not set
+CONFIG_TYPEC_HD3SS3220=m
+# CONFIG_TYPEC_STUSB160X is not set
+# CONFIG_TYPEC_WUSB3801 is not set
+CONFIG_TYPEC_MUX_FSA4480=y
+CONFIG_TYPEC_MUX_GPIO_SBU=m
+# CONFIG_TYPEC_MUX_PI3USB30532 is not set
+CONFIG_TYPEC_MUX_IT5205=m
+CONFIG_TYPEC_MUX_NB7VPQ904M=y
+CONFIG_TYPEC_MUX_PS883X=m
+CONFIG_TYPEC_MUX_PTN36502=m
+# CONFIG_TYPEC_MUX_TUSB1046 is not set
+CONFIG_TYPEC_MUX_WCD939X_USBSS=m
+CONFIG_TYPEC_DP_ALTMODE=m
+# CONFIG_TYPEC_NVIDIA_ALTMODE is not set
+# CONFIG_TYPEC_TBT_ALTMODE is not set
+CONFIG_USB_ROLE_SWITCH=y
+CONFIG_CROS_EC_TYPEC_ALTMODES=y
+CONFIG_CROS_EC_TYPEC=m
+CONFIG_CROS_TYPEC_SWITCH=m
+CONFIG_PHY_ROCKCHIP_TYPEC=y
+
+--- dmesg window T-2s .. T (15.0 .. 17.1) ---
+[   15.065426] usb 1-1: new high-speed USB device number 2 using xhci-hcd
+[   15.192082] input: InputPlumber Keyboard as /devices/virtual/input/input10
+[   15.192266] input: Microsoft X-Box One Elite 2 pad as /devices/virtual/input/input11
+[   15.264687] hub 1-1:1.0: USB hub found
+[   15.264782] hub 1-1:1.0: 4 ports detected
+[   15.553407] usb 1-1.1: new full-speed USB device number 3 using xhci-hcd
+[   15.581346] qcom-apm gprsvc:service:2:1: CMD timeout for [1001021] opcode
+[   15.581602] platform 6800000.remoteproc:glink-edge:gpr:service@1:dais: Adding to iommu group 26
+[   15.670998] usb 1-1.1: not running at top speed; connect to a high speed hub
+[   15.689917] qcom-soundwire 6d30000.soundwire: dout-ports (0) mismatch with controller (1)
+[   15.693683] wsa_macro 6aa0000.codec: Driver needs fixing: Unsorted reg_defaults, sorting the copy
+[   15.696383] rx_macro 6ac0000.codec: Driver needs fixing: Unsorted reg_defaults, sorting the copy
+[   15.699473] wcd938x_codec audio-codec: bound sdw:2:0:0217:010d:00:4 (ops wcd_sdw_component_ops [snd_soc_wcd_common])
+[   15.699488] wcd938x_codec audio-codec: bound sdw:3:0:0217:010d:00:3 (ops wcd_sdw_component_ops [snd_soc_wcd_common])
+[   15.805396] usb 1-1.2: new high-speed USB device number 4 using xhci-hcd
+[   15.866265] hid-generic 0003:28DE:12F0.0001: hidraw0: USB HID v10.00 Device [Generic Steam Controller] on 
+[   15.967114] usb-storage 1-1.2:1.0: USB Mass Storage device detected
+[   15.968159] scsi host1: usb-storage 1-1.2:1.0
+[   16.037404] usb 1-1.3: new high-speed USB device number 5 using xhci-hcd
+[   16.192731] hub 1-1.3:1.0: USB hub found
+[   16.192880] hub 1-1.3:1.0: 5 ports detected
+[   16.834480] snd-sc8280xp sound: ASoC: Parent card not yet available, widget card binding deferred
+[   16.859559] ALSA: Control name 'stream0.vol_ctrl0 MultiMedia1 Playback Volume' truncated to 'stream0.vol_ctrl0 MultiMedia1 Playback Volu'
+[   16.859641] ALSA: Control name 'stream1.vol_ctrl1 MultiMedia2 Playback Volume' truncated to 'stream1.vol_ctrl1 MultiMedia2 Playback Volu'
+[   16.863770] input: AYN-Odin2 Headset Jack as /devices/platform/sound/sound/card0/input12
+[   16.864093] input: AYN-Odin2 DP0 Jack as /devices/platform/sound/sound/card0/input13
+[   16.973434] usb 1-1.3.2: new high-speed USB device number 6 using xhci-hcd
+[   16.990164] scsi 1:0:0:0: Direct-Access     Netac    MobileDataStar   1101 PQ: 0 ANSI: 6
+[   16.991531] sd 1:0:0:0: [sdg] 976773168 512-byte logical blocks: (500 GB/466 GiB)
+[   16.992023] sd 1:0:0:0: [sdg] Write Protect is off
+[   16.992034] sd 1:0:0:0: [sdg] Mode Sense: 47 00 00 08
+[   16.992429] sd 1:0:0:0: [sdg] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+[   17.030194]  sdg: sdg1 sdg2
+[   17.030435] sd 1:0:0:0: [sdg] Attached SCSI disk
+
+=== END Thu Nov  5 22:13:45 +08 2026 ===

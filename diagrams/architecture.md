@@ -80,15 +80,21 @@ plug stick → CC edge → PM8550B CC → HW IRQ → ADSP charger-detection SM
   → D+/D- reach the HS PHY → xhci RxDetect (CCS=1) → "New USB device"
 ```
 
-The gate is the first hop: **classification is done entirely by ADSP + hardware;
-the AP is not in the loop** — the in-kernel UCSI core (the only AP↔PPM client,
-[ppm-ucsi-command-flow.md](ppm-ucsi-command-flow.md)) fires its four PMIC-doorbell
-commands in the active initramfs runs and the wedge still persists, while in the
-working full-system environment (UCSI deferred) the AP sends none at all. A fresh
-CC edge is what starts detection. In the failing environment the stick is already
-in the port when PPM starts (~3.4 s after kernel boot) — there is no edge after
-that, detection never starts, `charger_type` is never updated, ICM stays in
-`icm_ncp_stby` and the data path stays closed. ADSP fingerprint of the wedge (ULOG):
+The gate is the first hop: **classification is done by ADSP + hardware; the AP
+UCSI core is not required** — the in-kernel UCSI core (the only AP↔PPM client,
+[ppm-ucsi-command-flow.md](ppm-ucsi-command-flow.md)) fires its four
+PMIC-doorbell commands in the active initramfs runs and the wedge still
+persists. This is **not** a UCSI active/deferred difference: the full-system
+pre-plug capture (2026-11-05) shows UCSI **active** there too (`port0`,
+`port0-partner`, PD contract, `data_role=host`) and enumeration still works. A
+fresh CC/port event *after* the PPM is ready is what starts detection. In the
+failing environment the stick is already in the port when PPM starts (~3.4 s
+after kernel boot) and the host events (2.716/3.182 s) precede the `charger_pd`
+PDR (3.498 s) — no later event re-arms detection, `charger_type` is never
+updated, ICM stays in `icm_ncp_stby` and the data path stays closed. In the
+full system the xHCI host comes up **after** the `charger_pd` PDR
+(10.41 s → 14.81 s), which is the candidate re-arming event
+([../docs/FULL_SYSTEM_PREPLUG_RESULT.md](../docs/FULL_SYSTEM_PREPLUG_RESULT.md)). ADSP fingerprint of the wedge (ULOG):
 
 ```
 icm_ncp_stby_main: keeps in icm_ncp_stby until charger type updated
@@ -110,33 +116,37 @@ power-on and fails **≥ ~38 s** (boundary numerically matches the PPM config
 | ADSP firmware | `adsp.mbn`/`adsp_dtb.mbn` md5-verified | identical (stock == repo == all 7 public sm8550 variants) |
 | ADSP bring-up | from initramfs firmware pack, ~3.4 s | from initramfs firmware pack (stock initramfs also carries it), ~3.4 s |
 | userspace actors | none (static hunt, all 4 zones) | none (same hunt) |
-| UCSI client (in-kernel core) | **present and active** in the spliced diagnostic images (full handshake, partner=PRESENT, doorbell commands fire); **present but deferred** in the un-spliced CI image ("PPM init failed, stop trying") | present but deferred (predicted: stock DTB has the `usb-role-switch` property; check: `ls /sys/class/typec/` empty) |
+| UCSI client (in-kernel core) | **present and active** in the spliced diagnostic images (full handshake, partner=PRESENT, doorbell commands fire); **present but deferred** in the un-spliced CI image ("PPM init failed, stop trying") | **present and active** (measured 2026-11-05: `port0` + `port0-partner`, PD contract, `usb_role` registered — the earlier "deferred" prediction is refuted) |
 | AP-side USB data path | all builtin, up since ~0.5 s | same |
 
 Note on the UCSI row: the client (in-kernel UCSI core) is present in **every**
-environment; only its *mode* (active vs deferred) varies with the device tree.
-Neither mode is the discriminator — the active mode was measured directly
-(doorbell commands fire, wedge persists) and the deferred mode is the one the
-working environment runs.
+environment, and in both measured environments it was **active** (initramfs
+spliced images: doorbell commands fire, wedge persists; full system 2026-11-05:
+port/partner registered, PD contract). Only the *mode* can vary with the device
+tree, but the mode is **not** the discriminator — active UCSI was measured on
+both sides of the working/failing fork.
 
-## What differs (candidate discriminators, unmeasured)
+## What differs (candidate discriminators)
 
 | Factor | initramfs (failing) | full system (working) | Status |
 |---|---|---|---|
-| CC edge at the moment of interest | pre-plug target: no edge after PPM start | pre-plug target: **also** no edge after PPM start — yet it enumerates | **not** a discriminator in the pre-plug case (the full system works with no fresh edge); the ≤ ~30 s window only covers the cold-plug/replug cases |
-| BATT client (`qcom_battmgr`) | ACTIVE (auto-loaded via modalias in every initramfs run) | likely DEAD (stale `modules.builtin` says builtin, boot kernel has `=m` → modprobe no-ops) | inverted direction — its absence in the working env makes it an unlikely trigger; check: `ls /sys/class/power_supply/` |
-| what the AP sends over glink (UCSI) | active: the in-kernel UCSI core fires the 4 doorbell commands (0x03/0x09/0x0b/0x10) — measured: refused/no-op, wedge persists | deferred: none after the boot-time reset storm (predicted) | the AP actor is **named and characterized** (in-kernel UCSI core, no userspace actor) — it is **not** the discriminator |
+| CC edge at the moment of interest | pre-plug target: no edge after PPM start | pre-plug target: **also** no fresh CC edge after PPM start — yet it enumerates | **not** an edge-vs-no-edge difference in the pre-plug case; the ≤ ~30 s window only covers the cold-plug/replug cases |
+| host bring-up vs charger-PDR order | USB port-change events at **2.716/3.182 s**, `charger_pd` PDR at **3.498 s** (host events *before* the PDR; no bus events afterwards) | `charger_pd` PDR at **10.41 s**, xHCI host at **14.81 s**, drive at **16.99 s** (host events *after* the PDR) | **primary candidate** (measured 2026-11-05) — correlation, not yet causal; test by re-probing the host inside the ≤30 s window in the initramfs |
+| BATT client (`qcom_battmgr`) | ACTIVE (auto-loaded via modalias in every initramfs run) | **ACTIVE** (measured 2026-11-05: `qcom_battmgr` loaded, `qcom-battmgr-usb` present, `usb_type=[SDP]`, `online=1`; the "likely dead" prediction is refuted) | same on both sides — not a discriminator |
+| what the AP sends over glink (UCSI) | active: the in-kernel UCSI core fires the 4 doorbell commands (0x03/0x09/0x0b/0x10) — measured: refused/no-op, wedge persists | **active** (measured 2026-11-05: `port0`/partner registered, PD contract at 9 V; the exact command set was not captured) | the AP actor is **named and characterized** (in-kernel UCSI core, no userspace actor) — it is **not** the discriminator |
 
 Consequence: the difference between the environments is **not a userspace
-actor and not the firmware**, and — now that the AP actor is named and the
-active-UCSI runs are measured — **not what the AP sends over glink** either.
-It is the **PPM/PMIC state at the moment of interest**. In the cold-plug /
-replug cases that state is set by the **fresh CC edge** (the ~30 s window),
-but in the **pre-plug target case there is no fresh edge in either
-environment** and the full system still enumerates — so the mechanism that
-re-arms classification for a pre-plugged port is **not yet identified**. That
-is the open question: capture the full-system pre-plug run (it works but has
-no logs) to see what re-arms it there.
+actor and not the firmware**, and — now that the AP actor is named and
+active-UCSI was measured on both sides — **not what the AP sends over glink**
+either, and not the presence of `qcom_battmgr`. It is the **PPM/PMIC state at
+the moment of interest**. In the cold-plug / replug cases that state is set by
+the **fresh CC edge** (the ~30 s window). In the **pre-plug target case there
+is no fresh CC edge in either environment**; the measured full-system pre-plug
+run shows the host controller coming up *after* the charger-PDR service
+([../docs/FULL_SYSTEM_PREPLUG_RESULT.md](../docs/FULL_SYSTEM_PREPLUG_RESULT.md)),
+which is the leading candidate for the re-arming event. It is a timing
+correlation — the causal test is a host re-probe inside the ≤30 s window in the
+initramfs.
 
 ## Where the levers are
 

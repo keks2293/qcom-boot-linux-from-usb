@@ -11,7 +11,7 @@ Identify what the full system does to enumerate a **pre-plugged** drive — the 
 - Does the full system report `usb_type` as `SDP/DCP/PD` instead of `Unknown`?
 - When does the pre-plugged drive enumerate (T) relative to PPM start (~3.4 s) and switch-root?
 - What happens in the dmesg window before/around enumeration (`[T-2s, T]`)?
-- What are the PM states of `a600000.usb` and `xhci-hcd.0.auto`?
+- What are the PM states of `a600000.usb` and `xhci-hcd.<N>.auto` (on kernel 7.2.6 the controller is `soc@0/a600000.usb/xhci-hcd.2.auto`; the script discovers it dynamically)?
 
 ## Procedure (pre-plug, primary)
 
@@ -39,6 +39,12 @@ chmod +x scripts/full-system-coldplug-test.sh
 | `typec/usb_role` | Check if `typec`, `usb_role`, `typec_mux` exist |
 | `lsmod` | `qcom_battmgr`, `ucsi`, `tcpm`, `q6v5_pas` etc |
 | rpm trace count | `grep -c rpm_suspend /sys/kernel/tracing/trace` if tracing available |
+
+**Pre-plug result (measured 2026-11-05):** `usb_type=[SDP]`, UCSI active
+(`port0`/partner, 9 V PD contract), `qcom_battmgr` loaded, PM
+`glue=auto/active/5000` and `xhci=on/active/0`; timeline `charger_pd` PDR
+10.41 s → xHCI 14.81 s → drive 16.99 s. Full evidence and caveats:
+[FULL_SYSTEM_PREPLUG_RESULT.md](FULL_SYSTEM_PREPLUG_RESULT.md).
 
 ## Fork variant (pre-plug vs post-plug)
 

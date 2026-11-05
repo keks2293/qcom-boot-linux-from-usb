@@ -51,9 +51,14 @@ on the environment:
   `-EPROBE_DEFER` → 100 retries × 100 ms → `"PPM init failed, stop trying"`
   → the AP stops sending UCSI commands (only the boot-time reset storm of
   `UCSI_PPM_RESET` 0x01 remains). This is the state of the un-spliced
-  stock/CI images — in the **working full-system environment the UCSI core
-  is therefore deferred**, and the enumeration path is PPM **autonomy** on
-  the fresh CC edge, not an AP command.
+  stock/CI initramfs images.
+
+  Note: the earlier prediction that the **full system** is deferred is
+  **refuted by measurement** (2026-11-05): the full-system boot has
+  `/sys/class/typec/port0` + `port0-partner`, `usb_role` registered, and a
+  9 V PD contract, i.e. UCSI is **active** there too. Active vs deferred is
+  therefore not the working/failing discriminator — see
+  [../docs/FULL_SYSTEM_PREPLUG_RESULT.md](../docs/FULL_SYSTEM_PREPLUG_RESULT.md).
 
 The four commands that ring the PMIC doorbell and **where the core sends
 them** (kernel v7.2.6 line refs):
@@ -146,17 +151,18 @@ failing environment (`ucsi_partner_change` `default: break`).
 
 **Consequence:** the discriminator between the working (full system) and the
 failing (initramfs) environment is **not the presence or absence of an AP
-actor**. With the UCSI core *active* (spliced initramfs images) it fires the
-doorbell commands and the wedge still persists — the PMIC has no fresh CC
-event to re-detect, the port is misclassified as USB2, role commands are
-refused with a CC communication error, and the ICM stays in `icm_ncp_stby`
-until the charger type is updated
-([charger-type-chain.md](charger-type-chain.md)). With the UCSI core
-*deferred* (un-spliced stock/CI images, including the working full-system
-environment) the AP sends no doorbell commands at all — and enumeration
-still works there, driven purely by **PPM autonomy on the fresh CC edge**
-(cold plug after boot). Either way the re-arm is a **PPM/PMIC state**
-question: a fresh CC edge (replug ≤ ~24.7 s, cold plug) or a PMIC-side
+actor**, and not active-vs-deferred UCSI either: the core is active in the
+spliced initramfs images **and** in the measured full system (2026-11-05:
+`port0`/partner, PD contract), yet the wedge persists only in the initramfs.
+With the UCSI core *active* in the initramfs it fires the doorbell commands
+and the wedge still persists — the PMIC has no fresh CC event to re-detect,
+the port is misclassified as USB2, role commands are refused with a CC
+communication error, and the ICM stays in `icm_ncp_stby` until the charger
+type is updated ([charger-type-chain.md](charger-type-chain.md)). The re-arm
+is a **PPM/PMIC state** question: a fresh CC edge (replug ≤ ~24.7 s, cold
+plug), a host-controller bring-up after the charger service is ready (the
+measured full-system ordering: `charger_pd` PDR 10.41 s → xHCI 14.81 s → drive
+16.99 s; the initramfs has the USB events *before* the PDR), or a PMIC-side
 re-run (`apsd-rerun-cfg`,
 [../docs/ADSP_CONFIG.md](../docs/ADSP_CONFIG.md)) is what re-arms
 detection.
