@@ -43,26 +43,82 @@ environment does **not** re-classify via an edge — it simply scans the port
 Fix direction that follows: **hold the first scan** (defer the `dwc3-qcom` /
 `xhci-hcd` probe until the `charger_pd` PDR), not re-probe later.
 
-## Q1: what holds the xHCI probe — measured, not yet named
+## Q1 (answered): nothing *holds* the xHCI probe — the host controller does not exist until the role flips to HOST
 
-Two pre-plug boots, kernel-relative seconds:
+**Correction to the first version of this document.** The two boots available
+then gave Δ(PDR → xHCI) = 4.403966 s / 4.406008 s (≈1 ms apart, absolute boot
+times 2.9 s apart) and it was written up as "a deterministic wait anchored on
+the charger service". It is **not** deterministic: two further pre-plug boots
+with the boot sampler give 3.155016 s and 2.754997 s. It is a **service round
+trip** (UCSI ↔ ADSP), not a fixed timer.
 
-| event | 2026-11-05 | 2026-11-06 |
+### The measured chain
+
+Two pre-plug boots with `boot-deferred-sampler` running from ~9 s, kernel-relative
+seconds (the second boot is the 11:57:18 one, where dynamic debug was on):
+
+| event | 10:57 boot | 11:57 boot |
 |---|---:|---:|
-| `remote processor adsp is now up` | 10.354916 | 13.294832 |
-| `PDR: … msm/adsp/charger_pd` | **10.409606** | **13.349062** |
-| `xhci-hcd.2.auto: xHCI Host Controller` | **14.813572** | **17.755070** |
-| `usb 1-1: new high-speed` (dock) | 15.065426 | 18.004092 |
-| `usb-storage 1-1.2` | 15.967114 | 18.958341 |
-| `sd 1:0:0:0: [sdg] Attached` | 17.030435 | 20.517641 |
-| **Δ(PDR → xHCI)** | **4.403966** | **4.406008** |
-| Δ(adsp-up → xHCI) | 4.458656 | 4.460238 |
+| `remote processor adsp is now up` | 10.236830 | 14.512993 |
+| `PDR: … msm/adsp/charger_pd` | **10.310955** | **14.560018** |
+| `qcom_pmic_glink_rpmsg` bound (ADSP channel) | 10.321570 (+10.6 ms) | 14.580344 (+20.3 ms) |
+| `ucsi-source-psy-pmic_glink.ucsi.01` added | 10.556061 | 14.604060 |
+| `typec port0` devlink (`…--typec:port0`) | 10.560994 | 14.604638 |
+| **`device: 'a600000.usb': device_unregister`** | **13.461045** | **17.304077** |
+| **`device: 'xhci-hcd.2.auto': device_add`** | **13.461492** (+0.4 ms) | **17.308142** (+4.1 ms) |
+| `xhci-hcd.2.auto: xHCI Host Controller` | 13.465971 | 17.315015 |
+| `usb 1-1: new high-speed` (first scan) | 13.728065 | 17.650248 |
+| `sd 1:0:0:0: [sdg] Attached` | 15.610103 | 20.030283 |
+| Δ(PDR → role flip) | 3.150090 | 2.744059 |
+| Δ(PDR → xHCI probe) | 3.155016 | 2.754997 |
+| Δ(typec port0 → role flip) | 2.900051 | 2.699439 |
 
-The PDR→xHCI hold is **4.404–4.406 s on both boots** (≈1 ms apart), while the
-absolute boot times differ by 2.9 s — so it is a deterministic wait anchored on
-the charger service, not a race.
+Earlier boots (11-05, 11-06 10:15): Δ(PDR → xHCI) = 4.403966 / 4.406008 s —
+same shape, longer UCSI round trip.
 
-What was ruled out from userspace (no root needed):
+### What this means
+
+1. **No supplier holds the controller.** `a600000.usb` **never** appears in
+   `/sys/kernel/debug/devices_deferred` on either boot (sampled every 50 ms for
+   45 s as root; grep count 0), and there is no `EPROBE_DEFER` /
+   `Retrying from deferred list` line for it anywhere in the boot log. The
+   deferred list only ever contains soundwire/codec/pinctrl nodes. Q1's original
+   framing — *which supplier waits* — has the answer: **none**.
+2. **The glue is already bound long before the host controller exists.**
+   `dwc3_bound=1` at the sampler's first sample (9.48 s / 8.99 s, i.e. the glue
+   probe finished before 9 s) while `xhci_present` only becomes 1 at 13.51 s /
+   17.33 s. The xHCI device is **created** ~4–8 s later, not blocked.
+3. **Why it is created that late.** The DT node `usb@a600000` has **no
+   `dr_mode`** and does have `usb-role-switch`, so `dwc3-qcom` comes up in
+   **gadget mode**: a UDC named `a600000.usb` exists first (`/sys/class/udc/` is
+   empty *now*), the kernel exports `dwc3_drd_init`/`dwc3_drd_notifier`, and
+   `usb_role/…-role-switch/role` is `host`. When the Type-C stack flips the role
+   to HOST, the UDC is torn down (`device_unregister 'a600000.usb'`) and
+   `dwc3_host_init()` adds `xhci-hcd.2.auto` **0.4–4 ms later**. The host side
+   therefore only exists after that flip — which is why nothing could be found in
+   `devices_deferred`.
+4. **The flip needs the ADSP charger path.** PDR → (+10–20 ms) pmic-glink rpmsg
+   → (+44–234 ms) UCSI power supply + `typec:port0` → (**2.7–4.4 s** contract
+   round trip) → role = HOST → xHCI → first scan finds the pre-plugged dock.
+   The full system enumerates **on the first scan** (Q3), so the only thing the
+   initramfs lacks is reaching this state before it scans.
+
+### Still ruled out (from the first version, unchanged)
+
+- **No devlink supplier is left pending.** `a600000.usb` has 8 suppliers
+  (`15000000.iommu`, `1600000.interconnect`, `24100000.interconnect`,
+  `1fc0000.clock-controller`, `b220000.interrupt-controller`, `interconnect-1`,
+  `phy-88e3000`, `phy-88e8000`); at steady state the six platform ones are
+  `status = active` and the two PHY links are `status = not tracked` (they do
+  not gate the consumer).
+- **The type-C port is not a *supplier* gate.** The link
+  `platform:a600000.usb--typec:port0` is `supplier = a600000.usb`,
+  `consumer = typec:port0`, `sync_state_only = 1` — the UCSI/Type-C port
+  registers *after* the controller. It is not what blocks the probe; it is what
+  *releases* the host mode (see above).
+- `/sys/kernel/devlink` does not exist on kernel 7.2.6, so
+  `/sys/kernel/debug/devices_deferred` (root, `0700`) was the only candidate —
+  and it is empty of USB entries on every sampled boot.
 
 - **No deferral is printed.** The whole boot log has no `EPROBE_DEFER`, no
   `devlink` and no `waiting for` line for the USB chain (only the three
@@ -80,19 +136,32 @@ What was ruled out from userspace (no root needed):
   registers *after* the controller (and after `platform:88e8000.phy` and
   `platform:usb0-sbu-mux`, both also `available`/`sync_state_only`). The port is
   downstream of the delay, not its cause.
-- `/sys/kernel/devlink` does not exist on kernel 7.2.6; the file that names the
-  holder, `/sys/kernel/debug/devices_deferred`, is `0700` → **root only**.
+- `/sys/kernel/devlink` does not exist on kernel 7.2.6; naming a *holder* from
+  `/sys/kernel/debug/devices_deferred` (root, `0700`) turned out to be moot —
+  with root sampling during boot the file simply has no USB entry (see point 1
+  above).
 
-So the hold is real, constant and not visible without root. Q1 is the one
-question this run could not close.
+Q1 is closed: there is no holder to name. The wait is on the ADSP/UCSI side,
+before the host-side device exists at all.
 
-## Q2: the PDR → xHCI window (4.4 s) is silent
+## Q2: the PDR → xHCI window (2.7–4.4 s) is silent on the AP
 
-Unfiltered `dmesg` between `13.35` and `17.75` (2026-11-06 boot) contains only
-ADSP/FASTRPC follow-up (`compute-cb@5..7` iommu groups, `apr/gprsvc`), one
+Unfiltered `dmesg` between `13.35` and `17.75` (2026-11-06 10:15 boot) contains
+only ADSP/FASTRPC follow-up (`compute-cb@5..7` iommu groups, `apr/gprsvc`), one
 `Handover signaled` line, then input devices (`InputPlumber`, `Steam
-Controller` at 14.68/15.53 s) — **no USB, no typec, no UCSI, no battmgr, no
-PM activity**. The window is a pure wait, not a burst of work.
+Controller` at 14.68/15.53 s) — **no USB, no typec, no UCSI, no battmgr, no PM
+activity**. The window is a pure wait, not a burst of work.
+
+With dynamic debug on (10:57 boot) the same window shows the AP side is busy but
+**only with audio deferral churn** (`6ac0000.codec`, `6ad0000.soundwire`,
+`6e80000.pinctrl` … `Added to deferred list`) — nothing USB-related. Those nodes
+are the only residents of `devices_deferred` on any boot; the audio drivers are
+not shipped in the initramfs at all (the dbg logs contain no `deferred` line and
+no `6ac0000` reference), which is why this file could never name a USB holder.
+
+The waiting party is on the **ADSP side**: the role flip happens 2.7–4.4 s after
+the `typec:port0` registration with no AP-side activity in between, i.e. a
+UCSI ↔ ADSP contract round trip.
 
 ## Q4: who sets the glue PM policy
 
@@ -142,18 +211,24 @@ uevent failures (`qcom-battmgr-usb`, `qcom-battmgr-wls`, `-11`/EAGAIN at
 
 ## Next step
 
-1. **Name the holder (closes Q1):** run the script as root on a pre-plug boot
-   before touching any USB device —
-   `sudo OUTDIR=/tmp/mech ./scripts/full-system-mechanism-capture.sh` — and/or
-   install a root sampler that reads `/sys/kernel/debug/devices_deferred` at
-   10 Hz for the first 30 s of a boot. That file lists `device → waiting for
-   supplier`, which is exactly the missing answer.
-2. **Then test the fix direction:** if the hold turns out to be
-   supplier/devlink-based, replicate it in the initramfs (the full system runs
-   `fw_devlink.strict=1`; the dbg images' cmdline is not recorded in this repo)
-   so the first scan lands after the `charger_pd` PDR — instead of the current
-   initramfs behaviour where the USB events (2.716/3.182 s) precede the PDR
-   (3.498 s) and are lost.
+Q1 is closed (no supplier holds the controller; the host side is *created* on
+the role flip), so the old plan — "hold the first scan until after the PDR" — is
+**not** the fix: the initramfs already scans repeatedly and the dock never
+presents a device. The remaining question is why the initramfs never reaches the
+state the full system reaches:
+
+- initramfs: `dat=[host]` and `xhci-hcd.0.auto` up from ~0.5 s (the role never
+  has to flip), `pw=[source]`, v = 5.06 V, hub `CCS=0`,
+  `port-change=2 new-dev=0` for 58 s, and ADSP
+  `icm_ncp_stby … untill charger_type updated` still at 33 s **and** 52 s
+  ([dbg49](../logs/dbg49-adsp-icm-ncp-stby.txt)).
+- full system: gadget first → role flip 2.7–4.4 s after the PDR → dock present
+  at the **first** scan; steady state `power_role=sink`, `usb_type=SDP`.
+
+⇒ **Why does the ADSP never get `charger_type` in the initramfs** (and does the
+`power_role` difference — `source` vs `sink` — mean the CC/PD contract never
+completes, so the dock never turns on its upstream device)? Once that is known,
+the fix is to make the initramfs reach that contract state, not to move the scan.
 
 ## Root run (2026-11-06 10:48, same boot)
 
@@ -181,3 +256,30 @@ ostree system. It samples `devices_deferred` plus the `dwc3_bound` /
 `drivers/base/dd.c` / `core.c` / `dwc3` / `xhci_hcd` so the deferral may print
 itself. Read-only apart from that dynamic-debug switch (revert:
 `echo 'file drivers/base/dd.c -p' > /sys/kernel/debug/dynamic_debug/control`).
+
+### Sampler results — two pre-plug boots (2026-11-06 10:57 and 11:57)
+
+Log: [`logs/full-system/boot-deferred.log`](../logs/full-system/boot-deferred.log)
+(both runs, appended by the unit).
+
+| | 10:57 boot | 11:57 boot |
+|---|---:|---:|
+| `first_dwc3_bound` | 9.48 (glue already bound at first sample) | 8.99 (same) |
+| `first_typec_port0` | 10.59 | 14.67 |
+| `first_xhci_present` | 13.51 | 17.33 |
+| xHCI probe (`xHCI Host Controller`) | 13.466 | 17.315 |
+| `last_nonempty_deferred` | 14.62 (audio nodes only) | 17.84 (audio nodes only) |
+| `a600000.usb` in `devices_deferred` | **never** | **never** |
+
+The glue (`dwc3-qcom`) is bound before the sampler's first sample on both boots
+while the `xhci-hcd.*.auto` child appears 4.0 / 8.3 s later — i.e. the host
+controller is *created* late, not deferred. The `deferred=[…]` payload contains
+only `6ac0000.codec` / `6ad0000.soundwire` / `6d30000.soundwire` /
+`6e80000.pinctrl` / `6d44000.codec` / `6aa0000.codec` / `sound`.
+
+**Side effect to fix before the next run:** `module xhci_hcd +p` floods the
+ring buffer — on the 10:57 boot `dmesg` line 1 was already `[13.470754]`, so the
+whole early boot (including the adsp/PDR lines) had been evicted. Everything was
+recovered from `journalctl -b -k -o short-monotonic`, which journald had already
+consumed. Narrow the switch to `dd.c`/`core.c` (drop `dwc3`/`xhci_hcd`) so
+`dmesg` stays usable.

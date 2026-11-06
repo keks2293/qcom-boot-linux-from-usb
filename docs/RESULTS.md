@@ -28,14 +28,18 @@ Second pre-plug boot, captured with `scripts/full-system-mechanism-capture.sh`:
 - **The attach is the first scan, not a fresh CC edge** — the root hub is
   registered at 17.758 s and `usb 1-1` appears 246 ms later with *no* port
   change / CSC / reset / role line in between (same on the 2026-11-05 boot).
-- **The xHCI probe is held a deterministic 4.405 s after the `charger_pd`
-  PDR** (4.403966 s and 4.406008 s on two boots, absolute boot times 2.9 s
-  apart), and that window is silent — no USB/typec/UCSI/battmgr activity.
-- No `EPROBE_DEFER` is printed; all devlink suppliers of `a600000.usb` are
-  `active` (PHY links `not tracked`), and `typec:port0` is a *consumer* of the
-  controller (`sync_state_only`), so the Type-C/UCSI port cannot be the holder.
-  The holder can only be named from `/sys/kernel/debug/devices_deferred`
-  (root) → **the script must be re-run with sudo**.
+- **The 3–4.4 s gap after the `charger_pd` PDR is a UCSI↔ADSP contract round
+  trip, not a deterministic hold** — 4.403966 s / 4.406008 s on 11-05, but
+  **3.155016 s** and **2.754997 s** on the two sampler boots (root run, see
+  [FULL_SYSTEM_MECHANISM_CAPTURE.md](FULL_SYSTEM_MECHANISM_CAPTURE.md)).
+  In the full system the `charger_pd` PDR fires *early* (~10–14 s, before
+  `suspend`), so the role flip overlaps the boot instead of extending it.
+- **The gap is not `-EPROBE_DEFER`**: `devices_deferred` never contains
+  `a600000.usb`, and the `dd.c` dynamic-debug trace shows `device: 'a600000.usb':
+  device_unregister` (gadget UDC torn down) followed **0.4 ms later** by
+  `device: 'xhci-hcd.2.auto': device_add`, which probes bound with no defer in
+  39 ms. The host controller did not exist before that point — it is *created*
+  by the Type-C role flip. See `logs/full-system/boot-deferred.log`.
 - Q4: glue `power/control=auto` comes from
   `60-armada-usb-autosuspend.rules` (Armada-specific); the `5000` ms delay is
   not from udev/hwdb.

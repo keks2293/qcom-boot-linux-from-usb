@@ -102,7 +102,7 @@ inside the ≤30 s window).
 - [docs/RESULTS.md](docs/RESULTS.md) — results from dbg50/dbg51
 - [docs/FULL_SYSTEM_COLDPLUG_TEST.md](docs/FULL_SYSTEM_COLDPLUG_TEST.md) — full-system test procedure
 - [docs/FULL_SYSTEM_PREPLUG_RESULT.md](docs/FULL_SYSTEM_PREPLUG_RESULT.md) — measured full-system pre-plug result (2026-11-05)
-- [docs/FULL_SYSTEM_MECHANISM_CAPTURE.md](docs/FULL_SYSTEM_MECHANISM_CAPTURE.md) — Q1–Q5 mechanism capture (2026-11-06): the attach is the first scan, not a fresh CC edge; the xHCI probe is held a deterministic 4.405 s after the `charger_pd` PDR
+- [docs/FULL_SYSTEM_MECHANISM_CAPTURE.md](docs/FULL_SYSTEM_MECHANISM_CAPTURE.md) — Q1–Q5 mechanism capture (2026-11-06): the attach is the first scan, not a fresh CC edge; **Q1 answered** — nothing holds the xHCI probe, the host controller is *created* only when the Type-C role flips to HOST (gadget→host, 2.7–4.4 s after the `charger_pd` PDR)
 - [diagrams/architecture.md](diagrams/architecture.md) — system architecture: what is where (AP/ADSP/hardware layers, the data path and where it is gated, what is identical vs different between the working and failing environments, the lever map)
 - [diagrams/icm-state-machine.md](diagrams/icm-state-machine.md) — ICM charger state machine inside the PPM firmware: states, the `ncp_stby` wedge, exit conditions, where the exit inputs come from, the ULog fingerprint
 - [diagrams/charger-type-chain.md](diagrams/charger-type-chain.md) — charger type chain: PM8550B CC/APSD hardware → IRQ dispatcher → charger detection → ICM inputs; levers on the chain; object and function maps (vaddrs)

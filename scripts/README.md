@@ -29,9 +29,12 @@ Attach the generated log to any report.
 
 ## boot-deferred-sampler.sh + .service — boot-time deferred-probe sampling
 
-Answers Q1 of the mechanism capture (what supplier holds `soc@0/a600000.usb`
-until the `charger_pd` PDR + ~4.4 s): `/sys/kernel/debug/devices_deferred` is
-empty once boot is finished, so it must be sampled *during* boot.
+Answers Q1 of the mechanism capture (does any supplier hold
+`soc@0/a600000.usb`?): `/sys/kernel/debug/devices_deferred` is empty once
+boot is finished, so it must be sampled *during* boot. Result: nothing holds
+it — the host controller is only created when the Type-C role flips to HOST,
+3–4.4 s after the `charger_pd` PDR (see
+[`../docs/FULL_SYSTEM_MECHANISM_CAPTURE.md`](../docs/FULL_SYSTEM_MECHANISM_CAPTURE.md)).
 
 ```bash
 # on the device (as root; /usr/local is read-only on this ostree system)

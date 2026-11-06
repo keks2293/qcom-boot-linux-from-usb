@@ -48,7 +48,10 @@ during boot, not plugged by the user afterwards.
 | 17.71 | `user@1000` starts; 18.10 graphical session |
 
 So in the full system the host controller comes up **4.4 s after** the
-`charger_pd` PDR, and the drive enumerates 2.2 s after the host controller.
+`charger_pd` PDR (on this boot; the gap varies — 2.7–4.4 s across boots, it is
+a UCSI ↔ ADSP round trip, see
+[FULL_SYSTEM_MECHANISM_CAPTURE.md](FULL_SYSTEM_MECHANISM_CAPTURE.md)), and the
+drive enumerates 2.2 s after the host controller.
 
 ## State at capture
 
