@@ -1,0 +1,22 @@
+[Unit]
+# Samples /sys/kernel/debug/devices_deferred every 50 ms for the first 45 s of
+# a boot, to name the supplier that holds soc@0/a600000.usb (the xHCI probe is
+# held a deterministic ~4.405 s after the charger_pd PDR; see
+# docs/FULL_SYSTEM_MECHANISM_CAPTURE.md).
+#
+# Type=simple + Before=basic.target => the start job completes immediately and
+# nothing blocks boot; the sampler runs in the background and finishes after
+# DUR seconds.
+Description=Boot deferred-probe sampler (RP6 USB investigation)
+DefaultDependencies=no
+After=local-fs.target sys-kernel-debug.mount
+RequiresMountsFor=/sys/kernel/debug /var/tmp
+Before=basic.target
+
+[Service]
+Type=simple
+Environment=OUT=/var/tmp/boot-deferred.log DUR=45 INTERVAL_MS=50
+ExecStart=/var/lib/boot-deferred-sampler/boot-deferred-sampler.sh
+
+[Install]
+WantedBy=basic.target

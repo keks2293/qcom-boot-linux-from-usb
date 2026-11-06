@@ -154,3 +154,30 @@ uevent failures (`qcom-battmgr-usb`, `qcom-battmgr-wls`, `-11`/EAGAIN at
    so the first scan lands after the `charger_pd` PDR — instead of the current
    initramfs behaviour where the USB events (2.716/3.182 s) precede the PDR
    (3.498 s) and are lost.
+
+## Root run (2026-11-06 10:48, same boot)
+
+`sudo OUTDIR=…/mechanism-capture-20261106-104831-root ./scripts/full-system-mechanism-capture.sh`:
+
+- **UCSI debugfs is present** (`/sys/kernel/debug/usb/ucsi/pmic_glink.ucsi.0`):
+  `response = 0x0000…0000` (no pending command), `vbus_voltage = 0 mV`,
+  `avg_current = 0 mA`, `peak_current = 0 mA`, `command` is write-only.
+  So the UCSI glink channel exists and is idle — consistent with Q5 (no AP
+  command traffic before the attach).
+- **`/sys/kernel/debug/devices_deferred` is empty** — as expected, because the
+  deferral is over by the time a shell exists. The file can only answer Q1
+  *during* boot.
+
+### Boot sampler installed
+
+[`scripts/boot-deferred-sampler.sh`](../scripts/boot-deferred-sampler.sh) +
+[`scripts/boot-deferred-sampler.service`](../scripts/boot-deferred-sampler.service)
+are installed on the device (script in `/var/lib/boot-deferred-sampler/`, unit in
+`/etc/systemd/system/`, `enabled`) because `/usr/local` is read-only on this
+ostree system. It samples `devices_deferred` plus the `dwc3_bound` /
+`xhci_present` / `typec_port0` / `role_switch` state every 50 ms for the first
+45 s of each boot, prints **only state changes** with kernel uptime, and writes
+`/var/tmp/boot-deferred.log`; it also switches on dynamic debug for
+`drivers/base/dd.c` / `core.c` / `dwc3` / `xhci_hcd` so the deferral may print
+itself. Read-only apart from that dynamic-debug switch (revert:
+`echo 'file drivers/base/dd.c -p' > /sys/kernel/debug/dynamic_debug/control`).

@@ -1,0 +1,24 @@
+--- tree ---
+/sys/kernel/debug/usb/ucsi/:
+pmic_glink.ucsi.0
+
+/sys/kernel/debug/usb/ucsi/pmic_glink.ucsi.0:
+avg_current
+command
+message_out
+peak_current
+response
+vbus_voltage
+--- contents ---
+== /sys/kernel/debug/usb/ucsi/pmic_glink.ucsi.0/message_out
+head: error reading '/sys/kernel/debug/usb/ucsi/pmic_glink.ucsi.0/message_out': Invalid argument
+== /sys/kernel/debug/usb/ucsi/pmic_glink.ucsi.0/vbus_voltage
+0 mV
+== /sys/kernel/debug/usb/ucsi/pmic_glink.ucsi.0/avg_current
+0 mA
+== /sys/kernel/debug/usb/ucsi/pmic_glink.ucsi.0/peak_current
+0 mA
+== /sys/kernel/debug/usb/ucsi/pmic_glink.ucsi.0/response
+0x00000000000000000000000000000000
+== /sys/kernel/debug/usb/ucsi/pmic_glink.ucsi.0/command
+head: error reading '/sys/kernel/debug/usb/ucsi/pmic_glink.ucsi.0/command': Permission denied

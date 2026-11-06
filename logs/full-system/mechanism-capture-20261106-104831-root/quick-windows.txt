@@ -1,0 +1,119 @@
+=== [W1] adsp-up .. xhci probe (what releases the xHCI?) ===
+[   13.292709] armada kernel: remoteproc remoteproc0: remote processor adsp is now up
+[   13.310986] armada kernel: qcom,fastrpc 6800000.remoteproc:glink-edge.fastrpcglink-apps-dsp.-1.-1: no reserved DMA memory for FASTRPC
+[   13.329830] armada kernel: platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@3: Adding to iommu group 21
+[   13.348054] armada kernel: platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@4: Adding to iommu group 22
+[   13.348418] armada kernel: PDR: Indication received from msm/adsp/charger_pd, state: 0x1fffffff, trans-id: 1
+[   13.352084] armada kernel: platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@5: Adding to iommu group 23
+[   13.356048] armada kernel: platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@6: Adding to iommu group 24
+[   13.356412] armada kernel: platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@7: Adding to iommu group 25
+[   13.364041] armada kernel: qcom,apr 6800000.remoteproc:glink-edge.adsp_apps.-1.-1: Adding APR/GPR dev: gprsvc:service:2:1
+[   13.364286] armada kernel: qcom,apr 6800000.remoteproc:glink-edge.adsp_apps.-1.-1: Adding APR/GPR dev: gprsvc:service:2:2
+[   13.380046] armada kernel: qcom_q6v5_pas 6800000.remoteproc: Handover signaled, but it already happened
+[   14.680110] armada kernel: input: InputPlumber Keyboard as /devices/virtual/input/input10
+[   14.680317] armada kernel: input: Microsoft X-Box One Elite 2 pad as /devices/virtual/input/input11
+[   15.532050] armada kernel: hid-generic 0003:28DE:12F0.0001: hidraw0: USB HID v10.00 Device [Generic Steam Controller] on 
+[   17.752053] armada kernel: xhci-hcd xhci-hcd.2.auto: xHCI Host Controller
+
+=== [W2] PDR(charger_pd) .. first xHCI line (THE ~4.4 s window) ===
+[   13.348418] armada kernel: PDR: Indication received from msm/adsp/charger_pd, state: 0x1fffffff, trans-id: 1
+[   13.352084] armada kernel: platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@5: Adding to iommu group 23
+[   13.356048] armada kernel: platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@6: Adding to iommu group 24
+[   13.356412] armada kernel: platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@7: Adding to iommu group 25
+[   13.364041] armada kernel: qcom,apr 6800000.remoteproc:glink-edge.adsp_apps.-1.-1: Adding APR/GPR dev: gprsvc:service:2:1
+[   13.364286] armada kernel: qcom,apr 6800000.remoteproc:glink-edge.adsp_apps.-1.-1: Adding APR/GPR dev: gprsvc:service:2:2
+[   13.380046] armada kernel: qcom_q6v5_pas 6800000.remoteproc: Handover signaled, but it already happened
+[   14.680110] armada kernel: input: InputPlumber Keyboard as /devices/virtual/input/input10
+[   14.680317] armada kernel: input: Microsoft X-Box One Elite 2 pad as /devices/virtual/input/input11
+[   15.532050] armada kernel: hid-generic 0003:28DE:12F0.0001: hidraw0: USB HID v10.00 Device [Generic Steam Controller] on 
+[   17.752053] armada kernel: xhci-hcd xhci-hcd.2.auto: xHCI Host Controller
+
+=== [W3] 25 lines BEFORE the first 'new high-speed' (Q3: fresh edge or first scan?) ===
+[   13.292709] armada kernel: remoteproc remoteproc0: remote processor adsp is now up
+[   13.310986] armada kernel: qcom,fastrpc 6800000.remoteproc:glink-edge.fastrpcglink-apps-dsp.-1.-1: no reserved DMA memory for FASTRPC
+[   13.329830] armada kernel: platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@3: Adding to iommu group 21
+[   13.348054] armada kernel: platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@4: Adding to iommu group 22
+[   13.348418] armada kernel: PDR: Indication received from msm/adsp/charger_pd, state: 0x1fffffff, trans-id: 1
+[   13.352084] armada kernel: platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@5: Adding to iommu group 23
+[   13.356048] armada kernel: platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@6: Adding to iommu group 24
+[   13.356412] armada kernel: platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@7: Adding to iommu group 25
+[   13.364041] armada kernel: qcom,apr 6800000.remoteproc:glink-edge.adsp_apps.-1.-1: Adding APR/GPR dev: gprsvc:service:2:1
+[   13.364286] armada kernel: qcom,apr 6800000.remoteproc:glink-edge.adsp_apps.-1.-1: Adding APR/GPR dev: gprsvc:service:2:2
+[   13.380046] armada kernel: qcom_q6v5_pas 6800000.remoteproc: Handover signaled, but it already happened
+[   14.680110] armada kernel: input: InputPlumber Keyboard as /devices/virtual/input/input10
+[   14.680317] armada kernel: input: Microsoft X-Box One Elite 2 pad as /devices/virtual/input/input11
+[   15.532050] armada kernel: hid-generic 0003:28DE:12F0.0001: hidraw0: USB HID v10.00 Device [Generic Steam Controller] on 
+[   17.752053] armada kernel: xhci-hcd xhci-hcd.2.auto: xHCI Host Controller
+[   17.752473] armada kernel: xhci-hcd xhci-hcd.2.auto: new USB bus registered, assigned bus number 1
+[   17.756043] armada kernel: xhci-hcd xhci-hcd.2.auto: hcc params 0x0110ffc5 hci version 0x110 quirks 0x0000808020000810
+[   17.756465] armada kernel: xhci-hcd xhci-hcd.2.auto: irq 194, io mem 0x0a600000
+[   17.756747] armada kernel: xhci-hcd xhci-hcd.2.auto: xHCI Host Controller
+[   17.756976] armada kernel: xhci-hcd xhci-hcd.2.auto: new USB bus registered, assigned bus number 2
+[   17.757266] armada kernel: xhci-hcd xhci-hcd.2.auto: Host supports USB 3.1 Enhanced SuperSpeed
+[   17.757508] armada kernel: hub 1-0:1.0: USB hub found
+[   17.757806] armada kernel: hub 1-0:1.0: 1 port detected
+[   17.758061] armada kernel: hub 2-0:1.0: USB hub found
+[   17.758336] armada kernel: hub 2-0:1.0: 1 port detected
+[   18.004153] armada kernel: usb 1-1: new high-speed USB device number 2 using xhci-hcd
+[   18.056028] armada kernel: kauditd_printk_skb: 35 callbacks suppressed
+[   18.056066] armada kernel: audit: type=1131 audit(1793931347.487:117): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=armada-splash-early comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+
+=== [W4] all devlink/deferral lines ===
+93:[    0.928866] armada kernel: Kernel command line: ostree=/ostree/boot.1/default/34d7969129f068943c4e123a35bc6e25680bdfb4f24d274d56333824a20bc988/0 root=UUID=6c512adc-c48e-434b-9f36-d7a016a7edd5 rw boot=UUID=24f4f3d0-4a5c-429d-9490-4b7a819b7d7c rootwait console=tty0 quiet loglevel=3 allow_mismatched_32bit_el0 fw_devlink.strict=1 pcie_ports=compat psi=1 cgroup_disable=pressure cgroup.memory=nokmem,nosocket cpufreq.default_governor=schedutil swiotlb=8192 rootflags=subvol=/root,noatime,compress=zstd:1
+584:[    0.940533] armada kernel: qcom_pmic_glink pmic-glink: Failed to create device link (0x180) with supplier 88e8000.phy for /pmic-glink/connector@0
+604:[    0.942986] armada kernel: qcom_pmic_glink pmic-glink: Failed to create device link (0x180) with supplier a600000.usb for /pmic-glink/connector@0
+777:[    0.958272] armada kernel:  deferred_split_folio+0x254/0x308
+839:[    3.052479] armada kernel: qcom_pmic_glink pmic-glink: Failed to create device link (0x180) with supplier usb0-sbu-mux for /pmic-glink/connector@0
+1071:[   19.904044] armada kernel: snd-sc8280xp sound: ASoC: Parent card not yet available, widget card binding deferred
+
+=== [W5] all UCSI/PDR/battmgr/typec/role lines (AP activity) ===
+894:[    7.552740] armada kernel: synth uevent: /devices/platform/pmic-glink/pmic_glink.power-supply.0/power_supply/qcom-battmgr-usb: failed to send uevent
+895:[    7.552769] armada kernel: power_supply qcom-battmgr-usb: uevent: failed to send synthetic uevent: -11
+896:[    7.552911] armada kernel: synth uevent: /devices/platform/pmic-glink/pmic_glink.power-supply.0/power_supply/qcom-battmgr-wls: failed to send uevent
+897:[    7.552921] armada kernel: power_supply qcom-battmgr-wls: uevent: failed to send synthetic uevent: -11
+1024:[   13.348418] armada kernel: PDR: Indication received from msm/adsp/charger_pd, state: 0x1fffffff, trans-id: 1
+
+=== [W6] xhci/dwc3/phy/eusb2 probe lines with relative time ===
+277:[    0.930229] armada kernel: /soc@0/phy@88e8000: Fixed dependency cycle(s) with /soc@0/usb@a600000
+279:[    0.930244] armada kernel: /soc@0/usb@a600000: Fixed dependency cycle(s) with /soc@0/phy@88e8000
+280:[    0.930251] armada kernel: /soc@0/usb@a600000: Fixed dependency cycle(s) with /soc@0/phy@88e3000
+281:[    0.930258] armada kernel: /soc@0/usb@a600000: Fixed dependency cycle(s) with /soc@0/interconnect@16e0000
+282:[    0.930267] armada kernel: /soc@0/usb@a600000: Fixed dependency cycle(s) with /soc@0/clock-controller@100000
+332:[    0.930643] armada kernel: /soc@0/phy@88e8000: Fixed dependency cycle(s) with /soc@0/usb@a600000
+334:[    0.930658] armada kernel: /soc@0/phy@88e8000: Fixed dependency cycle(s) with /soc@0/usb@a600000
+335:[    0.930665] armada kernel: /soc@0/usb@a600000: Fixed dependency cycle(s) with /soc@0/phy@88e8000
+336:[    0.930672] armada kernel: /soc@0/usb@a600000: Fixed dependency cycle(s) with /soc@0/phy@88e3000
+337:[    0.930679] armada kernel: /soc@0/usb@a600000: Fixed dependency cycle(s) with /soc@0/interconnect@16e0000
+338:[    0.930688] armada kernel: /soc@0/usb@a600000: Fixed dependency cycle(s) with /soc@0/clock-controller@100000
+344:[    0.930733] armada kernel: /pmic-glink/connector@0: Fixed dependency cycle(s) with /soc@0/usb@a600000
+564:[    0.938749] armada kernel: platform a600000.usb: Adding to iommu group 11
+604:[    0.942986] armada kernel: qcom_pmic_glink pmic-glink: Failed to create device link (0x180) with supplier a600000.usb for /pmic-glink/connector@0
+1034:[   17.752053] armada kernel: xhci-hcd xhci-hcd.2.auto: xHCI Host Controller
+1035:[   17.752473] armada kernel: xhci-hcd xhci-hcd.2.auto: new USB bus registered, assigned bus number 1
+1036:[   17.756043] armada kernel: xhci-hcd xhci-hcd.2.auto: hcc params 0x0110ffc5 hci version 0x110 quirks 0x0000808020000810
+1037:[   17.756465] armada kernel: xhci-hcd xhci-hcd.2.auto: irq 194, io mem 0x0a600000
+1038:[   17.756747] armada kernel: xhci-hcd xhci-hcd.2.auto: xHCI Host Controller
+1039:[   17.756976] armada kernel: xhci-hcd xhci-hcd.2.auto: new USB bus registered, assigned bus number 2
+1040:[   17.757266] armada kernel: xhci-hcd xhci-hcd.2.auto: Host supports USB 3.1 Enhanced SuperSpeed
+1045:[   18.004153] armada kernel: usb 1-1: new high-speed USB device number 2 using xhci-hcd
+1052:[   18.492060] armada kernel: usb 1-1.1: new full-speed USB device number 3 using xhci-hcd
+1061:[   18.852052] armada kernel: usb 1-1.2: new high-speed USB device number 4 using xhci-hcd
+1065:[   19.032033] armada kernel: usb 1-1.3: new high-speed USB device number 5 using xhci-hcd
+1072:[   19.920156] armada kernel: usb 1-1.3.2: new high-speed USB device number 6 using xhci-hcd
+1079:[   20.188094] armada kernel: input: IO IO Type 68 Magnetic BL as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.2/1-1.3.2:1.0/0003:0C45:0256.0002/input/input14
+1080:[   20.328043] armada kernel: hid-generic 0003:0C45:0256.0002: input,hidraw1: USB HID v1.10 Keyboard [IO IO Type 68 Magnetic BL] on usb-xhci-hcd.2.auto-1.3.2/input0
+1081:[   20.328454] armada kernel: input: IO IO Type 68 Magnetic BL Consumer Control as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.2/1-1.3.2:1.1/0003:0C45:0256.0003/input/input15
+1082:[   20.388025] armada kernel: input: IO IO Type 68 Magnetic BL System Control as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.2/1-1.3.2:1.1/0003:0C45:0256.0003/input/input16
+1083:[   20.388057] armada kernel: input: IO IO Type 68 Magnetic BL Keyboard as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.2/1-1.3.2:1.1/0003:0C45:0256.0003/input/input17
+1084:[   20.388074] armada kernel: input: IO IO Type 68 Magnetic BL Mouse as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.2/1-1.3.2:1.1/0003:0C45:0256.0003/input/input18
+1085:[   20.388090] armada kernel: hid-generic 0003:0C45:0256.0003: input,hidraw2: USB HID v1.10 Keyboard [IO IO Type 68 Magnetic BL] on usb-xhci-hcd.2.auto-1.3.2/input1
+1086:[   20.388538] armada kernel: hid-generic 0003:0C45:0256.0004: hidraw3: USB HID v1.10 Device [IO IO Type 68 Magnetic BL] on usb-xhci-hcd.2.auto-1.3.2/input2
+1094:[   20.588030] armada kernel: usb 1-1.3.4: new full-speed USB device number 7 using xhci-hcd
+1095:[   20.768120] armada kernel: input: Compx 2.4G Wireless Receiver as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.4/1-1.3.4:1.0/0003:25A7:FA07.0005/input/input19
+1096:[   20.768207] armada kernel: hid-generic 0003:25A7:FA07.0005: input,hidraw4: USB HID v1.10 Mouse [Compx 2.4G Wireless Receiver] on usb-xhci-hcd.2.auto-1.3.4/input0
+1097:[   20.772029] armada kernel: input: Compx 2.4G Wireless Receiver Keyboard as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.4/1-1.3.4:1.1/0003:25A7:FA07.0006/input/input20
+1098:[   20.828036] armada kernel: input: Compx 2.4G Wireless Receiver as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.4/1-1.3.4:1.1/0003:25A7:FA07.0006/input/input21
+1099:[   20.828094] armada kernel: input: Compx 2.4G Wireless Receiver as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.4/1-1.3.4:1.1/0003:25A7:FA07.0006/input/input22
+1100:[   20.828118] armada kernel: hid-generic 0003:25A7:FA07.0006: input,hidraw5: USB HID v1.10 Keyboard [Compx 2.4G Wireless Receiver] on usb-xhci-hcd.2.auto-1.3.4/input1
+1101:[   20.920034] armada kernel: usb 1-1.3.5: new high-speed USB device number 8 using xhci-hcd
+1102:[   21.088042] armada kernel: hid-generic 0003:0424:274B.0007: hidraw6: USB HID v1.10 Device [Microchip Tech Hub Controller] on usb-xhci-hcd.2.auto-1.3.5/input0

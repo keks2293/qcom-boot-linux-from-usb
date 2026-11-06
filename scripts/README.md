@@ -27,6 +27,24 @@ Collects:
 
 Attach the generated log to any report.
 
+## boot-deferred-sampler.sh + .service — boot-time deferred-probe sampling
+
+Answers Q1 of the mechanism capture (what supplier holds `soc@0/a600000.usb`
+until the `charger_pd` PDR + ~4.4 s): `/sys/kernel/debug/devices_deferred` is
+empty once boot is finished, so it must be sampled *during* boot.
+
+```bash
+# on the device (as root; /usr/local is read-only on this ostree system)
+sudo install -D -m0755 scripts/boot-deferred-sampler.sh /var/lib/boot-deferred-sampler/boot-deferred-sampler.sh
+sudo install -D -m0644 scripts/boot-deferred-sampler.service /etc/systemd/system/boot-deferred-sampler.service
+sudo systemctl daemon-reload && sudo systemctl enable boot-deferred-sampler.service
+# then reboot; results land in /var/tmp/boot-deferred.log
+```
+
+Reads only (plus a best-effort dynamic-debug switch on `dd.c`/`core.c`/`dwc3`/
+`xhci_hcd`). Samples every 50 ms for 45 s and prints only state changes, with
+kernel uptime, so each line can be matched against the `dmesg` timeline.
+
 ## adsp-re/ — PPM firmware RE toolchain
 
 Tools used to reverse-engineer the PPM/ADSP firmware (`adsp.mbn`, a 32-bit
