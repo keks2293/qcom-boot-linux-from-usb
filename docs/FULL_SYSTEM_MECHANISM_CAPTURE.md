@@ -14,6 +14,12 @@ Caveat: this run was **not** root, so `/sys/kernel/debug/devices_deferred` and
 the UCSI debugfs were unavailable — the script now reports `NEEDS ROOT` for both
 instead of a false result. See [Next step](#next-step).
 
+> **Related:** the single mechanism that unifies every `linux usb` boot — how ABL
+> injects `dr_mode=host` into the runtime device tree, why the kernel command line
+> cannot override it, and why ABL can enumerate the drive while the kernel's early
+> host scan fails — is documented in
+> [ABL_DR_MODE_HOST.md](ABL_DR_MODE_HOST.md).
+
 ## Q3 (decisive): the attach is the FIRST SCAN, not a fresh CC edge
 
 Kernel-relative, from `full-kern-monotonic.log`:

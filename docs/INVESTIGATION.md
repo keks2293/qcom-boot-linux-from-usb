@@ -19,6 +19,12 @@ Concretely:
    after the `charger_pd` PDR, the initramfs's USB events precede it and nothing
    re-arms the port afterwards. Confirming that causally is the next experiment.
 
+> **Why the initramfs scans early at all:** ABL injects a `dr_mode=host` property
+> into the runtime device tree in `linux usb` mode, forcing the kernel's DWC3 into
+> HOST mode from probe. The unifying explanation, the fix options, and why the
+> command line cannot override it are in
+> [ABL_DR_MODE_HOST.md](ABL_DR_MODE_HOST.md).
+
 ## Methodology
 
 1. **Reproduce in initramfs** using custom `KERNEL` images with diagnostics injected into `dracut-initqueue`
