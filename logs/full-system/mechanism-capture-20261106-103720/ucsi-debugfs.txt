@@ -1,0 +1,3 @@
+ucsi debugfs: NOT READABLE AS ROOT: /sys/kernel/debug is 0700.
+  This run cannot tell 'UCSI core inactive' from 'permission denied'.
+  Re-run the script with sudo to answer this properly.

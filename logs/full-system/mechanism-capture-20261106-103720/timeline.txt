@@ -1,0 +1,16 @@
+--- key events (kernel-relative) ---
+1020:[   13.292709] armada kernel: remoteproc remoteproc0: remote processor adsp is now up
+1024:[   13.348418] armada kernel: PDR: Indication received from msm/adsp/charger_pd, state: 0x1fffffff, trans-id: 1
+1034:[   17.752053] armada kernel: xhci-hcd xhci-hcd.2.auto: xHCI Host Controller
+1038:[   17.756747] armada kernel: xhci-hcd xhci-hcd.2.auto: xHCI Host Controller
+1045:[   18.004153] armada kernel: usb 1-1: new high-speed USB device number 2 using xhci-hcd
+1063:[   18.956058] armada kernel: usb-storage 1-1.2:1.0: USB Mass Storage device detected
+1064:[   18.957027] armada kernel: scsi host1: usb-storage 1-1.2:1.0
+1077:[   19.968036] armada kernel: scsi 1:0:0:0: Direct-Access     Netac    MobileDataStar   1101 PQ: 0 ANSI: 6
+1093:[   20.516091] armada kernel: sd 1:0:0:0: [sdg] Attached SCSI disk
+
+--- deltas (awk, seconds) ---
+1024 13.348418
+1034 17.752053
+1038 17.756747
+1045 18.004153

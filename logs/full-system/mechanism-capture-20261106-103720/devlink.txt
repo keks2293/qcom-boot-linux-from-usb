@@ -1,0 +1,86 @@
+--- /sys/kernel/devlink/deferred: ABSENT (not exposed on this kernel) ---
+--- /sys/kernel/debug/devices_deferred: NEEDS ROOT ---
+    (this is the file that names the supplier holding a600000.usb;
+     re-run this script with sudo to answer Q1)
+--- supplier links of the USB chain (which suppliers can hold it) ---
+== /sys/devices/platform/soc@0/a600000.usb
+  supplier:phy:phy-88e3000.phy.1 -> /sys/devices/virtual/devlink/phy:phy-88e3000.phy.1--platform:a600000.usb
+  supplier:phy:phy-88e8000.phy.2 -> /sys/devices/virtual/devlink/phy:phy-88e8000.phy.2--platform:a600000.usb
+  supplier:platform:15000000.iommu -> /sys/devices/virtual/devlink/platform:15000000.iommu--platform:a600000.usb
+  supplier:platform:1600000.interconnect -> /sys/devices/virtual/devlink/platform:1600000.interconnect--platform:a600000.usb
+  supplier:platform:1fc0000.clock-controller -> /sys/devices/virtual/devlink/platform:1fc0000.clock-controller--platform:a600000.usb
+  supplier:platform:24100000.interconnect -> /sys/devices/virtual/devlink/platform:24100000.interconnect--platform:a600000.usb
+  supplier:platform:b220000.interrupt-controller -> /sys/devices/virtual/devlink/platform:b220000.interrupt-controller--platform:a600000.usb
+  supplier:platform:interconnect-1 -> /sys/devices/virtual/devlink/platform:interconnect-1--platform:a600000.usb
+== /sys/devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto
+--- usb-chain devlink nodes (status) ---
+== phy:phy-88e3000.phy.1--platform:a600000.usb
+  status = not tracked
+  runtime_pm = 0
+  sync_state_only = 0
+  auto_remove_on = never
+== phy:phy-88e8000.phy.2--platform:a600000.usb
+  status = not tracked
+  runtime_pm = 0
+  sync_state_only = 0
+  auto_remove_on = never
+== platform:15000000.iommu--platform:a600000.usb
+  status = active
+  runtime_pm = 1
+  sync_state_only = 0
+  auto_remove_on = never
+== platform:1600000.interconnect--platform:a600000.usb
+  status = active
+  runtime_pm = 1
+  sync_state_only = 0
+  auto_remove_on = never
+== platform:1fc0000.clock-controller--platform:a600000.usb
+  status = active
+  runtime_pm = 1
+  sync_state_only = 0
+  auto_remove_on = never
+== platform:24100000.interconnect--platform:a600000.usb
+  status = active
+  runtime_pm = 1
+  sync_state_only = 0
+  auto_remove_on = never
+== platform:a600000.usb--typec:port0
+  status = available
+  runtime_pm = 0
+  sync_state_only = 1
+  auto_remove_on = never
+== platform:b220000.interrupt-controller--platform:a600000.usb
+  status = active
+  runtime_pm = 1
+  sync_state_only = 0
+  auto_remove_on = never
+== platform:interconnect-1--platform:a600000.usb
+  status = active
+  runtime_pm = 1
+  sync_state_only = 0
+  auto_remove_on = never
+== platform:88e8000.phy--typec:port0
+  status = available
+  runtime_pm = 0
+  sync_state_only = 1
+  auto_remove_on = never
+== platform:a600000.usb--typec:port0
+  status = available
+  runtime_pm = 0
+  sync_state_only = 1
+  auto_remove_on = never
+== platform:usb0-sbu-mux--typec:port0
+  status = available
+  runtime_pm = 0
+  sync_state_only = 1
+  auto_remove_on = never
+== platform:f100000.pinctrl--platform:usb0-sbu-mux
+  status = active
+  runtime_pm = 1
+  sync_state_only = 0
+  auto_remove_on = never
+== platform:usb0-sbu-mux--typec:port0
+  status = available
+  runtime_pm = 0
+  sync_state_only = 1
+  auto_remove_on = never

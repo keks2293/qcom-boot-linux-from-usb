@@ -1,0 +1,48 @@
+--- PM state ---
+== /sys/devices/platform/soc@0/a600000.usb
+  power/control = auto
+  power/runtime_status = active
+  power/autosuspend_delay_ms = 5000
+== /sys/devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto
+  power/control = on
+  power/runtime_status = active
+  power/autosuspend_delay_ms = 0
+  power/wakeup = disabled
+--- usb_role ---
+total 0
+lrwxrwxrwx 1 root root 0 Nov  6 10:23 a600000.usb-role-switch -> ../../devices/platform/soc@0/a600000.usb/usb_role/a600000.usb-role-switch
+/sys/class/usb_role/a600000.usb-role-switch/role = host writable=no
+--- typec ---
+/sys/class/typec/port0/data_role = [host] device
+/sys/class/typec/port0/power_role = source [sink]
+/sys/class/typec/port0/power_operation_mode = usb_power_delivery
+--- power supplies ---
+== battery
+  type = Battery
+  voltage_now = 4420241
+  current_now = 277960
+== qcom-battmgr-usb
+  type = USB
+  online = 1
+  usb_type = Unknown [SDP] DCP CDP ACA C PD PD_DRP PD_PPS BrickID
+  voltage_now = 9025000
+  current_now = 309000
+  input_current_limit = 2440000
+== qcom-battmgr-wls
+  type = Wireless
+  online = 0
+  voltage_now = 3000
+  current_now = 284000
+== ucsi-source-psy-pmic_glink.ucsi.01
+  type = USB
+  online = 1
+  usb_type = C [PD] PD_PPS
+  voltage_now = 0
+  current_now = 1500000
+--- modules (usb/typec/charger) ---
+qcom_q6v5_pas          45056  0
+qcom_pil_info          12288  1 qcom_q6v5_pas
+qcom_q6v5              16384  1 qcom_q6v5_pas
+qcom_sysmon            24576  2 qcom_q6v5_pas,qcom_q6v5
+qcom_battmgr           24576  0
+qcom_common            16384  2 qcom_hv_haptics,qcom_q6v5_pas

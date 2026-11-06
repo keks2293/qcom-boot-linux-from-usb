@@ -21,6 +21,27 @@ power-on: the drive enumerated at **16.99 s**, 13 s after switch-root and
 Details, caveats and the next falsifiable test (host re-probe inside the
 ≤30 s window): [FULL_SYSTEM_PREPLUG_RESULT.md](FULL_SYSTEM_PREPLUG_RESULT.md).
 
+## Full-system mechanism capture (2026-11-06)
+
+Second pre-plug boot, captured with `scripts/full-system-mechanism-capture.sh`:
+
+- **The attach is the first scan, not a fresh CC edge** — the root hub is
+  registered at 17.758 s and `usb 1-1` appears 246 ms later with *no* port
+  change / CSC / reset / role line in between (same on the 2026-11-05 boot).
+- **The xHCI probe is held a deterministic 4.405 s after the `charger_pd`
+  PDR** (4.403966 s and 4.406008 s on two boots, absolute boot times 2.9 s
+  apart), and that window is silent — no USB/typec/UCSI/battmgr activity.
+- No `EPROBE_DEFER` is printed; all devlink suppliers of `a600000.usb` are
+  `active` (PHY links `not tracked`), and `typec:port0` is a *consumer* of the
+  controller (`sync_state_only`), so the Type-C/UCSI port cannot be the holder.
+  The holder can only be named from `/sys/kernel/debug/devices_deferred`
+  (root) → **the script must be re-run with sudo**.
+- Q4: glue `power/control=auto` comes from
+  `60-armada-usb-autosuspend.rules` (Armada-specific); the `5000` ms delay is
+  not from udev/hwdb.
+
+Full write-up: [FULL_SYSTEM_MECHANISM_CAPTURE.md](FULL_SYSTEM_MECHANISM_CAPTURE.md).
+
 ## dbg50 — Invalid
 
 Image: `KERNEL.ci-5d953ca-dbg50`

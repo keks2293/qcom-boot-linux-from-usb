@@ -1,0 +1,1235 @@
+[    0.928200] armada kernel: Booting Linux on physical CPU 0x0000000000 [0x411fd461]
+[    0.928231] armada kernel: Linux version 7.2.6 (armada@builder) (gcc (GCC) 16.2.1 20260819 (Red Hat 16.2.1-2), GNU ld version 2.46.1-1.fc44) #1 SMP PREEMPT Fri Oct  9 12:18:51 UTC 2026
+[    0.928242] armada kernel: KASLR enabled
+[    0.928250] armada kernel: random: crng init done
+[    0.928257] armada kernel: Machine model: Retroid Pocket 6
+[    0.928264] armada kernel: efi: UEFI not found.
+[    0.928274] armada kernel: [Firmware Bug]: Kernel image misaligned at boot, please fix your bootloader!
+[    0.928283] armada kernel: OF: reserved mem: 0x0000000080000000..0x00000000809fffff (10240 KiB) nomap non-reusable hyp-region@80000000
+[    0.928290] armada kernel: OF: reserved mem: 0x0000000080a00000..0x0000000080dfffff (4096 KiB) nomap non-reusable cpusys-vm-region@80a00000
+[    0.928297] armada kernel: OF: reserved mem: 0x0000000080e00000..0x00000000811cffff (3904 KiB) nomap non-reusable hyp-tags-region@80e00000
+[    0.928305] armada kernel: OF: reserved mem: 0x00000000d8100000..0x00000000d813ffff (256 KiB) nomap non-reusable xbl-sc-region@d8100000
+[    0.928312] armada kernel: OF: reserved mem: 0x00000000811d0000..0x00000000811fffff (192 KiB) nomap non-reusable hyp-tags-reserved-region@811d0000
+[    0.928319] armada kernel: OF: reserved mem: 0x0000000081a00000..0x0000000081c5ffff (2432 KiB) nomap non-reusable xbl-dt-log-merged-region@81a00000
+[    0.928326] armada kernel: OF: reserved mem: 0x0000000081c60000..0x0000000081c7ffff (128 KiB) nomap non-reusable aop-cmd-db-region@81c60000
+[    0.928335] armada kernel: OF: reserved mem: 0x0000000081c80000..0x0000000081cf3fff (464 KiB) nomap non-reusable aop-config-merged-region@81c80000
+[    0.928344] armada kernel: OF: reserved mem: 0x0000000081f00000..0x0000000081f1ffff (128 KiB) nomap non-reusable adsp-mhi-region@81f00000
+[    0.928351] armada kernel: OF: reserved mem: 0x0000000082600000..0x00000000826fffff (1024 KiB) nomap non-reusable global-sync-region@82600000
+[    0.928359] armada kernel: OF: reserved mem: 0x0000000082700000..0x00000000827fffff (1024 KiB) nomap non-reusable tz-stat-region@82700000
+[    0.928366] armada kernel: OF: reserved mem: 0x000000009b09a000..0x000000009b09bfff (8 KiB) nomap non-reusable gpu-micro-code-region@9b09a000
+[    0.928373] armada kernel: OF: reserved mem: 0x000000009b100000..0x000000009b27ffff (1536 KiB) nomap non-reusable spss-region@9b100000
+[    0.928380] armada kernel: OF: reserved mem: 0x000000009bb00000..0x000000009c1fffff (7168 KiB) nomap non-reusable video-region@9bb00000
+[    0.928386] armada kernel: OF: reserved mem: 0x000000009c200000..0x000000009c8fffff (7168 KiB) nomap non-reusable cvp-region@9c200000
+[    0.928393] armada kernel: OF: reserved mem: 0x000000009c900000..0x000000009e8fffff (32768 KiB) nomap non-reusable cdsp-region@9c900000
+[    0.928400] armada kernel: OF: reserved mem: 0x000000009e900000..0x000000009e97ffff (512 KiB) nomap non-reusable q6-cdsp-dtb-region@9e900000
+[    0.928407] armada kernel: OF: reserved mem: 0x000000009e980000..0x000000009e9fffff (512 KiB) nomap non-reusable q6-adsp-dtb-region@9e980000
+[    0.928413] armada kernel: OF: reserved mem: 0x000000009ea00000..0x00000000a2a7ffff (66048 KiB) nomap non-reusable adspslpi-region@9ea00000
+[    0.928421] armada kernel: OF: reserved mem: 0x00000000d8140000..0x00000000d82fffff (1792 KiB) nomap non-reusable cpucp-fw-region@d8140000
+[    0.928429] armada kernel: OF: reserved mem: 0x00000000d8300000..0x00000000d87fffff (5120 KiB) nomap non-reusable qtee-region@d8300000
+[    0.928437] armada kernel: OF: reserved mem: 0x00000000e6440000..0x00000000e671cfff (2932 KiB) nomap non-reusable hwfence-shbuf-region@e6440000
+[    0.928444] armada kernel: OF: reserved mem: 0x00000000fce00000..0x00000000ff6fffff (41984 KiB) nomap non-reusable hyp-ext-tags-region@fce00000
+[    0.928451] armada kernel: OF: reserved mem: 0x00000000ff700000..0x00000000ff7fffff (1024 KiB) nomap non-reusable hyp-ext-reserved-region@ff700000
+[    0.928458] armada kernel: OF: reserved mem: 0x0000000081d00000..0x0000000081efffff (2048 KiB) nomap non-reusable smem-region@81d00000
+[    0.928464] armada kernel: OF: reserved mem: 0x000000009b280000..0x000000009b2fffff (512 KiB) nomap non-reusable spu-secure-shared-memory-region@9b280000
+[    0.928471] armada kernel: OF: reserved mem: 0x0000000081cf4000..0x0000000081cf4fff (4 KiB) nomap non-reusable chipinfo-region@81cf4000
+[    0.928478] armada kernel: OF: reserved mem: 0x00000000ff800000..0x00000000ffdfffff (6144 KiB) nomap non-reusable llcc_lpi_region@ff800000
+[    0.928484] armada kernel: OF: reserved mem: 0x00000000b8000000..0x00000000baafffff (44032 KiB) nomap non-reusable splash_region@b8000000
+[    0.928491] armada kernel: NUMA: Faking a node at [mem 0x0000000080000000-0x00000009ffffffff]
+[    0.928498] armada kernel: NODE_DATA(0) allocated [mem 0x9fefeb580-0x9fefee3bf]
+[    0.928504] armada kernel: cma: Reserved 32 MiB at 0x00000000fae00000
+[    0.928511] armada kernel: psci: probing for conduit method from DT.
+[    0.928521] armada kernel: psci: PSCIv1.1 detected in firmware.
+[    0.928528] armada kernel: psci: Using standard PSCI v0.2 function IDs
+[    0.928534] armada kernel: psci: MIGRATE_INFO_TYPE not supported.
+[    0.928541] armada kernel: psci: SMC Calling Convention v1.3
+[    0.928547] armada kernel: psci: OSI mode supported.
+[    0.928556] armada kernel: Zone ranges:
+[    0.928562] armada kernel:   DMA      [mem 0x0000000080000000-0x00000000ffffffff]
+[    0.928569] armada kernel:   DMA32    empty
+[    0.928575] armada kernel:   Normal   [mem 0x0000000100000000-0x00000009ffffffff]
+[    0.928582] armada kernel: Movable zone start for each node
+[    0.928588] armada kernel: Early memory node ranges
+[    0.928595] armada kernel:   node   0: [mem 0x0000000080000000-0x0000000080dfffff]
+[    0.928601] armada kernel:   node   0: [mem 0x00000000811d0000-0x00000000811fffff]
+[    0.928608] armada kernel:   node   0: [mem 0x0000000081200000-0x00000000819fffff]
+[    0.928614] armada kernel:   node   0: [mem 0x0000000081a00000-0x0000000081cf4fff]
+[    0.928621] armada kernel:   node   0: [mem 0x0000000081cf5000-0x0000000081cfffff]
+[    0.928627] armada kernel:   node   0: [mem 0x0000000081d00000-0x0000000081f1ffff]
+[    0.928633] armada kernel:   node   0: [mem 0x0000000081f20000-0x00000000825fffff]
+[    0.928640] armada kernel:   node   0: [mem 0x0000000082600000-0x00000000827fffff]
+[    0.928646] armada kernel:   node   0: [mem 0x0000000082800000-0x000000009b099fff]
+[    0.928653] armada kernel:   node   0: [mem 0x000000009b09a000-0x000000009b09bfff]
+[    0.928659] armada kernel:   node   0: [mem 0x000000009b09c000-0x000000009b0fffff]
+[    0.928667] armada kernel:   node   0: [mem 0x000000009b100000-0x000000009b2fffff]
+[    0.928673] armada kernel:   node   0: [mem 0x000000009b300000-0x000000009bafffff]
+[    0.928680] armada kernel:   node   0: [mem 0x000000009bb00000-0x00000000a2a7ffff]
+[    0.928686] armada kernel:   node   0: [mem 0x00000000a2a80000-0x00000000b7ffffff]
+[    0.928693] armada kernel:   node   0: [mem 0x00000000b8000000-0x00000000baafffff]
+[    0.928699] armada kernel:   node   0: [mem 0x00000000bab00000-0x00000000d7ffffff]
+[    0.928706] armada kernel:   node   0: [mem 0x00000000d8140000-0x00000000d815ffff]
+[    0.928712] armada kernel:   node   0: [mem 0x00000000e1bb0000-0x00000000e643ffff]
+[    0.928718] armada kernel:   node   0: [mem 0x00000000e6440000-0x00000000e671cfff]
+[    0.928725] armada kernel:   node   0: [mem 0x00000000e671d000-0x00000000fcdfffff]
+[    0.928731] armada kernel:   node   0: [mem 0x00000000fce00000-0x00000000ffdfffff]
+[    0.928738] armada kernel:   node   0: [mem 0x00000000ffe00000-0x00000000ffffffff]
+[    0.928744] armada kernel:   node   0: [mem 0x0000000880000000-0x00000008baffffff]
+[    0.928751] armada kernel:   node   0: [mem 0x00000008c0000000-0x00000009ffffffff]
+[    0.928757] armada kernel: Initmem setup node 0 [mem 0x0000000080000000-0x00000009ffffffff]
+[    0.928764] armada kernel: On node 0, zone DMA: 976 pages in unavailable ranges
+[    0.928772] armada kernel: On node 0, zone DMA: 320 pages in unavailable ranges
+[    0.928778] armada kernel: On node 0, zone DMA: 39504 pages in unavailable ranges
+[    0.928785] armada kernel: On node 0, zone Normal: 20480 pages in unavailable ranges
+[    0.928791] armada kernel: percpu: Embedded 36 pages/cpu s107608 r8192 d31656 u147456
+[    0.928798] armada kernel: pcpu-alloc: s107608 r8192 d31656 u147456 alloc=36*4096
+[    0.928805] armada kernel: pcpu-alloc: [0] 0 [0] 1 [0] 2 [0] 3 [0] 4 [0] 5 [0] 6 [0] 7 
+[    0.928812] armada kernel: Detected PIPT I-cache on CPU0
+[    0.928819] armada kernel: CPU features: detected: Address authentication (architected QARMA5 algorithm)
+[    0.928825] armada kernel: CPU features: detected: GICv3 CPU interface
+[    0.928832] armada kernel: CPU features: detected: Spectre-v4
+[    0.928838] armada kernel: CPU features: detected: ARM erratum 2457168
+[    0.928844] armada kernel: CPU features: detected: ARM erratum 2658417
+[    0.928851] armada kernel: CPU features: detected: ARM errata 2966298, 3117295
+[    0.928858] armada kernel: alternatives: applying boot alternatives
+[    0.928866] armada kernel: Kernel command line: ostree=/ostree/boot.1/default/34d7969129f068943c4e123a35bc6e25680bdfb4f24d274d56333824a20bc988/0 root=UUID=6c512adc-c48e-434b-9f36-d7a016a7edd5 rw boot=UUID=24f4f3d0-4a5c-429d-9490-4b7a819b7d7c rootwait console=tty0 quiet loglevel=3 allow_mismatched_32bit_el0 fw_devlink.strict=1 pcie_ports=compat psi=1 cgroup_disable=pressure cgroup.memory=nokmem,nosocket cpufreq.default_governor=schedutil swiotlb=8192 rootflags=subvol=/root,noatime,compress=zstd:1
+[    0.928874] armada kernel: cgroup: Disabling pressure control group feature
+[    0.928881] armada kernel: Unknown kernel command line parameters "ostree=/ostree/boot.1/default/34d7969129f068943c4e123a35bc6e25680bdfb4f24d274d56333824a20bc988/0 boot=UUID=24f4f3d0-4a5c-429d-9490-4b7a819b7d7c", will be passed to user space.
+[    0.928888] armada kernel: printk: log buffer data + meta data: 131072 + 458752 = 589824 bytes
+[    0.928895] armada kernel: Dentry cache hash table entries: 1048576 (order: 11, 8388608 bytes, linear)
+[    0.928902] armada kernel: Inode-cache hash table entries: 524288 (order: 10, 4194304 bytes, linear)
+[    0.928908] armada kernel: software IO TLB: area num 8.
+[    0.928915] armada kernel: software IO TLB: mapped [mem 0x00000000f9e00000-0x00000000fae00000] (16MB)
+[    0.928921] armada kernel: Fallback order for Node 0: 0 
+[    0.928928] armada kernel: Built 1 zonelists, mobility grouping on.  Total pages: 2035872
+[    0.928934] armada kernel: Policy zone: Normal
+[    0.928941] armada kernel: mem auto-init: stack:all(zero), heap alloc:off, heap free:off
+[    0.928947] armada kernel: SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=8, Nodes=1
+[    0.928954] armada kernel: ftrace: allocating 75875 entries in 298 pages
+[    0.928960] armada kernel: ftrace: allocated 298 pages with 4 groups
+[    0.928967] armada kernel: rcu: Preemptible hierarchical RCU implementation.
+[    0.928974] armada kernel: rcu:         RCU event tracing is enabled.
+[    0.928983] armada kernel: rcu:         RCU restricting CPUs from NR_CPUS=512 to nr_cpu_ids=8.
+[    0.928990] armada kernel:         Trampoline variant of Tasks RCU enabled.
+[    0.928996] armada kernel:         Rude variant of Tasks RCU enabled.
+[    0.929003] armada kernel:         Tracing variant of Tasks RCU enabled.
+[    0.929009] armada kernel: rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
+[    0.929016] armada kernel: rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=8
+[    0.929022] armada kernel: RCU Tasks: Setting shift to 3 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=8.
+[    0.929029] armada kernel: RCU Tasks Rude: Setting shift to 3 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=8.
+[    0.929036] armada kernel: NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
+[    0.929047] armada kernel: GICv3: 988 SPIs implemented
+[    0.929055] armada kernel: GICv3: 0 Extended SPIs implemented
+[    0.929062] armada kernel: Root IRQ handler: gic_handle_irq
+[    0.929068] armada kernel: GICv3: GICv3 features: 16 PPIs, DirectLPI
+[    0.929075] armada kernel: GICv3: GICD_CTLR.DS=1, SCR_EL3.FIQ=0
+[    0.929081] armada kernel: GICv3: Enabling SGIs without active state
+[    0.929088] armada kernel: GICv3: CPU0: found redistributor 0 region 0:0x0000000017180000
+[    0.929095] armada kernel: ITS [mem 0x17140000-0x1717ffff]
+[    0.929101] armada kernel: ITS@0x0000000017140000: Devices Table too large, reduce ids 32->19
+[    0.929108] armada kernel: ITS@0x0000000017140000: Devices too large, reduce ITS pages 1024->256
+[    0.929115] armada kernel: ITS@0x0000000017140000: allocated 131072 Devices @880300000 (indirect, esz 8, psz 4K, shr 1)
+[    0.929122] armada kernel: ITS@0x0000000017140000: allocated 4096 Interrupt Collections @8802a1000 (flat, esz 1, psz 4K, shr 1)
+[    0.929129] armada kernel: GICv3: using LPI property table @0x00000008802c0000
+[    0.929135] armada kernel: GICv3: CPU0: using allocated LPI pending table @0x00000008802d0000
+[    0.929143] armada kernel: GICv3: GIC: PPI partition interrupt-partition-0[0] { /cpus/cpu@0[0] /cpus/cpu@100[1] /cpus/cpu@200[2] }
+[    0.929150] armada kernel: GICv3: GIC: PPI partition interrupt-partition-1[1] { /cpus/cpu@300[3] /cpus/cpu@400[4] }
+[    0.929157] armada kernel: GICv3: GIC: PPI partition interrupt-partition-2[2] { /cpus/cpu@500[5] /cpus/cpu@600[6] }
+[    0.929163] armada kernel: GICv3: GIC: PPI partition interrupt-partition-3[3] { /cpus/cpu@700[7] }
+[    0.929170] armada kernel: rcu: srcu_init: Setting srcu_struct sizes based on contention.
+[    0.929177] armada kernel: clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645041785100000 ns
+[    0.929183] armada kernel: arch_timer: cp15 timer running at 19.20MHz (virt).
+[    0.929190] armada kernel: clocksource: arch_sys_counter: mask: 0xffffffffffffff max_cycles: 0x46d987e47, max_idle_ns: 440795202767 ns
+[    0.929197] armada kernel: sched_clock: 56 bits at 19MHz, resolution 52ns, wraps every 4398046511078ns
+[    0.929203] armada kernel: arm-pv: using stolen time PV
+[    0.929211] armada kernel: Console: colour dummy device 80x25
+[    0.929219] armada kernel: printk: legacy console [tty0] enabled
+[    0.929226] armada kernel: Calibrating delay loop (skipped), value calculated using timer frequency.. 38.40 BogoMIPS (lpj=76800)
+[    0.929235] armada kernel: pid_max: default: 32768 minimum: 301
+[    0.929242] armada kernel: Mount-cache hash table entries: 16384 (order: 5, 131072 bytes, linear)
+[    0.929249] armada kernel: Mountpoint-cache hash table entries: 16384 (order: 5, 131072 bytes, linear)
+[    0.929256] armada kernel: VFS: Finished mounting rootfs on nullfs
+[    0.929264] armada kernel: rcu: Hierarchical SRCU implementation.
+[    0.929271] armada kernel: rcu:         Max phase no-delay instances is 1000.
+[    0.929279] armada kernel: Timer migration: 1 hierarchy levels; 8 children per group; 1 crossnode level
+[    0.929286] armada kernel: EFI services will not be available.
+[    0.929293] armada kernel: smp: Bringing up secondary CPUs ...
+[    0.929302] armada kernel: Detected PIPT I-cache on CPU1
+[    0.929309] armada kernel: GICv3: CPU1: found redistributor 100 region 0:0x00000000171c0000
+[    0.929317] armada kernel: GICv3: CPU1: using allocated LPI pending table @0x00000008802e0000
+[    0.929324] armada kernel: CPU1: Booted secondary processor 0x0000000100 [0x411fd461]
+[    0.929331] armada kernel: Detected PIPT I-cache on CPU2
+[    0.929339] armada kernel: GICv3: CPU2: found redistributor 200 region 0:0x0000000017200000
+[    0.929346] armada kernel: GICv3: CPU2: using allocated LPI pending table @0x00000008802f0000
+[    0.929353] armada kernel: CPU2: Booted secondary processor 0x0000000200 [0x411fd461]
+[    0.929361] armada kernel: CPU features: detected: Spectre-BHB
+[    0.929370] armada kernel: CPU features: detected: ARM erratum 2645198
+[    0.929377] armada kernel: CPU features: detected: SSBS not fully self-synchronizing
+[    0.929384] armada kernel: Detected PIPT I-cache on CPU3
+[    0.929392] armada kernel: CPU features: SANITY CHECK: Unexpected variation in SYS_ID_AA64MMFR1_EL1. Boot CPU: 0x00000011212122, CPU3: 0x00000010212122
+[    0.929399] armada kernel: CPU features: Unsupported CPU feature variation detected.
+[    0.929407] armada kernel: GICv3: CPU3: found redistributor 300 region 0:0x0000000017240000
+[    0.929414] armada kernel: GICv3: CPU3: using allocated LPI pending table @0x0000000880800000
+[    0.929421] armada kernel: CPU3: Booted secondary processor 0x0000000300 [0x411fd4d0]
+[    0.929430] armada kernel: Detected PIPT I-cache on CPU4
+[    0.929438] armada kernel: CPU features: SANITY CHECK: Unexpected variation in SYS_ID_AA64MMFR1_EL1. Boot CPU: 0x00000011212122, CPU4: 0x00000010212122
+[    0.929445] armada kernel: GICv3: CPU4: found redistributor 400 region 0:0x0000000017280000
+[    0.929453] armada kernel: GICv3: CPU4: using allocated LPI pending table @0x0000000880810000
+[    0.929460] armada kernel: CPU4: Booted secondary processor 0x0000000400 [0x411fd4d0]
+[    0.929468] armada kernel: CPU features: detected: ARM erratum 2067961 or 2054223
+[    0.929475] armada kernel: CPU features: detected: Broken broadcast TLBI completion
+[    0.929482] armada kernel: Detected PIPT I-cache on CPU5
+[    0.929489] armada kernel: CPU features: SANITY CHECK: Unexpected variation in SYS_ID_AA64MMFR1_EL1. Boot CPU: 0x00000011212122, CPU5: 0x00000010212122
+[    0.929499] armada kernel: CPU features: SANITY CHECK: Unexpected variation in SYS_ID_MMFR4_EL1. Boot CPU: 0x00000001021111, CPU5: 0x00000001021110
+[    0.929506] armada kernel: GICv3: CPU5: found redistributor 500 region 0:0x00000000172c0000
+[    0.929514] armada kernel: GICv3: CPU5: using allocated LPI pending table @0x0000000880820000
+[    0.929521] armada kernel: CPU5: Booted secondary processor 0x0000000500 [0x412fd470]
+[    0.929528] armada kernel: Detected PIPT I-cache on CPU6
+[    0.929536] armada kernel: CPU features: SANITY CHECK: Unexpected variation in SYS_ID_AA64MMFR1_EL1. Boot CPU: 0x00000011212122, CPU6: 0x00000010212122
+[    0.929544] armada kernel: CPU features: SANITY CHECK: Unexpected variation in SYS_ID_MMFR4_EL1. Boot CPU: 0x00000001021111, CPU6: 0x00000001021110
+[    0.929551] armada kernel: GICv3: CPU6: found redistributor 600 region 0:0x0000000017300000
+[    0.929560] armada kernel: GICv3: CPU6: using allocated LPI pending table @0x0000000880830000
+[    0.929567] armada kernel: CPU6: Booted secondary processor 0x0000000600 [0x412fd470]
+[    0.929574] armada kernel: Detected PIPT I-cache on CPU7
+[    0.929582] armada kernel: CPU features: SANITY CHECK: Unexpected variation in SYS_ID_AA64MMFR1_EL1. Boot CPU: 0x00000011212122, CPU7: 0x00000010212122
+[    0.929589] armada kernel: GICv3: CPU7: found redistributor 700 region 0:0x0000000017340000
+[    0.929597] armada kernel: GICv3: CPU7: using allocated LPI pending table @0x0000000880840000
+[    0.929604] armada kernel: CPU7: Booted secondary processor 0x0000000700 [0x411fd4e0]
+[    0.929611] armada kernel: smp: Brought up 1 node, 8 CPUs
+[    0.929619] armada kernel: SMP: Total of 8 processors activated.
+[    0.929628] armada kernel: CPU: All CPU(s) started at EL1
+[    0.929635] armada kernel: CPU features: detected: Branch Target Identification
+[    0.929643] armada kernel: CPU features: detected: ARMv8.4 Translation Table Level
+[    0.929650] armada kernel: CPU features: detected: Data cache clean to the PoU not required for I/D coherence
+[    0.929657] armada kernel: CPU features: detected: Common not Private translations
+[    0.929665] armada kernel: CPU features: detected: CRC32 instructions
+[    0.929672] armada kernel: CPU features: detected: Data independent timing control (DIT)
+[    0.929679] armada kernel: CPU features: detected: E0PD
+[    0.929687] armada kernel: CPU features: detected: Enhanced Virtualization Traps
+[    0.929696] armada kernel: CPU features: detected: Generic authentication (architected QARMA5 algorithm)
+[    0.929703] armada kernel: CPU features: detected: RCpc load-acquire (LDAPR)
+[    0.929711] armada kernel: CPU features: detected: LSE atomic instructions
+[    0.929718] armada kernel: CPU features: detected: Privileged Access Never
+[    0.929725] armada kernel: CPU features: detected: PMUv3
+[    0.929732] armada kernel: CPU features: detected: Speculation barrier (SB)
+[    0.929740] armada kernel: CPU features: detected: Stage-2 Force Write-Back
+[    0.929747] armada kernel: CPU features: detected: TLB range maintenance instructions
+[    0.929754] armada kernel: CPU features: detected: XNX
+[    0.929764] armada kernel: CPU features: detected: Speculative Store Bypassing Safe (SSBS)
+[    0.929771] armada kernel: alternatives: applying system-wide alternatives
+[    0.929778] armada kernel: CPU features: detected: Activity Monitors Unit (AMU) on CPU0-7
+[    0.929785] armada kernel: CPU features: detected: Hardware dirty bit management on CPU0-7
+[    0.929793] armada kernel: Memory: 7572872K/8143488K available (24064K kernel code, 7178K rwdata, 26584K rodata, 4480K init, 772K bss, 525384K reserved, 32768K cma-reserved)
+[    0.929800] armada kernel: devtmpfs: initialized
+[    0.929808] armada kernel: posixtimers hash table entries: 4096 (order: 4, 65536 bytes, linear)
+[    0.929815] armada kernel: futex hash table entries: 2048 (131072 bytes on 1 NUMA nodes, total 128 KiB, linear).
+[    0.929824] armada kernel: 2G module region forced by RANDOMIZE_MODULE_REGION_FULL
+[    0.929832] armada kernel: 0 pages in range for non-PLT usage
+[    0.929839] armada kernel: 508448 pages in range for PLT usage
+[    0.929846] armada kernel: DMI: not present or invalid.
+[    0.929853] armada kernel: NET: Registered PF_NETLINK/PF_ROUTE protocol family
+[    0.929861] armada kernel: DMA: preallocated 1024 KiB GFP_KERNEL pool for atomic allocations
+[    0.929868] armada kernel: DMA: preallocated 1024 KiB GFP_KERNEL|GFP_DMA pool for atomic allocations
+[    0.929876] armada kernel: audit: initializing netlink subsys (disabled)
+[    0.929883] armada kernel: audit: type=2000 audit(0.024:1): state=initialized audit_enabled=0 res=1
+[    0.929892] armada kernel: thermal_sys: Registered thermal governor 'step_wise'
+[    0.929899] armada kernel: thermal_sys: Registered thermal governor 'power_allocator'
+[    0.929906] armada kernel: cpuidle: using governor menu
+[    0.929914] armada kernel: NET: Registered PF_QIPCRTR protocol family
+[    0.929921] armada kernel: hw-breakpoint: found 6 breakpoint and 4 watchpoint registers.
+[    0.929928] armada kernel: ASID allocator initialised with 65536 entries
+[    0.929935] armada kernel: Serial: AMBA PL011 UART driver
+[    0.929943] armada kernel: CPUidle PSCI: Initialized CPU PM domain topology using OSI mode
+[    0.929950] armada kernel: /soc@0/clock-controller@100000: Fixed dependency cycle(s) with /soc@0/phy@88e8000
+[    0.929959] armada kernel: /soc@0/clock-controller@100000: Fixed dependency cycle(s) with /soc@0/phy@1d80000
+[    0.929967] armada kernel: /soc@0/clock-controller@100000: Fixed dependency cycle(s) with /soc@0/phy@1c06000
+[    0.929974] armada kernel: /soc@0/interconnect@16e0000: Fixed dependency cycle(s) with /soc@0/clock-controller@100000
+[    0.929982] armada kernel: /soc@0/phy@1c06000: Fixed dependency cycle(s) with /soc@0/clock-controller@100000
+[    0.929989] armada kernel: /soc@0/phy@1d80000: Fixed dependency cycle(s) with /soc@0/ufshc@1d84000
+[    0.929996] armada kernel: /soc@0/phy@1d80000: Fixed dependency cycle(s) with /soc@0/clock-controller@100000
+[    0.930004] armada kernel: /soc@0/ufshc@1d84000: Fixed dependency cycle(s) with /soc@0/interconnect@16e0000
+[    0.930011] armada kernel: /soc@0/ufshc@1d84000: Fixed dependency cycle(s) with /soc@0/clock-controller@100000
+[    0.930020] armada kernel: /soc@0/ufshc@1d84000: Fixed dependency cycle(s) with /soc@0/phy@1d80000
+[    0.930028] armada kernel: /soc@0/display-subsystem@ae00000: Fixed dependency cycle(s) with /soc@0/clock-controller@100000
+[    0.930035] armada kernel: /soc@0/display-subsystem@ae00000: Fixed dependency cycle(s) with /soc@0/clock-controller@af00000
+[    0.930043] armada kernel: /soc@0/display-subsystem@ae00000/display-controller@ae01000: Fixed dependency cycle(s) with /soc@0/display-subsystem@ae00000/displayport-controller@ae90000
+[    0.930051] armada kernel: /soc@0/display-subsystem@ae00000/display-controller@ae01000: Fixed dependency cycle(s) with /soc@0/display-subsystem@ae00000/dsi@ae94000
+[    0.930059] armada kernel: /soc@0/display-subsystem@ae00000/display-controller@ae01000: Fixed dependency cycle(s) with /soc@0/clock-controller@af00000
+[    0.930066] armada kernel: /soc@0/display-subsystem@ae00000/display-controller@ae01000: Fixed dependency cycle(s) with /soc@0/clock-controller@100000
+[    0.930074] armada kernel: /soc@0/display-subsystem@ae00000/display-controller@ae01000: Fixed dependency cycle(s) with /soc@0/display-subsystem@ae00000
+[    0.930083] armada kernel: /soc@0/display-subsystem@ae00000/displayport-controller@ae90000: Fixed dependency cycle(s) with /soc@0/display-subsystem@ae00000/display-controller@ae01000
+[    0.930090] armada kernel: /soc@0/display-subsystem@ae00000/displayport-controller@ae90000: Fixed dependency cycle(s) with /soc@0/phy@88e8000
+[    0.930098] armada kernel: /soc@0/display-subsystem@ae00000/displayport-controller@ae90000: Fixed dependency cycle(s) with /soc@0/clock-controller@af00000
+[    0.930106] armada kernel: /soc@0/display-subsystem@ae00000/displayport-controller@ae90000: Fixed dependency cycle(s) with /soc@0/display-subsystem@ae00000
+[    0.930114] armada kernel: /soc@0/display-subsystem@ae00000/dsi@ae94000: Fixed dependency cycle(s) with /soc@0/display-subsystem@ae00000/dsi@ae94000/panel@0
+[    0.930121] armada kernel: /soc@0/display-subsystem@ae00000/dsi@ae94000: Fixed dependency cycle(s) with /soc@0/display-subsystem@ae00000/display-controller@ae01000
+[    0.930129] armada kernel: /soc@0/display-subsystem@ae00000/dsi@ae94000: Fixed dependency cycle(s) with /soc@0/display-subsystem@ae00000/phy@ae95000
+[    0.930136] armada kernel: /soc@0/display-subsystem@ae00000/dsi@ae94000: Fixed dependency cycle(s) with /soc@0/clock-controller@100000
+[    0.930145] armada kernel: /soc@0/display-subsystem@ae00000/dsi@ae94000: Fixed dependency cycle(s) with /soc@0/clock-controller@af00000
+[    0.930153] armada kernel: /soc@0/display-subsystem@ae00000/dsi@ae94000: Fixed dependency cycle(s) with /soc@0/display-subsystem@ae00000
+[    0.930160] armada kernel: /soc@0/display-subsystem@ae00000/dsi@ae94000/panel@0: Fixed dependency cycle(s) with /soc@0/display-subsystem@ae00000/dsi@ae94000
+[    0.930168] armada kernel: /soc@0/display-subsystem@ae00000/phy@ae95000: Fixed dependency cycle(s) with /soc@0/clock-controller@af00000
+[    0.930175] armada kernel: /soc@0/display-subsystem@ae00000/phy@ae97000: Fixed dependency cycle(s) with /soc@0/clock-controller@af00000
+[    0.930183] armada kernel: /soc@0/clock-controller@af00000: Fixed dependency cycle(s) with /soc@0/phy@88e8000
+[    0.930190] armada kernel: /soc@0/clock-controller@af00000: Fixed dependency cycle(s) with /soc@0/display-subsystem@ae00000/phy@ae97000
+[    0.930199] armada kernel: /soc@0/clock-controller@af00000: Fixed dependency cycle(s) with /soc@0/display-subsystem@ae00000/phy@ae95000
+[    0.930207] armada kernel: /soc@0/clock-controller@af00000: Fixed dependency cycle(s) with /soc@0/clock-controller@100000
+[    0.930214] armada kernel: /soc@0/phy@88e3000: Fixed dependency cycle(s) with /soc@0/clock-controller@100000
+[    0.930221] armada kernel: /soc@0/phy@88e8000: Fixed dependency cycle(s) with /soc@0/display-subsystem@ae00000/displayport-controller@ae90000
+[    0.930229] armada kernel: /soc@0/phy@88e8000: Fixed dependency cycle(s) with /soc@0/usb@a600000
+[    0.930236] armada kernel: /soc@0/phy@88e8000: Fixed dependency cycle(s) with /soc@0/clock-controller@100000
+[    0.930244] armada kernel: /soc@0/usb@a600000: Fixed dependency cycle(s) with /soc@0/phy@88e8000
+[    0.930251] armada kernel: /soc@0/usb@a600000: Fixed dependency cycle(s) with /soc@0/phy@88e3000
+[    0.930258] armada kernel: /soc@0/usb@a600000: Fixed dependency cycle(s) with /soc@0/interconnect@16e0000
+[    0.930267] armada kernel: /soc@0/usb@a600000: Fixed dependency cycle(s) with /soc@0/clock-controller@100000
+[    0.930275] armada kernel: /soc@0/interrupt-controller@17100000: Fixed dependency cycle(s) with /soc@0/interrupt-controller@17100000
+[    0.930282] armada kernel: /soc@0/clock-controller@100000: Fixed dependency cycle(s) with /soc@0/phy@88e8000
+[    0.930289] armada kernel: /soc@0/clock-controller@100000: Fixed dependency cycle(s) with /soc@0/phy@1d80000
+[    0.930297] armada kernel: /soc@0/clock-controller@100000: Fixed dependency cycle(s) with /soc@0/phy@1c06000
+[    0.930304] armada kernel: /soc@0/interconnect@16e0000: Fixed dependency cycle(s) with /soc@0/clock-controller@100000
+[    0.930311] armada kernel: /soc@0/clock-controller@100000: Fixed dependency cycle(s) with /soc@0/phy@1c06000
+[    0.930319] armada kernel: /soc@0/phy@1c06000: Fixed dependency cycle(s) with /soc@0/clock-controller@100000
+[    0.930326] armada kernel: /soc@0/clock-controller@100000: Fixed dependency cycle(s) with /soc@0/phy@1d80000
+[    0.930333] armada kernel: /soc@0/phy@1d80000: Fixed dependency cycle(s) with /soc@0/ufshc@1d84000
+[    0.930342] armada kernel: /soc@0/phy@1d80000: Fixed dependency cycle(s) with /soc@0/clock-controller@100000
+[    0.930349] armada kernel: /soc@0/phy@1d80000: Fixed dependency cycle(s) with /soc@0/ufshc@1d84000
+[    0.930356] armada kernel: /soc@0/ufshc@1d84000: Fixed dependency cycle(s) with /soc@0/interconnect@16e0000
+[    0.930364] armada kernel: /soc@0/ufshc@1d84000: Fixed dependency cycle(s) with /soc@0/clock-controller@100000
+[    0.930371] armada kernel: /soc@0/ufshc@1d84000: Fixed dependency cycle(s) with /soc@0/phy@1d80000
+[    0.930378] armada kernel: /soc@0/display-subsystem@ae00000: Fixed dependency cycle(s) with /soc@0/clock-controller@100000
+[    0.930385] armada kernel: /soc@0/display-subsystem@ae00000: Fixed dependency cycle(s) with /soc@0/clock-controller@af00000
+[    0.930393] armada kernel: /soc@0/display-subsystem@ae00000/display-controller@ae01000: Fixed dependency cycle(s) with /soc@0/display-subsystem@ae00000/displayport-controller@ae90000
+[    0.930401] armada kernel: /soc@0/display-subsystem@ae00000/display-controller@ae01000: Fixed dependency cycle(s) with /soc@0/display-subsystem@ae00000/dsi@ae94000
+[    0.930409] armada kernel: /soc@0/display-subsystem@ae00000/display-controller@ae01000: Fixed dependency cycle(s) with /soc@0/clock-controller@af00000
+[    0.930416] armada kernel: /soc@0/display-subsystem@ae00000/display-controller@ae01000: Fixed dependency cycle(s) with /soc@0/clock-controller@100000
+[    0.930425] armada kernel: /soc@0/display-subsystem@ae00000/display-controller@ae01000: Fixed dependency cycle(s) with /soc@0/display-subsystem@ae00000
+[    0.930433] armada kernel: /soc@0/display-subsystem@ae00000/displayport-controller@ae90000: Fixed dependency cycle(s) with /soc@0/display-subsystem@ae00000/display-controller@ae01000
+[    0.930440] armada kernel: /soc@0/display-subsystem@ae00000/displayport-controller@ae90000: Fixed dependency cycle(s) with /soc@0/phy@88e8000
+[    0.930447] armada kernel: /soc@0/display-subsystem@ae00000/displayport-controller@ae90000: Fixed dependency cycle(s) with /soc@0/clock-controller@af00000
+[    0.930455] armada kernel: /soc@0/display-subsystem@ae00000/displayport-controller@ae90000: Fixed dependency cycle(s) with /soc@0/display-subsystem@ae00000
+[    0.930463] armada kernel: /soc@0/display-subsystem@ae00000/dsi@ae94000: Fixed dependency cycle(s) with /soc@0/display-subsystem@ae00000/dsi@ae94000/panel@0
+[    0.930470] armada kernel: /soc@0/display-subsystem@ae00000/dsi@ae94000: Fixed dependency cycle(s) with /soc@0/display-subsystem@ae00000/display-controller@ae01000
+[    0.930477] armada kernel: /soc@0/display-subsystem@ae00000/dsi@ae94000: Fixed dependency cycle(s) with /soc@0/display-subsystem@ae00000/phy@ae95000
+[    0.930485] armada kernel: /soc@0/display-subsystem@ae00000/dsi@ae94000: Fixed dependency cycle(s) with /soc@0/clock-controller@100000
+[    0.930492] armada kernel: /soc@0/display-subsystem@ae00000/dsi@ae94000: Fixed dependency cycle(s) with /soc@0/clock-controller@af00000
+[    0.930500] armada kernel: /soc@0/display-subsystem@ae00000/dsi@ae94000: Fixed dependency cycle(s) with /soc@0/display-subsystem@ae00000
+[    0.930509] armada kernel: /soc@0/display-subsystem@ae00000/dsi@ae94000/panel@0: Fixed dependency cycle(s) with /soc@0/display-subsystem@ae00000/dsi@ae94000
+[    0.930517] armada kernel: /soc@0/display-subsystem@ae00000/phy@ae95000: Fixed dependency cycle(s) with /soc@0/clock-controller@af00000
+[    0.930524] armada kernel: /soc@0/display-subsystem@ae00000/phy@ae97000: Fixed dependency cycle(s) with /soc@0/clock-controller@af00000
+[    0.930532] armada kernel: /soc@0/display-subsystem@ae00000/phy@ae97000: Fixed dependency cycle(s) with /soc@0/clock-controller@af00000
+[    0.930539] armada kernel: /soc@0/display-subsystem@ae00000/phy@ae95000: Fixed dependency cycle(s) with /soc@0/clock-controller@af00000
+[    0.930546] armada kernel: /soc@0/display-subsystem@ae00000/dsi@ae94000: Fixed dependency cycle(s) with /soc@0/clock-controller@af00000
+[    0.930553] armada kernel: /soc@0/display-subsystem@ae00000/displayport-controller@ae90000: Fixed dependency cycle(s) with /soc@0/clock-controller@af00000
+[    0.930561] armada kernel: /soc@0/display-subsystem@ae00000/display-controller@ae01000: Fixed dependency cycle(s) with /soc@0/clock-controller@af00000
+[    0.930568] armada kernel: /soc@0/display-subsystem@ae00000: Fixed dependency cycle(s) with /soc@0/clock-controller@af00000
+[    0.930576] armada kernel: /soc@0/clock-controller@af00000: Fixed dependency cycle(s) with /soc@0/phy@88e8000
+[    0.930583] armada kernel: /soc@0/clock-controller@af00000: Fixed dependency cycle(s) with /soc@0/display-subsystem@ae00000/phy@ae97000
+[    0.930590] armada kernel: /soc@0/clock-controller@af00000: Fixed dependency cycle(s) with /soc@0/display-subsystem@ae00000/phy@ae95000
+[    0.930599] armada kernel: /soc@0/clock-controller@af00000: Fixed dependency cycle(s) with /soc@0/clock-controller@100000
+[    0.930607] armada kernel: /soc@0/phy@88e3000: Fixed dependency cycle(s) with /soc@0/clock-controller@100000
+[    0.930614] armada kernel: /soc@0/clock-controller@af00000: Fixed dependency cycle(s) with /soc@0/phy@88e8000
+[    0.930621] armada kernel: /soc@0/display-subsystem@ae00000/displayport-controller@ae90000: Fixed dependency cycle(s) with /soc@0/phy@88e8000
+[    0.930629] armada kernel: /soc@0/clock-controller@100000: Fixed dependency cycle(s) with /soc@0/phy@88e8000
+[    0.930636] armada kernel: /soc@0/phy@88e8000: Fixed dependency cycle(s) with /soc@0/display-subsystem@ae00000/displayport-controller@ae90000
+[    0.930643] armada kernel: /soc@0/phy@88e8000: Fixed dependency cycle(s) with /soc@0/usb@a600000
+[    0.930650] armada kernel: /soc@0/phy@88e8000: Fixed dependency cycle(s) with /soc@0/clock-controller@100000
+[    0.930658] armada kernel: /soc@0/phy@88e8000: Fixed dependency cycle(s) with /soc@0/usb@a600000
+[    0.930665] armada kernel: /soc@0/usb@a600000: Fixed dependency cycle(s) with /soc@0/phy@88e8000
+[    0.930672] armada kernel: /soc@0/usb@a600000: Fixed dependency cycle(s) with /soc@0/phy@88e3000
+[    0.930679] armada kernel: /soc@0/usb@a600000: Fixed dependency cycle(s) with /soc@0/interconnect@16e0000
+[    0.930688] armada kernel: /soc@0/usb@a600000: Fixed dependency cycle(s) with /soc@0/clock-controller@100000
+[    0.930695] armada kernel: /soc@0/rsc@17a00000/regulators-0: Fixed dependency cycle(s) with /soc@0/rsc@17a00000/regulators-0/bob2
+[    0.930703] armada kernel: /soc@0/rsc@17a00000/regulators-0: Fixed dependency cycle(s) with /soc@0/rsc@17a00000/regulators-0/bob1
+[    0.930710] armada kernel: /soc@0/rsc@17a00000/regulators-3: Fixed dependency cycle(s) with /soc@0/rsc@17a00000/regulators-3/smps4
+[    0.930718] armada kernel: /soc@0/rsc@17a00000/regulators-5: Fixed dependency cycle(s) with /soc@0/rsc@17a00000/regulators-5/smps4
+[    0.930725] armada kernel: /pmic-glink/connector@0: Fixed dependency cycle(s) with /soc@0/phy@88e8000
+[    0.930733] armada kernel: /pmic-glink/connector@0: Fixed dependency cycle(s) with /soc@0/usb@a600000
+[    0.930740] armada kernel: /pmic-glink/connector@0: Fixed dependency cycle(s) with /usb0-sbu-mux
+[    0.930749] armada kernel: /usb0-sbu-mux: Fixed dependency cycle(s) with /pmic-glink/connector@0
+[    0.930757] armada kernel: HugeTLB: registered 1.00 GiB page size, pre-allocated 0 pages
+[    0.930764] armada kernel: HugeTLB: 0 KiB vmemmap can be freed for a 1.00 GiB page
+[    0.930771] armada kernel: HugeTLB: registered 32.0 MiB page size, pre-allocated 0 pages
+[    0.930778] armada kernel: HugeTLB: 0 KiB vmemmap can be freed for a 32.0 MiB page
+[    0.930786] armada kernel: HugeTLB: registered 2.00 MiB page size, pre-allocated 0 pages
+[    0.930793] armada kernel: HugeTLB: 0 KiB vmemmap can be freed for a 2.00 MiB page
+[    0.930810] armada kernel: HugeTLB: registered 64.0 KiB page size, pre-allocated 0 pages
+[    0.930817] armada kernel: HugeTLB: 0 KiB vmemmap can be freed for a 64.0 KiB page
+[    0.930825] armada kernel: ACPI: Interpreter disabled.
+[    0.930832] armada kernel: /soc@0/display-subsystem@ae00000/dsi@ae94000: Fixed dependency cycle(s) with /soc@0/clock-controller@100000
+[    0.930840] armada kernel: /soc@0/display-subsystem@ae00000/display-controller@ae01000: Fixed dependency cycle(s) with /soc@0/clock-controller@100000
+[    0.930847] armada kernel: iommu: Default domain type: Translated
+[    0.930854] armada kernel: iommu: DMA domain TLB invalidation policy: strict mode
+[    0.930863] armada kernel: SCSI subsystem initialized
+[    0.930870] armada kernel: libata version 3.00 loaded.
+[    0.930878] armada kernel: usbcore: registered new interface driver usbfs
+[    0.930885] armada kernel: usbcore: registered new interface driver hub
+[    0.930892] armada kernel: usbcore: registered new device driver usb
+[    0.930899] armada kernel: pps_core: LinuxPPS API ver. 1 registered
+[    0.930907] armada kernel: pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
+[    0.930914] armada kernel: PTP clock support registered
+[    0.930921] armada kernel: EDAC MC: Ver: 3.0.0
+[    0.930930] armada kernel: scmi_core: SCMI protocol bus registered
+[    0.930937] armada kernel: FPGA manager framework
+[    0.930945] armada kernel: CPU features: Asymmetric 32-bit EL0 support detected on CPU 3; CPU hot-unplug disabled on CPU 0
+[    0.930952] armada kernel: vgaarb: loaded
+[    0.930959] armada kernel: clocksource: Switched to clocksource arch_sys_counter
+[    0.930968] armada kernel: VFS: Disk quotas dquot_6.6.0
+[    0.930976] armada kernel: VFS: Dquot-cache hash table entries: 512 (4096 bytes)
+[    0.930983] armada kernel: pnp: PnP ACPI: disabled
+[    0.930990] armada kernel: NET: Registered PF_INET protocol family
+[    0.930998] armada kernel: IP idents hash table entries: 131072 (order: 8, 1048576 bytes, linear)
+[    0.931005] armada kernel: tcp_listen_portaddr_hash hash table entries: 4096 (order: 4, 65536 bytes, linear)
+[    0.931012] armada kernel: Table-perturb hash table entries: 65536 (order: 6, 262144 bytes, linear)
+[    0.931021] armada kernel: TCP established hash table entries: 65536 (order: 7, 524288 bytes, linear)
+[    0.931029] armada kernel: TCP bind hash table entries: 65536 (order: 9, 2097152 bytes, linear)
+[    0.931036] armada kernel: TCP: Hash tables configured (established 65536 bind 65536)
+[    0.931043] armada kernel: UDP hash table entries: 4096 (order: 6, 262144 bytes, linear)
+[    0.931050] armada kernel: NET: Registered PF_UNIX/PF_LOCAL protocol family
+[    0.931058] armada kernel: RPC: Registered named UNIX socket transport module.
+[    0.931065] armada kernel: RPC: Registered udp transport module.
+[    0.931073] armada kernel: RPC: Registered tcp transport module.
+[    0.931080] armada kernel: RPC: Registered tcp-with-tls transport module.
+[    0.931089] armada kernel: RPC: Registered tcp NFSv4.1 backchannel transport module.
+[    0.931096] armada kernel: PCI: CLS 0 bytes, default 64
+[    0.931103] armada kernel: Unpacking initramfs...
+[    0.931111] armada kernel: kvm [1]: HYP mode not available
+[    0.931118] armada kernel: Initialise system trusted keyrings
+[    0.931125] armada kernel: workingset: timestamp_bits=42 (anon: 37) max_order=21 bucket_order=0 (anon: 0)
+[    0.931132] armada kernel: squashfs: version 4.0 (2009/01/31) Phillip Lougher
+[    0.931140] armada kernel: NFS: Registering the id_resolver key type
+[    0.931147] armada kernel: Key type id_resolver registered
+[    0.931156] armada kernel: Key type id_legacy registered
+[    0.931163] armada kernel: nfs4filelayout_init: NFSv4 File Layout Driver Registering...
+[    0.931170] armada kernel: nfs4flexfilelayout_init: NFSv4 Flexfile Layout Driver Registering...
+[    0.931178] armada kernel: NET: Registered PF_ALG protocol family
+[    0.931185] armada kernel: Key type asymmetric registered
+[    0.931192] armada kernel: Asymmetric key parser 'x509' registered
+[    0.931200] armada kernel: Asymmetric key parser 'pkcs8' registered
+[    0.931207] armada kernel: Block layer SCSI generic (bsg) driver version 0.4 loaded (major 240)
+[    0.931215] armada kernel: io scheduler mq-deadline registered
+[    0.931223] armada kernel: io scheduler kyber registered
+[    0.931230] armada kernel: io scheduler bfq registered
+[    0.931238] armada kernel: ledtrig-cpu: registered to indicate activity on CPUs
+[    0.931245] armada kernel: ------------[ cut here ]------------
+[    0.931252] armada kernel: disp_cc_mdss_mdp_clk_src: rcg didn't update its configuration.
+[    0.931260] armada kernel: WARNING: drivers/clk/qcom/clk-rcg2.c:136 at update_config+0xdc/0x100, CPU#7: swapper/0/1
+[    0.931268] armada kernel: Modules linked in:
+[    0.931275] armada kernel: CPU: 7 UID: 0 PID: 1 Comm: swapper/0 Tainted: G S                  7.2.6 #1 PREEMPT 
+[    0.931284] armada kernel: Tainted: [S]=CPU_OUT_OF_SPEC
+[    0.931291] armada kernel: Hardware name: Retroid Pocket 6 (DT)
+[    0.931298] armada kernel: pstate: 61400005 (nZCv daif +PAN -UAO -TCO +DIT -SSBS BTYPE=--)
+[    0.931306] armada kernel: pc : update_config+0xdc/0x100
+[    0.931313] armada kernel: lr : update_config+0xdc/0x100
+[    0.931320] armada kernel: sp : ffff80008005b9b0
+[    0.931328] armada kernel: x29: ffff80008005b9c0 x28: ffff000803f52c00 x27: ffffde315af1aa00
+[    0.931335] armada kernel: x26: 0000000000000004 x25: ffff000803dae9c0 x24: 0000000000000003
+[    0.931342] armada kernel: x23: 0000000000000000 x22: ffffde315b94d360 x21: ffffde315b94d360
+[    0.931350] armada kernel: x20: ffffde315cc5ba60 x19: 0000000000000000 x18: 000000000000000a
+[    0.931359] armada kernel: x17: 632d6b636f6c632e x16: 303030306564613a x15: 0000000000000100
+[    0.931366] armada kernel: x14: 0000000000000000 x13: 2e6e6f6974617275 x12: 6769666e6f632073
+[    0.931374] armada kernel: x11: 7469206574616470 x10: 752074276e646964 x9 : ffffde315942e368
+[    0.931381] armada kernel: x8 : 3fffffffffffefff x7 : ffffde315c9117f8 x6 : 00000000000004d1
+[    0.931388] armada kernel: x5 : 000000000000019c x4 : 000000000000019b x3 : 0000000000000000
+[    0.931395] armada kernel: x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff00080096b3c0
+[    0.931403] armada kernel: Call trace:
+[    0.931410] armada kernel:  update_config+0xdc/0x100 (P)
+[    0.931418] armada kernel:  clk_rcg2_shared_disable+0x58/0x90
+[    0.931510] armada kernel:  clk_rcg2_shared_init+0x18/0x30
+[    0.931519] armada kernel:  __clk_register+0x508/0xa00
+[    0.931526] armada kernel:  devm_clk_hw_register+0x64/0xe8
+[    0.931533] armada kernel:  devm_clk_register_regmap+0x4c/0xa0
+[    0.931541] armada kernel:  qcom_cc_really_probe+0x318/0x528
+[    0.931548] armada kernel:  disp_cc_sm8550_probe+0x130/0x240
+[    0.931556] armada kernel:  platform_probe+0x88/0xc0
+[    0.931563] armada kernel:  really_probe+0xc8/0x400
+[    0.931573] armada kernel:  __driver_probe_device+0x16c/0x1c8
+[    0.931580] armada kernel:  driver_probe_device+0x44/0x128
+[    0.931587] armada kernel:  __driver_attach+0xd0/0x228
+[    0.931594] armada kernel:  bus_for_each_dev+0x84/0xf0
+[    0.931602] armada kernel:  driver_attach+0x2c/0x40
+[    0.931609] armada kernel:  bus_add_driver+0x124/0x280
+[    0.931616] armada kernel:  driver_register+0x70/0x138
+[    0.931623] armada kernel:  __platform_driver_register+0x2c/0x40
+[    0.931631] armada kernel:  disp_cc_sm8550_driver_init+0x2c/0x40
+[    0.931640] armada kernel:  do_one_initcall+0x5c/0x3f8
+[    0.931647] armada kernel:  kernel_init_freeable+0x230/0x2c0
+[    0.931678] armada kernel:  kernel_init+0x2c/0x150
+[    0.931704] armada kernel:  ret_from_fork+0x10/0x20
+[    0.931711] armada kernel: ---[ end trace 0000000000000000 ]---
+[    0.931729] armada kernel: /soc@0/display-subsystem@ae00000/phy@ae95000: Fixed dependency cycle(s) with /soc@0/clock-controller@af00000
+[    0.931737] armada kernel: /soc@0/display-subsystem@ae00000/dsi@ae94000: Fixed dependency cycle(s) with /soc@0/clock-controller@af00000
+[    0.931744] armada kernel: /soc@0/display-subsystem@ae00000/displayport-controller@ae90000: Fixed dependency cycle(s) with /soc@0/clock-controller@af00000
+[    0.931752] armada kernel: /soc@0/display-subsystem@ae00000/display-controller@ae01000: Fixed dependency cycle(s) with /soc@0/clock-controller@af00000
+[    0.931763] armada kernel: vreg_s1g_1p2: Setting 1200000-1300000uV
+[    0.931771] armada kernel: vreg_s2g_0p8: Setting 800000-1000000uV
+[    0.931779] armada kernel: vreg_s3g_0p7: Setting 300000-1004000uV
+[    0.931786] armada kernel: vreg_s4g_1p3: Setting 1200000-1352000uV
+[    0.931792] armada kernel: vreg_s5g_0p8: Setting 500000-1004000uV
+[    0.931799] armada kernel: vreg_s6g_1p8: Setting 1800000-2000000uV
+[    0.931805] armada kernel: vreg_l1g_1p2: Setting 1200000-1200000uV
+[    0.931812] armada kernel: vreg_l3g_1p2: Setting 1200000-1200000uV
+[    0.931818] armada kernel: Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
+[    0.931825] armada kernel: msm_serial: driver initialized
+[    0.931832] armada kernel: SuperH (H)SCI(F) driver initialized
+[    0.931839] armada kernel: STM32 USART driver initialized
+[    0.931845] armada kernel: loop: module loaded
+[    0.931852] armada kernel: megasas: 07.734.00.00-rc1
+[    0.932084] armada kernel: spmi_pmic_arb c400000.spmi: PMIC arbiter version v7 (0x70000001)
+[    0.932099] armada kernel: tun: Universal TUN/TAP device driver, 1.6
+[    0.932106] armada kernel: VFIO - User Level meta-driver version: 0.3
+[    0.932113] armada kernel: usbcore: registered new interface driver usb-storage
+[    0.932123] armada kernel: SPI driver mcu-joystick has no spi_device_id for mcu,joystick
+[    0.932130] armada kernel: i2c_dev: i2c /dev entries driver
+[    0.932138] armada kernel: input: pmic_pwrkey as /devices/platform/soc@0/c400000.spmi/spmi-0/0-00/c400000.spmi:pmic@0:pon@1300/c400000.spmi:pmic@0:pon@1300:pwrkey/input/input0
+[    0.932145] armada kernel: input: pmic_resin as /devices/platform/soc@0/c400000.spmi/spmi-0/0-00/c400000.spmi:pmic@0:pon@1300/c400000.spmi:pmic@0:pon@1300:resin/input/input1
+[    0.932152] armada kernel: SMCCC: SOC_ID: ARCH_SOC_ID not implemented, skipping ....
+[    0.932158] armada kernel: clocksource: arch_mmio_counter: mask: 0xffffffffffffff max_cycles: 0x46d987e47, max_idle_ns: 440795202767 ns
+[    0.932304] armada kernel: arch-timer-mmio 17420000.timer: mmio timer running at 19.20MHz (virt)
+[    0.932314] armada kernel: hid: raw HID events driver (C) Jiri Kosina
+[    0.932324] armada kernel: usbcore: registered new interface driver usbhid
+[    0.932331] armada kernel: usbhid: USB HID core driver
+[    0.932337] armada kernel: hw perfevents: enabled with armv9_cortex_a510 PMU driver, 7 (0,8000003f) counters available
+[    0.932344] armada kernel: hw perfevents: enabled with armv9_cortex_a710 PMU driver, 7 (0,8000003f) counters available
+[    0.932351] armada kernel: hw perfevents: enabled with armv9_cortex_a715 PMU driver, 7 (0,8000003f) counters available
+[    0.932358] armada kernel: hw perfevents: enabled with armv9_cortex_x3 PMU driver, 7 (0,8000003f) counters available
+[    0.932364] armada kernel: Initializing XFRM netlink socket
+[    0.932371] armada kernel: NET: Registered PF_INET6 protocol family
+[    0.932379] armada kernel: Segment Routing with IPv6
+[    0.932386] armada kernel: In-situ OAM (IOAM) with IPv6
+[    0.932392] armada kernel: NET: Registered PF_PACKET protocol family
+[    0.932399] armada kernel: PFKEY is deprecated and scheduled to be removed in 2027, please contact the netdev mailing list
+[    0.932405] armada kernel: NET: Registered PF_KEY protocol family
+[    0.932412] armada kernel: Key type dns_resolver registered
+[    0.932419] armada kernel: registered taskstats version 1
+[    0.932425] armada kernel: Loading compiled-in X.509 certificates
+[    0.932431] armada kernel: Demotion targets for Node 0: null
+[    0.932440] armada kernel: qcom_scm: convention: smc arm 64
+[    0.932578] armada kernel: qcom_scm firmware:scm: qseecom: found qseecom with version 0x1402000
+[    0.932698] armada kernel: qcom_scm firmware:scm: qseecom: untested machine, skipping
+[    0.932933] armada kernel: qcom-ice 1d88000.crypto: Found QC Inline Crypto Engine (ICE) v4.0.1
+[    0.933043] armada kernel: qcom-ice 1d88000.crypto: QC Hardware Key Manager (HWKM) version v2
+[    0.933151] armada kernel: qcom-ice 1d88000.crypto: A supported HWKM is not present. Supporting raw keys only.
+[    0.933159] armada kernel: vreg_bob1: Setting 3320000-3960000uV
+[    0.933167] armada kernel: vreg_bob2: Setting 3000000-3960000uV
+[    0.933175] armada kernel: vreg_l2b_3p0: Setting 3008000-3008000uV
+[    0.933181] armada kernel: vreg_l5b_3p1: Setting 3104000-3104000uV
+[    0.933188] armada kernel: vreg_l6b_1p8: Setting 1800000-3008000uV
+[    0.933195] armada kernel: vreg_s4e_0p95: Setting 904000-984000uV
+[    0.933201] armada kernel: vreg_l7b_1p8: Setting 1800000-3008000uV
+[    0.933208] armada kernel: vreg_s5e_1p08: Setting 1012000-1120000uV
+[    0.933215] armada kernel: vreg_l8b_1p8: Setting 1800000-3008000uV
+[    0.933222] armada kernel: vreg_l1e_0p88: Setting 880000-912000uV
+[    0.933231] armada kernel: vreg_l2e_0p9: Setting 872000-968000uV
+[    0.933238] armada kernel: vreg_l9b_2p9: Setting 2960000-3008000uV
+[    0.933245] armada kernel: vreg_l11b_1p2: Setting 1200000-1504000uV
+[    0.933252] armada kernel: vreg_l12b_1p8: Setting 1800000-1800000uV
+[    0.933258] armada kernel: vreg_l3e_1p2: Setting 1200000-1200000uV
+[    0.933265] armada kernel: vreg_l13b_3p0: Setting 3000000-3000000uV
+[    0.933270] armada kernel: vreg_l14b_3p2: Setting 3200000-3200000uV
+[    0.933276] armada kernel: vreg_s4f_0p5: Setting 300000-700000uV
+[    0.933282] armada kernel: vreg_l15b_1p8: Setting 1800000-1800000uV
+[    0.933289] armada kernel: vreg_l1f_0p9: Setting 880000-912000uV
+[    0.933295] armada kernel: vreg_l16b_2p8: Setting 2800000-2800000uV
+[    0.933301] armada kernel: vreg_l2f_0p88: Setting 880000-912000uV
+[    0.933307] armada kernel: vreg_l17b_2p5: Setting 2504000-2504000uV
+[    0.933312] armada kernel: vreg_l3f_0p88: Setting 880000-912000uV
+[    0.933430] armada kernel: arm-smmu 3da0000.iommu: probing hardware configuration...
+[    0.933695] armada kernel: arm-smmu 3da0000.iommu: SMMUv2 with:
+[    0.933832] armada kernel: arm-smmu 3da0000.iommu:         stage 1 translation
+[    0.933949] armada kernel: arm-smmu 3da0000.iommu:         coherent table walk
+[    0.934601] armada kernel: arm-smmu 3da0000.iommu:         stream matching with 24 register groups
+[    0.934760] armada kernel: arm-smmu 3da0000.iommu:         22 context banks (0 stage-2 only)
+[    0.934871] armada kernel: arm-smmu 3da0000.iommu:         Supported page sizes: 0x61311000
+[    0.935201] armada kernel: arm-smmu 3da0000.iommu:         Stage-1: 48-bit VA -> 36-bit IPA
+[    0.935330] armada kernel: arm-smmu 3da0000.iommu:         preserved 0 boot mappings
+[    0.935457] armada kernel: platform 3d00000.gpu: Adding to iommu group 0
+[    0.935572] armada kernel: platform 3d6a000.gmu: Adding to iommu group 1
+[    0.935699] armada kernel: arm-smmu 15000000.iommu: probing hardware configuration...
+[    0.935805] armada kernel: arm-smmu 15000000.iommu: SMMUv2 with:
+[    0.935910] armada kernel: arm-smmu 15000000.iommu:         stage 1 translation
+[    0.936057] armada kernel: arm-smmu 15000000.iommu:         coherent table walk
+[    0.936168] armada kernel: arm-smmu 15000000.iommu:         stream matching with 105 register groups
+[    0.936369] armada kernel: arm-smmu 15000000.iommu:         70 context banks (0 stage-2 only)
+[    0.936524] armada kernel: arm-smmu 15000000.iommu:         Supported page sizes: 0x61311000
+[    0.936686] armada kernel: arm-smmu 15000000.iommu:         Stage-1: 36-bit VA -> 36-bit IPA
+[    0.936834] armada kernel: arm-smmu 15000000.iommu:         preserved 0 boot mappings
+[    0.937028] armada kernel: platform 800000.dma-controller: Adding to iommu group 2
+[    0.937197] armada kernel: platform 8c0000.geniqup: Adding to iommu group 3
+[    0.937364] armada kernel: platform a00000.dma-controller: Adding to iommu group 4
+[    0.937529] armada kernel: platform ac0000.geniqup: Adding to iommu group 5
+[    0.937727] armada kernel: platform 1dc4000.dma-controller: Adding to iommu group 6
+[    0.937893] armada kernel: platform 1dfa000.crypto: Adding to iommu group 6
+[    0.938063] armada kernel: platform 1d84000.ufshc: Adding to iommu group 7
+[    0.938221] armada kernel: platform 8804000.mmc: Adding to iommu group 8
+[    0.938398] armada kernel: platform aa00000.video-codec: Adding to iommu group 9
+[    0.938571] armada kernel: platform ae00000.display-subsystem: Adding to iommu group 10
+[    0.938749] armada kernel: platform a600000.usb: Adding to iommu group 11
+[    0.938768] armada kernel: /soc@0/display-subsystem@ae00000/display-controller@ae01000: Fixed dependency cycle(s) with /soc@0/display-subsystem@ae00000/displayport-controller@ae90000
+[    0.938778] armada kernel: /soc@0/display-subsystem@ae00000/display-controller@ae01000: Fixed dependency cycle(s) with /soc@0/display-subsystem@ae00000/dsi@ae94000
+[    0.938788] armada kernel: /soc@0/phy@88e8000: Fixed dependency cycle(s) with /soc@0/display-subsystem@ae00000/displayport-controller@ae90000
+[    0.938799] armada kernel: /soc@0/display-subsystem@ae00000/displayport-controller@ae90000: Fixed dependency cycle(s) with /soc@0/phy@88e8000
+[    0.938808] armada kernel: /soc@0/display-subsystem@ae00000/dsi@ae94000: Fixed dependency cycle(s) with /soc@0/display-subsystem@ae00000/dsi@ae94000/panel@0
+[    0.938818] armada kernel: /soc@0/display-subsystem@ae00000/dsi@ae94000/panel@0: Fixed dependency cycle(s) with /soc@0/display-subsystem@ae00000/dsi@ae94000
+[    0.938969] armada kernel: pwrseq-qcom_wcn wcn7850-pmu: supply vddio1p2 not found, using dummy regulator
+[    0.939123] armada kernel: ufshcd-qcom 1d84000.ufshc: freq-table-hz property not specified
+[    0.939275] armada kernel: sdhci_msm 8804000.mmc: Got CD GPIO
+[    0.939423] armada kernel: ufshcd-qcom 1d84000.ufshc: ufshcd_populate_vreg: Unable to find vccq2-supply regulator, assuming enabled
+[    0.939435] armada kernel: Freeing initrd memory: 49964K
+[    0.939607] armada kernel: cpu cpu0: EM: OPP:307200 is inefficient
+[    0.939764] armada kernel: cpu cpu0: EM: created perf domain
+[    0.939777] armada kernel: mmc0: SDHCI controller on 8804000.mmc [8804000.mmc] using ADMA 64-bit
+[    0.939935] armada kernel: cpu cpu3: EM: created perf domain
+[    0.940132] armada kernel: cpu cpu7: EM: created perf domain
+[    0.940154] armada kernel: energy_model: updating cpu0 cpu_cap=222 old capacity=326
+[    0.940340] armada kernel: cpu cpu0: EM: OPP:307200 is inefficient
+[    0.940354] armada kernel: energy_model: updating cpu3 cpu_cap=657 old capacity=693
+[    0.940533] armada kernel: qcom_pmic_glink pmic-glink: Failed to create device link (0x180) with supplier 88e8000.phy for /pmic-glink/connector@0
+[    0.940722] armada kernel: qcom-pcie 1c00000.pcie: supply vdda not found, using dummy regulator
+[    0.940892] armada kernel: qcom-pcie 1c00000.pcie: supply vddpe-3v3 not found, using dummy regulator
+[    0.941063] armada kernel: qcom-pcie 1c00000.pcie: host bridge /soc@0/pcie@1c00000 ranges:
+[    0.941229] armada kernel: qcom-pcie 1c00000.pcie:       IO 0x0060200000..0x00602fffff -> 0x0000000000
+[    0.941393] armada kernel: qcom-pcie 1c00000.pcie:      MEM 0x0060300000..0x0063ffffff -> 0x0060300000
+[    0.941408] armada kernel: 898000.serial: ttyHS1 at MMIO 0x898000 (irq = 187, base_baud = 0) is a MSM
+[    0.941641] armada kernel: serial serial0: tty port ttyHS1 registered
+[    0.941659] armada kernel: 89c000.serial: ttyHS2 at MMIO 0x89c000 (irq = 188, base_baud = 0) is a MSM
+[    0.941873] armada kernel: serial serial1: tty port ttyHS2 registered
+[    0.941888] armada kernel: mmc0: tuning execution failed: -5
+[    0.941904] armada kernel: a9c000.serial: ttyMSM0 at MMIO 0xa9c000 (irq = 191, base_baud = 0) is a MSM
+[    0.941916] armada kernel: vreg_l3c_0p9: Setting 880000-912000uV
+[    0.941928] armada kernel: vreg_l1d_0p88: Setting 880000-920000uV
+[    0.941940] armada kernel: /soc@0/display-subsystem@ae00000/dsi@ae94000: Fixed dependency cycle(s) with /soc@0/display-subsystem@ae00000/dsi@ae94000/panel@0
+[    0.941951] armada kernel: /soc@0/display-subsystem@ae00000/dsi@ae94000/panel@0: Fixed dependency cycle(s) with /soc@0/display-subsystem@ae00000/dsi@ae94000
+[    0.942164] armada kernel: panel-visionox-vtdr6130-cog ae94000.dsi.0: supply vdd not found, using dummy regulator
+[    0.942364] armada kernel: panel-visionox-vtdr6130-cog ae94000.dsi.0: supply vci not found, using dummy regulator
+[    0.942566] armada kernel: panel-visionox-vtdr6130-cog ae94000.dsi.0: supply vdd18 not found, using dummy regulator
+[    0.942772] armada kernel: panel-visionox-vtdr6130-cog ae94000.dsi.0: supply vdd28 not found, using dummy regulator
+[    0.942986] armada kernel: qcom_pmic_glink pmic-glink: Failed to create device link (0x180) with supplier a600000.usb for /pmic-glink/connector@0
+[    0.943180] armada kernel: ufshcd-qcom 1d84000.ufshc: freq-table-hz property not specified
+[    0.943370] armada kernel: ufshcd-qcom 1d84000.ufshc: ufshcd_populate_vreg: Unable to find vccq2-supply regulator, assuming enabled
+[    0.943550] armada kernel: qcom-pcie 1c00000.pcie: supply vdda not found, using dummy regulator
+[    0.943732] armada kernel: qcom-pcie 1c00000.pcie: supply vddpe-3v3 not found, using dummy regulator
+[    0.943910] armada kernel: qcom-pcie 1c00000.pcie: host bridge /soc@0/pcie@1c00000 ranges:
+[    0.944125] armada kernel: qcom-pcie 1c00000.pcie:       IO 0x0060200000..0x00602fffff -> 0x0000000000
+[    0.944292] armada kernel: qcom-pcie 1c00000.pcie:      MEM 0x0060300000..0x0063ffffff -> 0x0060300000
+[    0.944474] armada kernel: ufshcd-qcom 1d84000.ufshc: freq-table-hz property not specified
+[    0.944649] armada kernel: ufshcd-qcom 1d84000.ufshc: ufshcd_populate_vreg: Unable to find vccq2-supply regulator, assuming enabled
+[    0.944844] armada kernel: scsi host0: ufshcd
+[    0.945055] armada kernel: scsi 0:0:0:49488: Well-known LUN    YMTC     YMUS8B4TF1D1C1   0304 PQ: 0 ANSI: 6
+[    0.945228] armada kernel: qcom-pcie 1c00000.pcie: supply vdda not found, using dummy regulator
+[    0.945392] armada kernel: qcom-pcie 1c00000.pcie: supply vddpe-3v3 not found, using dummy regulator
+[    0.945555] armada kernel: qcom-pcie 1c00000.pcie: host bridge /soc@0/pcie@1c00000 ranges:
+[    0.945719] armada kernel: qcom-pcie 1c00000.pcie:       IO 0x0060200000..0x00602fffff -> 0x0000000000
+[    0.945884] armada kernel: qcom-pcie 1c00000.pcie:      MEM 0x0060300000..0x0063ffffff -> 0x0060300000
+[    0.945901] armada kernel: irq: IRQ196: trimming hierarchy from :soc@0:interrupt-controller@b220000-8
+[    0.945912] armada kernel: irq: IRQ197: trimming hierarchy from :soc@0:interrupt-controller@b220000-8
+[    0.945924] armada kernel: input: gpio-keys as /devices/platform/gpio-keys/input/input2
+[    0.945935] armada kernel: clk: Disabling unused clocks
+[    0.946122] armada kernel: scsi 0:0:0:49476: Well-known LUN    YMTC     YMUS8B4TF1D1C1   0304 PQ: 0 ANSI: 6
+[    0.946138] armada kernel: PM: genpd: Disabling unused power domains
+[    0.946324] armada kernel: scsi 0:0:0:49456: Well-known LUN    YMTC     YMUS8B4TF1D1C1   0304 PQ: 0 ANSI: 6
+[    0.946519] armada kernel: scsi 0:0:0:0: Direct-Access     YMTC     YMUS8B4TF1D1C1   0304 PQ: 0 ANSI: 6
+[    0.946707] armada kernel: scsi 0:0:0:1: Direct-Access     YMTC     YMUS8B4TF1D1C1   0304 PQ: 0 ANSI: 6
+[    0.946887] armada kernel: sd 0:0:0:0: [sda] 30150656 4096-byte logical blocks: (123 GB/115 GiB)
+[    0.947066] armada kernel: sd 0:0:0:0: [sda] Write Protect is off
+[    0.947245] armada kernel: sd 0:0:0:0: [sda] Mode Sense: 00 32 00 10
+[    0.947425] armada kernel: sd 0:0:0:0: [sda] Write cache: enabled, read cache: enabled, supports DPO and FUA
+[    0.947604] armada kernel: sd 0:0:0:0: [sda] Preferred minimum I/O size 4096 bytes
+[    0.947787] armada kernel: sd 0:0:0:0: [sda] Optimal transfer size 524288 bytes
+[    0.947974] armada kernel: scsi 0:0:0:2: Direct-Access     YMTC     YMUS8B4TF1D1C1   0304 PQ: 0 ANSI: 6
+[    0.948192] armada kernel: sd 0:0:0:1: [sdb] 5120 4096-byte logical blocks: (21.0 MB/20.0 MiB)
+[    0.948362] armada kernel: sd 0:0:0:1: [sdb] Write Protect is off
+[    0.948527] armada kernel: sd 0:0:0:1: [sdb] Mode Sense: 00 32 00 10
+[    0.948691] armada kernel: sd 0:0:0:1: [sdb] Write cache: enabled, read cache: enabled, supports DPO and FUA
+[    0.948855] armada kernel: sd 0:0:0:1: [sdb] Preferred minimum I/O size 4096 bytes
+[    0.949023] armada kernel: sd 0:0:0:1: [sdb] Optimal transfer size 524288 bytes
+[    0.949210] armada kernel: scsi 0:0:0:3: Direct-Access     YMTC     YMUS8B4TF1D1C1   0304 PQ: 0 ANSI: 6
+[    0.949375] armada kernel: sd 0:0:0:2: [sdc] 5120 4096-byte logical blocks: (21.0 MB/20.0 MiB)
+[    0.949541] armada kernel: sd 0:0:0:2: [sdc] Write Protect is off
+[    0.949709] armada kernel: sd 0:0:0:2: [sdc] Mode Sense: 00 32 00 10
+[    0.949874] armada kernel: sd 0:0:0:2: [sdc] Write cache: enabled, read cache: enabled, supports DPO and FUA
+[    0.950036] armada kernel: sd 0:0:0:2: [sdc] Preferred minimum I/O size 4096 bytes
+[    0.950200] armada kernel: sd 0:0:0:2: [sdc] Optimal transfer size 524288 bytes
+[    0.950368] armada kernel: sd 0:0:0:3: [sdd] 8192 4096-byte logical blocks: (33.6 MB/32.0 MiB)
+[    0.950542] armada kernel: scsi 0:0:0:4: Direct-Access     YMTC     YMUS8B4TF1D1C1   0304 PQ: 0 ANSI: 6
+[    0.950708] armada kernel: sd 0:0:0:3: [sdd] Write Protect is off
+[    0.950871] armada kernel: sd 0:0:0:3: [sdd] Mode Sense: 00 32 00 10
+[    0.951028] armada kernel: qcom-pcie 1c00000.pcie: supply vdda not found, using dummy regulator
+[    0.951181] armada kernel: qcom-pcie 1c00000.pcie: supply vddpe-3v3 not found, using dummy regulator
+[    0.951333] armada kernel: qcom-pcie 1c00000.pcie: host bridge /soc@0/pcie@1c00000 ranges:
+[    0.951484] armada kernel: qcom-pcie 1c00000.pcie:       IO 0x0060200000..0x00602fffff -> 0x0000000000
+[    0.951635] armada kernel: qcom-pcie 1c00000.pcie:      MEM 0x0060300000..0x0063ffffff -> 0x0060300000
+[    0.951802] armada kernel: sd 0:0:0:3: [sdd] Write cache: enabled, read cache: enabled, supports DPO and FUA
+[    0.951965] armada kernel: sd 0:0:0:3: [sdd] Preferred minimum I/O size 4096 bytes
+[    0.952272] armada kernel: sd 0:0:0:3: [sdd] Optimal transfer size 524288 bytes
+[    0.952434] armada kernel: sd 0:0:0:4: [sde] 1048576 4096-byte logical blocks: (4.29 GB/4.00 GiB)
+[    0.952604] armada kernel: scsi 0:0:0:5: Direct-Access     YMTC     YMUS8B4TF1D1C1   0304 PQ: 0 ANSI: 6
+[    0.952761] armada kernel: sd 0:0:0:4: [sde] Write Protect is off
+[    0.952913] armada kernel: sd 0:0:0:4: [sde] Mode Sense: 00 32 00 10
+[    0.953067] armada kernel: sd 0:0:0:4: [sde] Write cache: enabled, read cache: enabled, supports DPO and FUA
+[    0.953227] armada kernel: sd 0:0:0:4: [sde] Preferred minimum I/O size 4096 bytes
+[    0.953382] armada kernel: sd 0:0:0:4: [sde] Optimal transfer size 524288 bytes
+[    0.953537] armada kernel: sd 0:0:0:5: [sdf] 8192 4096-byte logical blocks: (33.6 MB/32.0 MiB)
+[    0.953689] armada kernel: sd 0:0:0:5: [sdf] Write Protect is off
+[    0.953840] armada kernel: sd 0:0:0:5: [sdf] Mode Sense: 00 32 00 10
+[    0.953992] armada kernel: sd 0:0:0:5: [sdf] Write cache: enabled, read cache: enabled, supports DPO and FUA
+[    0.954144] armada kernel: sd 0:0:0:5: [sdf] Preferred minimum I/O size 4096 bytes
+[    0.954300] armada kernel: sd 0:0:0:5: [sdf] Optimal transfer size 524288 bytes
+[    0.954314] armada kernel: input: generic ft5x06 (8d) as /devices/platform/soc@0/9c0000.geniqup/98c000.i2c/i2c-1/1-0038/input/input3
+[    0.954458] armada kernel: qcom-pcie 1c00000.pcie: supply vdda not found, using dummy regulator
+[    0.954598] armada kernel: qcom-pcie 1c00000.pcie: supply vddpe-3v3 not found, using dummy regulator
+[    0.954742] armada kernel: qcom-pcie 1c00000.pcie: host bridge /soc@0/pcie@1c00000 ranges:
+[    0.954883] armada kernel: qcom-pcie 1c00000.pcie:       IO 0x0060200000..0x00602fffff -> 0x0000000000
+[    0.955024] armada kernel: qcom-pcie 1c00000.pcie:      MEM 0x0060300000..0x0063ffffff -> 0x0060300000
+[    0.955037] armada kernel: mmc0: new UHS-I speed SDR104 SDXC card at address 59b4
+[    0.955048] armada kernel: mmcblk0: mmc0:59b4 LX64G 59.2 GiB
+[    0.955058] armada kernel:  mmcblk0: p1 p2 p3
+[    0.955201] armada kernel: qcom-pcie 1c00000.pcie: supply vdda not found, using dummy regulator
+[    0.955343] armada kernel: qcom-pcie 1c00000.pcie: supply vddpe-3v3 not found, using dummy regulator
+[    0.955484] armada kernel: qcom-pcie 1c00000.pcie: host bridge /soc@0/pcie@1c00000 ranges:
+[    0.955627] armada kernel: qcom-pcie 1c00000.pcie:       IO 0x0060200000..0x00602fffff -> 0x0000000000
+[    0.955770] armada kernel: qcom-pcie 1c00000.pcie:      MEM 0x0060300000..0x0063ffffff -> 0x0060300000
+[    0.955782] armada kernel:  sdf: sdf1 sdf2 sdf3 sdf4 sdf5
+[    0.955793] armada kernel:  sdb: sdb1 sdb2 sdb3 sdb4 sdb5
+[    0.955804] armada kernel:  sda: sda1 sda2 sda3 sda4 sda5 sda6 sda7 sda8 sda9 sda10 sda11 sda12 sda13 sda14 sda15 sda16 sda17
+[    0.955959] armada kernel: sd 0:0:0:5: [sdf] Attached SCSI disk
+[    0.955976] armada kernel:  sdd: sdd1 sdd2 sdd3
+[    0.956161] armada kernel: sd 0:0:0:1: [sdb] Attached SCSI disk
+[    0.956307] armada kernel: sd 0:0:0:3: [sdd] Attached SCSI disk
+[    0.956451] armada kernel: sd 0:0:0:0: [sda] Attached SCSI disk
+[    0.956462] armada kernel:  sdc: sdc1 sdc2 sdc3 sdc4 sdc5
+[    0.956473] armada kernel:  sde: sde1 sde2 sde3 sde4 sde5 sde6 sde7 sde8 sde9 sde10 sde11 sde12 sde13 sde14 sde15 sde16 sde17 sde18 sde19 sde20 sde21 sde22 sde23 sde24 sde25 sde26 sde27 sde28 sde29 sde30 sde31 sde32 sde33 sde34 sde35 sde36 sde37 sde38 sde39 sde40 sde41 sde42 sde43 sde44 sde45 sde46 sde47 sde48 sde49 sde50 sde51 sde52 sde53 sde54 sde55 sde56 sde57 sde58 sde59 sde60 sde61 sde62 sde63 sde64 sde65 sde66 sde67 sde68 sde69 sde70 sde71 sde72 sde73 sde74 sde75 sde76 sde77 sde78 sde79 sde80
+[    0.956613] armada kernel: sd 0:0:0:2: [sdc] Attached SCSI disk
+[    0.956759] armada kernel: sd 0:0:0:4: [sde] Attached SCSI disk
+[    0.956775] armada kernel: Freeing unused kernel memory: 4480K
+[    0.956784] armada kernel: Run /init as init process
+[    0.956793] armada kernel:   with arguments:
+[    0.956802] armada kernel:     /init
+[    0.956811] armada kernel:   with environment:
+[    0.956820] armada kernel:     HOME=/
+[    0.956828] armada kernel:     TERM=linux
+[    0.956837] armada kernel:     ostree=/ostree/boot.1/default/34d7969129f068943c4e123a35bc6e25680bdfb4f24d274d56333824a20bc988/0
+[    0.956846] armada kernel:     boot=UUID=24f4f3d0-4a5c-429d-9490-4b7a819b7d7c
+[    0.956983] armada kernel: qcom-pcie 1c00000.pcie: supply vdda not found, using dummy regulator
+[    0.957118] armada kernel: qcom-pcie 1c00000.pcie: supply vddpe-3v3 not found, using dummy regulator
+[    0.957251] armada kernel: qcom-pcie 1c00000.pcie: host bridge /soc@0/pcie@1c00000 ranges:
+[    0.957384] armada kernel: qcom-pcie 1c00000.pcie:       IO 0x0060200000..0x00602fffff -> 0x0000000000
+[    0.957515] armada kernel: qcom-pcie 1c00000.pcie:      MEM 0x0060300000..0x0063ffffff -> 0x0060300000
+[    0.957530] armada systemd[1]: System time advanced to built-in epoch: Mon 2026-09-14 00:00:00 UTC
+[    0.957546] armada systemd[1]: Successfully made /usr/ read-only.
+[    0.957560] armada systemd[1]: systemd 259.9-1.fc44 running in system mode (+PAM +AUDIT +SELINUX -APPARMOR +IMA +IPE +SMACK +SECCOMP -GCRYPT +GNUTLS +OPENSSL +ACL +BLKID +CURL +ELFUTILS +FIDO2 +IDN2 -IDN +KMOD +LIBCRYPTSETUP +LIBCRYPTSETUP_PLUGINS +LIBFDISK +PCRE2 +PWQUALITY +P11KIT +QRENCODE +TPM2 +BZIP2 +LZ4 +XZ +ZLIB +ZSTD +BPF_FRAMEWORK +BTF +XKBCOMMON +UTMP +SYSVINIT +LIBARCHIVE)
+[    0.957575] armada systemd[1]: Detected architecture arm64.
+[    0.957586] armada systemd[1]: Running in initrd.
+[    0.957598] armada systemd[1]: Initializing machine ID from random generator.
+[    0.957611] armada systemd[1]: No hostname configured, using default hostname.
+[    0.957622] armada systemd[1]: Hostname set to <armada>.
+[    0.957634] armada systemd[1]: bpf-restrict-fs: BPF LSM hook not enabled in the kernel, BPF LSM not supported.
+[    0.957645] armada systemd[1]: /usr/lib/systemd/system/systemd-udevd.service:56: System call bpf cannot be resolved as libseccomp is not available, ignoring: Operation not supported
+[    0.957658] armada systemd[1]: /usr/lib/systemd/system/armada-splash-initrd.service:13: Unit uses KillMode=none. This is unsafe, as it disables systemd's process lifecycle management for the service. Please update the service to use a safer KillMode=, such as 'mixed' or 'control-group'. Support for KillMode=none is deprecated and will eventually be removed.
+[    0.957671] armada systemd[1]: Queued start job for default target initrd.target.
+[    0.957682] armada systemd[1]: Started clevis-luks-askpass.path - Forward Password Requests to Clevis Directory Watch.
+[    0.957693] armada systemd[1]: Started systemd-ask-password-console.path - Dispatch Password Requests to Console Directory Watch.
+[    0.957705] armada systemd[1]: Expecting device dev-disk-by\x2duuid-6c512adc\x2dc48e\x2d434b\x2d9f36\x2dd7a016a7edd5.device - /dev/disk/by-uuid/6c512adc-c48e-434b-9f36-d7a016a7edd5...
+[    0.957716] armada systemd[1]: Reached target initrd-usr-fs.target - Initrd /usr File System.
+[    0.957727] armada systemd[1]: Reached target paths.target - Path Units.
+[    0.957736] armada systemd[1]: Reached target slices.target - Slice Units.
+[    0.957750] armada systemd[1]: Reached target swap.target - Swaps.
+[    0.957761] armada systemd[1]: Reached target timers.target - Timer Units.
+[    0.957772] armada systemd[1]: Listening on dbus.socket - D-Bus System Message Bus Socket.
+[    0.957784] armada systemd[1]: Listening on systemd-journald-dev-log.socket - Journal Socket (/dev/log).
+[    0.957796] armada systemd[1]: Listening on systemd-journald.socket - Journal Sockets.
+[    0.957807] armada systemd[1]: Listening on systemd-udevd-control.socket - udev Control Socket.
+[    0.957817] armada systemd[1]: Listening on systemd-udevd-kernel.socket - udev Kernel Socket.
+[    0.957829] armada systemd[1]: Reached target sockets.target - Socket Units.
+[    0.957840] armada systemd[1]: Starting kmod-static-nodes.service - Create List of Static Device Nodes...
+[    0.957854] armada systemd[1]: memstrack.service - Memstrack Anylazing Service skipped, no trigger condition checks were met.
+[    0.957866] armada systemd[1]: systemd-battery-check.service - Early Battery Level Check skipped, unmet condition check ConditionDirectoryNotEmpty=/sys/class/power_supply
+[    0.957878] armada systemd[1]: Starting systemd-journald.service - Journal Service...
+[    0.957889] armada systemd[1]: Starting systemd-modules-load.service - Load Kernel Modules...
+[    0.957901] armada systemd[1]: systemd-pcrphase-initrd.service - TPM PCR Barrier (initrd) skipped, unmet condition check ConditionSecurity=measured-uki
+[    0.957912] armada systemd[1]: Reached target cryptsetup-pre.target - Local Encrypted Volumes (Pre).
+[    0.957923] armada systemd[1]: Reached target cryptsetup.target - Local Encrypted Volumes.
+[    0.957933] armada systemd[1]: Starting systemd-vconsole-setup.service - Virtual Console Setup...
+[    0.957947] armada systemd[1]: Finished kmod-static-nodes.service - Create List of Static Device Nodes.
+[    0.957957] armada systemd[1]: Starting systemd-tmpfiles-setup-dev-early.service - Create Static Device Nodes in /dev gracefully...
+[    0.957996] armada systemd-journald[242]: Collecting audit messages is disabled.
+[    0.958025] armada kernel: ------------[ cut here ]------------
+[    0.958036] armada kernel: WARNING: mm/shrinker.c:212 at set_shrinker_bit+0xbc/0xd0, CPU#1: systemd-modules/249
+[    0.958049] armada kernel: Modules linked in:
+[    0.958060] armada kernel: CPU: 1 UID: 0 PID: 249 Comm: systemd-modules Tainted: G S      W           7.2.6 #1 PREEMPT 
+[    0.958070] armada kernel: Tainted: [S]=CPU_OUT_OF_SPEC, [W]=WARN
+[    0.958080] armada kernel: Hardware name: Retroid Pocket 6 (DT)
+[    0.958091] armada kernel: pstate: 634000c5 (nZCv daIF +PAN -UAO +TCO +DIT -SSBS BTYPE=--)
+[    0.958102] armada kernel: pc : set_shrinker_bit+0xbc/0xd0
+[    0.958111] armada kernel: lr : set_shrinker_bit+0x3c/0xd0
+[    0.958122] armada kernel: sp : ffff80008284bb40
+[    0.958132] armada kernel: x29: ffff80008284bb40 x28: ffff000802d36780 x27: 0000000000000000
+[    0.958145] armada kernel: x26: 0000000000000000 x25: 0000000000000002 x24: 0000ffffa4000000
+[    0.958155] armada kernel: x23: fffffdffe0460000 x22: ffff000800c3a780 x21: fffffdffe0460000
+[    0.958165] armada kernel: x20: 0000000000000000 x19: 0000000000000000 x18: 0000000000000000
+[    0.958174] armada kernel: x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000200
+[    0.958184] armada kernel: x14: ffff00097efeb580 x13: 0000000000000002 x12: 0000000000000000
+[    0.958192] armada kernel: x11: ffff00080133c448 x10: 0000000000000000 x9 : ffffde3159652ea4
+[    0.958202] armada kernel: x8 : 0000000000000000 x7 : ffff0008013dd080 x6 : ffffde315cfd8678
+[    0.958212] armada kernel: x5 : 0000000000000001 x4 : ffff00080133ca40 x3 : ffff000800964a40
+[    0.958223] armada kernel: x2 : 0000000000000000 x1 : ffff00081014f0a0 x0 : 0000000000000000
+[    0.958234] armada kernel: Call trace:
+[    0.958244] armada kernel:  set_shrinker_bit+0xbc/0xd0 (P)
+[    0.958253] armada kernel:  __list_lru_add.part.0+0xa4/0xb8
+[    0.958262] armada kernel:  __list_lru_add+0x2c/0x48
+[    0.958272] armada kernel:  deferred_split_folio+0x254/0x308
+[    0.958281] armada kernel:  map_anon_folio_pmd_nopf+0xb4/0xe0
+[    0.958292] armada kernel:  map_anon_folio_pmd_pf+0x20/0x138
+[    0.958302] armada kernel:  do_huge_pmd_anonymous_page+0x188/0x5c0
+[    0.958314] armada kernel:  __handle_mm_fault+0x6a0/0x1858
+[    0.958324] armada kernel:  handle_mm_fault+0xe4/0x310
+[    0.958334] armada kernel:  do_page_fault+0x438/0x7b0
+[    0.958344] armada kernel:  do_translation_fault+0x5c/0x90
+[    0.958354] armada kernel:  do_mem_abort+0x48/0xa0
+[    0.958362] armada kernel:  el0_da+0x38/0xd0
+[    0.958372] armada kernel:  el0t_64_sync_handler+0xd0/0xe8
+[    0.958382] armada kernel:  el0t_64_sync+0x198/0x1a0
+[    0.958391] armada kernel: ---[ end trace 0000000000000000 ]---
+[    0.958403] armada systemd[1]: Finished systemd-tmpfiles-setup-dev-early.service - Create Static Device Nodes in /dev gracefully.
+[    0.958415] armada kernel: fuse: init (API version 7.45)
+[    0.958425] armada systemd[1]: Starting systemd-tmpfiles-setup-dev.service - Create Static Device Nodes in /dev...
+[    0.958492] armada kernel: qcom-hv-haptics c400000.spmi:pmic@7:qcom,hv-haptics@f000: Parse device-tree failed, rc = -517
+[    0.958688] armada kernel: rsinput serial1-0: DT axis-range override applied: ±1024
+[    0.958703] armada kernel: input: AYN Odin2 Gamepad as /devices/platform/soc@0/8c0000.geniqup/89c000.serial/89c000.serial:0/89c000.serial:0.0/serial1/serial1-0/input/input5
+[    0.958713] armada systemd[1]: Finished systemd-tmpfiles-setup-dev.service - Create Static Device Nodes in /dev.
+[    0.958729] armada systemd[1]: Reached target local-fs-pre.target - Preparation for Local File Systems.
+[    0.958739] armada systemd[1]: Reached target local-fs.target - Local File Systems.
+[    0.959457] armada systemd[1]: Started systemd-journald.service - Journal Service.
+[    1.160108] armada kernel: [66B blob data]
+[    1.200063] armada kernel: device-mapper: ioctl: 4.50.0-ioctl (2025-04-28) initialised: dm-devel@lists.linux.dev
+[    1.263950] armada kernel: qcom-hv-haptics c400000.spmi:pmic@7:qcom,hv-haptics@f000: Parse device-tree failed, rc = -517
+[    1.265806] armada kernel: qcom-pcie 1c00000.pcie: supply vdda not found, using dummy regulator
+[    1.266481] armada kernel: qcom-pcie 1c00000.pcie: supply vddpe-3v3 not found, using dummy regulator
+[    1.267001] armada kernel: qcom-pcie 1c00000.pcie: host bridge /soc@0/pcie@1c00000 ranges:
+[    1.267530] armada kernel: qcom-pcie 1c00000.pcie:       IO 0x0060200000..0x00602fffff -> 0x0000000000
+[    1.268782] armada kernel: qcom-pcie 1c00000.pcie:      MEM 0x0060300000..0x0063ffffff -> 0x0060300000
+[    1.272070] armada kernel: rsinput serial1-0: MCU parameters set successfully
+[    1.324025] armada kernel: raid6: using neon recovery algorithm
+[    1.392010] armada kernel: raid6: int64x1  gen()  5492 MB/s
+[    1.460021] armada kernel: raid6: int64x2  gen()  9414 MB/s
+[    1.528013] armada kernel: raid6: int64x4  gen() 10319 MB/s
+[    1.596012] armada kernel: raid6: int64x8  gen()  2383 MB/s
+[    1.664024] armada kernel: raid6: neonx1   gen() 12901 MB/s
+[    1.732013] armada kernel: raid6: neonx2   gen()  4517 MB/s
+[    1.800010] armada kernel: raid6: neonx4   gen() 25998 MB/s
+[    1.868009] armada kernel: raid6: neonx8   gen() 15173 MB/s
+[    1.868021] armada kernel: raid6: using algorithm neonx4 gen() 25998 MB/s
+[    1.936011] armada kernel: raid6: .... xor() 22264 MB/s, rmw enabled
+[    1.936021] armada kernel: xor: measuring software checksum speed
+[    1.936033] armada kernel:    eor3            : 43866 MB/sec
+[    1.936045] armada kernel:    32regs          : 35914 MB/sec
+[    1.936056] armada kernel:    8regs           : 39995 MB/sec
+[    1.936068] armada kernel: xor: using function: eor3 (43866 MB/sec)
+[    1.946876] armada kernel: Btrfs loaded, zoned=no, fsverity=no
+[    2.912072] armada kernel: qcom-hv-haptics c400000.spmi:pmic@7:qcom,hv-haptics@f000: Parse device-tree failed, rc = -517
+[    2.916026] armada kernel: qcom-pcie 1c00000.pcie: supply vdda not found, using dummy regulator
+[    2.916210] armada kernel: qcom-pcie 1c00000.pcie: supply vddpe-3v3 not found, using dummy regulator
+[    2.916334] armada kernel: qcom-pcie 1c00000.pcie: host bridge /soc@0/pcie@1c00000 ranges:
+[    2.916446] armada kernel: qcom-pcie 1c00000.pcie:       IO 0x0060200000..0x00602fffff -> 0x0000000000
+[    2.916552] armada kernel: qcom-pcie 1c00000.pcie:      MEM 0x0060300000..0x0063ffffff -> 0x0060300000
+[    2.952035] armada kernel: irq: IRQ198: trimming hierarchy from :soc@0:interrupt-controller@b220000-8
+[    3.012038] armada kernel: qcom-hv-haptics c400000.spmi:pmic@7:qcom,hv-haptics@f000: Parse device-tree failed, rc = -517
+[    3.016109] armada kernel: qcom-pcie 1c00000.pcie: supply vdda not found, using dummy regulator
+[    3.036019] armada kernel: qcom-pcie 1c00000.pcie: supply vddpe-3v3 not found, using dummy regulator
+[    3.052051] armada kernel: qcom-pcie 1c00000.pcie: host bridge /soc@0/pcie@1c00000 ranges:
+[    3.052226] armada kernel: qcom-pcie 1c00000.pcie:       IO 0x0060200000..0x00602fffff -> 0x0000000000
+[    3.052359] armada kernel: qcom-pcie 1c00000.pcie:      MEM 0x0060300000..0x0063ffffff -> 0x0060300000
+[    3.052479] armada kernel: qcom_pmic_glink pmic-glink: Failed to create device link (0x180) with supplier usb0-sbu-mux for /pmic-glink/connector@0
+[    3.060679] armada kernel: qcom-hv-haptics c400000.spmi:pmic@7:qcom,hv-haptics@f000: haptics revision: HAP_CFG 0x400, HAP_PTN 0x400, HAP_HBST 0x2, hw_type 4
+[    3.062468] armada kernel: OF: /soc@0/spmi@c400000/pmic@7/qcom,hv-haptics@f000: Read of boolean property 'qcom,use-erm' with a value.
+[    3.062481] armada kernel: input: qcom-hv-haptics as /devices/platform/soc@0/c400000.spmi/spmi-0/0-07/c400000.spmi:pmic@7:qcom,hv-haptics@f000/input/input9
+[    3.064020] armada kernel: rtc-pm8xxx c400000.spmi:pmic@0:rtc@6100: registered as rtc0
+[    3.065999] armada kernel: rtc-pm8xxx c400000.spmi:pmic@0:rtc@6100: setting system clock to 2026-11-06T02:15:32 UTC (1793931332)
+[    3.076020] armada kernel: msm_dpu ae01000.display-controller: bound ae94000.dsi (ops dsi_ops)
+[    3.076216] armada kernel: qcom-pcie 1c00000.pcie: supply vdda not found, using dummy regulator
+[    3.080077] armada kernel: qcom-pcie 1c00000.pcie: supply vddpe-3v3 not found, using dummy regulator
+[    3.081588] armada kernel: qcom-pcie 1c00000.pcie: host bridge /soc@0/pcie@1c00000 ranges:
+[    3.082889] armada kernel: qcom-pcie 1c00000.pcie:       IO 0x0060200000..0x00602fffff -> 0x0000000000
+[    3.083414] armada kernel: qcom-pcie 1c00000.pcie:      MEM 0x0060300000..0x0063ffffff -> 0x0060300000
+[    3.085154] armada kernel: msm_dpu ae01000.display-controller: bound ae90000.displayport-controller (ops msm_dp_display_comp_ops)
+[    3.086445] armada kernel: adreno 3d00000.gpu: supply vdd not found, using dummy regulator
+[    3.096024] armada kernel: adreno 3d00000.gpu: supply vddcx not found, using dummy regulator
+[    3.120067] armada kernel: msm_dpu ae01000.display-controller: bound 3d00000.gpu (ops a3xx_ops)
+[    3.120311] armada kernel: [drm:dpu_kms_hw_init:1305] dpu hardware revision:0x90000000
+[    3.160014] armada kernel: [drm] Initialized msm 1.13.0 for ae01000.display-controller on minor 0
+[    3.160042] armada kernel: msm_dpu ae01000.display-controller: Direct firmware load for qcom/a740_sqe.fw failed with error -2
+[    3.160220] armada kernel: msm_dpu ae01000.display-controller: [drm:adreno_request_fw] *ERROR* failed to load a740_sqe.fw
+[    3.165114] armada kernel: fbcon: Deferring console take-over
+[    3.165163] armada kernel: msm_dpu ae01000.display-controller: [drm] fb0: msmdrmfb frame buffer device
+[    3.167351] armada kernel: qcom-pcie 1c00000.pcie: supply vdda not found, using dummy regulator
+[    3.167858] armada kernel: qcom-pcie 1c00000.pcie: supply vddpe-3v3 not found, using dummy regulator
+[    3.168322] armada kernel: qcom-pcie 1c00000.pcie: host bridge /soc@0/pcie@1c00000 ranges:
+[    3.168782] armada kernel: qcom-pcie 1c00000.pcie:       IO 0x0060200000..0x00602fffff -> 0x0000000000
+[    3.169233] armada kernel: qcom-pcie 1c00000.pcie:      MEM 0x0060300000..0x0063ffffff -> 0x0060300000
+[    3.476093] armada kernel: msm_dpu ae01000.display-controller: Direct firmware load for qcom/a740_sqe.fw failed with error -2
+[    3.476348] armada kernel: msm_dpu ae01000.display-controller: [drm:adreno_request_fw] *ERROR* failed to load a740_sqe.fw
+[    3.506432] armada kernel: BTRFS: device label root devid 1 transid 294 /dev/mmcblk0p3 (179:3) scanned by mount (601)
+[    3.507515] armada kernel: BTRFS info (device mmcblk0p3): first mount of filesystem 6c512adc-c48e-434b-9f36-d7a016a7edd5
+[    3.507561] armada kernel: BTRFS info (device mmcblk0p3): using crc32c checksum algorithm
+[    3.512304] armada kernel: BTRFS info (device mmcblk0p3): enabling ssd optimizations
+[    3.512356] armada kernel: BTRFS info (device mmcblk0p3): turning on async discard
+[    3.512373] armada kernel: BTRFS info (device mmcblk0p3): enabling free space tree
+[    3.512387] armada kernel: BTRFS info (device mmcblk0p3): use zstd compression, level 1
+[    3.600086] armada kernel: erofs (device 0:38): mounted with root inode @ nid 36.
+[    7.157927] armada systemd-journald[242]: Received SIGTERM from PID 1 (systemd).
+[    7.158065] armada kernel: zram: Added device: zram0
+[    7.158186] armada systemd-journald[732]: Collecting audit messages is enabled.
+[    7.158295] armada kernel: audit: type=1130 audit(1793931336.583:2): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=systemd-modules-load comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[    7.159562] armada kernel: audit: type=1130 audit(1793931336.591:3): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=systemd-journald comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[    7.188072] armada kernel: audit: type=1334 audit(1793931336.619:4): prog-id=38 op=LOAD
+[    7.188110] armada kernel: audit: type=1334 audit(1793931336.619:5): prog-id=39 op=LOAD
+[    7.188131] armada kernel: audit: type=1334 audit(1793931336.619:6): prog-id=40 op=LOAD
+[    7.220053] armada kernel: audit: type=1130 audit(1793931336.651:7): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=armada-esp-rename comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[    7.220112] armada kernel: audit: type=1131 audit(1793931336.651:8): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=armada-esp-rename comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[    7.236089] armada kernel: audit: type=1130 audit(1793931336.667:9): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=systemd-userdbd comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[    7.236241] armada kernel: audit: type=1130 audit(1793931336.667:10): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=systemd-sysctl comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[    7.272020] armada kernel: audit: type=1130 audit(1793931336.703:11): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=lvm2-monitor comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[    7.500013] armada kernel: msm_dpu ae01000.display-controller: [drm:adreno_request_fw] loaded qcom/a740_sqe.fw from new location
+[    7.508026] armada kernel: msm_dpu ae01000.display-controller: [drm:adreno_request_fw] loaded qcom/gmu_gen70200.bin from new location
+[    7.508246] armada kernel: [drm] Loaded GMU firmware v4.1.9
+[    7.552219] armada kernel: synth uevent: /devices/platform/pmic-glink/pmic_glink.power-supply.0/power_supply/battery: failed to send uevent
+[    7.552518] armada kernel: power_supply battery: uevent: failed to send synthetic uevent: -11
+[    7.552740] armada kernel: synth uevent: /devices/platform/pmic-glink/pmic_glink.power-supply.0/power_supply/qcom-battmgr-usb: failed to send uevent
+[    7.552769] armada kernel: power_supply qcom-battmgr-usb: uevent: failed to send synthetic uevent: -11
+[    7.552911] armada kernel: synth uevent: /devices/platform/pmic-glink/pmic_glink.power-supply.0/power_supply/qcom-battmgr-wls: failed to send uevent
+[    7.552921] armada kernel: power_supply qcom-battmgr-wls: uevent: failed to send synthetic uevent: -11
+[    8.008156] armada kernel: loop0: detected capacity change from 0 to 30528
+[    8.008202] armada kernel: zram0: detected capacity change from 0 to 15343616
+[    8.780662] armada systemd-journald[732]: Received client request to flush runtime journal.
+[    8.781136] armada kernel: erofs (device loop0): mounted with root inode @ nid 36.
+[    8.781467] armada kernel: Adding 7671804k swap on /dev/zram0.  Priority:100 extents:1 across:7671804k SSDsc
+[    8.781760] armada systemd-journald[732]: /var/log/journal/51bc849b28324a3bb50efe88bb869de4/system.journal: Realtime clock jumped backwards relative to last journal entry, rotating.
+[    8.781915] armada systemd-journald[732]: Rotating system journal.
+[    8.782046] armada kernel: qcom-pcie 1c00000.pcie: supply vdda not found, using dummy regulator
+[    8.782363] armada kernel: qcom-pcie 1c00000.pcie: supply vddpe-3v3 not found, using dummy regulator
+[    8.782573] armada kernel: qcom-pcie 1c00000.pcie: host bridge /soc@0/pcie@1c00000 ranges:
+[    8.782769] armada kernel: qcom-pcie 1c00000.pcie:       IO 0x0060200000..0x00602fffff -> 0x0000000000
+[    8.782960] armada kernel: qcom-pcie 1c00000.pcie:      MEM 0x0060300000..0x0063ffffff -> 0x0060300000
+[    8.783147] armada kernel: mc: Linux media interface: v0.10
+[    8.783205] armada kernel: qcomtee: QTEE version 5.2.0
+[    8.783252] armada kernel: EXT4-fs (mmcblk0p2): mounted filesystem 24f4f3d0-4a5c-429d-9490-4b7a819b7d7c ro with ordered data mode. Quota mode: none.
+[    8.788025] armada kernel: FAT-fs (mmcblk0p1): Volume was not properly unmounted. Some data may be corrupt. Please run fsck.
+[    8.820022] armada kernel: qcom-pcie 1c00000.pcie: iATU: unroll T, 8 ob, 8 ib, align 4K, limit 1024G
+[    9.020070] armada kernel: qcom-pcie 1c00000.pcie: PCIe Gen.2 x2 link up
+[    9.024221] armada kernel: qcom-pcie 1c00000.pcie: PCI host bridge to bus 0000:00
+[    9.027648] armada kernel: pci_bus 0000:00: root bus resource [bus 00-ff]
+[    9.029449] armada kernel: pci_bus 0000:00: root bus resource [io  0x0000-0xfffff]
+[    9.031359] armada kernel: pci_bus 0000:00: root bus resource [mem 0x60300000-0x63ffffff]
+[    9.033106] armada kernel: pci 0000:00:00.0: [17cb:0113] type 01 class 0x060400 PCIe Root Port
+[    9.035393] armada kernel: pci 0000:00:00.0: BAR 0 [mem 0x00000000-0x00000fff]
+[    9.037504] armada kernel: pci 0000:00:00.0: PCI bridge to [bus 01-ff]
+[    9.039776] armada kernel: pci 0000:00:00.0:   bridge window [io  0x0000-0x0fff]
+[    9.042024] armada kernel: pci 0000:00:00.0:   bridge window [mem 0x00000000-0x000fffff]
+[    9.049918] armada kernel: pci 0000:00:00.0:   bridge window [mem 0x00000000-0x000fffff 64bit pref]
+[    9.051975] armada kernel: pci 0000:00:00.0: PME# supported from D0 D3hot D3cold
+[    9.053963] armada kernel: pci 0000:00:00.0: Adding to iommu group 12
+[    9.056531] armada kernel: pci 0000:01:00.0: [17cb:1107] type 00 class 0x028000 PCIe Endpoint
+[    9.058072] armada kernel: pci 0000:01:00.0: BAR 0 [mem 0x00000000-0x001fffff 64bit]
+[    9.059653] armada kernel: pci 0000:01:00.0: PME# supported from D0 D3hot D3cold
+[    9.061877] armada kernel: pci 0000:01:00.0: Adding to iommu group 12
+[    9.063819] armada kernel: pci 0000:01:00.0: ASPM: default states L0s L1
+[    9.065848] armada kernel: pci 0000:00:00.0: bridge window [io  0x1000-0x0fff] to [bus 01-ff] add_size 1000
+[    9.067661] armada kernel: pci 0000:00:00.0: bridge window [mem 0x00100000-0x000fffff 64bit pref] to [bus 01-ff] add_size 200000 add_align 100000
+[    9.069630] armada kernel: pci 0000:00:00.0: bridge window [mem 0x60400000-0x605fffff]: assigned
+[    9.071342] armada kernel: pci 0000:00:00.0: bridge window [mem 0x60600000-0x607fffff 64bit pref]: assigned
+[    9.073074] armada kernel: pci 0000:00:00.0: BAR 0 [mem 0x60300000-0x60300fff]: assigned
+[    9.074399] armada kernel: pci 0000:00:00.0: bridge window [io  0x1000-0x1fff]: assigned
+[    9.075784] armada kernel: pci 0000:01:00.0: BAR 0 [mem 0x60400000-0x605fffff 64bit]: assigned
+[    9.077092] armada kernel: pci 0000:00:00.0: PCI bridge to [bus 01-ff]
+[    9.078198] armada kernel: pci 0000:00:00.0:   bridge window [io  0x1000-0x1fff]
+[    9.079450] armada kernel: pci 0000:00:00.0:   bridge window [mem 0x60400000-0x605fffff]
+[    9.080729] armada kernel: pci 0000:00:00.0:   bridge window [mem 0x60600000-0x607fffff 64bit pref]
+[    9.081951] armada kernel: pci_bus 0000:00: resource 4 [io  0x0000-0xfffff]
+[    9.082897] armada kernel: pci_bus 0000:00: resource 5 [mem 0x60300000-0x63ffffff]
+[    9.083648] armada kernel: pci_bus 0000:01: resource 0 [io  0x1000-0x1fff]
+[    9.084566] armada kernel: pci_bus 0000:01: resource 1 [mem 0x60400000-0x605fffff]
+[    9.085391] armada kernel: pci_bus 0000:01: resource 2 [mem 0x60600000-0x607fffff 64bit pref]
+[    9.104478] armada kernel: remoteproc remoteproc0: adsp is available
+[    9.105800] armada kernel: remoteproc remoteproc1: cdsp is available
+[    9.136028] armada kernel: cfg80211: Loading compiled-in X.509 certificates for regulatory database
+[    9.152135] armada kernel: Loaded X.509 cert 'sforshee: 00b28ddf47aef9cea7'
+[    9.152345] armada kernel: Loaded X.509 cert 'wens: 61c038651aabdcf94bd0ac7ff06c7248db18c600'
+[    9.164067] armada kernel: videodev: Linux video capture interface: v2.00
+[    9.176109] armada kernel: Bluetooth: Core ver 2.22
+[    9.176182] armada kernel: NET: Registered PF_BLUETOOTH protocol family
+[    9.176200] armada kernel: Bluetooth: HCI device and connection manager initialized
+[    9.176214] armada kernel: Bluetooth: HCI socket layer initialized
+[    9.176227] armada kernel: Bluetooth: L2CAP socket layer initialized
+[    9.176248] armada kernel: Bluetooth: SCO socket layer initialized
+[    9.192275] armada kernel: Bluetooth: HCI UART driver ver 2.3
+[    9.192321] armada kernel: Bluetooth: HCI UART protocol H4 registered
+[    9.192338] armada kernel: Bluetooth: HCI UART protocol LL registered
+[    9.192352] armada kernel: Bluetooth: HCI UART protocol Broadcom registered
+[    9.192365] armada kernel: Bluetooth: HCI UART protocol QCA registered
+[    9.192378] armada kernel: Bluetooth: HCI UART protocol Marvell registered
+[    9.196053] armada kernel: Bluetooth: hci0: setting up wcn7850
+[    9.260045] armada kernel: Bluetooth: hci0: QCA Product ID   :0x00000019
+[    9.260153] armada kernel: Bluetooth: hci0: QCA SOC Version  :0x40170200
+[    9.260189] armada kernel: Bluetooth: hci0: QCA ROM Version  :0x00000200
+[    9.260267] armada kernel: Bluetooth: hci0: QCA Patch Version:0x000043fb
+[    9.268044] armada kernel: Bluetooth: hci0: QCA controller version 0x02000200
+[    9.268173] armada kernel: Bluetooth: hci0: QCA Downloading qca/hmtbtfw20.tlv
+[    9.455139] armada kernel: ath12k_wifi7_pci 0000:01:00.0: BAR 0 [mem 0x60400000-0x605fffff 64bit]: assigned
+[    9.455908] armada kernel: ath12k_wifi7_pci 0000:01:00.0: enabling device (0000 -> 0002)
+[    9.456390] armada kernel: ath12k_wifi7_pci 0000:01:00.0: Wi-Fi 7 Hardware name: wcn7850 hw2.0
+[    9.456785] armada kernel: ath12k_wifi7_pci 0000:01:00.0: MSI vectors: 16
+[    9.516047] armada kernel: mhi mhi0: Requested to power ON
+[    9.517393] armada kernel: mhi mhi0: Power on setup success
+[    9.876798] armada kernel: mhi mhi0: Wait for device to enter SBL or Mission mode
+[   10.052035] armada kernel: remoteproc remoteproc1: powering up cdsp
+[   10.060077] armada kernel: remoteproc remoteproc1: Booting fw image qcom/sm8550/ayn/cdsp.mbn, size 7086504
+[   10.127738] armada kernel: loop1: detected capacity change from 0 to 2655912
+[   10.288083] armada kernel: ath12k_wifi7_pci 0000:01:00.0: chip_id 0x2 chip_family 0x4 board_id 0xff soc_id 0x40170200
+[   10.289658] armada kernel: ath12k_wifi7_pci 0000:01:00.0: fw_version 0x110cffff fw_build_timestamp 2025-06-25 09:26 fw_build_id QC_IMAGE_VERSION_STRING=WLAN.HMT.1.1.c5-00302-QCAHMTSWPL_V1.0_V2.0_SILICONZ-1.115823.3
+[   10.428741] armada kernel: Bluetooth: hci0: QCA Downloading qca/hmtnv20.bin
+[   10.439658] armada kernel: remoteproc remoteproc1: remote processor cdsp is now up
+[   10.442387] armada kernel: qcom,fastrpc 32300000.remoteproc:glink-edge.fastrpcglink-apps-dsp.-1.-1: no reserved DMA memory for FASTRPC
+[   10.452636] armada kernel: platform 32300000.remoteproc:glink-edge:fastrpc:compute-cb@1: Adding to iommu group 13
+[   10.453497] armada kernel: platform 32300000.remoteproc:glink-edge:fastrpc:compute-cb@2: Adding to iommu group 14
+[   10.460179] armada kernel: platform 32300000.remoteproc:glink-edge:fastrpc:compute-cb@3: Adding to iommu group 15
+[   10.464072] armada kernel: platform 32300000.remoteproc:glink-edge:fastrpc:compute-cb@4: Adding to iommu group 16
+[   10.476049] armada kernel: platform 32300000.remoteproc:glink-edge:fastrpc:compute-cb@5: Adding to iommu group 17
+[   10.476371] armada kernel: platform 32300000.remoteproc:glink-edge:fastrpc:compute-cb@6: Adding to iommu group 18
+[   10.480097] armada kernel: platform 32300000.remoteproc:glink-edge:fastrpc:compute-cb@7: Adding to iommu group 19
+[   10.481911] armada kernel: platform 32300000.remoteproc:glink-edge:fastrpc:compute-cb@8: Adding to iommu group 20
+[   10.680275] armada kernel: ath12k_wifi7_pci 0000:01:00.0: Generated MAC_ADDR: 00:03:7f:44:70:00
+[   10.681649] armada kernel: ath12k_wifi7_pci 0000:01:00.0: MAC_ADDR set to 00:03:7f:44:70:00
+[   10.691551] armada kernel: ath12k_wifi7_pci 0000:01:00.0 wlp1s0: renamed from wlan0
+[   10.969330] armada kernel: Bluetooth: hci0: QCA FW build version: BTFW.HAMILTON.2.0.1-00349-WOS_PATCHZ-2
+[   10.969549] armada kernel: Bluetooth: hci0: Generated BD_ADDR: 00:03:7f:00:70:44
+[   10.972083] armada kernel: Bluetooth: hci0: BD_ADDR set to 00:03:7f:00:70:44
+[   10.972224] armada kernel: Bluetooth: hci0: QCA setup on UART is completed
+[   10.972296] armada kernel: Bluetooth: hci0: HFP non-HCI data transport is supported
+[   11.614571] armada kernel: loop2: detected capacity change from 0 to 39448
+[   12.532051] armada kernel: Bluetooth: MGMT ver 1.23
+[   12.932045] armada kernel: remoteproc remoteproc0: powering up adsp
+[   12.968043] armada kernel: remoteproc remoteproc0: Booting fw image qcom/sm8550/retroidpocket/rp6/adsp.mbn, size 28494168
+[   12.996132] armada kernel: kauditd_printk_skb: 64 callbacks suppressed
+[   12.996168] armada kernel: audit: type=1130 audit(1793931342.427:76): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=systemd-hostnamed comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   12.996215] armada kernel: audit: type=1130 audit(1793931342.427:77): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=chronyd comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   12.996243] armada kernel: audit: type=1130 audit(1793931342.427:78): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=systemd-logind comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   13.000043] armada kernel: audit: type=1130 audit(1793931342.431:79): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=armada-guestos comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   13.000088] armada kernel: audit: type=1130 audit(1793931342.431:80): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=armada-update-reserve comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   13.000147] armada kernel: audit: type=1131 audit(1793931342.431:81): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=armada-update-reserve comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   13.000169] armada kernel: audit: type=1130 audit(1793931342.431:82): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dracut-shutdown comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   13.000196] armada kernel: audit: type=1130 audit(1793931342.431:83): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=rtkit-daemon comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   13.008047] armada kernel: audit: type=1130 audit(1793931342.439:84): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=steamos-manager comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   13.012043] armada kernel: audit: type=1130 audit(1793931342.443:85): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=systemd-homed comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   13.292709] armada kernel: remoteproc remoteproc0: remote processor adsp is now up
+[   13.310986] armada kernel: qcom,fastrpc 6800000.remoteproc:glink-edge.fastrpcglink-apps-dsp.-1.-1: no reserved DMA memory for FASTRPC
+[   13.329830] armada kernel: platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@3: Adding to iommu group 21
+[   13.348054] armada kernel: platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@4: Adding to iommu group 22
+[   13.348418] armada kernel: PDR: Indication received from msm/adsp/charger_pd, state: 0x1fffffff, trans-id: 1
+[   13.352084] armada kernel: platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@5: Adding to iommu group 23
+[   13.356048] armada kernel: platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@6: Adding to iommu group 24
+[   13.356412] armada kernel: platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@7: Adding to iommu group 25
+[   13.364041] armada kernel: qcom,apr 6800000.remoteproc:glink-edge.adsp_apps.-1.-1: Adding APR/GPR dev: gprsvc:service:2:1
+[   13.364286] armada kernel: qcom,apr 6800000.remoteproc:glink-edge.adsp_apps.-1.-1: Adding APR/GPR dev: gprsvc:service:2:2
+[   13.380046] armada kernel: qcom_q6v5_pas 6800000.remoteproc: Handover signaled, but it already happened
+[   14.680110] armada kernel: input: InputPlumber Keyboard as /devices/virtual/input/input10
+[   14.680317] armada kernel: input: Microsoft X-Box One Elite 2 pad as /devices/virtual/input/input11
+[   15.532050] armada kernel: hid-generic 0003:28DE:12F0.0001: hidraw0: USB HID v10.00 Device [Generic Steam Controller] on 
+[   17.752053] armada kernel: xhci-hcd xhci-hcd.2.auto: xHCI Host Controller
+[   17.752473] armada kernel: xhci-hcd xhci-hcd.2.auto: new USB bus registered, assigned bus number 1
+[   17.756043] armada kernel: xhci-hcd xhci-hcd.2.auto: hcc params 0x0110ffc5 hci version 0x110 quirks 0x0000808020000810
+[   17.756465] armada kernel: xhci-hcd xhci-hcd.2.auto: irq 194, io mem 0x0a600000
+[   17.756747] armada kernel: xhci-hcd xhci-hcd.2.auto: xHCI Host Controller
+[   17.756976] armada kernel: xhci-hcd xhci-hcd.2.auto: new USB bus registered, assigned bus number 2
+[   17.757266] armada kernel: xhci-hcd xhci-hcd.2.auto: Host supports USB 3.1 Enhanced SuperSpeed
+[   17.757508] armada kernel: hub 1-0:1.0: USB hub found
+[   17.757806] armada kernel: hub 1-0:1.0: 1 port detected
+[   17.758061] armada kernel: hub 2-0:1.0: USB hub found
+[   17.758336] armada kernel: hub 2-0:1.0: 1 port detected
+[   18.004153] armada kernel: usb 1-1: new high-speed USB device number 2 using xhci-hcd
+[   18.056028] armada kernel: kauditd_printk_skb: 35 callbacks suppressed
+[   18.056066] armada kernel: audit: type=1131 audit(1793931347.487:117): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=armada-splash-early comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   18.204060] armada kernel: hub 1-1:1.0: USB hub found
+[   18.204370] armada kernel: hub 1-1:1.0: 4 ports detected
+[   18.328191] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR RFB STORAGE ERROR
+[   18.328294] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR IRQ_HPD received
+[   18.492060] armada kernel: usb 1-1.1: new full-speed USB device number 3 using xhci-hcd
+[   18.636440] armada kernel: usb 1-1.1: not running at top speed; connect to a high speed hub
+[   18.656154] armada kernel: qcom-apm gprsvc:service:2:1: CMD timeout for [1001021] opcode
+[   18.658625] armada kernel: platform 6800000.remoteproc:glink-edge:gpr:service@1:dais: Adding to iommu group 26
+[   18.772082] armada kernel: rx_macro 6ac0000.codec: Driver needs fixing: Unsorted reg_defaults, sorting the copy
+[   18.773197] armada kernel: wsa_macro 6aa0000.codec: Driver needs fixing: Unsorted reg_defaults, sorting the copy
+[   18.784055] armada kernel: qcom-soundwire 6d30000.soundwire: dout-ports (0) mismatch with controller (1)
+[   18.784913] armada kernel: wcd938x_codec audio-codec: bound sdw:2:0:0217:010d:00:4 (ops wcd_sdw_component_ops [snd_soc_wcd_common])
+[   18.785780] armada kernel: wcd938x_codec audio-codec: bound sdw:3:0:0217:010d:00:3 (ops wcd_sdw_component_ops [snd_soc_wcd_common])
+[   18.852052] armada kernel: usb 1-1.2: new high-speed USB device number 4 using xhci-hcd
+[   18.892161] armada kernel: audit: type=1131 audit(1793931348.323:118): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=bootc-generic-growpart comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   18.956058] armada kernel: usb-storage 1-1.2:1.0: USB Mass Storage device detected
+[   18.957027] armada kernel: scsi host1: usb-storage 1-1.2:1.0
+[   19.032033] armada kernel: usb 1-1.3: new high-speed USB device number 5 using xhci-hcd
+[   19.088172] armada kernel: audit: type=1131 audit(1793931348.519:119): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=run-p946-i28752 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   19.124033] armada kernel: audit: type=1131 audit(1793931348.555:120): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=run-p944-i12493 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   19.144022] armada kernel: audit: type=1131 audit(1793931348.575:121): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=run-p943-i4192 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   19.164110] armada kernel: hub 1-1.3:1.0: USB hub found
+[   19.164989] armada kernel: hub 1-1.3:1.0: 5 ports detected
+[   19.904044] armada kernel: snd-sc8280xp sound: ASoC: Parent card not yet available, widget card binding deferred
+[   19.920156] armada kernel: usb 1-1.3.2: new high-speed USB device number 6 using xhci-hcd
+[   19.928034] armada kernel: ALSA: Control name 'stream0.vol_ctrl0 MultiMedia1 Playback Volume' truncated to 'stream0.vol_ctrl0 MultiMedia1 Playback Volu'
+[   19.928089] armada kernel: ALSA: Control name 'stream1.vol_ctrl1 MultiMedia2 Playback Volume' truncated to 'stream1.vol_ctrl1 MultiMedia2 Playback Volu'
+[   19.928144] armada kernel: input: AYN-Odin2 Headset Jack as /devices/platform/sound/sound/card0/input12
+[   19.928159] armada kernel: input: AYN-Odin2 DP0 Jack as /devices/platform/sound/sound/card0/input13
+[   19.968036] armada kernel: scsi 1:0:0:0: Direct-Access     Netac    MobileDataStar   1101 PQ: 0 ANSI: 6
+[   20.140027] armada kernel: audit: type=1130 audit(1793931349.571:122): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=alsa-state comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   20.188094] armada kernel: input: IO IO Type 68 Magnetic BL as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.2/1-1.3.2:1.0/0003:0C45:0256.0002/input/input14
+[   20.328043] armada kernel: hid-generic 0003:0C45:0256.0002: input,hidraw1: USB HID v1.10 Keyboard [IO IO Type 68 Magnetic BL] on usb-xhci-hcd.2.auto-1.3.2/input0
+[   20.328454] armada kernel: input: IO IO Type 68 Magnetic BL Consumer Control as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.2/1-1.3.2:1.1/0003:0C45:0256.0003/input/input15
+[   20.388025] armada kernel: input: IO IO Type 68 Magnetic BL System Control as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.2/1-1.3.2:1.1/0003:0C45:0256.0003/input/input16
+[   20.388057] armada kernel: input: IO IO Type 68 Magnetic BL Keyboard as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.2/1-1.3.2:1.1/0003:0C45:0256.0003/input/input17
+[   20.388074] armada kernel: input: IO IO Type 68 Magnetic BL Mouse as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.2/1-1.3.2:1.1/0003:0C45:0256.0003/input/input18
+[   20.388090] armada kernel: hid-generic 0003:0C45:0256.0003: input,hidraw2: USB HID v1.10 Keyboard [IO IO Type 68 Magnetic BL] on usb-xhci-hcd.2.auto-1.3.2/input1
+[   20.388538] armada kernel: hid-generic 0003:0C45:0256.0004: hidraw3: USB HID v1.10 Device [IO IO Type 68 Magnetic BL] on usb-xhci-hcd.2.auto-1.3.2/input2
+[   20.388818] armada kernel: usbhid 1-1.3.2:1.3: couldn't find an input interrupt endpoint
+[   20.472092] armada kernel: sd 1:0:0:0: [sdg] 976773168 512-byte logical blocks: (500 GB/466 GiB)
+[   20.472429] armada kernel: sd 1:0:0:0: [sdg] Write Protect is off
+[   20.472602] armada kernel: sd 1:0:0:0: [sdg] Mode Sense: 47 00 00 08
+[   20.472761] armada kernel: sd 1:0:0:0: [sdg] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+[   20.516033] armada kernel:  sdg: sdg1 sdg2
+[   20.516091] armada kernel: sd 1:0:0:0: [sdg] Attached SCSI disk
+[   20.588030] armada kernel: usb 1-1.3.4: new full-speed USB device number 7 using xhci-hcd
+[   20.768120] armada kernel: input: Compx 2.4G Wireless Receiver as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.4/1-1.3.4:1.0/0003:25A7:FA07.0005/input/input19
+[   20.768207] armada kernel: hid-generic 0003:25A7:FA07.0005: input,hidraw4: USB HID v1.10 Mouse [Compx 2.4G Wireless Receiver] on usb-xhci-hcd.2.auto-1.3.4/input0
+[   20.772029] armada kernel: input: Compx 2.4G Wireless Receiver Keyboard as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.4/1-1.3.4:1.1/0003:25A7:FA07.0006/input/input20
+[   20.828036] armada kernel: input: Compx 2.4G Wireless Receiver as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.4/1-1.3.4:1.1/0003:25A7:FA07.0006/input/input21
+[   20.828094] armada kernel: input: Compx 2.4G Wireless Receiver as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.4/1-1.3.4:1.1/0003:25A7:FA07.0006/input/input22
+[   20.828118] armada kernel: hid-generic 0003:25A7:FA07.0006: input,hidraw5: USB HID v1.10 Keyboard [Compx 2.4G Wireless Receiver] on usb-xhci-hcd.2.auto-1.3.4/input1
+[   20.920034] armada kernel: usb 1-1.3.5: new high-speed USB device number 8 using xhci-hcd
+[   21.088042] armada kernel: hid-generic 0003:0424:274B.0007: hidraw6: USB HID v1.10 Device [Microchip Tech Hub Controller] on usb-xhci-hcd.2.auto-1.3.5/input0
+[   22.440220] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR RFB STORAGE ERROR
+[   22.440359] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR IRQ_HPD received
+[   22.584094] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR RFB STORAGE ERROR
+[   22.584216] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR IRQ_HPD received
+[   22.724182] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR RFB STORAGE ERROR
+[   22.724285] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR IRQ_HPD received
+[   22.948675] armada kernel: wlp1s0: authenticate with a6:39:b3:70:cb:2d (local address=00:03:7f:44:70:00)
+[   22.948886] armada kernel: wlp1s0: send auth to a6:39:b3:70:cb:2d (try 1/3)
+[   22.956077] armada kernel: wlp1s0: authenticated
+[   22.956144] armada kernel: wlp1s0: associate with a6:39:b3:70:cb:2d (try 1/3)
+[   22.964055] armada kernel: wlp1s0: RX AssocResp from a6:39:b3:70:cb:2d (capab=0x11 status=0 aid=5)
+[   22.984166] armada kernel: wlp1s0: associated
+[   23.080034] armada kernel: audit: type=1334 audit(1793931352.507:123): prog-id=63 op=LOAD
+[   23.080094] armada kernel: audit: type=1300 audit(1793931352.507:123): arch=c00000b7 syscall=280 success=yes exit=25 a0=5 a1=ffffca884178 a2=a8 a3=7f items=0 ppid=1 pid=1191 auid=4294967295 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=(none) ses=4294967295 comm="NetworkManager" exe="/usr/bin/NetworkManager" key=(null)
+[   23.080137] armada kernel: audit: type=1327 audit(1793931352.507:123): proctitle=2F7573722F62696E2F4E6574776F726B4D616E61676572002D2D6E6F2D6461656D6F6E
+[   23.272041] armada kernel: audit: type=1334 audit(1793931352.699:124): prog-id=64 op=LOAD
+[   23.272088] armada kernel: audit: type=1300 audit(1793931352.699:124): arch=c00000b7 syscall=280 success=yes exit=25 a0=5 a1=ffffca884178 a2=a8 a3=7f items=0 ppid=1 pid=1191 auid=4294967295 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=(none) ses=4294967295 comm="NetworkManager" exe="/usr/bin/NetworkManager" key=(null)
+[   23.272126] armada kernel: audit: type=1327 audit(1793931352.699:124): proctitle=2F7573722F62696E2F4E6574776F726B4D616E61676572002D2D6E6F2D6461656D6F6E
+[   23.284152] armada kernel: audit: type=1334 audit(1793931352.711:125): prog-id=63 op=UNLOAD
+[   23.284444] armada kernel: audit: type=1300 audit(1793931352.711:125): arch=c00000b7 syscall=208 success=yes exit=0 a0=15 a1=1 a2=1a a3=ffffca882da0 items=0 ppid=1 pid=1191 auid=4294967295 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=(none) ses=4294967295 comm="NetworkManager" exe="/usr/bin/NetworkManager" key=(null)
+[   23.284783] armada kernel: audit: type=1327 audit(1793931352.711:125): proctitle=2F7573722F62696E2F4E6574776F726B4D616E61676572002D2D6E6F2D6461656D6F6E
+[   25.344165] armada kernel: soundwire sdw-master-2-0: clock stop deprepare wait failed:-110
+[   27.029170] armada kernel: fb0: Framebuffer is not in virtual address space.
+[   27.029698] armada kernel:  MultiMedia1 Playback: ASoC: no backend DAIs enabled for MultiMedia1 Playback, possibly missing ALSA mixer-based routing or UCM profile
+[   27.220080] armada kernel: Bluetooth: RFCOMM socket layer initialized
+[   27.220317] armada kernel: Bluetooth: RFCOMM ver 1.11
+[   29.047532] armada systemd-journald[732]: Time jumped backwards, rotating.
+[   29.047758] armada kernel: gcc-sm8550 100000.clock-controller: sync_state() pending due to 3d6a000.gmu
+[   29.048765] armada kernel: gpu_cc-sm8550 3d90000.clock-controller: sync_state() pending due to 3d6a000.gmu
+[   31.712062] armada kernel: hap-swr-slave-reg: disabling
+[   33.572148] armada kernel: audit: type=1131 audit(1793931360.371:126): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=NetworkManager-dispatcher comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   47.900061] armada kernel: audit: type=1131 audit(1793931374.698:127): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=systemd-hostnamed comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   47.960348] armada kernel: audit: type=1334 audit(1793931374.758:128): prog-id=59 op=UNLOAD
+[  111.920068] armada kernel: audit: type=1701 audit(1793931438.720:129): auid=1000 uid=1000 gid=1000 ses=2 pid=2607 comm="mangoapp" exe="/usr/bin/mangoapp" sig=6 res=1
+[  111.964046] armada kernel: audit: type=1334 audit(1793931438.764:130): prog-id=65 op=LOAD
+[  111.964138] armada kernel: audit: type=1334 audit(1793931438.764:131): prog-id=66 op=LOAD
+[  111.964198] armada kernel: audit: type=1334 audit(1793931438.764:132): prog-id=67 op=LOAD
+[  111.968052] armada kernel: audit: type=1130 audit(1793931438.768:133): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=systemd-coredump@0-1-4933_29326-0 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  112.018054] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR RFB STORAGE ERROR
+[  112.018267] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR IRQ_HPD received
+[  112.112054] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR RFB STORAGE ERROR
+[  112.112258] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR IRQ_HPD received
+[  112.534047] armada kernel: audit: type=1106 audit(1793931439.336:134): pid=1700 uid=0 auid=1000 ses=1 msg='op=PAM:session_close grantors=pam_selinux,pam_loginuid,pam_selinux,pam_keyinit,pam_namespace,pam_keyinit,pam_limits,pam_systemd,pam_unix,pam_umask,pam_lastlog2 acct="armada" exe="/usr/libexec/sddm-helper" hostname=armada addr=? terminal=/dev/tty1 res=success'
+[  112.534109] armada kernel: audit: type=1104 audit(1793931439.336:135): pid=1700 uid=0 auid=1000 ses=1 msg='op=PAM:setcred grantors=pam_permit acct="armada" exe="/usr/libexec/sddm-helper" hostname=armada addr=? terminal=/dev/tty1 res=success'
+[  112.612024] armada kernel: audit: type=1100 audit(1793931439.412:136): pid=4971 uid=0 auid=4294967295 ses=4294967295 msg='op=PAM:authentication grantors=pam_permit acct="armada" exe="/usr/libexec/sddm-helper" hostname=? addr=? terminal=? res=success'
+[  112.616304] armada kernel: audit: type=1101 audit(1793931439.416:137): pid=4971 uid=0 auid=4294967295 ses=4294967295 msg='op=PAM:accounting grantors=pam_unix acct="armada" exe="/usr/libexec/sddm-helper" hostname=? addr=? terminal=? res=success'
+[  112.616404] armada kernel: audit: type=1103 audit(1793931439.416:138): pid=4971 uid=0 auid=4294967295 ses=4294967295 msg='op=PAM:setcred grantors=pam_permit acct="armada" exe="/usr/libexec/sddm-helper" hostname=? addr=? terminal=? res=success'
+[  114.468865] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR RFB STORAGE ERROR
+[  114.469114] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR IRQ_HPD received
+[  114.582319] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR RFB STORAGE ERROR
+[  114.582538] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR IRQ_HPD received
+[  114.696840] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR RFB STORAGE ERROR
+[  114.697076] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR IRQ_HPD received
+[  120.604102] armada kernel: kauditd_printk_skb: 14 callbacks suppressed
+[  120.604143] armada kernel: audit: type=1130 audit(1793931447.403:151): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=user-runtime-dir@0 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  120.632035] armada kernel: audit: type=1105 audit(1793931447.431:152): pid=5515 uid=1000 auid=1000 ses=2 msg='op=PAM:session_open grantors=pam_keyinit,pam_limits,pam_systemd,pam_unix acct="root" exe="/usr/bin/pkexec" hostname=? addr=? terminal=? res=success'
+[  120.772026] armada kernel: audit: type=1123 audit(1793931447.571:153): pid=5549 uid=1000 auid=1000 ses=2 msg='cwd="/var/home/armada/.local/share/Steam" cmd=746565202F7379732F636C6173732F6261636B6C696768742F616539343030302E6473692E302F6272696768746E657373 exe="/usr/bin/sudo" terminal=? res=failed'
+[  121.220029] armada kernel: audit: type=1130 audit(1793931448.019:154): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=NetworkManager-dispatcher comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  122.356165] armada kernel: audit: type=1131 audit(1793931449.155:155): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=armada-splash-stall comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  122.460069] armada kernel: audit: type=1105 audit(1793931449.259:156): pid=5764 uid=1000 auid=1000 ses=2 msg='op=PAM:session_open grantors=pam_keyinit,pam_limits,pam_systemd,pam_unix acct="root" exe="/usr/bin/pkexec" hostname=? addr=? terminal=? res=success'
+[  122.508050] armada kernel: audit: type=1123 audit(1793931449.307:157): pid=5793 uid=1000 auid=1000 ses=2 msg='cwd="/var/home/armada/.local/share/Steam" cmd=746565202F7379732F636C6173732F6261636B6C696768742F616539343030302E6473692E302F6272696768746E657373 exe="/usr/bin/sudo" terminal=? res=failed'
+[  122.544030] armada kernel: audit: type=1131 audit(1793931449.343:158): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=armada-boot-hotkeys comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  122.632089] armada kernel: audit: type=1105 audit(1793931449.431:159): pid=5800 uid=1000 auid=1000 ses=2 msg='op=PAM:session_open grantors=pam_keyinit,pam_limits,pam_systemd,pam_unix acct="root" exe="/usr/bin/pkexec" hostname=? addr=? terminal=? res=success'
+[  122.684545] armada kernel: audit: type=1123 audit(1793931449.483:160): pid=5825 uid=1000 auid=1000 ses=2 msg='cwd="/var/home/armada/.local/share/Steam" cmd=746565202F7379732F636C6173732F6261636B6C696768742F616539343030302E6473692E302F6272696768746E657373 exe="/usr/bin/sudo" terminal=? res=failed'
+[  125.608038] armada kernel: kauditd_printk_skb: 38 callbacks suppressed
+[  125.608078] armada kernel: audit: type=1105 audit(1793931452.407:199): pid=6456 uid=1000 auid=1000 ses=2 msg='op=PAM:session_open grantors=pam_keyinit,pam_limits,pam_systemd,pam_unix acct="root" exe="/usr/bin/pkexec" hostname=? addr=? terminal=? res=success'
+[  125.664086] armada kernel: audit: type=1123 audit(1793931452.463:200): pid=6480 uid=1000 auid=1000 ses=2 msg='cwd="/var/home/armada/.local/share/Steam" cmd=746565202F7379732F636C6173732F6261636B6C696768742F616539343030302E6473692E302F6272696768746E657373 exe="/usr/bin/sudo" terminal=? res=failed'
+[  125.772212] armada kernel: audit: type=1105 audit(1793931452.571:201): pid=6489 uid=1000 auid=1000 ses=2 msg='op=PAM:session_open grantors=pam_keyinit,pam_limits,pam_systemd,pam_unix acct="root" exe="/usr/bin/pkexec" hostname=? addr=? terminal=? res=success'
+[  125.804050] armada kernel: audit: type=1123 audit(1793931452.603:202): pid=6516 uid=1000 auid=1000 ses=2 msg='cwd="/var/home/armada/.local/share/Steam" cmd=746565202F7379732F636C6173732F6261636B6C696768742F616539343030302E6473692E302F6272696768746E657373 exe="/usr/bin/sudo" terminal=? res=failed'
+[  125.932039] armada kernel: audit: type=1105 audit(1793931452.731:203): pid=6522 uid=1000 auid=1000 ses=2 msg='op=PAM:session_open grantors=pam_keyinit,pam_limits,pam_systemd,pam_unix acct="root" exe="/usr/bin/pkexec" hostname=? addr=? terminal=? res=success'
+[  125.965008] armada kernel: audit: type=1123 audit(1793931452.763:204): pid=6544 uid=1000 auid=1000 ses=2 msg='cwd="/var/home/armada/.local/share/Steam" cmd=746565202F7379732F636C6173732F6261636B6C696768742F616539343030302E6473692E302F6272696768746E657373 exe="/usr/bin/sudo" terminal=? res=failed'
+[  126.068040] armada kernel: audit: type=1105 audit(1793931452.867:205): pid=6552 uid=1000 auid=1000 ses=2 msg='op=PAM:session_open grantors=pam_keyinit,pam_limits,pam_systemd,pam_unix acct="root" exe="/usr/bin/pkexec" hostname=? addr=? terminal=? res=success'
+[  126.100072] armada kernel: audit: type=1123 audit(1793931452.899:206): pid=6576 uid=1000 auid=1000 ses=2 msg='cwd="/var/home/armada/.local/share/Steam" cmd=746565202F7379732F636C6173732F6261636B6C696768742F616539343030302E6473692E302F6272696768746E657373 exe="/usr/bin/sudo" terminal=? res=failed'
+[  126.180075] armada kernel: audit: type=1105 audit(1793931452.979:207): pid=6583 uid=1000 auid=1000 ses=2 msg='op=PAM:session_open grantors=pam_keyinit,pam_limits,pam_systemd,pam_unix acct="root" exe="/usr/bin/pkexec" hostname=? addr=? terminal=? res=success'
+[  126.224101] armada kernel: audit: type=1123 audit(1793931453.023:208): pid=6604 uid=1000 auid=1000 ses=2 msg='cwd="/var/home/armada/.local/share/Steam" cmd=746565202F7379732F636C6173732F6261636B6C696768742F616539343030302E6473692E302F6272696768746E657373 exe="/usr/bin/sudo" terminal=? res=failed'
+[  131.256055] armada kernel: kauditd_printk_skb: 9 callbacks suppressed
+[  131.256106] armada kernel: audit: type=1131 audit(1793931458.055:218): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=NetworkManager-dispatcher comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  133.204031] armada kernel: input: Microsoft X-Box 360 pad 0 as /devices/virtual/input/input23
+[  136.640024] armada kernel: audit: type=1131 audit(1793931463.439:219): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=user-runtime-dir@0 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  143.820085] armada kernel: audit: type=1131 audit(1793931470.619:220): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=systemd-hostnamed comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  143.900111] armada kernel: audit: type=1334 audit(1793931470.699:221): prog-id=68 op=UNLOAD
+[  158.124055] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR RFB STORAGE ERROR
+[  158.124501] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR IRQ_HPD received
+[  158.222736] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR RFB STORAGE ERROR
+[  158.225025] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR IRQ_HPD received
+[  160.780074] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR RFB STORAGE ERROR
+[  160.780417] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR IRQ_HPD received
+[  160.868051] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR RFB STORAGE ERROR
+[  160.868381] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR IRQ_HPD received
+[  160.964087] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR RFB STORAGE ERROR
+[  160.964339] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR IRQ_HPD received
+[  161.052170] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR RFB STORAGE ERROR
+[  161.052372] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR IRQ_HPD received
+[  174.476023] armada kernel: audit: type=1106 audit(1793931501.277:222): pid=4971 uid=0 auid=1000 ses=3 msg='op=PAM:session_close grantors=pam_selinux,pam_loginuid,pam_selinux,pam_keyinit,pam_namespace,pam_keyinit,pam_limits,pam_systemd,pam_unix,pam_umask,pam_lastlog2 acct="armada" exe="/usr/libexec/sddm-helper" hostname=armada addr=? terminal=/dev/tty1 res=success'
+[  174.476076] armada kernel: audit: type=1104 audit(1793931501.277:223): pid=4971 uid=0 auid=1000 ses=3 msg='op=PAM:setcred grantors=pam_permit acct="armada" exe="/usr/libexec/sddm-helper" hostname=armada addr=? terminal=/dev/tty1 res=success'
+[  174.524275] armada kernel: audit: type=1100 audit(1793931501.325:224): pid=7360 uid=0 auid=4294967295 ses=4294967295 msg='op=PAM:authentication grantors=pam_permit acct="armada" exe="/usr/libexec/sddm-helper" hostname=? addr=? terminal=? res=success'
+[  174.528044] armada kernel: audit: type=1101 audit(1793931501.329:225): pid=7360 uid=0 auid=4294967295 ses=4294967295 msg='op=PAM:accounting grantors=pam_unix acct="armada" exe="/usr/libexec/sddm-helper" hostname=? addr=? terminal=? res=success'
+[  174.528692] armada kernel: audit: type=1103 audit(1793931501.333:226): pid=7360 uid=0 auid=4294967295 ses=4294967295 msg='op=PAM:setcred grantors=pam_permit acct="armada" exe="/usr/libexec/sddm-helper" hostname=? addr=? terminal=? res=success'
+[  174.528776] armada kernel: audit: type=1006 audit(1793931501.333:227): pid=7360 uid=0 old-auid=4294967295 auid=1000 tty=(none) old-ses=4294967295 ses=4 res=1
+[  174.528860] armada kernel: audit: type=1300 audit(1793931501.333:227): arch=c00000b7 syscall=64 success=yes exit=4 a0=c a1=ffffc4161ef0 a2=4 a3=0 items=0 ppid=1679 pid=7360 auid=1000 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=(none) ses=4 comm="sddm-helper" exe="/usr/libexec/sddm-helper" key=(null)
+[  174.528936] armada kernel: audit: type=1327 audit(1793931501.333:227): proctitle=2F7573722F6C6962657865632F7364646D2D68656C706572002D2D736F636B6574002F746D702F7364646D2D617574682D62613366636231642D393563372D346338312D613566322D656230323632306231643432002D2D69640033002D2D7374617274002F7573722F6C6962657865632F61726D6164612F61726D6164612D
+[  174.592015] armada kernel: audit: type=1105 audit(1793931501.393:228): pid=7360 uid=0 auid=1000 ses=4 msg='op=PAM:session_open grantors=pam_selinux,pam_loginuid,pam_selinux,pam_keyinit,pam_namespace,pam_keyinit,pam_limits,pam_systemd,pam_unix,pam_umask,pam_lastlog2 acct="armada" exe="/usr/libexec/sddm-helper" hostname=armada addr=? terminal=/dev/tty1 res=success'
+[  174.608064] armada kernel: audit: type=1334 audit(1793931501.409:229): prog-id=70 op=UNLOAD
+[  174.992084] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR RFB STORAGE ERROR
+[  174.992299] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR IRQ_HPD received
+[  175.151985] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR RFB STORAGE ERROR
+[  175.152139] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR IRQ_HPD received
+[  179.496750] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR RFB STORAGE ERROR
+[  179.497088] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR IRQ_HPD received
+[  183.540023] armada kernel: kauditd_printk_skb: 9 callbacks suppressed
+[  183.540067] armada kernel: audit: type=1130 audit(1793931510.341:239): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.discretegpuhelper@0 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  183.672039] armada kernel: audit: type=1130 audit(1793931510.473:240): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.chargethresholdhelper@0 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  183.776019] armada kernel: audit: type=1130 audit(1793931510.577:241): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.backlighthelper@0 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  194.020050] armada kernel: audit: type=1131 audit(1793931520.820:242): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.discretegpuhelper@0 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  194.024078] armada kernel: audit: type=1131 audit(1793931520.824:243): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.backlighthelper@0 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  195.006117] armada kernel: audit: type=1131 audit(1793931521.808:244): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.chargethresholdhelper@0 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  199.551728] armada kernel: audit: type=1130 audit(1793931526.352:245): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=user-runtime-dir@0 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  199.552718] armada kernel: audit: type=1105 audit(1793931526.356:246): pid=8044 uid=1000 auid=1000 ses=2 msg='op=PAM:session_open grantors=pam_keyinit,pam_limits,pam_systemd,pam_unix acct="root" exe="/usr/bin/pkexec" hostname=? addr=? terminal=? res=success'
+[  199.580432] armada kernel: audit: type=1105 audit(1793931526.380:247): pid=8052 uid=1000 auid=1000 ses=2 msg='op=PAM:session_open grantors=pam_keyinit,pam_limits,pam_systemd,pam_unix acct="root" exe="/usr/bin/pkexec" hostname=? addr=? terminal=? res=success'
+[  200.016052] armada kernel: EXT4-fs (mmcblk0p2): re-mounted 24f4f3d0-4a5c-429d-9490-4b7a819b7d7c r/w.
+[  204.716299] armada kernel: audit: type=1131 audit(1793931531.515:248): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=systemd-hostnamed comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  204.776056] armada kernel: audit: type=1334 audit(1793931531.575:249): prog-id=71 op=UNLOAD
+[  206.036586] armada kernel: audit: type=1131 audit(1793931532.835:250): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=systemd-localed comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  206.096873] armada kernel: audit: type=1334 audit(1793931532.895:251): prog-id=76 op=UNLOAD
+[  206.097422] armada kernel: audit: type=1334 audit(1793931532.895:252): prog-id=75 op=UNLOAD
+[  206.097690] armada kernel: audit: type=1334 audit(1793931532.895:253): prog-id=74 op=UNLOAD
+[  210.464071] armada kernel: audit: type=1131 audit(1793931537.259:254): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=user-runtime-dir@0 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  246.576117] armada kernel: exFAT-fs (sdg2): Volume was not properly unmounted. Some data may be corrupt. Please run fsck.
+[  260.028071] armada kernel: audit: type=1131 audit(1793931586.828:255): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=rpm-ostreed comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  417.904487] armada kernel: audit: type=1101 audit(1793931744.695:256): pid=9549 uid=1000 auid=1000 ses=2 msg='op=PAM:accounting grantors=pam_unix acct="armada" exe="/usr/bin/sudo" hostname=? addr=? terminal=? res=success'
+[  456.904034] armada kernel: audit: type=1123 audit(1793931783.706:257): pid=9775 uid=1000 auid=1000 ses=2 msg='cwd="/run/media/armada/Slim" cmd="true" exe="/usr/bin/sudo" terminal=? res=failed'
+[  900.449634] armada kernel: audit: type=1130 audit(1793932227.242:258): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=systemd-tmpfiles-clean comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  900.449703] armada kernel: audit: type=1131 audit(1793932227.242:259): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=systemd-tmpfiles-clean comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'

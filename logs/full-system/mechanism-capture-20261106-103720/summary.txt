@@ -1,0 +1,17 @@
+=== FULL-SYSTEM MECHANISM CAPTURE Fri Nov  6 10:37:21 +08 2026 ===
+host:    Linux armada 7.2.6 #1 SMP PREEMPT Fri Oct  9 12:18:51 UTC 2026 aarch64 GNU/Linux
+boot:    2026-11-06 10:15:26
+cmdline: ostree=/ostree/boot.1/default/34d7969129f068943c4e123a35bc6e25680bdfb4f24d274d56333824a20bc988/0 root=UUID=6c512adc-c48e-434b-9f36-d7a016a7edd5 rw boot=UUID=24f4f3d0-4a5c-429d-9490-4b7a819b7d7c rootwait console=tty0 quiet loglevel=3 allow_mismatched_32bit_el0 fw_devlink.strict=1 pcie_ports=compat psi=1 cgroup_disable=pressure cgroup.memory=nokmem,nosocket cpufreq.default_governor=schedutil swiotlb=8192 rootflags=subvol=/root,noatime,compress=zstd:1
+root:    composefs overlay
+user:    armada (journalctl/mount may need root)
+kern log: 1235 lines (journalctl -b -k)
+kern log: 1235 lines (short-monotonic)
+journal: 3639 lines
+udev rules: 150 lines
+udevd log: 34 lines
+devlink: 86 lines
+timeline: 16 lines
+ucsi debugfs: 3 lines
+steady state: 48 lines
+quick windows: 119 lines
+=== END Fri Nov  6 10:37:22 +08 2026 — send at least: quick-windows.txt full-kern-iso.log udevd-iso.log devlink.txt ucsi-debugfs.txt udev-rules.txt steady-state.txt ===
