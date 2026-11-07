@@ -63,13 +63,25 @@ The mechanism is identified and the first fix is shipped:
   (the PDR precondition) and kernel patch **1400** demotes the bootloader's
   `dr_mode=host` to OTG when `usb-role-switch` is present, so `linux usb`
   follows the full-system (known-good) role-flip sequence.
-- **2026-11-07 device test**: the CI image built from the branch was flashed;
-  the patch is present in the kernel (marker string verified in the flashed
-  vmlinux), but `linux usb` pre-plug still ends in the dracut root-wait
-  timeout. The run is inconclusive (quiet console, no diagnostics), so the
-  next steps are a **full-boot re-check on the same CI build** (control) and
-  the `dbg1400` dracut timeout-hook image on the CI kernel —
-  [docs/KERNEL_PATCH_1400.md](docs/KERNEL_PATCH_1400.md).
+- **2026-11-07 device tests**: the CI image built from the branch was
+  flashed; the patch is present in the kernel (marker string verified in the
+  flashed vmlinux), but `linux usb` pre-plug still ends in the dracut
+  root-wait timeout. The follow-up `dbg1400` diagnostic run (same kernel,
+  dracut timeout-hook dumping the runtime state) shows the **kernel-side
+  chain of the fix works end-to-end** (the demotion fired, the role flipped
+  to HOST after the PDR, ADSP is up), while the **port power path stays
+  dead** (`usb_type=[Unknown]`, `online=0`, ICM `icm_ncp_stby`: no VBUS is
+  driven onto the port, the pre-plugged drive never enumerates). The
+  root-wait timeout is now trivially explained: the root filesystem lives on
+  the drive itself (the CI disk image *is* the drive — layout, boot marker
+  and root UUID all match). Leading hypothesis: in `linux usb` mode the
+  ABL/XBL runs its own closed USB host stack on this very port (it reads
+  `\KERNEL` from the drive), and the PPM/ICM port state left by that ABL
+  session is not re-classified at kernel handoff (pre-plug ⇒ no fresh CC
+  edge; the ICM in `ncp_stby` does not rescan). Next: a re-run with the
+  **fixed** `dbg1400` build (the run used the pre-dedup build — its own dump
+  lines contaminated its dmesg tail) and a **full-boot re-check on the same
+  CI build** (control) — [docs/KERNEL_PATCH_1400.md](docs/KERNEL_PATCH_1400.md).
 
 Background: the firmware RE removed the "runtime flag" hypothesis and named
 both ends of the AP↔PPM link (the in-kernel UCSI core fires the four

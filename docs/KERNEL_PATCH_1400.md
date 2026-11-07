@@ -18,17 +18,19 @@ the protocol for the **full-boot re-check** (the control experiment).
   `linux usb` mode with the drive pre-plugged. The patch marker string is
   present in the flashed kernel, but the boot **still ends in the dracut
   root-wait timeout** — no enumeration.
-- The run is **inconclusive, not a clean negative**: the CI image is `quiet`
-  and carries no diagnostic block, so it is not known whether the demotion
-  fired at runtime, whether the role flipped to HOST after the PDR, when the
-  xHCI controller probed, and what the ICM state was.
-- Next steps: (1) a **full-boot re-check** with the same CI build (the
-  control — it must still show the known-good ROLE-FLIP + FIRST SCAN behavior
-  and confirm the patch is a no-op in a normal boot); (2) `dbg1400` — a
-  dracut `initqueue/timeout` hook image on top of the CI kernel that dumps
-  the runtime `[DT] dr_mode`/`usb-role-switch`, `usb_role` state, xHCI/PDR
-  timestamps, and the ICM/`usb_type` fingerprint — to localize where the
-  `linux usb` chain breaks.
+- The follow-up `dbg1400` run (same kernel + CI initramfs + a dracut
+  timeout-hook image) closed that observability gap: the **kernel-side chain
+  of the fix works end-to-end** — the demotion fired, the role flipped to
+  HOST after the PDR, ADSP is up, xHCI was created — while the **port power
+  path stays dead** (`usb_type=[Unknown]`, `online=0`, ICM `icm_ncp_stby`:
+  no VBUS, the pre-plugged drive never enumerates). The root-wait timeout is
+  now trivially explained: the root filesystem lives on the drive itself (the
+  CI disk image *is* the drive).
+- Next steps: (1) a re-run with the **fixed** `dbg1400` build — the run used
+  the pre-dedup build, whose own dump lines contaminated its dmesg tail — for
+  a clean PDR→xHCI/ICM timeline; (2) a **full-boot re-check** with the same
+  CI build (the control — it must still show the known-good ROLE-FLIP +
+  FIRST SCAN behavior and confirm the patch is a no-op in a normal boot).
 
 ## What the current branch contains (PR #704, `initramfs-adsp`, HEAD `a699dd6`)
 
@@ -97,6 +99,63 @@ three candidates, which the two next tests separate:
 The full-boot re-check is the **control**: it must still show the known-good
 behavior on the *same* kernel. If it does not, the patch itself regressed the
 normal path.
+
+## 2026-11-07 (second run): `dbg1400` — the kernel-side chain works; the break is on the port power path
+
+The `dbg1400` image was flashed and booted: `linux usb`, drive pre-plugged,
+zero actions. The run used the **pre-dedup build** — the hook's own dump
+lines (written to `/dev/kmsg`) re-appeared inside its own dmesg tail
+(nested `DBG1400:` lines in the photos), evicting the real kernel timeline
+from the tail-80 section. The fixed build (double `grep -v DBG1400` +
+full-dump-on-change dedup; 202 106 472 B, md5 `91ee17b24a4a25b78ce49e74a190484e`)
+is built, verified, and has been written to the drive for the re-run.
+
+**What the photos show** (kernel-monotonic timestamps; the screen is
+redrawn every 8 s, so a photo at any moment shows the current state):
+
+| fact | value |
+|---|---|
+| 1400 marker in dmesg | `[164.06] dwc3 a600000.usb: dr_mode=host ignored: usb-role-switch present, using OTG` — the demotion **fired** |
+| runtime `[DT]` (`/proc` + `/sys`) | `dr_mode=host` present **and** `usb-role-switch` present, `role-switch-default-mode` absent — the ABL overlay is present in the unspliced `linux usb` mode |
+| `/sys/class/usb_role/a600000.usb-role-switch/role` | `host` — the role-switch device is registered (OTG path) and the role **flipped to HOST** |
+| typec `port0` / `port0-partner` | `data_role={host} device`, partner **PRESENT**, `power_operation_mode=3.0A` |
+| `qcom-battmgr-usb` | `usb_type=[Unknown]`, `online=0`, `voltage_now=5062000` — the `icm_ncp_stby` fingerprint |
+| USB devices | only the two root hubs — the drive is **not enumerated** |
+| `remoteproc0` (adsp) | `state=running` (the dracut ADSP drop-in works: driver + firmware in the initramfs) |
+| `ucsi debugfs` | ABSENT — benign: debugfs is simply not mounted in the initramfs |
+| duration | 6+ minutes of the identical state (hook iterations up to t≈366 s); boot ended in the dracut root-wait timeout |
+
+**Verdict.** The kernel-side chain of the fix works end-to-end: demotion to
+OTG → role-switch registered → ADSP up → `charger_pd` PDR → UCSI role flip to
+HOST → xHCI created. The candidates "the flip does not happen", "xHCI is not
+created" and "the snapshot precedes the chain" are all refuted by the photos.
+The break is on the **power path side**: the ICM/PPM charger path never
+classifies the port (`usb_type=[Unknown]`, `online=0`, `icm_ncp_stby`), so no
+VBUS is driven onto the port — the pre-plugged drive is electrically dead,
+never attaches, and is never enumerated (CC partner detection is alive:
+`partner=PRESENT`; D+/D− are not).
+
+**Why the root-wait timeout is trivial here.** The CI disk image *is* the
+drive: identical MBR layout (525.3 MB FAT + 1 GiB + 27 GiB), the
+`.armada-bootimg.id` boot marker found inside the image's p1, and the
+cmdline `root=UUID=49a99c0a-…` found verbatim in the image's p3 superblock
+region. The root filesystem lives on the drive — no enumeration, no root,
+timeout. (Topology, for interpreting the by-uuid list: `mmcblk0` is the
+eMMC — the full-boot root — and `sda–sdf` are the UFS LUNs, not USB.)
+
+**Leading hypothesis (unproven).** In `linux usb` mode the ABL/XBL runs its
+own closed USB host stack on this very port — it reads `\KERNEL` from the
+drive. With the drive pre-plugged there is no fresh CC edge afterwards, and
+the ICM in `ncp_stby` does not rescan: the PPM/ICM port state left by the ABL
+host session is not re-classified at kernel handoff. In a normal boot the
+bootloader never touches the port, PPM detects the drive fresh, and it
+enumerates on the first post-PDR scan. The re-run with the fixed `dbg1400`
+(clean dmesg tail) will measure the PDR→xHCI Δ, the flip timing, and the ICM
+transitions; the full-boot control (same build, internal install, pre-plug)
+confirms the other half.
+
+Secondary anomaly: the dwc3 probe timestamp (t≈164 s) is far later than the
+full-boot xHCI probe (~14.8/17.75 s) — to be measured with the clean tail.
 
 ## `dbg1400` — the next `linux usb` diagnostic image
 

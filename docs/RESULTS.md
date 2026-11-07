@@ -1,5 +1,50 @@
 # Results
 
+## dbg1400 run — `linux usb` pre-plug (2026-11-07, second run)
+
+Image: `KERNEL.ci-a699dd6-dbg1400` (CI kernel with patch 1400 + CI initramfs
++ CI cmdline + dracut `initqueue/timeout` dump hook). The run used the
+**pre-dedup build** — the hook's own dump lines (written to `/dev/kmsg`)
+re-appeared inside its own dmesg tail (nested `DBG1400:` lines in the
+photos), evicting the real kernel timeline from the tail-80 section. The
+fixed build (202 106 472 B, md5 `91ee17b24a4a25b78ce49e74a190484e`) is
+built, verified, and has been written to the drive for the re-run.
+
+Protocol: `linux usb`, drive pre-plugged, zero actions.
+
+- **The kernel-side chain of the fix works end-to-end** (photos,
+  kernel-monotonic): 1400 marker in dmesg `[164.06] … dr_mode=host ignored:
+  usb-role-switch present, using OTG` (the demotion fired) → runtime `[DT]`
+  carries both `dr_mode=host` and `usb-role-switch` (the ABL overlay is
+  present in the unspliced mode) → `a600000.usb-role-switch` exists with
+  `role=host` → `port0-partner` PRESENT, `data_role={host}`, 3.0A →
+  `remoteproc0` (adsp) `state=running` → xHCI up.
+- **The break is on the port power path**: `qcom-battmgr-usb`
+  `usb_type=[Unknown]`, `online=0`, `voltage_now=5062000` — the
+  `icm_ncp_stby` fingerprint; no VBUS on the port → the drive is electrically
+  dead, never attaches, never enumerates (USB devices = the two root hubs
+  only). `ucsi debugfs` ABSENT is benign — debugfs is not mounted in the
+  initramfs. The state does not change for 6+ minutes (hook iterations up to
+  t≈366 s); the boot ends in the dracut root-wait timeout.
+- **The root-wait timeout is trivially explained**: the CI disk image *is*
+  the drive (identical MBR layout — 525.3 MB FAT + 1 GiB + 27 GiB; the
+  `.armada-bootimg.id` boot marker found inside the image's p1; the cmdline
+  `root=UUID=49a99c0a-…` found verbatim in the image's p3 superblock region).
+  No enumeration ⇒ no root ⇒ timeout. (Topology: `mmcblk0` is the eMMC — the
+  full-boot root — and `sda–sdf` are the UFS LUNs, not USB.)
+- **Leading hypothesis (unproven)**: the ABL/XBL USB host session that reads
+  `\KERNEL` in `linux usb` mode leaves the PPM/ICM in a state that is not
+  re-classified at kernel handoff (pre-plug ⇒ no fresh CC edge; the ICM in
+  `ncp_stby` does not rescan). In a normal boot the bootloader never touches
+  the port, so PPM detects the drive fresh and it enumerates on the first
+  post-PDR scan.
+- Secondary anomaly: dwc3 probe at t≈164 s (full-boot xHCI ~14.8/17.75 s) —
+  to be measured with the clean tail.
+
+Next: re-run with the fixed `dbg1400` (clean PDR→xHCI Δ / flip timing / ICM
+transitions) + full-boot re-check on the same CI build (control). Details:
+[KERNEL_PATCH_1400.md](KERNEL_PATCH_1400.md).
+
 ## Kernel patch 1400 in the CI image — `linux usb` pre-plug (2026-11-07)
 
 First device test of the patched kernel (Armada PR #704, HEAD `a699dd6`; CI
@@ -14,9 +59,10 @@ run 42324657729, artifact `armada-disk-pr704`):
   diagnostic block, so the runtime behavior of the demotion (did it fire, did
   the role flip happen after the PDR, when did xHCI probe, what is the ICM
   state) was not observable.
-- Next: a **full-boot re-check on the same CI build** (control) and the
-  `dbg1400` dracut timeout-hook image on the CI kernel — protocol and
-  decision matrix in
+- Follow-up: the `dbg1400` diagnostic run (above) resolved the observability
+  gap — the kernel-side chain works, the break is on the port power path.
+  The **full-boot re-check on the same CI build** (control) is still pending
+  — protocol and decision matrix in
   [KERNEL_PATCH_1400.md](KERNEL_PATCH_1400.md).
 
 ## Cell II — full-system pre-plug (2026-11-05)
