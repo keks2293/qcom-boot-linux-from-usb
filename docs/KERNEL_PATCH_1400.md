@@ -116,6 +116,17 @@ it prints despite `quiet`, 8 s refresh). At the root-wait timeout it dumps:
 - remoteproc state; dmesg filtered on the 1400 marker / PDR / ADSP / xhci /
   dwc3 / usb_role / ucsi / pmic_glink / icm_ncp / charger / `New USB device`
 
+Design note (log repetitions): the hook's own lines are written to
+`/dev/kmsg`, so both dmesg greps exclude the hook's own `DBG1400:` lines
+(`grep -v DBG1400`) — without this, the tail-80 section re-captures the hook's
+own output (its header lines contain the PDR/xhci/dwc3/ucsi keywords) and the
+real kernel timeline gets evicted. The full snapshot is written to kmsg only
+when the dump changed since the previous iteration (otherwise a one-line
+heartbeat), so the dmesg ring is not flooded with repeated full dumps (the CI
+cmdline has no `log_buf_len` → default ring size). The screen itself is
+cleared and fully redrawn every 8 s, so a photo at any moment shows the
+current state.
+
 Protocol: `linux usb`, pre-plug, zero actions, photo of the final screen.
 
 ## Full-boot re-check (control experiment) — protocol
