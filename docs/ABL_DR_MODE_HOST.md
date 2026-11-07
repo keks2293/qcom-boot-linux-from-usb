@@ -174,6 +174,18 @@ non-automated version of the initramfs-script fix below.
 | ABL patch | ABL: only set `dr_mode=host` when `usb-role-switch` is **absent** | No — ABL is closed | The "right" place semantically, but not actionable |
 | Initramfs script | dracut: hold the first scan until the PDR, then re-probe | Yes — no kernel rebuild | `unbind`/`bind` the `dwc3-qcom` device once the PDR line appears; ships in the next CI image |
 
+> **Status (2026-11-07):** the kernel patch option was implemented as Armada
+> PR #704 commit `a699dd6` (patch
+> `1400-dwc3-ignore-dr-mode-host-with-role-switch.patch`, exactly the demotion
+> above) and tested on device: the CI image built from the branch carries the
+> patch in the kernel (marker string verified in the flashed vmlinux), but
+> `linux usb` pre-plug still ends in the dracut root-wait timeout —
+> **inconclusive**, because the CI image is `quiet` and carries no
+> diagnostics (it is not known whether the demotion fired at runtime). Next:
+> a full-boot re-check on the same CI build (control) and the `dbg1400`
+> dracut timeout-hook image on the CI kernel. See
+> [KERNEL_PATCH_1400.md](KERNEL_PATCH_1400.md).
+
 ### Kernel patch (recommended)
 
 The single choke point is `dwc3_get_dr_mode()` (`drivers/usb/dwc3/core.c:53`),

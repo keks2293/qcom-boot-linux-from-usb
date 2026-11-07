@@ -47,25 +47,42 @@ Also refuted along the way:
 
 UCSI 2.0 spec cross-check: PPM is the spec term "Platform Policy Manager"; the spec requires a `CONNECTOR_RESET` hard reset to "go through a disconnect-connect sequence", but on this device the plain reset is a no-op — the PPM firmware deviates from the spec (after the role-swap `-ECOMM` and the `SET_*` `-EOPNOTSUPP` set; the second dbg32 reset variant re-decodes to an *invalid port 0*, so the observed hang is a confounded experiment — see [docs/RESULTS.md](docs/RESULTS.md#dbg31dbg32--ucsi-command-re-decode-word-layout)).
 
-Remaining focus is **early port classification by PPM/BC1.2 on the ADSP side**
-(`icm_ncp_stby` until charger type updated). The firmware RE removed the
-"runtime flag" hypothesis and named both ends of the AP↔PPM link: the AP
-actor is the **in-kernel UCSI core** (`ucsi.c` + `ucsi_glink.c`, no userspace
-daemon), which fires the four PMIC-doorbell commands (0x03/0x09/0x0b/0x10)
-itself. That actor does **not** discriminate the environments: in the *active*
-initramfs runs it fires those commands and the wedge persists, and in the
-*working* full system the core is **also active** (measured 2026-11-05:
-`port0` + partner, 9 V PD contract) and enumeration still works. The
-**pre-plug** case sharpens the open question: with the drive connected before
-power-on there is **no fresh CC edge after the PPM starts** (~3.4 s) in
-*either* environment, yet the full system enumerates the drive and the
-initramfs does not — so the fresh-CC-edge mechanism that explains the
-cold-plug/replug cases **cannot** explain the working pre-plug case. The
-full-system pre-plug boot is now captured: the xHCI host comes up **after**
-the ADSP `charger_pd` PDR (10.41 s → 14.81 s) and the drive enumerates at
-16.99 s, while in the initramfs the USB events (2.716/3.182 s) precede the PDR
-(3.498 s) and nothing re-arms the port afterwards. That ordering is the
-current candidate; the causal test is a host re-probe inside the ≤30 s window.
+## Current status (2026-11-07)
+
+The mechanism is identified and the first fix is shipped:
+
+- **Unifying root cause**: in `linux usb` mode ABL unconditionally adds
+  `dr_mode=host` to the runtime device tree, forcing the early host scan
+  *before* the `charger_pd` PDR; that scan is absorbed by the ICM
+  (`icm_ncp_stby`) and the pre-plugged drive is never enumerated. In a normal
+  boot there is no overlay: the controller stays OTG, the Type-C role flips
+  to HOST only **after** the PDR, and the **first scan after the PDR**
+  enumerates the drive
+  ([docs/ABL_DR_MODE_HOST.md](docs/ABL_DR_MODE_HOST.md)).
+- **Fix (Armada PR #704)**: dracut ships ADSP + firmware into the initramfs
+  (the PDR precondition) and kernel patch **1400** demotes the bootloader's
+  `dr_mode=host` to OTG when `usb-role-switch` is present, so `linux usb`
+  follows the full-system (known-good) role-flip sequence.
+- **2026-11-07 device test**: the CI image built from the branch was flashed;
+  the patch is present in the kernel (marker string verified in the flashed
+  vmlinux), but `linux usb` pre-plug still ends in the dracut root-wait
+  timeout. The run is inconclusive (quiet console, no diagnostics), so the
+  next steps are a **full-boot re-check on the same CI build** (control) and
+  the `dbg1400` dracut timeout-hook image on the CI kernel —
+  [docs/KERNEL_PATCH_1400.md](docs/KERNEL_PATCH_1400.md).
+
+Background: the firmware RE removed the "runtime flag" hypothesis and named
+both ends of the AP↔PPM link (the in-kernel UCSI core fires the four
+PMIC-doorbell commands itself; there is no userspace daemon). The pre-plug
+case sharpens the open question: with the drive connected before power-on
+there is no fresh CC edge after the PPM starts (~3.4 s) in *either*
+environment, yet the full system enumerates the drive and the initramfs does
+not — so the fresh-CC-edge mechanism that explains the cold-plug/replug cases
+cannot explain the working pre-plug case. The full-system pre-plug boot is
+now captured: the xHCI host comes up **after** the ADSP `charger_pd` PDR
+(10.41 s → 14.81 s) and the drive enumerates at 16.99 s, while in the
+initramfs the USB events (2.716/3.182 s) precede the PDR (3.498 s) and
+nothing re-arms the port afterwards.
 
 ## Goals
 
@@ -103,6 +120,7 @@ inside the ≤30 s window).
 - [docs/FULL_SYSTEM_COLDPLUG_TEST.md](docs/FULL_SYSTEM_COLDPLUG_TEST.md) — full-system test procedure
 - [docs/FULL_SYSTEM_PREPLUG_RESULT.md](docs/FULL_SYSTEM_PREPLUG_RESULT.md) — measured full-system pre-plug result (2026-11-05)
 - [docs/FULL_SYSTEM_MECHANISM_CAPTURE.md](docs/FULL_SYSTEM_MECHANISM_CAPTURE.md) — Q1–Q5 mechanism capture (2026-11-06): the attach is the first scan, not a fresh CC edge; **Q1 answered** — nothing holds the xHCI probe, the host controller is *created* only when the Type-C role flips to HOST (gadget→host, 2.7–4.4 s after the `charger_pd` PDR)
+- [docs/KERNEL_PATCH_1400.md](docs/KERNEL_PATCH_1400.md) — the current patch version (PR #704: dracut ADSP drop-in + kernel patch 1400), the 2026-11-07 CI test result (patch in the kernel, `linux usb` pre-plug still times out — inconclusive), the `dbg1400` diagnostic, and the full-boot re-check protocol
 - [diagrams/architecture.md](diagrams/architecture.md) — system architecture: what is where (AP/ADSP/hardware layers, the data path and where it is gated, what is identical vs different between the working and failing environments, the lever map)
 - [diagrams/icm-state-machine.md](diagrams/icm-state-machine.md) — ICM charger state machine inside the PPM firmware: states, the `ncp_stby` wedge, exit conditions, where the exit inputs come from, the ULog fingerprint
 - [diagrams/charger-type-chain.md](diagrams/charger-type-chain.md) — charger type chain: PM8550B CC/APSD hardware → IRQ dispatcher → charger detection → ICM inputs; levers on the chain; object and function maps (vaddrs)

@@ -1,5 +1,24 @@
 # Results
 
+## Kernel patch 1400 in the CI image — `linux usb` pre-plug (2026-11-07)
+
+First device test of the patched kernel (Armada PR #704, HEAD `a699dd6`; CI
+run 42324657729, artifact `armada-disk-pr704`):
+
+- Patch presence **verified in the flashed `KERNEL`** — the vmlinux marker
+  string `dr_mode=host ignored: usb-role-switch present, using OTG` is in the
+  boot image.
+- `linux usb` mode, drive pre-plugged → **dracut root-wait timeout, no
+  enumeration**.
+- **Inconclusive, not a clean negative**: the CI image is `quiet` with no
+  diagnostic block, so the runtime behavior of the demotion (did it fire, did
+  the role flip happen after the PDR, when did xHCI probe, what is the ICM
+  state) was not observable.
+- Next: a **full-boot re-check on the same CI build** (control) and the
+  `dbg1400` dracut timeout-hook image on the CI kernel — protocol and
+  decision matrix in
+  [KERNEL_PATCH_1400.md](KERNEL_PATCH_1400.md).
+
 ## Cell II — full-system pre-plug (2026-11-05)
 
 Full-system boot (internal storage) with the dock and drive connected before
