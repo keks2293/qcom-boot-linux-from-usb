@@ -24,9 +24,12 @@ have to contain to enumerate a pre-plugged drive?**
   init: a fresh CC edge is impossible from software on this board, and
   `SetRerunApsd` is config-gated off by `apsd-rerun-cfg = 0` in the firmware.
 - ⇒ **Ranked candidates: A stage the ADSP start like a normal boot, B add the
-  poller + ADSP ULog capture to init (diagnostic), C a post-PDR AP nudge inside
-  the ≤30 s window. If all three are negative, the answer is "nothing that can
-  be added to init" and the fix is the firmware byte (D, `dbg52`).**
+  poller + ADSP ULog capture to init (diagnostic — the reader is the stock
+  `pmic_pdcharger_ulog.ko`, already in the initramfs image, and the
+  success-side fingerprint is already captured in
+  [ADSP_ULOG.md](ADSP_ULOG.md)), C a post-PDR AP nudge inside the ≤30 s
+  window. If all three are negative, the answer is "nothing that can be added
+  to init" and the fix is the firmware byte (D, `dbg52`).**
 
 ## What is already in init (PR #704)
 
@@ -63,8 +66,8 @@ classification window**.
 
 | # | add to init | what it tests | cost |
 |---|---|---|---|
-| **A** | **Stage the ADSP start like a normal boot.** Don't let `qcom_q6v5_pas` probe at ~3 s; delay it to ~10 s (blacklist + a hook that loads it later, or a `modprobe -r`/`modprobe` pair) | The one timing difference between the environments that has **never** been varied. Full system: ADSP up **10.978 s** → PDR 11.025 → classified 11.08. Initramfs: PDR 3.498 s, immediately behind ABL's USB host session. If the PPM coming up "late and clean" is what makes initial detection succeed, this reproduces it | one boot |
-| **B** | **The poller + ADSP ULog capture in initramfs.** Ship [`scripts/usb-type-poller.sh`](../scripts/usb-type-poller.sh) into the initramfs, plus an ADSP ULog dump grepping `charger_detection_inital_detection: adsp rerun status=0x%X` and `ncp_stby_db` around the PDR | Diagnostic, no behaviour change: does initial detection **run** in the failing env, and what does it return? This is lever 4 in the trigger table and has never been captured | one boot |
+| **A** | **Stage the ADSP start like a normal boot.** Don't let `qcom_q6v5_pas` probe at ~3 s; delay it to ~10 s (blacklist + a hook that loads it later, or a `modprobe -r`/`modprobe` pair) | The one timing difference between the environments that has **never** been varied. Full system: ADSP up **10.978 s** (13:09 boot; 12.012 s in the 15:39 boot — the start drifts ~1.5 s boot-to-boot) → PDR 11.025 → classified 11.08. Initramfs: PDR 3.498 s, immediately behind ABL's USB host session. If the PPM coming up "late and clean" is what makes initial detection succeed, this reproduces it | one boot |
+| **B** | **The poller + ADSP ULog capture in initramfs.** Ship [`scripts/usb-type-poller.sh`](../scripts/usb-type-poller.sh) and [`scripts/adsp-ulog-capture.sh`](../scripts/adsp-ulog-capture.sh) into the initramfs: mount tracefs, `modprobe pmic_pdcharger_ulog` (the **stock** AP-side reader — no dependencies, **already in the initramfs image**), enable `pmic_pdcharger_ulog:pmic_pdcharger_ulog_msg`, drain ~40 s. Grep the `PartnerType=` detection result, `ncp_stby_db`, `sm_state_loop` around the PDR | Diagnostic, no behaviour change: does initial detection **run** in the failing env, and what does it return? Success side already captured ([ADSP_ULOG.md](ADSP_ULOG.md)); this boot gets the failing side for the diff | one boot |
 | **C** | **Post-PDR nudge inside the ≤30 s window** — a hook that waits for the `PDR: Indication … charger_pd` line, then (one lever per boot) mounts debugfs and issues the UCSI command, or toggles `/sys/class/usb_role/*/role`, or unbinds/binds `dwc3-qcom` | The last open AP-side option. Every previous attempt was either run **outside** the window (dbg49's re-probe at >32 s) or with a confounded command word (dbg31/dbg32) — `FULL_SYSTEM_PREPLUG_RESULT.md` next-experiment #1 has still never been run | one boot per lever |
 | **D** | *(not an init change)* **`apsd-rerun-cfg` 0→1** in `adsp_dtb.mbn` (1 byte + `sha384` slot, recipe byte-verified, TZ accepts the re-hash) | Opens the only edge-free re-detection path the firmware has. Caveat: `SetRerunApsd` still needs the AP's `pmic_glink` message in the right DPM state, which is undecoded — so even D may need C | one boot (dbg52) |
 
@@ -88,12 +91,21 @@ is free; C as the last AP-side option; D if the AP side is exhausted.
 
 ## Decision rule
 
-1. **B shows initial detection never runs** (or returns a status that explains
-   the wedge) → A/C are about *making it run*; if the status says "rerun
-   disabled", go straight to D.
-2. **B shows initial detection runs and returns success, but `usb_type` stays
-   `Unknown`** → the push never reaches the property service; that is a
-   firmware-side defect and D is the only lever.
+The success-side fingerprint is captured ([ADSP_ULOG.md](ADSP_ULOG.md)): the
+success env's PPM logs `charger_detection_evaluate_typec_charger …
+PartnerType=2, Voltage=5000 mV, Current=900 mA` in the PDR + 22 ms drain, the
+charger SM walks 2→4 by PDR + 8 s, and there is **no** `ncp_stby`. The failing
+env (dbg49) shows the opposite: SM stuck at state 2 (`event_type=24, curr=2,
+next=2` at 33.2 s and 52.7 s), ICM parked in `ncp_stby` "untill charger_type
+updated" (`chgr_stat=7`), no PartnerType line at all.
+
+1. **B shows no `PartnerType=` line in any drain** (detection produced nothing
+   — the dbg49 fingerprint, now on the full ULog) → the PPM's initial
+   detection ran blind or was skipped in the initramfs; A is about *making it
+   see the port*; if A is negative, go straight to D.
+2. **B shows a `PartnerType=` line (detection ran and saw the port) but
+   `usb_type` stays `Unknown`** → the result never reaches the property
+   service; that is a firmware-side defect and D is the only lever.
 3. **A or C flips `usb_type` to `SDP`** → the fix is an initramfs change, and
    PR #704 grows a third commit: a staged ADSP start or a post-PDR nudge hook.
 4. **All negative** → the documented conclusion is *"nothing that can be added
@@ -102,6 +114,7 @@ is free; C as the last AP-side option; D if the AP side is exhausted.
 
 ## References
 
+- Success-side PPM ULog fingerprint: [ADSP_ULOG.md](ADSP_ULOG.md)
 - Measurement: [USB_TYPE_TIMING.md](USB_TYPE_TIMING.md)
 - Why the early scan existed: [ABL_DR_MODE_HOST.md](ABL_DR_MODE_HOST.md)
 - Patch state and `dbg1400`: [KERNEL_PATCH_1400.md](KERNEL_PATCH_1400.md)

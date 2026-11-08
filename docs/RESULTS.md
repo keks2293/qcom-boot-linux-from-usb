@@ -1,5 +1,47 @@
 # Results
 
+## PPM ULog from the AP — success-side fingerprint (2026-11-08, boot 1 of 2)
+
+New instrument: the stock `pmic_pdcharger_ulog.ko` — never loaded in any
+environment — reads the PPM charger ULog from the AP over the
+`PMIC_LOGS_ADSP_APPS` rpmsg channel (1 s poll, 8 KB drain ring, tracepoint
+output). Installed as `adsp-ulog-capture.service` at `sysinit.target`; the
+module is **already in the stock initramfs**, so lever B
+([INITRAMFS_CHANGES.md](INITRAMFS_CHANGES.md)) collapses to `modprobe` +
+tracefs inside init.
+
+Boot 1 = full-system pre-plug control (2026-11-08 15:39). The PPM's own view:
+
+- **Initial detection ran at ADSP boot**: the first ULog drain (PDR + 21.9 ms)
+  already contains `charger_detection_evaluate_typec_charger: Input[0]
+  PartnerType=2, Voltage=5000 mV, Current=900 mA` plus charger SM
+  `event_type=10, curr=0→1→2` and `otg enable: 1` / "OTG source not
+  available". This is the PPM-internal event that `usb_type` timing measured
+  as "classified at PDR + 55 ms" from the AP side.
+- PD contract reflected at PDR + 2.06 s: `ActivePort[0] PartnerType=15,
+  Voltage_max=9000 mV, Current_max=2440 mA`, `max_vbus = 9000`, `USB charger
+  connected`, `Charging source is 2`, `usb_charge_now=1`; BattMngr Run level 3.
+- Charger SM reaches **state 4** by PDR + 8.2 s (`event_type=20, curr=4`
+  periodic; heartbeat `event_type=24, curr=4` at 43.0 s); steady state
+  `scp_inov_db: fcc_ma=5700, icl_ma=2440, vin_mv=9000`.
+- **Zero `ncp_stby` lines** — contrast dbg49 (initramfs): SM stuck at state 2
+  (`event_type=24, curr=2, next=2` at 33.2 s and 52.7 s) with ICM parked in
+  `ncp_stby` "untill charger_type updated" (`chgr_stat=7`), no PartnerType line
+  at all.
+- AP side (poller, same boot): SDP at PDR + 294 ms, PD 13.01 s, role=host
+  15.72 s, `usb 1-1` 15.956 s, `sdg` 17.92 s. The power-path phase order
+  differs from the 13:09 boot (no 9.083 V first sample, no 6 mV collapse) —
+  offsets stable, phase order boot-dependent.
+- The 2→4 SM transition line was lost to the 8 KB ring wrap (drain semantics);
+  the state value at each drain is the reliable quantity.
+
+The success/failure discriminator is the PPM's initial-detection result; boot
+2 (lever B in the initramfs) captures the failing side for the diff.
+
+Raw: [`logs/full-system/adsp-ulog-20261108-1539.log`](../logs/full-system/adsp-ulog-20261108-1539.log),
+[`logs/full-system/usb-type-poller-20261108-1539.log`](../logs/full-system/usb-type-poller-20261108-1539.log).
+Write-up: [ADSP_ULOG.md](ADSP_ULOG.md).
+
 ## `usb_type` timing — full-system pre-plug (2026-11-08)
 
 New instrument (`scripts/usb-type-poller.sh`, 50 ms, enabled at

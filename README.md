@@ -100,6 +100,15 @@ to fire on device — but it does not enumerate the drive yet**:
   post-PDR nudge inside the ≤30 s window — otherwise the gate is the
   `apsd-rerun-cfg` firmware byte. Measurement:
   [docs/USB_TYPE_TIMING.md](docs/USB_TYPE_TIMING.md).
+- **2026-11-08: the PPM's own log is readable from the AP.** The stock
+  `pmic_pdcharger_ulog.ko` (never loaded in any environment) reads the PPM
+  charger ULog over the `PMIC_LOGS_ADSP_APPS` rpmsg channel. The boot-1
+  control capture (full system, pre-plug) shows initial detection ran at ADSP
+  boot — `PartnerType=2, 5 V / 900 mA` in the PDR + 22 ms drain — the charger
+  SM reaches state 4, and there are **zero** `ncp_stby` lines: the exact
+  opposite of dbg49's stuck-at-state-2 + `ncp_stby` fingerprint. The module is
+  already in the stock initramfs, so the failing-side capture (boot 2, lever B)
+  is a `modprobe` away: [docs/ADSP_ULOG.md](docs/ADSP_ULOG.md).
 
 Background: the firmware RE removed the "runtime flag" hypothesis and named
 both ends of the AP↔PPM link (the in-kernel UCSI core fires the four
@@ -148,6 +157,7 @@ inside the ≤30 s window).
 - [docs/TEST_METHOD.md](docs/TEST_METHOD.md) — how tests were performed
 - [docs/RESULTS.md](docs/RESULTS.md) — results tracker: `usb_type` timing (2026-11-08), the `dbg1400` run, the CI/kernel-patch tests, dbg50/dbg51
 - [docs/USB_TYPE_TIMING.md](docs/USB_TYPE_TIMING.md) — **when the port gets classified** (2026-11-08, new poller instrument): `usb_type = SDP` at `charger_pd` PDR + 55 ms, produced inside the PPM with no AP actor; the VBUS-bounce power sequence; the PPM-state discriminator vs the initramfs
+- [docs/ADSP_ULOG.md](docs/ADSP_ULOG.md) — **the PPM's own charger log, read from the AP** (2026-11-08): the stock `pmic_pdcharger_ulog.ko` instrument (never loaded before; already in the initramfs), the boot-1 success-side fingerprint (initial detection in the PDR + 22 ms drain, charger SM state 4, zero `ncp_stby`), and the diff vs dbg49's failing fingerprint
 - [docs/INITRAMFS_CHANGES.md](docs/INITRAMFS_CHANGES.md) — what a `linux usb` initramfs would have to contain: what PR #704 already added and verified, why no AP-side command can set `usb_type`, and the ranked remaining options (stage the ADSP start / poller + ADSP ULog in init / a ≤30 s post-PDR nudge / the `apsd-rerun-cfg` firmware byte)
 - [docs/FULL_SYSTEM_COLDPLUG_TEST.md](docs/FULL_SYSTEM_COLDPLUG_TEST.md) — full-system test procedure
 - [docs/FULL_SYSTEM_PREPLUG_RESULT.md](docs/FULL_SYSTEM_PREPLUG_RESULT.md) — measured full-system pre-plug result (2026-11-05)
@@ -156,18 +166,21 @@ inside the ≤30 s window).
 - [diagrams/architecture.md](diagrams/architecture.md) — system architecture: what is where (AP/ADSP/hardware layers, the data path and where it is gated, what is identical vs different between the working and failing environments, the lever map)
 - [diagrams/icm-state-machine.md](diagrams/icm-state-machine.md) — ICM charger state machine inside the PPM firmware: states, the `ncp_stby` wedge, exit conditions, where the exit inputs come from, the ULog fingerprint
 - [diagrams/charger-type-chain.md](diagrams/charger-type-chain.md) — charger type chain: PM8550B CC/APSD hardware → IRQ dispatcher → charger detection → ICM inputs; levers on the chain; object and function maps (vaddrs)
+- [diagrams/usb-type.md](diagrams/usb-type.md) — **what `usb_type` is and what makes USB work in the full system**: the PPM→AP data path (read-only mirror via `BATTMGR_USB_PROPERTY_GET`/`USB_ADAP_TYPE`, no AP write path), the three PPM trigger paths, and the two orderings (PPM boots late+clean; first host scan after the PDR) that the full system has and `linux usb` breaks
 - [diagrams/ppm-ucsi-command-flow.md](diagrams/ppm-ucsi-command-flow.md) — UCSI/PPM command flow: the AP↔PPM protocol (plain UCSI, no renumbering), the in-kernel UCSI core as the only AP actor (active vs deferred), the 4 PMIC-doorbell commands, the full PPM dispatch table, why the AP-side experiments stayed no-op
 - [diagrams/pm-chain.md](diagrams/pm-chain.md) — PM chain and RPM blockers
 
 ## Scripts
 
 - [scripts/full-system-coldplug-test.sh](scripts/full-system-coldplug-test.sh) — run on full system after boot
+- [scripts/adsp-ulog-capture.sh](scripts/adsp-ulog-capture.sh) + `.service` — PPM charger ULog from the AP at boot (stock `pmic_pdcharger_ulog.ko`, tracepoint drain, 40 s in the background)
 - [scripts/adsp-re/](scripts/adsp-re/) — firmware RE toolchain (disassembly dump, function extractor, vaddr→string resolver, ELF map)
 - [scripts/README.md](scripts/README.md) — usage
 
 ## Logs
 
 - [`logs/`](logs/) — raw/near-raw evidence from initramfs diagnostic runs
+- [`logs/full-system/`](logs/full-system/) — full-system instrument captures (usb-type poller, mechanism capture, ADSP ULog)
 - [`logs/adsp-re/`](logs/adsp-re/) — disassembly excerpts and xref evidence for every RE claim
 
 ## Author

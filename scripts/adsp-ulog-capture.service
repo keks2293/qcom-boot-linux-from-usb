@@ -1,0 +1,14 @@
+[Unit]
+Description=Capture the PPM (ADSP) charger ULog from the AP at boot
+DefaultDependencies=no
+WantedBy=sysinit.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+Environment=CAPTURE_S=40
+ExecStart=/var/lib/adsp-ulog-capture/capture.sh
+Nice=5
+
+[Install]
+WantedBy=sysinit.target

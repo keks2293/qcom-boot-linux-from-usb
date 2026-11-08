@@ -69,6 +69,32 @@ USB block device) plus a 10 s heartbeat — voltage/current wobble is carried
 along but does not trigger a line, so a steady boot produces ~1 line per 10 s.
 Starts at `sysinit.target` (after `local-fs.target`), i.e. before the ADSP PDR.
 
+## adsp-ulog-capture.sh + .service — the PPM's own charger log, from the AP
+
+The kernel ships `pmic_pdcharger_ulog.ko` (no dependencies, *"loaded manually
+only"* → never auto-loaded). It binds the `PMIC_LOGS_ADSP_APPS` rpmsg channel
+and reads the PPM charger ULog once per second into the tracepoint
+`pmic_pdcharger_ulog:pmic_pdcharger_ulog_msg` — the PPM's own view of initial
+detection, ICM `ncp_stby`, and the charger state machine, with no custom dbg
+firmware. Write-up and the boot-1 success-side fingerprint:
+[`../docs/ADSP_ULOG.md`](../docs/ADSP_ULOG.md).
+
+```bash
+# on the device (as root; /usr/local is read-only on this ostree system)
+sudo install -d -m0755 /var/lib/adsp-ulog-capture
+sudo install -m0755 scripts/adsp-ulog-capture.sh /var/lib/adsp-ulog-capture/capture.sh
+sudo install -m0644 scripts/adsp-ulog-capture.service /etc/systemd/system/adsp-ulog-capture.service
+sudo systemctl daemon-reload && sudo systemctl enable adsp-ulog-capture.service
+# then reboot; next boot drains 40 s in the background → /var/tmp/adsp-ulog-capture.log
+# (CAPTURE_S env var overrides the window)
+```
+
+The 40 s dump loop runs in the background, so the `sysinit.target` unit
+returns immediately and boot is not delayed. In the initramfs the same script
+works after mounting tracefs — **the module is already in the stock initramfs
+image**. Gotcha: never `rmmod` it in a live session — unloading tears the
+rpmsg channel down and it does not come back until an ADSP restart.
+
 ## adsp-re/ — PPM firmware RE toolchain
 
 Tools used to reverse-engineer the PPM/ADSP firmware (`adsp.mbn`, a 32-bit
