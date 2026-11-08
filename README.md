@@ -47,7 +47,7 @@ Also refuted along the way:
 
 UCSI 2.0 spec cross-check: PPM is the spec term "Platform Policy Manager"; the spec requires a `CONNECTOR_RESET` hard reset to "go through a disconnect-connect sequence", but on this device the plain reset is a no-op — the PPM firmware deviates from the spec (after the role-swap `-ECOMM` and the `SET_*` `-EOPNOTSUPP` set; the second dbg32 reset variant re-decodes to an *invalid port 0*, so the observed hang is a confounded experiment — see [docs/RESULTS.md](docs/RESULTS.md#dbg31dbg32--ucsi-command-re-decode-word-layout)).
 
-## Current status (2026-11-07)
+## Current status (2026-11-09)
 
 The mechanism is identified and the first fix is **in the branch and verified
 to fire on device — but it does not enumerate the drive yet**:
@@ -109,6 +109,19 @@ to fire on device — but it does not enumerate the drive yet**:
   opposite of dbg49's stuck-at-state-2 + `ncp_stby` fingerprint. The module is
   already in the stock initramfs, so the failing-side capture (boot 2, lever B)
   is a `modprobe` away: [docs/ADSP_ULOG.md](docs/ADSP_ULOG.md).
+- **2026-11-09: the next boot is the enum-only test.** The plan in
+  [docs/INITRAMFS_CHANGES.md](docs/INITRAMFS_CHANGES.md) is now concrete: a
+  `linux usb` boot of the built fixed initramfs (A staged ADSP start + B the
+  poller / PPM-ULog capture + C-lite, unprivileged build in
+  `agent-work/usb-fix/`, no kernel rebuild) on a minimal **enum-only** drive
+  (p1 vfat + boot image, **no OS clone**). The milestone is *does the
+  pre-plugged stick enumerate as `/dev/sdX`?*; the debug PID-1 reports
+  `ENUMERATION OK: /dev/sdX` on screen and ships the init logs (incl. the PPM
+  ULog) to the stick for the diff against the success-side fingerprint. A cheap
+  control (full-system pre-plug with a **direct stick**, to rule out the
+  partner-type confound of the dock-based success measurement) runs alongside.
+  Verdict → next boot mapping:
+  [docs/INITRAMFS_CHANGES.md#next-step-the-enum-only-test](docs/INITRAMFS_CHANGES.md).
 
 Background: the firmware RE removed the "runtime flag" hypothesis and named
 both ends of the AP↔PPM link (the in-kernel UCSI core fires the four

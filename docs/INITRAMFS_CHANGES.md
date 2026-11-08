@@ -112,6 +112,64 @@ updated" (`chgr_stat=7`), no PartnerType line at all.
    to the initramfs fixes this; the gate is the PPM config byte"* — which is
    itself the falsifiable end-state this investigation has been converging on.
 
+## Next step: the enum-only test
+
+The ranked candidates above are a plan; this is the concrete next boot. It
+answers the one open question in the decision rule — **does the PPM's initial
+detection run in the failing (initramfs) environment, and what does it
+return?** — on the smallest drive that can carry the question.
+
+**"Enum-only" = the milestone is enumeration, not boot.** The drive is one
+partition: p1 (256 M, vfat, label `ARMADA`) holding the boot image (`KERNEL` =
+`gzip(vmlinuz)+DTBs` + the fixed initramfs as ramdisk). No p2, no OS-root
+clone, no real root (a placeholder `root=UUID=` is used and the debug init
+ignores it). Booting the OS from the stick is the later step, only after
+enumeration is proven.
+
+**Why this vehicle.** One boot runs the first candidates of the ranked order
+together — **A** (stage the ADSP start to ~T+11 s), **B** (the poller + the
+stock `pmic_pdcharger_ulog` PPM-ULog drain), and **C-lite** (unbind/rebind
+`dwc3-qcom` around the PDR) — and B's first-drain ULog window is exactly the
+discriminator the decision rule needs. A debug PID-1
+(`armada-usb-fix-debug-init`) runs the sequence with a console echo per step;
+on enumeration it prints `ENUMERATION OK: /dev/sdX` and keeps refreshing the
+init logs (including the PPM ULog) onto p1 so they can be read off the stick on
+a PC.
+
+**How to run it** (unprivileged build, no kernel rebuild; the build lives in
+`agent-work/usb-fix/`, a sibling of this repo, on the device):
+
+```sh
+cd agent-work/usb-fix/build
+./build-initramfs.sh  ../out/initramfs-fix.img              # A + B + C-lite
+# lever-D variant — only if the first boot's verdict is FAIL-NO-DETECTION /
+# FAIL-NO-CLASSIFY:
+./build-initramfs.sh ../out/initramfs-fwD.img --fw-dir ../out/fw-apsdrerun
+# on a spare stick (NOT Slim), with your sudo:
+sudo ./make-drive.sh /dev/sdX ../out/initramfs-fix.img --enum-only
+# unplug → pre-plug into the RP6 before power-on → ABL menu → linux usb
+```
+
+**Verdict → next boot** (the decision rule, mapped to the build):
+
+| console verdict | decision-rule branch | next boot |
+|---|---|---|
+| `PASS usb_blocks=[sdX]` | A+B(+C-lite) fixed it | milestone 1 done → OS-root clone + boot-from-stick |
+| `FAIL-NO-PDR` | A failed (staged ADSP start didn't reach the PDR) | read the ULog/dmesg remoteproc errors in the shipped logs |
+| `FAIL-NO-DETECTION` (no `PartnerType=`) | branch 1 — detection ran blind or was skipped | lever-D boot (`initramfs-fwD.img`), or refine A |
+| `FAIL-NO-CLASSIFY` (`PartnerType=` present, `usb_type` stuck `Unknown`) | branch 2 — result never reaches the property service | lever-D boot (firmware-side) |
+| `FAIL-NO-SCAN` (`usb_type=SDP`, no block device) | classification OK, the scan missed the drive | refine C (post-PDR nudge timing) |
+
+**The confound to rule out (cheap control boot).** The measured full-system
+success used a **PD dock** as the partner; the failing `linux usb` case is a
+**directly-attached stick** — a different partner for the PPM. Before reading
+an enum-only result as "initramfs vs full system," run the control: a
+**full-system pre-plug with a directly-attached stick** (no tooling — boot the
+normal OS with the stick already in the port and check it enumerates without a
+replug). If the full system *also* fails to enumerate a pre-plugged direct
+stick until a replug, the discriminator is partner-type/pre-plug, not
+initramfs-vs-full, and the plan above changes.
+
 ## References
 
 - Success-side PPM ULog fingerprint: [ADSP_ULOG.md](ADSP_ULOG.md)
