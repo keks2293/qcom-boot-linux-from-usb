@@ -1,5 +1,37 @@
 # Results
 
+## `usb_type` timing — full-system pre-plug (2026-11-08)
+
+New instrument (`scripts/usb-type-poller.sh`, 50 ms, enabled at
+`sysinit.target`) on a normal pre-plug boot, zero actions. It closes the
+"when does it get classified?" hole left open in
+[FULL_SYSTEM_PREPLUG_RESULT.md](FULL_SYSTEM_PREPLUG_RESULT.md) (next experiment
+2):
+
+- **`usb_type` is `SDP` at `charger_pd` PDR + 55 ms** (PDR 11.024750 → first
+  readable sample 11.08, `online=1`, V = 9.083 V) — **inside the PPM, with no
+  AP actor**: the in-kernel UCSI core had issued nothing (its
+  `ucsi-source-psy` node only appears at 11.056 s *because* the PPM pushed
+  state at it), there is no fresh CC edge, and `SetRerunApsd` is config-gated
+  off. Trigger path **#1 (initial detection at PPM boot)** is the one that
+  fires; #2/#3 were neither needed nor used.
+- What follows is a **power-path** sequence, not classification: 9.08 V →
+  VBUS collapse to 6 mV (11.71, `usb_type` → `Unknown` for 0.8 s) → 5.25 V +
+  `SDP` (12.52) → PD negotiation (12.75) → 9 V + data-role swap to host
+  (15.43, within one poller sample of the `xhci-hcd.2.auto` `device_add` at
+  15.412) → first scan 15.664 → `sdg` 18.320 → mounted.
+- **Discriminator vs the initramfs is the PPM state at the PDR**, not an AP
+  trigger: the initramfs gets the same PDR (dbg49: 3.498103 s) and the same
+  UCSI/typec nodes, yet `usb_type` never leaves `[Unknown]`, `online=0`,
+  V = 5.062 V, no PD contract — for minutes (dbg1400, unchanged to t≈366 s).
+- New PDR → xHCI sample: **4.387312 s** (range 2.7–4.4 s unchanged, now
+  2.755 / 3.155 / 4.387 / 4.404 / 4.406 s).
+
+Raw: [`logs/full-system/usb-type-poller-20261108-130924.log`](../logs/full-system/usb-type-poller-20261108-130924.log),
+[`logs/full-system/usb-type-timeline-20261108.txt`](../logs/full-system/usb-type-timeline-20261108.txt).
+Full write-up: [USB_TYPE_TIMING.md](USB_TYPE_TIMING.md). Consequence for the
+fix: [INITRAMFS_CHANGES.md](INITRAMFS_CHANGES.md).
+
 ## dbg1400 run — `linux usb` pre-plug (2026-11-07, second run)
 
 Image: `KERNEL.ci-a699dd6-dbg1400` (CI kernel with patch 1400 + CI initramfs

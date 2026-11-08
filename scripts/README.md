@@ -48,6 +48,27 @@ Reads only (plus a best-effort dynamic-debug switch on `dd.c`/`core.c`/`dwc3`/
 `xhci_hcd`). Samples every 50 ms for 45 s and prints only state changes, with
 kernel uptime, so each line can be matched against the `dmesg` timeline.
 
+## usb-type-poller.sh + .service — `usb_type` transition logger
+
+Answers "when does the port get classified?" — the transition
+`Unknown → SDP` on `qcom-battmgr-usb`, stamped with kernel uptime so it lines
+up with `journalctl -b -k -o short-monotonic` (PDR, role flip, first scan).
+Result and interpretation: [`../docs/USB_TYPE_TIMING.md`](../docs/USB_TYPE_TIMING.md).
+
+```bash
+# on the device (as root; /usr/local is read-only on this ostree system)
+sudo install -D -m0755 scripts/usb-type-poller.sh /var/lib/usb-type-poller/poller.sh
+sudo install -D -m0644 scripts/usb-type-poller.service /etc/systemd/system/usb-type-poller.service
+sudo systemctl daemon-reload && sudo systemctl enable --now usb-type-poller.service
+# log: /var/tmp/usb-type-poller.log (rotated to .prev on each start)
+```
+
+Reads sysfs only. Samples every 50 ms; a line is written only when a *stable*
+field changes (`usb_type`, `online`, `power/data` role, partner, role-switch,
+USB block device) plus a 10 s heartbeat — voltage/current wobble is carried
+along but does not trigger a line, so a steady boot produces ~1 line per 10 s.
+Starts at `sysinit.target` (after `local-fs.target`), i.e. before the ADSP PDR.
+
 ## adsp-re/ — PPM firmware RE toolchain
 
 Tools used to reverse-engineer the PPM/ADSP firmware (`adsp.mbn`, a 32-bit

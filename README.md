@@ -88,6 +88,18 @@ to fire on device — but it does not enumerate the drive yet**:
   with the **fixed** `dbg1400` build (the run used the pre-dedup build — its
   own dump lines contaminated its dmesg tail) and a **full-boot re-check on
   the same CI build** (control) — [docs/KERNEL_PATCH_1400.md](docs/KERNEL_PATCH_1400.md).
+- **2026-11-08: the classification trigger is measured.** A 50 ms poller on a
+  normal pre-plug boot shows `usb_type = SDP` **at the `charger_pd` PDR +
+  55 ms**, produced inside the PPM with no AP actor — so the working
+  environment uses *initial detection at PPM boot*, and the initramfs fails
+  that same step (same PDR, `usb_type` never leaves `[Unknown]`). The
+  consequence for the fix is collected in
+  [docs/INITRAMFS_CHANGES.md](docs/INITRAMFS_CHANGES.md): nothing an init
+  script can *command* is left, so the remaining init-side options are
+  staging the ADSP start, shipping the poller + ADSP ULog for diagnosis, and a
+  post-PDR nudge inside the ≤30 s window — otherwise the gate is the
+  `apsd-rerun-cfg` firmware byte. Measurement:
+  [docs/USB_TYPE_TIMING.md](docs/USB_TYPE_TIMING.md).
 
 Background: the firmware RE removed the "runtime flag" hypothesis and named
 both ends of the AP↔PPM link (the in-kernel UCSI core fires the four
@@ -134,7 +146,9 @@ inside the ≤30 s window).
 - [docs/ADSP_RE.md](docs/ADSP_RE.md) — PPM/ADSP firmware reverse engineering (wedge state, trigger map, glink RX, the "flag wall" refutation, the final charger-type/property model)
 - [docs/ADSP_CONFIG.md](docs/ADSP_CONFIG.md) — `adsp_dtb.mbn` container layout, PPM config values, the 1-byte `apsd-rerun-cfg` patch recipe
 - [docs/TEST_METHOD.md](docs/TEST_METHOD.md) — how tests were performed
-- [docs/RESULTS.md](docs/RESULTS.md) — results from dbg50/dbg51
+- [docs/RESULTS.md](docs/RESULTS.md) — results tracker: `usb_type` timing (2026-11-08), the `dbg1400` run, the CI/kernel-patch tests, dbg50/dbg51
+- [docs/USB_TYPE_TIMING.md](docs/USB_TYPE_TIMING.md) — **when the port gets classified** (2026-11-08, new poller instrument): `usb_type = SDP` at `charger_pd` PDR + 55 ms, produced inside the PPM with no AP actor; the VBUS-bounce power sequence; the PPM-state discriminator vs the initramfs
+- [docs/INITRAMFS_CHANGES.md](docs/INITRAMFS_CHANGES.md) — what a `linux usb` initramfs would have to contain: what PR #704 already added and verified, why no AP-side command can set `usb_type`, and the ranked remaining options (stage the ADSP start / poller + ADSP ULog in init / a ≤30 s post-PDR nudge / the `apsd-rerun-cfg` firmware byte)
 - [docs/FULL_SYSTEM_COLDPLUG_TEST.md](docs/FULL_SYSTEM_COLDPLUG_TEST.md) — full-system test procedure
 - [docs/FULL_SYSTEM_PREPLUG_RESULT.md](docs/FULL_SYSTEM_PREPLUG_RESULT.md) — measured full-system pre-plug result (2026-11-05)
 - [docs/FULL_SYSTEM_MECHANISM_CAPTURE.md](docs/FULL_SYSTEM_MECHANISM_CAPTURE.md) — Q1–Q5 mechanism capture (2026-11-06): the attach is the first scan, not a fresh CC edge; **Q1 answered** — nothing holds the xHCI probe, the host controller is *created* only when the Type-C role flips to HOST (gadget→host, 2.7–4.4 s after the `charger_pd` PDR)
