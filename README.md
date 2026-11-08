@@ -49,7 +49,8 @@ UCSI 2.0 spec cross-check: PPM is the spec term "Platform Policy Manager"; the s
 
 ## Current status (2026-11-07)
 
-The mechanism is identified and the first fix is shipped:
+The mechanism is identified and the first fix is **in the branch and verified
+to fire on device — but it does not enumerate the drive yet**:
 
 - **Unifying root cause**: in `linux usb` mode ABL unconditionally adds
   `dr_mode=host` to the runtime device tree, forcing the early host scan
@@ -78,10 +79,15 @@ The mechanism is identified and the first fix is shipped:
   ABL/XBL runs its own closed USB host stack on this very port (it reads
   `\KERNEL` from the drive), and the PPM/ICM port state left by that ABL
   session is not re-classified at kernel handoff (pre-plug ⇒ no fresh CC
-  edge; the ICM in `ncp_stby` does not rescan). Next: a re-run with the
-  **fixed** `dbg1400` build (the run used the pre-dedup build — its own dump
-  lines contaminated its dmesg tail) and a **full-boot re-check on the same
-  CI build** (control) — [docs/KERNEL_PATCH_1400.md](docs/KERNEL_PATCH_1400.md).
+  edge; the ICM in `ncp_stby` does not rescan). That hypothesis must be
+  reconciled with the measured replug window (a fresh edge works at ≤ ~24.7 s
+  and fails at ≥ ~38 s — so a missing edge alone cannot be the story); the
+  combined model and the two remaining edge-free levers (`apsd-rerun-cfg`
+  0→1, still untested; a ≤30 s role/`unbind`-`bind` cycle, still unrun) are
+  in [docs/KERNEL_PATCH_1400.md](docs/KERNEL_PATCH_1400.md). Next: a re-run
+  with the **fixed** `dbg1400` build (the run used the pre-dedup build — its
+  own dump lines contaminated its dmesg tail) and a **full-boot re-check on
+  the same CI build** (control) — [docs/KERNEL_PATCH_1400.md](docs/KERNEL_PATCH_1400.md).
 
 Background: the firmware RE removed the "runtime flag" hypothesis and named
 both ends of the AP↔PPM link (the in-kernel UCSI core fires the four

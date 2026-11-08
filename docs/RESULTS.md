@@ -37,7 +37,11 @@ Protocol: `linux usb`, drive pre-plugged, zero actions.
   re-classified at kernel handoff (pre-plug ⇒ no fresh CC edge; the ICM in
   `ncp_stby` does not rescan). In a normal boot the bootloader never touches
   the port, so PPM detects the drive fresh and it enumerates on the first
-  post-PDR scan.
+  post-PDR scan. **It does not fit on its own**: a fresh CC edge works at
+  ≤ ~24.7 s and fails at 38/59/102 s with an identical ABL session — the
+  combined model (ABL blocks the *initial* classification, the PPM ~30 s/40 s
+  window blocks *late* recovery) and the two remaining edge-free levers are in
+  [KERNEL_PATCH_1400.md](KERNEL_PATCH_1400.md).
 - Secondary anomaly: dwc3 probe at t≈164 s (full-boot xHCI ~14.8/17.75 s) —
   to be measured with the clean tail.
 

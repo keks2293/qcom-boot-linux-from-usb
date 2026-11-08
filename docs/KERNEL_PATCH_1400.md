@@ -39,7 +39,15 @@ the protocol for the **full-boot re-check** (the control experiment).
 | `68f68ad` | dracut drop-in `system_files/etc/dracut.conf.d/91-armada-adsp.conf`: `add_drivers += qcom_q6v5_pas` (resolves its 4 deps through `modules.dep`) + `install_items +=` the board ADSP firmware images | ADSP/PPM must be up **early** (initramfs): dracut's aarch64 whitelist ships neither the `remoteproc` driver nor the firmware (its name comes from the board DT, not `MODULE_FIRMWARE`), so without it the `charger_pd` PDR — which the fix depends on — never comes up in the initramfs |
 | `a699dd6` | kernel patch `1400-dwc3-ignore-dr-mode-host-with-role-switch.patch` (+ `series` + `PATCHES.md`): in `dwc3_get_dr_mode()` (`drivers/usb/dwc3/core.c:53`), when `dwc->dr_mode == HOST` and the device declares `usb-role-switch`, demote to OTG with a `dev_warn` marker | the ABL overlay `dr_mode=host` (applied unconditionally in `linux usb` mode) forces the early host scan **before** the `charger_pd` PDR; that scan is absorbed by the ICM (`icm_ncp_stby`) and the pre-plugged drive is never enumerated — the unifying root cause. The demotion makes `linux usb` follow the full-system (known-good) OTG + role-flip sequence |
 
-Expected behavior with both in place, in `linux usb` mode:
+### Expected behavior with both in place, in `linux usb` mode — **partly refuted on device**
+
+> **Prediction vs measurement (2026-11-07, `dbg1400`):** the first three lines
+> held (OTG path taken, role-switch registered, role flipped to HOST after the
+> PDR, xHCI created) — the fourth, *the first scan after the PDR enumerates the
+> pre-plugged drive*, is **refuted**: the port never gets classified
+> (`usb_type=[Unknown]`, `online=0`), so nothing enumerates. The prediction is
+> kept below as originally written because it documents what the fix was
+> expected to deliver.
 
 - `dwc3` takes the OTG path → the `a600000.usb-role-switch` device is
   registered → the controller starts in the **DEVICE** role (no xHCI, no
@@ -154,8 +162,39 @@ enumerates on the first post-PDR scan. The re-run with the fixed `dbg1400`
 transitions; the full-boot control (same build, internal install, pre-plug)
 confirms the other half.
 
-Secondary anomaly: the dwc3 probe timestamp (t≈164 s) is far later than the
-full-boot xHCI probe (~14.8/17.75 s) — to be measured with the clean tail.
+**Reconciliation with the replug window (required — the hypothesis alone does
+not fit).** The replug table in [INVESTIGATION.md](INVESTIGATION.md#the-replug-window-timing-correlation)
+shows a fresh CC edge **works at ≤ ~24.7 s and fails at 38 s, 59 s and 102 s** —
+in runs where the ABL host session is *identical*. If "no fresh edge" were the
+whole story, a late replug would fix it too, and it does not. The two
+observations are only compatible if **both** are true:
+
+1. ABL's host session blocks the **initial** classification in `linux usb`
+   (why pre-plug never classifies and why the full system — where ABL never
+   touches the port — does), **and**
+2. the PPM's classification window (`chg-heartbeat-timer-ms = 30000`,
+   `poll-timer-ms = 40000`, see
+   [ADSP_CONFIG.md](ADSP_CONFIG.md#timer--replug-correlation)) blocks **late**
+   recovery, so an edge after ~38 s cannot rescue it either.
+
+Model: the full system needs neither rescue (clean initial classification);
+pre-plug in `linux usb` needs a re-classification that arrives *within* the
+window. That is also why the two live levers are complementary — the
+`dwc3`/scan-timing fix (1400, done) and an **edge-free re-arming** of
+detection: the `apsd-rerun-cfg` 0→1 firmware patch (recipe ready, **still
+untested on device**, dbg52 candidate) or a role/`unbind`-`bind` cycle run
+**inside the ≤30 s window** (never run either — `dbg1400` only dumps at the
+dracut timeout, ~160 s+).
+
+**Secondary anomaly: the dwc3 probe timestamp (t≈164 s) is far later than the
+full-boot xHCI probe (~14.8/17.75 s) and than the ~0.5 s `xhci-hcd` probe this
+document attributes to the forced-HOST path.** Two readings, and they imply
+different fixes: (a) the timestamp base in the photos is not kernel-monotonic
+(hook-relative / redraw time) and the chain really ran early, leaving a pure
+classification failure; or (b) the chain genuinely ran at ~164 s — far outside
+the PPM's 30 s window, which by itself would explain the dead power path.
+**Confirm the timestamp base first**, then measure the PDR→xHCI Δ with the
+clean tail; do not treat 164 s as settled either way.
 
 ## `dbg1400` — the next `linux usb` diagnostic image
 

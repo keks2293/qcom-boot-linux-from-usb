@@ -31,15 +31,21 @@ Run-level evidence lives in
 - The property forces `dwc3` into HOST mode at probe → `xhci-hcd` appears at
   ~0.5 s → the **first root-hub scan is at ~2.7 s**, which is **before** the
   `charger_pd` PDR indication at ~3.5 s. That early scan is absorbed (the ICM is
-  still in standby waiting for the charger type), so the drive is not enumerated.
+  still in standby waiting for the charger type), so the drive is not
+  enumerated. **Fixing the timing turns out to be necessary but not sufficient**
+  — with the demotion in place the port power path still never comes up
+  (`usb_type=[Unknown]`, `online=0`), see the status block below.
 - The full system (normal boot, **no** overlay) does not have this problem: it
   stays OTG, keeps the role switch, flips to HOST only **after** the PDR (on the
-  UCSI partner event), and its first scan lands ~4.4 s after the PDR — and it
-  enumerates the pre-plugged drive fine.
+  UCSI partner event), and its first scan lands **2.7–4.4 s after** the PDR —
+  and it enumerates the pre-plugged drive fine.
 - The fix is therefore not a new driver. It is to make the kernel **not** honor
   the bootloader's static `dr_mode=host` when the device declares a
   `usb-role-switch`, so the kernel reproduces the full-system (known-good)
-  behavior.
+  behavior. That is **necessary but not sufficient**: it is implemented
+  (PR #704 / patch 1400) and verified on device to fire, yet `linux usb`
+  pre-plug still does not enumerate — the break is one step further down, on
+  the port power path (status block below).
 
 ---
 
@@ -141,6 +147,12 @@ This is the crux, and it is **not** about a missing or special driver.
   delivered and the ICM is out of standby). The full system already proves this
   works — its first scan is at 18 s, after the PDR at 13.3 s, and it enumerates
   the pre-plugged drive. That is precisely what the recommended fix does.
+  **Caveat (2026-11-07):** the `dbg1400` run shows this condition is *not* the
+  whole story — with the demotion active and the role flipped to HOST after the
+  PDR, the drive still does not enumerate, because `qcom-battmgr-usb` stays
+  `usb_type=[Unknown]` / `online=0` (the ICM `icm_ncp_stby` wedge) and no VBUS
+  reaches the port. Timing gets the scan into the right window; the port still
+  has to be classified. See [KERNEL_PATCH_1400.md](KERNEL_PATCH_1400.md).
 
 ---
 
@@ -174,17 +186,24 @@ non-automated version of the initramfs-script fix below.
 | ABL patch | ABL: only set `dr_mode=host` when `usb-role-switch` is **absent** | No — ABL is closed | The "right" place semantically, but not actionable |
 | Initramfs script | dracut: hold the first scan until the PDR, then re-probe | Yes — no kernel rebuild | `unbind`/`bind` the `dwc3-qcom` device once the PDR line appears; ships in the next CI image |
 
-> **Status (2026-11-07):** the kernel patch option was implemented as Armada
-> PR #704 commit `a699dd6` (patch
+> **Status (2026-11-07, updated after the `dbg1400` run):** the kernel patch
+> option was implemented as Armada PR #704 commit `a699dd6` (patch
 > `1400-dwc3-ignore-dr-mode-host-with-role-switch.patch`, exactly the demotion
-> above) and tested on device: the CI image built from the branch carries the
-> patch in the kernel (marker string verified in the flashed vmlinux), but
-> `linux usb` pre-plug still ends in the dracut root-wait timeout —
-> **inconclusive**, because the CI image is `quiet` and carries no
-> diagnostics (it is not known whether the demotion fired at runtime). Next:
-> a full-boot re-check on the same CI build (control) and the `dbg1400`
-> dracut timeout-hook image on the CI kernel. See
-> [KERNEL_PATCH_1400.md](KERNEL_PATCH_1400.md).
+> above) and tested on device. First test: the CI image built from the branch
+> carries the patch in the kernel (marker string verified in the flashed
+> vmlinux) but `linux usb` pre-plug still ended in the dracut root-wait
+> timeout — inconclusive at the time, because the image is `quiet` and carries
+> no diagnostics. The follow-up `dbg1400` run closed that gap: **the demotion
+> fired** (`dr_mode=host ignored: usb-role-switch present, using OTG` in
+> dmesg), the runtime FDT carries both properties, the role-switch device is
+> registered, ADSP is up and the role **flipped to HOST after the PDR** — and
+> the drive *still* does not enumerate, because the **port power path stays
+> dead** (`usb_type=[Unknown]`, `online=0`, ICM `icm_ncp_stby`, no VBUS).
+> So 1400 is confirmed as a no-op-free, correctly-firing **partial** fix: it
+> removes the early-scan ordering problem and leaves the classification
+> problem (the same ICM `charger_type` wedge the initramfs has had all along).
+> Remaining work, and the reconciliation with the measured replug window, are
+> in [KERNEL_PATCH_1400.md](KERNEL_PATCH_1400.md).
 
 ### Kernel patch (recommended)
 
