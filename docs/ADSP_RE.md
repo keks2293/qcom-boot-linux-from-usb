@@ -49,19 +49,36 @@ updated`, `sm_state_loop: event_type=24 curr=2 next=2`, `chgr_stat=7`,
 `charger_present=0`) corresponds to the state machine in
 [`func-icm-ncp-stby-main.txt`](../logs/adsp-re/func-icm-ncp-stby-main.txt):
 
-- `icm_ncp_stby_main` @0x601a1790 is an **event dispatcher** for the wedge state.
-- Entry gate: `arg0->field_0xc == 2` — state **2 = icm_ncp_stby** (matches the diag
-  `curr=2 next=2`).
-- Jump table on `arg1[0] − 7` (table @0x60238cc0); valid index 0..0x11 ⇒ events 7..0x18.
-  **Event 24 (0x18) is the maximum = the periodic tick** (matches the diag
-  `event_type=24`).
-- The WARN log "keeps in icm_ncp_stby utill charger_type updated" (typo "utill" is
-  verbatim in the firmware) is emitted from **four jumptable arms**, each behind a ULog
-  gate (see below). The functional state write `memb(r2+#0xc) = #0x2` runs
-  unconditionally.
+- `icm_ncp_stby_main` @0x601a1790 (body 0x601a1790–0x601a1c2c, **fully decoded**
+  2026-11-09) is the **event dispatcher** for the wedge state:
+  - Prologue: loads `T = *(*(0x60339210) + 1)`; early return unless
+    `icm->+0xc == 2` — state **2 = icm_ncp_stby** (matches the diag
+    `curr=2 next=2`).
+  - Jump table on `event − 7` (table @0x60238cc0); valid index 0..0x11 ⇒ events
+    7..0x18, default arm @0x601a1978. **Event 24 (0x18) is the maximum = the
+    periodic tick** (matches the diag `event_type=24`).
+  - **Handler-1** @0x601a182c: `chgr_stat == 3` **or** `(chgr_stat == 4 and
+    vbat ≤ 0x2647)` → **direct `icm->+0xc = 3` @0x601a1898, before the flag
+    section**.
+  - **Flag section** @0x601a197c–0x601a1ae0 — the same logic as
+    `icm_ncp_stby_init` (below): null-guarded vtable calls on `B = 0x6016e900()`
+    (the ctxB singleton, `*0x60338c40`), selected by the T range:
+    `T ∈ {21,22,23}` → `flag = !(B->vt[+0x1c/4](B) != 0)` (via 0x6016d2f0; the
+    target is 0x6016aad0 = `GET(0x270b) & 0x10`); `T ∈ {2..16,19}` →
+    `flag = !(B->vt[+0x20/4](B) != 0)` (via 0x6016d350; target 0x6016ab40 =
+    `GET(0x270b) & 0x20`); `T ∈ {0,1,17,18,20}` or `T > 23` → **flag = 1
+    unconditionally**.
+  - Exit evaluation @0x601a1ae0 → `icm->+0xc = 3` @0x601a1b4c when `flag == 0`.
+  - **Force-stay** @0x601a1ad8: when `flag == 1`, re-assert `icm->+0xc = 2` —
+    **overwriting the state 3 that handler-1 may have set** — behind the ULog
+    gate that also emits the WARN "keeps in icm_ncp_stby utill charger_type
+    updated" (typo "utill" verbatim; the `main` variant's fmt string is
+    @0x60238da2, the `init` variant's @0x60238d14).
+  - Epilogue @0x601a1b58; the function returns the flag.
 
 So the ICM state machine stays in `icm_ncp_stby` until charger-detection updates
-`charger_type`. The question is what re-triggers detection.
+`charger_type`. The questions are what re-triggers detection — and what value T
+has at runtime (below).
 
 ## Detection and the trigger chain
 
@@ -283,6 +300,37 @@ read-only** in the ADSP code (no setter). So "who pulls the charger type" is **n
 runtime ADSP actor: the type is fixed by boot configuration (HW/FDT), and the dynamic
 "charger present / type changed" information comes from the PMIC and is triggered by
 AP-side USB/PD activity.
+
+### The value of T: two hypotheses (2026-11-09)
+
+The write-site search is now **closed (negative)**: a full taint analysis (39 597
+functions) plus a direct-address scan of the halfword at 0x603391b8 finds exactly
+**one** store — the ICM init @0x6019ffe4 (`memh(##0x603391b8) = (old & 0xfff0) | 4`),
+which preserves the byte. So T is either:
+
+- **H1 (static, T = 0):** the byte is BSS (zero) and nothing ever writes it. Then the
+  flag section takes the "otherwise" branch: **flag = 1 on every event,
+  unconditionally** — no property value can clear the wedge, and the
+  `apsd-rerun-cfg` patch cannot help (dbg53 dead).
+- **H2 (FDT config-loader, candidate T = 2):** a firmware config loader writes T from
+  the PPM FDT (`adsp_dtb.mbn`). Evidence: the firmware contains the FDT symbol-node
+  name `__symbols__` (vaddr 0xb23e7341/0xb23e736c) and the tree anchor `battman`
+  (vaddr 0xf02fe8e1), but **no property-name strings at all** — so it walks the FDT by
+  symbol lookup + positional property reads. The `chg_icm_cfg` node (phandle 0x12)
+  carries exactly two properties, `force-eoc-5v = 0` and `ptm-cfg = 2`; no property is
+  named after the type byte, and `ptm-cfg = 2` is the only plausible T source. If
+  T = 2, the flag is `!(GET(0x270b) & 0x20)` and the `apsd-rerun-cfg = 0→1` patch
+  (dbg53) is viable, provided the re-detection path sets that bit.
+
+**Logical constraint (2026-11-09):** the ICM always passes through pre_chg (state 1) →
+ncp_stby (state 2) — pre_chg's **only** state write is `icm->+0xc = 2` @0x601a0bb8 —
+and can leave ncp_stby only via `flag == 0`. The measured working system (full-system
+boot: `PartnerType=15`, 9 V / 2440 mA) *does* leave ncp_stby, so in a working system
+**T ∈ {2..23}**. H1 (T = 0) is therefore in tension with the working system unless the
+working system never enters ncp_stby — not supported by the ICM init, which sets state
+1 at boot (@0x6019ffc8). Decoding the config loader (the consumer of the `__symbols__`
+vaddr 0xb23e7341 — no direct immext references; the base is reached through a pointer
+global) is the next RE step and decides dbg53 viability directly.
 
 ### Property 0x270b: every reference is a GET
 
@@ -618,6 +666,11 @@ the candidates narrow to:
    that is disabled by config. A 1-byte FDT patch (+ `sha384` recompute) is the
    candidate config fix. See
    [ADSP_CONFIG.md](ADSP_CONFIG.md#the-1-byte-patch-recipe-verified-by-trial-patch).
+   **Its effectiveness depends on T** (2026-11-09): under H1 (T = 0) the ICM flag is
+   1 unconditionally and the patch cannot clear the wedge; under H2 (T = 2, written by
+   the config loader from `ptm-cfg`) the flag is `!(GET(0x270b) & 0x20)` and the patch
+   enables the concrete re-detection path. See
+   [the value of T](#the-value-of-t-two-hypotheses-2026-11-09).
 
 ## The two remaining function bodies — now decoded (2026-11-09)
 

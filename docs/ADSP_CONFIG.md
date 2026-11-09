@@ -23,6 +23,29 @@ Note: the string table is the region `[5648 : 8315]` (2667 bytes); the 4th
 header field (0x28) is the rsvmap pointer, **not** a strings size. A naive
 parser that reads it as `stringsz` will find 40 bytes and parse nothing.
 
+## FDT internal format (re-parsed byte-for-byte, 2026-11-09)
+
+The payload is a **custom FDT variant** (not raw-dtc-parseable):
+
+- Tokens are big-endian u32 with the standard values: `0x1` BEGIN_NODE, `0x3` PROP,
+  `0x2` END_NODE.
+- **Node name = inline C string** (NUL-terminated, padded to 4 bytes) directly after
+  the `0x1` token — *not* a string-table offset. This is the deviation from standard
+  FDT (a raw dtc parse fails on it; the `ppm-fdt-rp6.dts` dump was produced by a
+  custom parser).
+- Property record: `[0x3][value size][name offset into the string table][value,
+  padded to 4 bytes]`.
+- The string table (file 0x16e0 = FDT+0x1610) holds the names (property names plus a
+  few node names); the ICM-relevant offsets: 0x2c=phandle, 0x3b=struct-ver,
+  0x46=plat-id, 0x4f9=en-apsd-pwr, 0x505=en-usb-phy-cfg, 0x514=qc-det-cfg,
+  0x51f=dam-hc-override, 0x52f=apsd-rerun-cfg, 0x53e=bm-hw-poff-ctrl,
+  0x54e=force-eoc-5v, 0x55b=ptm-cfg.
+
+The two ICM-relevant nodes: `chg_det_cfg` (phandle **0x11**, file 0x930) and
+`chg_icm_cfg` (phandle **0x12**, file 0x9b0). `chg_icm_cfg` carries **exactly two**
+properties — `force-eoc-5v = 0` and `ptm-cfg = 2`; there is **no property named after
+the ICM type byte T** (see [ADSP_RE.md, the value of T](ADSP_RE.md#the-value-of-t-two-hypotheses-2026-11-09)).
+
 The FDT describes the PPM configuration tree:
 
 ```
