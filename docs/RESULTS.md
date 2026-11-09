@@ -1,5 +1,41 @@
 # Results
 
+## dbgB run — failing-side PPM ULog capture (2026-11-09) — FAIL-NO-CLASSIFY
+
+Lever B as designed in [INITRAMFS_CHANGES.md](INITRAMFS_CHANGES.md): the
+failing env's own PPM view, captured in the initramfs console. Image `dbgB`
+(md5 `12a0327f…`), `linux usb`, stick pre-plugged, zero user action, ~41 s of
+console ([raw capture](../logs/dbgB-preplug-usb-ulog-20261109.txt)).
+
+The diff against the success-side fingerprint
+([ADSP_ULOG.md](ADSP_ULOG.md)) is now on the full ULog, not on the
+dbg49 `ncp_stby` excerpt:
+
+- **Detection ran and saw the partner** — `FPM: GET_CONNECTOR_STATUS:
+  Port[0]: … ConnectPartnerType=2, (USB=1, AltMode=0)` @7.41; the
+  `charger_detection.c` tag is demonstrably enabled (`…get_active_charger`,
+  `…get_charger_update` lines present), so the log-gate caveat of the
+  decision rule does not apply.
+- **The result was empty and never became a power type** —
+  `activePort[4] PartnerType=0, Voltage_max=0 mV, Power_max_uw=0 uW` @17.67,
+  `bChargeChanged = 0 max_vbus = 0`; and the PPM says why:
+  `charger_detection_event_handler: skip checking usb charging type while
+  usb is sourcing` @17.67. `usb_type` stays `[Unknown]` / `online=0` in
+  every poll (5.4 s → 40.8 s).
+- **ICM parked the whole time** — `keeps in icn_ncp_stby untill
+  charger_type updated` @7.41, `ncp_stby_db - chgr_stat=7, soc=9980` @30.23
+  (the dbg49 fingerprint, now on the full ULog); charger SM `0→1→2` then
+  stuck at 2 (success side: →4 by PDR + 8 s).
+
+**Verdict: FAIL-NO-CLASSIFY** (a `PartnerType=` line is present, `usb_type`
+stuck `Unknown`) ⇒ decision-rule branch 2 (firmware side). The "ABL USB
+host-session blocks detection" hypothesis is not supported: the PPM detected
+the partner; what is missing is the source-role power path (VBUS source for
+the stick), with the classification explicitly skipped "while usb is
+sourcing". Next: the full-system pre-plug control with a directly-attached
+stick (discriminates pre-plug/source-role from initramfs-vs-full), then the
+firmware-side levers per [INITRAMFS_CHANGES.md](INITRAMFS_CHANGES.md).
+
 ## PPM ULog from the AP — success-side fingerprint (2026-11-08, boot 1 of 2)
 
 New instrument: the stock `pmic_pdcharger_ulog.ko` — never loaded in any
@@ -287,3 +323,4 @@ persists regardless — see
 - [`logs/dbg32-connector-reset.txt`](../logs/dbg32-connector-reset.txt) — `CONNECTOR_RESET` rc=0 no-op; the second variant was a reset of invalid port 0 (re-decoded, above)
 - [`logs/dbg49-adsp-icm-ncp-stby.txt`](../logs/dbg49-adsp-icm-ncp-stby.txt) — ADSP stuck in `icm_ncp_stby` until charger type updated
 - [`logs/dbg51-rpm-no-suspend.txt`](../logs/dbg51-rpm-no-suspend.txt) — RPM idle returns `-EAGAIN`/`-EBUSY`, chain cannot suspend
+- [`logs/dbgB-preplug-usb-ulog-20261109.txt`](../logs/dbgB-preplug-usb-ulog-20261109.txt) — failing-side PPM ULog (lever B): partner detected (`ConnectPartnerType=2`), charger type skipped "while usb is sourcing", ICM parked in `ncp_stby`

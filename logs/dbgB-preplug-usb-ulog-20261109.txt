@@ -1,0 +1,68 @@
+dbgB run — failing side: PPM ULog capture + usb_type poller (2026-11-09)
+=========================================================================
+Image: diag/KERNEL.ci-a699dd6-dbgB (md5 12a0327f1175439bb2cf5798b0c61384)
+  = CI kernel a699dd6 (patch 1400) + CI initramfs + exactly one added file:
+    var/lib/dracut/hooks/initqueue/90-armada-ulog-b.sh
+Mode:  ABL "linux usb", stick pre-plugged, zero user action.
+Sink:  console (photo OCR; timestamps = kernel monotonic seconds).
+Hook:  ULog capture via the pmic_pdcharger_ulog_msg tracepoint
+       (INCLUDE PartnerType|charger_detection|sm_state_loop|ncp_stby|...
+       with ADC/QBG/SPMI spam excluded), usb_type poll of qcom-battmgr-usb +
+       ucsi-source-psy + typec port0, 16 s heartbeat.
+       "ARMADA-B ULOG:"  = filtered PPM ULog line
+       "ARMADA-B USB:"   = poller (on change / first read)
+       "ARMADA-B status:"= heartbeat
+OCR note: "util1 charger_type" below = "untill charger_type"
+       (cf. the dbg49 line "keeps in icm_ncp_stby untill charger_type updated").
+
+Raw console capture:
+
+[    3.325324] ARMADA-B: Ulog capture ON (pmic_pdcharger_ulog tracepoint)
+[    3.330796] ARMADA-B USB: usb_type=? online=? V=? src=? src_on=? power=? data=? partner=no
+[    3.330422] dracut-initqueue[569]: /lib/dracut/hooks/initqueue/90-armada-ulog-b.sh: line 82: read: 0: read error: Resource temporarily unavailable
+[    3.429218] dracut-initqueue[569]: /lib/dracut/hooks/initqueue/90-armada-ulog-b.sh: line 82: read: 0: read error: Resource temporarily unavailable
+[    3.429277] dracut-initqueue[569]: /lib/dracut/hooks/initqueue/90-armada-ulog-b.sh: line 82: read: 0: read error: Resource temporarily unavailable
+[    5.346039] ARMADA-B ULOG: typec_detect_partner: ssdev_type::InputNum=0, TypeCPartnerType=0
+[    5.351528] ARMADA-B ULOG: charger_detection_evaluate_typec_charger: charger detection: Input[0] blpdEn=0, bLiquidDetected=0
+[    5.353171] ARMADA-B ULOG: sn_state_loop: charger state: event_type=10, curr=0, next=1, status=0x0
+[    5.355836] ARMADA-B ULOG: sn_state_loop: charger state: event_type=10, curr=1, next=2, status=0x0
+[    5.358437] ARMADA-B ULOG: sn_state_loop: charger state: event_type=10, curr=2, next=2, status=0x0
+[    5.360218] ARMADA-B ULOG: battmngr_plat_scpqchg_qbg_r1_update_wlstx_otg_context: battmngr_plat_scpqchg_qbg_r1_update_wlstx_otg_context: wlstx enable: 0
+[    5.362130] ARMADA-B ULOG: battmngr_plat_scpqchg_qbg_r1_update_wlstx_otg_context: battmngr_plat_scpqchg_qbg_r1_update_wlstx_otg_context: otg enable: 1
+[    5.364684] ARMADA-B ULOG: battmngr_plat_scpqchg_qbg_r1_update_wlstx_otg_context: battmngr_plat_scpqchg_qbg_r1_update_wlstx_otg_context: otg source = 1
+[    5.369212] ARMADA-B USB: usb_type=(Unknown) SDP DCP CDP ACA C PD PD_DRP PD_PPS BrickID online=0 V=5061000 src=[C] PD PD_PPS src_on=0 power=[source] sink data=[host] device partner=yes
+[    7.398368] ARMADA-B ULOG: battmngr_tech_scpq_chq_r1_get_chg_cable_state: battmngr_tech_scpq_chq_r1_chg_get_cable_state::No charger cable is connected
+[    7.401011] ARMADA-B ULOG: battmngr_plat_scpqchg_qbg_r1_check_state_change: battmngr_plat_scpqchg_qbg_r1_check_state_change:: No charger connected
+[    7.401508] ARMADA-B ULOG: battmngr_plat_scpqchg_qbg_r1_check_state_change: battmngr_plat_scpqchg_qbg_r1_check_state_change::Change to state 1
+[    7.405189] ARMADA-B ULOG: battmngr_plat_scpqchg_qbg_r1_check_state_change: battmngr_plat_scpqchg_qbg_r1_check_state_change::Change state to 1 from 1
+[    7.407187] ARMADA-B ULOG: icn_ncp_stby_main: icn_ncp_stby_main: keeps in icn_ncp_stby util1 charger_type updated
+[    7.412442] ARMADA-B ULOG: ppm_process_immediate_command: FPM: GET_CONNECTOR_STATUS: Port[0]: ConnectorStatusChange=0x0000, PowerUp Mode=5, ConnectStatus=1, PowerDirection=1, ConnectPartnerType=2, (USB=1, AltMode=0), RID=0x00000000
+[    7.420865] ARMADA-B USB: usb_type=(Unknown) SDP DCP CDP ACA C PD PD_DRP PD_PPS BrickID online=0 V=5058000 src=[C] PD PD_PPS src_on=0 power=[source] sink data=[host] device partner=yes
+[    9.422840] ARMADA-B USB: usb_type=(Unknown) SDP DCP CDP ACA C PD PD_DRP PD_PPS BrickID online=0 V=5066000 src=[C] PD PD_PPS src_on=0 power=[source] sink data=[host] device partner=yes
+[   11.520160] ARMADA-B USB: usb_type=(Unknown) SDP DCP CDP ACA C PD PD_DRP PD_PPS BrickID online=0 V=5065000 src=[C] PD PD_PPS src_on=0 power=[source] sink data=[host] device partner=yes
+[   15.625338] ARMADA-B USB: usb_type=(Unknown) SDP DCP CDP ACA C PD PD_DRP PD_PPS BrickID online=0 V=5063000 src=[C] PD PD_PPS src_on=0 power=[source] sink data=[host] device partner=yes
+[   17.666833] ARMADA-B ULOG: charger_detection_event_handler: charger_detection_event_handler: skip checking usb charging type while usb is sourcing
+[   17.667632] ARMADA-B ULOG: BattMngrStateMachine_Main_Thread: BattMngrStateMachine_Main_Thread::Servicing BATTMNGR_DRV_PRE_CHARGER_CABLE_EVENT
+[   17.670688] ARMADA-B ULOG: sn_state_loop: charger state: event_type=3, curr=2, next=2, status=0x0
+[   17.671754] ARMADA-B ULOG: BattMngrStateMachine_Main_Thread: BattMngrStateMachine_Main_Thread::Servicing BATTMNGR_DRV_CHARGER_CABLE_EVENT
+[   17.674735] ARMADA-B ULOG: charger_detection_get_active_charger: activePort[4] PartnerType=0, Voltage_max=0 mV, Voltage_min=0 mV, Current_max=0 mA Power_max_uw=0 uW
+[   17.675852] ARMADA-B ULOG: charger_detection_get_charger_update: ActivePort[4] Charger Header 0xUINT32 current=0x00000004, previous=0x00000004
+[   17.678737] ARMADA-B ULOG: charger_detection_get_charger_update: ActivePort[4] Charger Power current=0 uW, previous=0 uW
+[   17.679974] ARMADA-B ULOG: battmngr_plat_scpqchg_qbg_r1_check_state_change: battmngr_plat_scpqchg_qbg_r1_check_state_change::bChargeChanged = 0 max_vbus = 0
+[   17.697094] ARMADA-B USB: usb_type=(Unknown) SDP DCP CDP ACA C PD PD_DRP PD_PPS BrickID online=0 V=5067000 src=[C] PD PD_PPS src_on=0 power=[source] sink data=[host] device partner=yes
+[   17.699905] ARMADA-B status: up=17s ulog_ok=1 seen=22 usb_type=(Unknown) SDP DCP CDP ACA C PD PD_DRP PD_PPS BrickID online=0
+[   19.773204] ARMADA-B USB: usb_type=(Unknown) SDP DCP CDP ACA C PD PD_DRP PD_PPS BrickID online=0 V=5065000 src=[C] PD PD_PPS src_on=0 power=[source] sink data=[host] device partner=yes
+[   21.856584] ARMADA-B USB: usb_type=(Unknown) SDP DCP CDP ACA C PD PD_DRP PD_PPS BrickID online=0 V=5063000 src=[C] PD PD_PPS src_on=0 power=[source] sink data=[host] device partner=yes
+[   23.941571] ARMADA-B USB: usb_type=(Unknown) SDP DCP CDP ACA C PD PD_DRP PD_PPS BrickID online=0 V=5067000 src=[C] PD PD_PPS src_on=0 power=[source] sink data=[host] device partner=yes
+[   28.100635] ARMADA-B ULOG: BattMngrStateMachine_Main_Thread: BattMngrStateMachine_Main_Thread::Servicing BATTMNGR_DRV_QBG_DATA_FULL_EVENT
+[   28.123024] ARMADA-B USB: usb_type=(Unknown) SDP DCP CDP ACA C PD PD_DRP PD_PPS BrickID online=0 V=5065000 src=[C] PD PD_PPS src_on=0 power=[source] sink data=[host] device partner=yes
+[   30.220143] ARMADA-B ULOG: sn_state_loop: charger state: event_type=12, curr=2, next=2, status=0x0
+[   30.232262] ARMADA-B ULOG: ncp_stby_db_log: ncp_stby_db - chgr_stat=7, soc=9980
+[   30.237282] ARMADA-B ULOG: sn_state_loop: charger state: event_type=24, curr=2, next=2, status=0x0
+[   30.244041] ARMADA-B USB: usb_type=(Unknown) SDP DCP CDP ACA C PD PD_DRP PD_PPS BrickID online=0 V=5063000 src=[C] PD PD_PPS src_on=0 power=[source] sink data=[host] device partner=yes
+[   32.357814] ARMADA-B USB: usb_type=(Unknown) SDP DCP CDP ACA C PD PD_DRP PD_PPS BrickID online=0 V=5064000 src=[C] PD PD_PPS src_on=0 power=[source] sink data=[host] device partner=yes
+[   34.484401] ARMADA-B USB: usb_type=(Unknown) SDP DCP CDP ACA C PD PD_DRP PD_PPS BrickID online=0 V=5065000 src=[C] PD PD_PPS src_on=0 power=[source] sink data=[host] device partner=yes
+[   34.486688] ARMADA-B status: up=34s ulog_ok=1 seen=26 usb_type=(Unknown) SDP DCP CDP ACA C PD PD_DRP PD_PPS BrickID online=0
+[   36.592719] ARMADA-B USB: usb_type=(Unknown) SDP DCP CDP ACA C PD PD_DRP PD_PPS BrickID online=0 V=5060000 src=[C] PD PD_PPS src_on=0 power=[source] sink data=[host] device partner=yes
+[   38.690020] ARMADA-B USB: usb_type=(Unknown) SDP DCP CDP ACA C PD PD_DRP PD_PPS BrickID online=0 V=5061000 src=[C] PD PD_PPS src_on=0 power=[source] sink data=[host] device partner=yes
+[   40.832380] ARMADA-B USB: usb_type=(Unknown) SDP DCP CDP ACA C PD PD_DRP PD_PPS BrickID online=0 V=5063000 src=[C] PD PD_PPS src_on=0 power=[source] sink data=[host] device partner=yes

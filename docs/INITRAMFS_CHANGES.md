@@ -120,6 +120,51 @@ updated" (`chgr_stat=7`), no PartnerType line at all.
    to the initramfs fixes this; the gate is the PPM config byte"* — which is
    itself the falsifiable end-state this investigation has been converging on.
 
+## dbgB run result (2026-11-09) — FAIL-NO-CLASSIFY
+
+The next boot was run as **B-only** (`dbgB`, md5 `12a0327f…` — CI base
+`a699dd6` + the single `90-armada-ulog-b.sh` hook; the enum-only A + C-lite
+build was not used — the "light logging only" decision). `linux usb`, stick
+pre-plugged, zero user action, ~41 s captured from the console
+([logs/dbgB-preplug-usb-ulog-20261109.txt](../logs/dbgB-preplug-usb-ulog-20261109.txt)).
+
+**The PPM detected the partner and ran charger detection — and then never
+classified the port to a power type; the ICM stayed parked in `ncp_stby`
+through the whole capture.**
+
+| what | line (t s) |
+|---|---|
+| capture alive | `Ulog capture ON` @3.33; heartbeats @17.7 / @34.5 with `ulog_ok=1` |
+| FPM sees the partner | `FPM: GET_CONNECTOR_STATUS: Port[0]: … PowerDirection=1, ConnectPartnerType=2, (USB=1, AltMode=0)` @7.41 |
+| charger detection ran | `charger_detection_get_active_charger: activePort[4] PartnerType=0, Voltage_max=0 mV, … Power_max_uw=0 uW` @17.67 (`charger_detection.c` tag demonstrably enabled → the log-gate check of decision rule 1 is satisfied) |
+| classification skipped | `charger_detection_event_handler: skip checking usb charging type while usb is sourcing` @17.67 |
+| ICM parked | `icn_ncp_stby_main: keeps in icm_ncp_stby untill charger_type updated` @7.41; `ncp_stby_db - chgr_stat=7, soc=9980` @30.23 (same `chgr_stat=7` as the dbg49 fingerprint) |
+| charger SM stuck at 2 | `sn_state_loop: curr=2, next=2` on events 3 / 12 / 24 (the success side walks 2→4, [ADSP_ULOG.md](ADSP_ULOG.md)) |
+| port never classified | `usb_type=(Unknown) online=0` in every poll, 5.4 s → 40.8 s, no change; `partner=yes` from 5.37 s |
+
+**Verdict: FAIL-NO-CLASSIFY** — a `PartnerType=` line is present but
+`usb_type` never leaves `Unknown` ⇒ decision-rule **branch 2**: the detection
+result never reaches the property service; firmware side. The "ABL USB
+host-session blocks detection" hypothesis is **not supported by this run**:
+detection ran, and the FPM reports the partner (`ConnectPartnerType=2`,
+USB=1). What is missing is the classification to a power type — and the PPM
+logs the reason explicitly: it **skips** the USB charging-type check
+**"while usb is sourcing"** (the port is in the source role, expected to power
+the stick, instead of the sink role of the success environment, where the PD
+dock was the power partner).
+
+Open question this raises: in the source role the expected charger-detection
+result is "no charger" — so the missing step is not classification per se, it
+is whatever makes the PPM **release the port for host power (VBUS source)**
+after a source-role partner is detected. The cheap control below (full-system
+pre-plug with a directly-attached stick) now also discriminates
+"pre-plug / source-role" from "initramfs vs full system".
+
+Two discrepancies to keep in mind: `typec_detect_partner: TypeCPartnerType=0
+(InputNum=0)` @5.35 vs the FPM's `ConnectPartnerType=2` @7.41 (the two
+partner readings disagree), and the charger_detection active port is index
+**4**, not 0 (success side: port 0).
+
 ## Next step: the enum-only test
 
 The ranked candidates above are a plan; this is the concrete next boot. It
