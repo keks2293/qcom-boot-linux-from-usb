@@ -617,3 +617,42 @@ the candidates narrow to:
    that is disabled by config. A 1-byte FDT patch (+ `sha384` recompute) is the
    candidate config fix. See
    [ADSP_CONFIG.md](ADSP_CONFIG.md#the-1-byte-patch-recipe-verified-by-trial-patch).
+
+## Static RE ceiling: what the local artifacts cannot answer
+
+The decoded coverage above is complete for the **trigger/propagation
+skeleton** (the EMIT/event-0x25 dispatch, the 9 subscribers, the chg-det SM
+call chain into `charger_detection_inital_detection` @0x60152970, the
+property push, the ICM `ncp_stby` wedge, the `SetRerunApsd` chain, and the
+ULog flag-gates). Two specific **function bodies** on the *initial-detection*
+path (trigger #3) are **not decoded locally**, and the full disassembly is not
+on this machine, so one question cannot be answered statically from the local
+artifacts:
+
+- **Not decoded locally:** (a) `charger_detection_evaluate_typec_charger` — the
+  body that reads the CC / APSD line state, decides *partner present vs absent*,
+  and gates the `PartnerType=` print; (b)
+  `battmngr_plat_scpqchg_qbg_r1_update_wlstx_otg_context` (the `otg enable: 1`
+  line) — the scp_qchg init that, in the same driver, arms the IRQ that EMITs
+  event 0x25. For (a) only the *call chain into* `charger_detection_inital_detection`
+  exists ([`call-sites-trigger-map.txt`](../logs/adsp-re/call-sites-trigger-map.txt));
+  for (b) only the log line and its driver-family link to the EMIT source
+  `battmngr_plat_irq_scpqchg_qbg_r1_irq_setup`.
+- **No full dump here:** `text_all.txt` (~3.67M lines) was produced on a host
+  with the Hexagon LLVM backend (`llvm-objdump --triple=hexagon`); that tool is
+  **not** on this device, so a fresh string-xref / body decode cannot be run
+  here.
+- **Consequence:** the exact instruction / CC-line offset at which the detection
+  takes the *partner present / absent* decision (and the exact gate on the
+  `PartnerType=` print) is **not** statically resolvable from the local
+  artifacts. The functional-vs-log distinction *is* established (the flag
+  globals gate ULog logging only, not the charger-type push — see
+  [`ulog-flag-globals-write-sites.txt`](../logs/adsp-re/ulog-flag-globals-write-sites.txt)),
+  so the *absence* of the line tracks a functional miss, not a suppressed log.
+- **How to close it:** either (1) rebuild `text_all.txt` on a Hexagon-LLVM host
+  and decode the two bodies above, or (2) cheaper and behaviorally sufficient —
+  let the **enum-only boot**'s PPM ULog answer it as *line present / absent* in
+  the first drain window (see
+  [INITRAMFS_CHANGES.md](INITRAMFS_CHANGES.md#next-step-the-enum-only-test));
+  the presence of the `battmngr…otg_context` line is the proxy for "did the
+  scp_qchg HW init (and thus the event-0x25 trigger) run".
