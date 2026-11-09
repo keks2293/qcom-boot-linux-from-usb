@@ -7,7 +7,14 @@
 # Produces in <out_dir>:
 #   elfmap.txt       - ELF header, PHDR list, LOAD segment file<->vaddr map
 #   adsp_strings.txt - strings with FILE offsets ("0x<off> <string>")
-#   text_all.txt     - full disassembly (~3.7M lines for rp6)
+#   text_all.txt     - full disassembly (~3.67M lines for rp6)
+#
+# A verified copy of the rp6 text_all.txt is published as
+#   logs/adsp-re/text_all.zst   (27.9 MB, zstd -19 of the 219 848 927 B text)
+#   md5(text_all.txt) = c741d7a6e8aa01ed3dd216b7762bff66
+# for the firmware adsp.mbn md5 535b2f806f1e87a4a063827c81270968
+# (armada system_files .../sm8550/retroidpocket/rp6/adsp.mbn).
+#   zstd -d logs/adsp-re/text_all.zst   # -> text_all.txt
 #
 # Toolchain: any LLVM/Clang with the Hexagon backend (Homebrew LLVM on macOS
 # works; /opt/homebrew/opt/llvm). No cross-compiler build needed.

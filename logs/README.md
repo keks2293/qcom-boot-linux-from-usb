@@ -15,6 +15,7 @@ xref = `grep '##0x<vaddr>' text_all.txt`; writes =
 
 | File | What it proves |
 |---|---|
+| `text_all.zst` | the **full** `llvm-objdump --triple=hexagon -d` disassembly of `adsp.mbn` (219 848 927 B / 3,666,180 lines; `zstd -19`; md5 of the decompressed text `c741d7a6e8aa01ed3dd216b7762bff66`) — the base for all string-xrefs; regenerate with [`../scripts/adsp-re/dump_adsp.sh`](../scripts/adsp-re/dump_adsp.sh) |
 | `elfmap-adsp-mbn.txt` | PHDR map; PT_LOAD#19 file↔vaddr mapping |
 | `ppm-fdt-rp6.dts` | dtc dump of the PPM FDT payload (8315 B @MBN+208) — 216 properties |
 | `strings-xref-sample.txt` | string→code xref method + the glink/ULog/BattMngr name-string xrefs |

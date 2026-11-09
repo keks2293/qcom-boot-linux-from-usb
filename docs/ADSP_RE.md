@@ -32,7 +32,8 @@ Address mapping (PT_LOAD#19): file `[0xa93000:0xcd67c4]` ↔ vaddr
 `[0x60000000:0x602437c4]`. So `vaddr = 0x60000000 + (fileoff − 0xa93000)`. The
 `scripts/adsp-re/` tools:
 
-- `dump_adsp.sh` — produce `text_all.txt`
+- `dump_adsp.sh` — produce `text_all.txt` (a verified copy for the stock RP6
+  firmware is published at [`logs/adsp-re/text_all.zst`](../logs/adsp-re/text_all.zst))
 - `adsp_elfmap.py` — PHDR map
 - `extract_func.py <vaddr>` — cut the function enclosing a site (by `allocframe`…`deallocframe`)
 - `vaddr2str.py <strings-file> <vaddr>…` — resolve a vaddr to the string at that offset
@@ -618,41 +619,118 @@ the candidates narrow to:
    candidate config fix. See
    [ADSP_CONFIG.md](ADSP_CONFIG.md#the-1-byte-patch-recipe-verified-by-trial-patch).
 
-## Static RE ceiling: what the local artifacts cannot answer
+## The two remaining function bodies — now decoded (2026-11-09)
 
-The decoded coverage above is complete for the **trigger/propagation
-skeleton** (the EMIT/event-0x25 dispatch, the 9 subscribers, the chg-det SM
-call chain into `charger_detection_inital_detection` @0x60152970, the
-property push, the ICM `ncp_stby` wedge, the `SetRerunApsd` chain, and the
-ULog flag-gates). Two specific **function bodies** on the *initial-detection*
-path (trigger #3) are **not decoded locally**, and the full disassembly is not
-on this machine, so one question cannot be answered statically from the local
-artifacts:
+The full disassembly has been rebuilt locally (`text_all.txt`, 3,666,180 lines,
+219 848 927 B; published compressed as
+[`logs/adsp-re/text_all.zst`](../logs/adsp-re/text_all.zst), 27.9 MB,
+`zstd -d text_all.zst > text_all.txt`) with Homebrew LLVM 23.1.3
+(`llvm-objdump --triple=hexagon -d`, see
+[`scripts/adsp-re/dump_adsp.sh`](../scripts/adsp-re/dump_adsp.sh)). The two
+function bodies that were left open are decoded here. Firmware:
+`adsp.mbn` md5 `535b2f806f1e87a4a063827c81270968`, segment PT_LOAD#19
+file `0xa93000` ↔ vaddr `0x60000000` (string vaddr = `0x60000000 + (off − 0xa93000)`).
 
-- **Not decoded locally:** (a) `charger_detection_evaluate_typec_charger` — the
-  body that reads the CC / APSD line state, decides *partner present vs absent*,
-  and gates the `PartnerType=` print; (b)
-  `battmngr_plat_scpqchg_qbg_r1_update_wlstx_otg_context` (the `otg enable: 1`
-  line) — the scp_qchg init that, in the same driver, arms the IRQ that EMITs
-  event 0x25. For (a) only the *call chain into* `charger_detection_inital_detection`
-  exists ([`call-sites-trigger-map.txt`](../logs/adsp-re/call-sites-trigger-map.txt));
-  for (b) only the log line and its driver-family link to the EMIT source
-  `battmngr_plat_irq_scpqchg_qbg_r1_irq_setup`.
-- **No full dump here:** `text_all.txt` (~3.67M lines) was produced on a host
-  with the Hexagon LLVM backend (`llvm-objdump --triple=hexagon`); that tool is
-  **not** on this device, so a fresh string-xref / body decode cannot be run
-  here.
-- **Consequence:** the exact instruction / CC-line offset at which the detection
-  takes the *partner present / absent* decision (and the exact gate on the
-  `PartnerType=` print) is **not** statically resolvable from the local
-  artifacts. The functional-vs-log distinction *is* established (the flag
-  globals gate ULog logging only, not the charger-type push — see
-  [`ulog-flag-globals-write-sites.txt`](../logs/adsp-re/ulog-flag-globals-write-sites.txt)),
-  so the *absence* of the line tracks a functional miss, not a suppressed log.
-- **How to close it:** either (1) rebuild `text_all.txt` on a Hexagon-LLVM host
-  and decode the two bodies above, or (2) cheaper and behaviorally sufficient —
-  let the **enum-only boot**'s PPM ULog answer it as *line present / absent* in
-  the first drain window (see
-  [INITRAMFS_CHANGES.md](INITRAMFS_CHANGES.md#next-step-the-enum-only-test));
-  the presence of the `battmngr…otg_context` line is the proxy for "did the
-  scp_qchg HW init (and thus the event-0x25 trigger) run".
+### `charger_detection_evaluate_typec_charger` @0x60150d50–0x60152380
+
+1 421 instructions; the per-input Type-C evaluation that the chg-det SM calls
+after each event-0x25 wake. Inputs and data:
+
+- Reads the 7-byte Type-C status of the port via
+  `ssdev_typec_get_status` @0x601580b0 (memcpy of `*(u8*)(port_state+0x7d)`
+  × 7), the partner type via
+  `ssdev_typec_get_partner_type` @0x601581e0 (`*(u8*)(port_state+0x84)`), and
+  a helper @0x6015c1e0 (`*(u8*)(port_state+0x29)`). `port_state` is looked up
+  in a per-port table (`memw(0x60256ef8) + input*0x14` for status/partner,
+  `memw(0x60256ef4) + input*0x14` for the helper); NULL entry → return `0x202`.
+  Also reads the SDAM OS state via `PmSdamBm_GetOS` @0x6009cb90 and three
+  global getters (`memw(0x60338c40)` @0x6016e900, `memw(0x60336c00)`
+  @0x6015ba00, `memw(0x60336bf8)` @0x60156e80).
+- Per-input result table: `0x60334b40`, stride `0x14`: `+0x1c` present flag,
+  `+0x1d` PartnerType, `+0x20` Voltage (mV), `+0x24` Current (mA), `+0x28`
+  bLpdEn, `+0x29` bLiquidDetected, `+0x2a` bPDSuspendSupported, `+0x2c` power
+  max (µW).
+- Classification: status rc ≠ 0 → returns the rc. Type-C partner type in
+  `{0xf, 0x10, 0xa, 0x13}` → PartnerType = the value itself (PD partners).
+  Otherwise a cascade of branches (on the status bytes + the SS partner byte)
+  writes 1 / 2 / 5 / … : branch **2 (SDP)** stores 5000 mV / 500 mA /
+  2 500 000 µW max (`0x60152120`–`0x60152158`); another stores 5000 mV /
+  1500 mA (`0x601521fc`–`0x60152214`). NULL state pointer → return `0x202`.
+- **The `PartnerType=` print is ULog-gated.** The log block at
+  `0x60152264`–`0x601522a0` is entered only if `tstbit(memub(0x60256f7c), #2)`
+  is set, otherwise the default-mask check on bit 4 of `memub(0x6024a66c)`
+  (disassembled as the predicate form `p0 = bitsclr(r2,#0x4)`, i.e. "bit
+  clear"), and `memub(0x6024a660) > #2` — the same ULog enable-mask /
+  default-mask / verbosity-counter gate as everything else (the identical
+  shape, with `!tstbit`, is used at `0x60150e18` for the `bLpdEn=` line)
+  ([`ulog-flag-globals-write-sites.txt`](../logs/adsp-re/ulog-flag-globals-write-sites.txt)).
+  The `bLpdEn=` line is gated the same way with mask byte `0x60256f79` bit 6 /
+  default `0x6024a669` bit 6. So **absence of the `PartnerType=` line in a
+  drain is a logging-config artifact unless the capture demonstrably enables
+  that tag** — it is not by itself proof of a functional detection miss. The
+  functional marker that the result actually reached the charger state machine
+  is the `sm_state_loop` event burst + the ICM `ncp_stby`
+  "untill charger_type updated" (which is what the dbg49 fingerprint actually
+  shows; see [ADSP_ULOG.md](ADSP_ULOG.md)).
+
+### `battmngr_plat_scpqchg_qbg_r1_update_wlstx_otg_context` @0x60040050–0x60040784
+
+462 instructions. It is **not** an IRQ-arming function — it is one step of the
+battmngr platform init:
+
+- Reads SDAM: `PmSdamBm_GetOS`, `PmSdamBm_Get_WlsTx_status` @0x6009e230,
+  `PmSdamBm_Get_Otg_status` @0x6009e580; reads boost state:
+  `PmSchgDcdc_GetBoostOnWls` @0x60090480 / `PmSchgDcdc_GetBoostOnUsb`
+  @0x600906b0.
+- Writes SDAM: `battmngr_plat_scpqchg_qbg_r1_set_wlx_tx_status_to_sdam`
+  @0x600472b0, `battmngr_plat_scpqchg_qbg_r1_set_otg_status_to_sdam`
+  @0x600471d0; calls `battmngr_plat_scpqchg_qbg_r1_enable_wireless_tx`
+  @0x6003ab00 when wls tx is requested.
+- Logs: `wlstx enable: %d`, `otg enable: %d`, `wls tx source = %d`,
+  `IDT in wrong state, disabling wls tx…`, `otg source = %d`, `OTG source not
+  available` — all ULog-gated like everything else.
+- **Single caller:** `call 0x60040050` at `0x60030428`, inside
+  `battmngr_plat_scpqchg_qbg_r1_one_time_init` (fn `0x6002f480`).
+
+### The init call chain (corrects the "otg line = IRQ armed" phrasing)
+
+```
+BattMngr_init @0x6002ad50
+  → BattMngr_BattMngr_init @0x6002a770
+    → battmngr_platform_init @0x6002b030 (dispatch via fn-ptr table,
+       platform init fn ptr stored at 0x6002b174)
+      → battmngr_plat_scpqchg_qbg_r1_init @0x6002e0b0
+          → (0x6002e8d8) battmngr_plat_scpqchg_qbg_r1_one_time_init @0x6002f480
+              → (0x60030428) update_wlstx_otg_context @0x60040050   ← "otg enable: 1"
+          → (0x6002e8e8) battmngr_plat_irq_scpqchg_qbg_r1_irq_setup @0x6004e260
+```
+
+Consequences:
+
+- **`otg enable: 1` is a proxy only for "the scp_qchg platform init ran (at
+  least through `one_time_init`)".** The IRQ setup is the *next* call in the
+  same init, 10 bytes later; the line does not prove the IRQ setup itself ran.
+- `battmngr_plat_irq_scpqchg_qbg_r1_irq_setup` @0x6004e260 loops the static
+  descriptor table at `0x60248dc0` (stride `0x24`, ≤ 0x10 entries) through
+  wrapper `0x60083a50`, which routes by index byte: 0 → register `0x60083460`,
+  1 → EMIT @0x60083f60 (event id from the descriptor), ≥ 2 → return `0x202`.
+  Its success log is `Setting up interrupt for IRQ_INDEX=%d succeeded`
+  (format @0x601e9dcc, ULog-gated, tag `battmngr_plat_irq_scpqchg_qbg_r1.c`) —
+  **that** line, if seen in a drain, is the marker that the IRQ arming ran.
+- **Event 0x25 is not armed here.** The 9 event-0x25 subscriber
+  registrations (via `0x60084740`, see
+  [`event-0x25-subscribers.txt`](../logs/adsp-re/event-0x25-subscribers.txt))
+  are in the individual module inits, not in `irq_setup`.
+- The earlier wording "the `otg enable: 1` line is the proxy for 'did the
+  scp_qchg HW init (and thus the event-0x25 trigger) run'" is **superseded**:
+  it proves the init ran, not the event-0x25 arming, and its *absence* is a
+  ULog-gate artifact like any other log line.
+
+**Impact on the enum-only test**
+([INITRAMFS_CHANGES.md](INITRAMFS_CHANGES.md#next-step-the-enum-only-test)):
+the `FAIL-NO-DETECTION` branch (no `PartnerType=` line) must be read as
+"detection produced no *logged* result" — distinguish *functional* miss (SM
+stuck + `ncp_stby`, the dbg49 fingerprint) from *suppressed log* (tag/mask not
+enabled in the capture). The decision rule branches 1 and 2 in
+[INITRAMFS_CHANGES.md](INITRAMFS_CHANGES.md#decision-rule) and the
+fingerprint table in [ADSP_ULOG.md](ADSP_ULOG.md) are updated accordingly.

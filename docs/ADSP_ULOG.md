@@ -137,11 +137,16 @@ From [`logs/dbg49-adsp-icm-ncp-stby.txt`](../logs/dbg49-adsp-icm-ncp-stby.txt)
 52.736372 … same ncp_stby + sm_state_loop (still parked 19 s later)
 ```
 
+Note: this is a **diag-screen excerpt** (selected lines), not a full 40 s
+drain — "no PartnerType line" in the dbg49 transcript is a statement about
+what the diag screen showed, not about the whole ring. The full-fidelity
+failing-side capture is exactly what lever B / the enum-only boot produces.
+
 ## The diff — success vs failure
 
 | marker | success (boot 1, full system) | failure (dbg49, initramfs) |
 |---|---|---|
-| initial detection result | `charger_detection_evaluate_typec_charger: Input[0] PartnerType=2, Voltage=5000 mV, Current=900 mA` in the PDR + 22 ms drain | **no PartnerType line at all** |
+| initial detection result | `charger_detection_evaluate_typec_charger: Input[0] PartnerType=2, Voltage=5000 mV, Current=900 mA` in the PDR + 22 ms drain | **no PartnerType line at all** (see log-gate caveat below) |
 | charger SM | 0→1→2 at PDR + 22 ms; **reaches state 4** by PDR + 8.2 s | **stuck at state 2**: `event_type=24, curr=2, next=2` at 33.2 s and again at 52.7 s |
 | ICM `ncp_stby` | **absent** | `ncp_stby_db - chgr_stat=7` + "keeps in icm_ncp_stby untill charger_type updated" |
 | ActivePort partner | PartnerType=15 @ 9000 mV / 2440 mA (PD contract, PDR + 2.06 s) | never |
@@ -161,6 +166,21 @@ runs (points at the staged-start, lever A).
 
 ## Caveats
 
+- **Log-gate semantics (2026-11-09, from the local RE):** every ULog line is
+  behind an enable-mask / default-mask / verbosity-counter gate (the globals
+  at `0x60256f78`+ / `0x6024a668`+ / `0x6024a660`; per-line bits differ). The
+  `PartnerType=` print in `charger_detection_evaluate_typec_charger` is gated
+  at `0x60152264` by enable bit `tstbit(0x60256f7c, 2)`, falling back to the
+  default mask bit 4 of `0x6024a66c`, and `0x6024a660 > 2`; the `bLpdEn=` line
+  by `0x60256f79` bit 6 / `0x6024a669`
+  bit 6 (see [ADSP_RE.md](ADSP_RE.md#the-two-remaining-function-bodies--now-decoded-2026-11-09)).
+  So **absence of a line is a functional signal only if the capture
+  demonstrably enables that tag** (i.e. other lines from the same source file
+  / tag appear in the same capture). In the success capture the
+  `charger_detection.c` tag is clearly on (the lines above); in the dbg49
+  diag excerpt the visible lines come from *other* tags (`battmngr*`), so the
+  failure verdict rests on the functional markers (`sm_state_loop` stuck at
+  2, ICM `ncp_stby` "untill charger_type updated"), not on the missing log.
 - **Drain semantics**: 1 s poll, 8 KB ring. Lines can be lost under boot-time
   load (the 2→4 transition was); the state value *at each drain* is reliable,
   transition lines are not guaranteed.
@@ -183,5 +203,6 @@ runs (points at the staged-start, lever A).
 - raw captures: [`logs/full-system/adsp-ulog-20261108-1539.log`](../logs/full-system/adsp-ulog-20261108-1539.log),
   [`logs/full-system/usb-type-poller-20261108-1539.log`](../logs/full-system/usb-type-poller-20261108-1539.log)
 - failing-side reference: [`logs/dbg49-adsp-icm-ncp-stby.txt`](../logs/dbg49-adsp-icm-ncp-stby.txt)
+- full ADSP disassembly (local RE): [`logs/adsp-re/text_all.zst`](../logs/adsp-re/text_all.zst)
 - lever B and the decision rule: [INITRAMFS_CHANGES.md](INITRAMFS_CHANGES.md)
 - AP-side classification timing: [USB_TYPE_TIMING.md](USB_TYPE_TIMING.md)

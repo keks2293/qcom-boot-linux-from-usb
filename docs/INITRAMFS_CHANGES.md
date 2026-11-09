@@ -102,7 +102,15 @@ updated" (`chgr_stat=7`), no PartnerType line at all.
 1. **B shows no `PartnerType=` line in any drain** (detection produced nothing
    — the dbg49 fingerprint, now on the full ULog) → the PPM's initial
    detection ran blind or was skipped in the initramfs; A is about *making it
-   see the port*; if A is negative, go straight to D.
+   see the port*; if A is negative, go straight to D. **Log-gate caveat
+   (2026-11-09 RE):** the `PartnerType=` print is ULog-gated
+   ([ADSP_RE.md](ADSP_RE.md#the-two-remaining-function-bodies--now-decoded-2026-11-09)),
+   so this branch is *functional* only when the capture also shows other
+   `charger_detection.c` lines (tag demonstrably enabled) — otherwise absence
+   is a logging artifact. The functional markers that make the branch valid
+   are the `sm_state_loop` state stuck at 2 + ICM `ncp_stby`
+   "untill charger_type updated"; if those are absent too, re-enable the ULog
+   tag before drawing a conclusion.
 2. **B shows a `PartnerType=` line (detection ran and saw the port) but
    `usb_type` stays `Unknown`** → the result never reaches the property
    service; that is a firmware-side defect and D is the only lever.
@@ -156,7 +164,7 @@ sudo ./make-drive.sh /dev/sdX ../out/initramfs-fix.img --enum-only
 |---|---|---|
 | `PASS usb_blocks=[sdX]` | A+B(+C-lite) fixed it | milestone 1 done → OS-root clone + boot-from-stick |
 | `FAIL-NO-PDR` | A failed (staged ADSP start didn't reach the PDR) | read the ULog/dmesg remoteproc errors in the shipped logs |
-| `FAIL-NO-DETECTION` (no `PartnerType=`) | branch 1 — detection ran blind or was skipped | lever-D boot (`initramfs-fwD.img`), or refine A |
+| `FAIL-NO-DETECTION` (no `PartnerType=`) | branch 1 — detection ran blind or was skipped *(valid only with the log-gate check: `charger_detection.c` tag demonstrably enabled + SM/ICM markers, see decision rule 1)* | lever-D boot (`initramfs-fwD.img`), or refine A |
 | `FAIL-NO-CLASSIFY` (`PartnerType=` present, `usb_type` stuck `Unknown`) | branch 2 — result never reaches the property service | lever-D boot (firmware-side) |
 | `FAIL-NO-SCAN` (`usb_type=SDP`, no block device) | classification OK, the scan missed the drive | refine C (post-PDR nudge timing) |
 
