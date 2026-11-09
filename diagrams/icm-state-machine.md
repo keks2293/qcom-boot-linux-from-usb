@@ -83,6 +83,16 @@ screening −2, ncp_stby −7).
 | `vbat` | ctxA voltage getter `0x60147d30` (guarded by `ctxA->+0x24 != 0` in `0x60147e90`) |
 | `GET(0x270b)` bit checks | ctxB methods `0x6016aad0` (+0x1c, `& 0x10`), `0x6016ab40` (+0x20, `& 0x20`), `0x6016abb0` (+0x24, `& 0x80`); each is `rc = 0x60169a00(ctxB, 0x270b, &out); rc == 0 ? (out & BIT) : 0` reached through the indirections `0x6016d2f0`/`0x6016d350` (`callr ctxB->+0x1c/+0x20`). The 0x270b value lives in the **central property service** (RPC, see [charger-type-chain.md](charger-type-chain.md)) |
 
+Note on the ChgIcmCfg pointer slots: the base `0x603391b8` is reachable
+through **two** global pointer slots. `0x60339108` (= `icm_ctx->+0x1c`, set in
+the ICM init @0x6019fef4) is read by **event screening** @0x601a00e0;
+`0x60339210` (set in the constructor @0x601a12c0, = the same base) is read by
+**ncp_stby / pre_chg**. Screening evaluates the per-input records and writes the
+**accumulated partner type** to `cfgp + 0x14` (= `0x603391cc`) @0x601a01f8/0x601a0238
+— a **different field** from the T byte (`cfgp + 1` = `0x603391b9`). So the
+screening is *not* a write-site of the T byte; the T byte stays static boot
+config (see below).
+
 ## Why it wedges in the failing environment
 
 - `T` is **static boot config**: the only write to the type region in the
