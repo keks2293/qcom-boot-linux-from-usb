@@ -1,0 +1,400 @@
+[ 6588.849619] armada kernel: xhci-hcd xhci-hcd.2.auto: Port change event, 1-1, id 1, portsc: 0x202a0
+[ 6588.859799] armada kernel: xhci-hcd xhci-hcd.2.auto: handle_port_status: starting usb1 port polling.
+[ 6588.862009] armada kernel: xhci-hcd xhci-hcd.2.auto: Transfer error for slot 5 ep 4 on endpoint
+[ 6588.864448] armada kernel: xhci-hcd xhci-hcd.2.auto: Soft-reset ep 4, slot 5
+[ 6588.865981] armada kernel: xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 6588.866823] armada kernel: xhci-hcd xhci-hcd.2.auto: Transfer error for slot 5 ep 2 on endpoint
+[ 6588.867559] armada kernel: xhci-hcd xhci-hcd.2.auto: Soft-reset ep 2, slot 5
+[ 6588.868388] armada kernel: xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 6588.869158] armada kernel: xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[ 6588.869732] armada kernel: xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[ 6588.870278] armada kernel: xhci-hcd xhci-hcd.2.auto: Transfer error for slot 6 ep 4 on endpoint
+[ 6588.870812] armada kernel: xhci-hcd xhci-hcd.2.auto: Hard-reset ep 4, slot 6
+[ 6588.871346] armada kernel: xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 6588.871869] armada kernel: xhci-hcd xhci-hcd.2.auto: Transfer error for slot 6 ep 2 on endpoint
+[ 6588.872545] armada kernel: xhci-hcd xhci-hcd.2.auto: Hard-reset ep 2, slot 6
+[ 6588.873383] armada kernel: xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 6588.874087] armada kernel: xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[ 6588.876291] armada kernel: xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xffd6ff000 (dma) in stream 0 URB 00000000329946ab
+[ 6588.877248] armada kernel: xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xffd6ff010, cycle 1
+[ 6588.877767] armada kernel: xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 6588.878240] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 00000000329946ab TD as cancel_status is 2
+[ 6588.878723] armada kernel: xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[ 6588.879187] armada kernel: xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xffd6fd010 (dma) in stream 0 URB 0000000056e47401
+[ 6588.879647] armada kernel: xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xffd6fd020, cycle 1
+[ 6588.881022] armada kernel: xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 6588.882019] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 0000000056e47401 TD as cancel_status is 2
+[ 6588.882811] armada kernel: xhci-hcd xhci-hcd.2.auto: Transfer error for slot 5 ep 4 on endpoint
+[ 6588.883273] armada kernel: xhci-hcd xhci-hcd.2.auto: Soft-reset ep 4, slot 5
+[ 6588.884444] armada kernel: xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 6588.885520] armada kernel: xhci-hcd xhci-hcd.2.auto: Transfer error for slot 5 ep 2 on endpoint
+[ 6588.885871] armada kernel: xhci-hcd xhci-hcd.2.auto: Soft-reset ep 2, slot 5
+[ 6588.886080] armada kernel: xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 6588.886275] armada kernel: xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @ffd6ff010
+[ 6588.887104] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 00000000329946ab TD
+[ 6588.887428] armada kernel: xhci-hcd xhci-hcd.2.auto: Giveback URB 00000000329946ab, len = 0, expected = 17, status = -71
+[ 6588.887654] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[ 6588.888134] armada kernel: xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @ffd6fd020
+[ 6588.888399] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 0000000056e47401 TD
+[ 6588.888656] armada kernel: xhci-hcd xhci-hcd.2.auto: Giveback URB 0000000056e47401, len = 0, expected = 7, status = -71
+[ 6588.888899] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[ 6588.889089] armada kernel: xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[ 6588.889594] armada kernel: xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[ 6588.889921] armada kernel: xhci-hcd xhci-hcd.2.auto: Get port status 1-1 read: 0x202a0, return 0x10100
+[ 6588.890196] armada kernel: xhci-hcd xhci-hcd.2.auto: Transfer error for slot 5 ep 4 on endpoint
+[ 6588.890510] armada kernel: xhci-hcd xhci-hcd.2.auto: Soft-reset ep 4, slot 5
+[ 6588.890903] armada kernel: xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 6588.891223] armada kernel: xhci-hcd xhci-hcd.2.auto: Transfer error for slot 5 ep 2 on endpoint
+[ 6588.891416] armada kernel: xhci-hcd xhci-hcd.2.auto: Soft-reset ep 2, slot 5
+[ 6588.891658] armada kernel: xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 6588.891851] armada kernel: xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[ 6588.892098] armada kernel: xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[ 6588.892283] armada kernel: xhci-hcd xhci-hcd.2.auto: clear port1 connect change, portsc: 0x2a0
+[ 6588.892466] armada kernel: xhci-hcd xhci-hcd.2.auto: Transfer error for slot 5 ep 4 on endpoint
+[ 6588.892658] armada kernel: xhci-hcd xhci-hcd.2.auto: Soft-reset ep 4, slot 5
+[ 6588.892830] armada kernel: xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 6588.893033] armada kernel: xhci-hcd xhci-hcd.2.auto: Transfer error for slot 5 ep 2 on endpoint
+[ 6588.893218] armada kernel: xhci-hcd xhci-hcd.2.auto: Soft-reset ep 2, slot 5
+[ 6588.893390] armada kernel: xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 6588.893560] armada kernel: xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[ 6588.893741] armada kernel: xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[ 6588.893948] armada kernel: xhci-hcd xhci-hcd.2.auto: Transfer error for slot 5 ep 4 on endpoint
+[ 6588.894148] armada kernel: xhci-hcd xhci-hcd.2.auto: Hard-reset ep 4, slot 5
+[ 6588.894341] armada kernel: xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 6588.894513] armada kernel: xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[ 6588.894705] armada kernel: xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xffd33f000 (dma) in stream 0 URB 0000000072f57eed
+[ 6588.894900] armada kernel: xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xffd33f010, cycle 1
+[ 6588.895101] armada kernel: xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 6588.895294] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 0000000072f57eed TD as cancel_status is 2
+[ 6588.895495] armada kernel: xhci-hcd xhci-hcd.2.auto: Transfer error for slot 5 ep 2 on endpoint
+[ 6588.895688] armada kernel: xhci-hcd xhci-hcd.2.auto: Hard-reset ep 2, slot 5
+[ 6588.895872] armada kernel: xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 6588.896111] armada kernel: xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @ffd33f010
+[ 6588.896308] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 0000000072f57eed TD
+[ 6588.896494] armada kernel: xhci-hcd xhci-hcd.2.auto: Giveback URB 0000000072f57eed, len = 0, expected = 16, status = -71
+[ 6588.896678] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[ 6588.896862] armada kernel: xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[ 6588.897060] armada kernel: xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xffd33d010 (dma) in stream 0 URB 00000000b40e51e5
+[ 6588.897258] armada kernel: xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xffd33d020, cycle 1
+[ 6588.897445] armada kernel: xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 6588.897641] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 00000000b40e51e5 TD as cancel_status is 2
+[ 6588.897837] armada kernel: xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @ffd33d020
+[ 6588.898015] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 00000000b40e51e5 TD
+[ 6588.898200] armada kernel: xhci-hcd xhci-hcd.2.auto: Giveback URB 00000000b40e51e5, len = 0, expected = 8, status = -71
+[ 6588.898410] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[ 6588.898587] armada kernel: usb 1-1: USB disconnect, device number 2
+[ 6588.899324] armada kernel: usb 1-1.1: USB disconnect, device number 3
+[ 6588.899494] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_check_bandwidth called for udev 0000000052488963
+[ 6588.899681] armada kernel: device: 'ep_00': device_unregister
+[ 6588.899739] armada kernel: xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 6588.899922] armada kernel: usb 1-1.2: USB disconnect, device number 4
+[ 6588.900724] armada kernel: device: 'ep_81': device_unregister
+[ 6588.900793] armada kernel: device: 'ep_02': device_unregister
+[ 6588.900823] armada kernel: device: '2:0:0:0': device_unregister
+[ 6588.900872] armada kernel: device: '8:112': device_unregister
+[ 6588.900918] armada kernel: device: '8:112': device_create_release
+[ 6588.900958] armada kernel: device: 'pd0': device_unregister
+[ 6588.900996] armada kernel: device: 'port0-partner': device_unregister
+[ 6588.901037] armada kernel: xhci-hcd xhci-hcd.2.auto: remove, state 4
+[ 6588.901246] armada kernel: usb usb2: USB disconnect, device number 1
+[ 6588.901391] armada kernel: device: 'ep_81': device_unregister
+[ 6588.901423] armada kernel: device: 'usb2-port1': device_unregister
+[ 6588.901468] armada kernel: xHCI xhci_drop_endpoint called for root hub
+[ 6588.901504] armada kernel: xHCI xhci_check_bandwidth called for root hub
+[ 6588.901548] armada kernel: device: 'ep_00': device_unregister
+[ 6588.901584] armada kernel: xhci-hcd xhci-hcd.2.auto: USB bus 2 deregistered
+[ 6588.901788] armada kernel: xhci-hcd xhci-hcd.2.auto: remove, state 1
+[ 6588.901975] armada kernel: usb usb1: USB disconnect, device number 1
+[ 6588.934615] armada kernel: sd 2:0:0:0: [sdh] Synchronizing SCSI cache
+[ 6588.935336] armada kernel: sd 2:0:0:0: [sdh] Synchronize Cache(10) failed: Result: hostbyte=0x01 driverbyte=DRIVER_OK
+[ 6588.948107] armada kernel: device: 'host2': device_unregister
+[ 6589.000045] armada kernel: device: 'scsi_tmf_2': device_unregister
+[ 6589.000184] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 00000000bfa08963
+[ 6589.000307] armada kernel: xhci-hcd xhci-hcd.2.auto: drop ep 0x81, slot id 3, new drop flags = 0x8, new add flags = 0x0
+[ 6589.000368] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 00000000bfa08963
+[ 6589.000430] armada kernel: xhci-hcd xhci-hcd.2.auto: drop ep 0x2, slot id 3, new drop flags = 0x18, new add flags = 0x0
+[ 6589.000485] armada kernel: device: 'ep_00': device_unregister
+[ 6589.000497] armada kernel: xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 6589.000564] armada kernel: usb 1-1.3: USB disconnect, device number 5
+[ 6589.000873] armada kernel: usb 1-1.3.2: USB disconnect, device number 6
+[ 6589.001098] armada kernel: device: 'ep_81': device_unregister
+[ 6589.020054] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_hub_status_data: stopping usb1 port polling
+[ 6589.092074] armada kernel: device: 'input25::numlock': device_unregister
+[ 6589.092240] armada kernel: device: 'input25::numlock': device_create_release
+[ 6589.117017] armada kernel: device: 'input25::capslock': device_unregister
+[ 6589.117116] armada kernel: device: 'input25::capslock': device_create_release
+[ 6589.134583] armada kernel: device: 'input25::scrolllock': device_unregister
+[ 6589.134717] armada kernel: device: 'input25::scrolllock': device_create_release
+[ 6589.134782] armada kernel: device: 'input25::compose': device_unregister
+[ 6589.134807] armada kernel: device: 'input25::compose': device_create_release
+[ 6589.151870] armada kernel: device: 'input25::kana': device_unregister
+[ 6589.151981] armada kernel: device: 'input25::kana': device_create_release
+[ 6589.192257] armada kernel: device: 'hidraw1': device_unregister
+[ 6589.192372] armada kernel: device: 'hidraw1': device_create_release
+[ 6589.192407] armada kernel: device: 'ep_82': device_unregister
+[ 6589.384036] armada kernel: device: 'hidraw2': device_unregister
+[ 6589.388048] armada kernel: device: 'hidraw2': device_create_release
+[ 6589.388120] armada kernel: device: 'ep_83': device_unregister
+[ 6589.388193] armada kernel: device: 'ep_04': device_unregister
+[ 6589.388221] armada kernel: device: 'hidraw3': device_unregister
+[ 6589.388249] armada kernel: device: 'hidraw3': device_create_release
+[ 6589.388264] armada kernel: device: 'ep_05': device_unregister
+[ 6589.392115] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 000000006f823d89
+[ 6589.392583] armada kernel: xhci-hcd xhci-hcd.2.auto: drop ep 0x81, slot id 5, new drop flags = 0x8, new add flags = 0x0
+[ 6589.392941] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 000000006f823d89
+[ 6589.393196] armada kernel: xhci-hcd xhci-hcd.2.auto: drop ep 0x82, slot id 5, new drop flags = 0x28, new add flags = 0x0
+[ 6589.393536] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 000000006f823d89
+[ 6589.395431] armada kernel: xhci-hcd xhci-hcd.2.auto: drop ep 0x83, slot id 5, new drop flags = 0xa8, new add flags = 0x0
+[ 6589.395941] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 000000006f823d89
+[ 6589.396378] armada kernel: xhci-hcd xhci-hcd.2.auto: drop ep 0x4, slot id 5, new drop flags = 0x1a8, new add flags = 0x0
+[ 6589.396702] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 000000006f823d89
+[ 6589.397002] armada kernel: xhci-hcd xhci-hcd.2.auto: drop ep 0x5, slot id 5, new drop flags = 0x5a8, new add flags = 0x0
+[ 6589.397481] armada kernel: xhci-hcd xhci-hcd.2.auto: endpoint disable with ep_state 0x40
+[ 6589.397787] armada kernel: xhci-hcd xhci-hcd.2.auto: endpoint disable with ep_state 0x40
+[ 6589.398098] armada kernel: device: 'ep_00': device_unregister
+[ 6589.408113] armada kernel: device: 'wakeup14': device_unregister
+[ 6589.412051] armada kernel: xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 6589.428108] armada kernel: usb 1-1.3.4: USB disconnect, device number 7
+[ 6589.430473] armada kernel: device: 'ep_81': device_unregister
+[ 6589.444358] armada kernel: device: 'hidraw4': device_unregister
+[ 6589.444680] armada kernel: device: 'hidraw4': device_create_release
+[ 6589.444766] armada kernel: device: 'ep_82': device_unregister
+[ 6589.555041] armada kernel: xhci-hcd xhci-hcd.2.auto: Transfer error for slot 4 ep 2 on endpoint
+[ 6589.555218] armada kernel: xhci-hcd xhci-hcd.2.auto: Soft-reset ep 2, slot 4
+[ 6589.555343] armada kernel: xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 6589.555410] armada kernel: xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[ 6589.555475] armada kernel: xhci-hcd xhci-hcd.2.auto: Transfer error for slot 1 ep 2 on endpoint
+[ 6589.555551] armada kernel: xhci-hcd xhci-hcd.2.auto: Soft-reset ep 2, slot 1
+[ 6589.555614] armada kernel: xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 6589.555677] armada kernel: xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[ 6589.570438] armada kernel: device: 'hidraw5': device_unregister
+[ 6589.572031] armada kernel: device: 'hidraw5': device_create_release
+[ 6589.572075] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 000000008f1fe6d1
+[ 6589.572212] armada kernel: xhci-hcd xhci-hcd.2.auto: drop ep 0x81, slot id 6, new drop flags = 0x8, new add flags = 0x0
+[ 6589.572292] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 000000008f1fe6d1
+[ 6589.572359] armada kernel: xhci-hcd xhci-hcd.2.auto: drop ep 0x82, slot id 6, new drop flags = 0x28, new add flags = 0x0
+[ 6589.573339] armada kernel: xhci-hcd xhci-hcd.2.auto: endpoint disable with ep_state 0x40
+[ 6589.573624] armada kernel: xhci-hcd xhci-hcd.2.auto: endpoint disable with ep_state 0x40
+[ 6589.573698] armada kernel: device: 'ep_00': device_unregister
+[ 6589.580139] armada kernel: device: 'wakeup15': device_unregister
+[ 6589.580278] armada kernel: xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 6589.588109] armada kernel: usb 1-1.3.5: USB disconnect, device number 8
+[ 6589.588469] armada kernel: device: 'ep_81': device_unregister
+[ 6589.588552] armada kernel: device: 'ep_01': device_unregister
+[ 6589.588628] armada kernel: device: 'hidraw6': device_unregister
+[ 6589.588681] armada kernel: device: 'hidraw6': device_create_release
+[ 6589.588755] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 00000000da685c3e
+[ 6589.589061] armada kernel: xhci-hcd xhci-hcd.2.auto: drop ep 0x1, slot id 7, new drop flags = 0x4, new add flags = 0x0
+[ 6589.589328] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 00000000da685c3e
+[ 6589.589637] armada kernel: xhci-hcd xhci-hcd.2.auto: drop ep 0x81, slot id 7, new drop flags = 0xc, new add flags = 0x0
+[ 6589.589951] armada kernel: device: 'ep_00': device_unregister
+[ 6589.590028] armada kernel: xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 6589.620074] armada kernel: device: 'ep_81': device_unregister
+[ 6589.620206] armada kernel: xhci-hcd xhci-hcd.2.auto: Cancel URB 0000000023d2d5c8, dev 1.3, ep 0x81, starting at offset 0xffadd3000
+[ 6589.620521] armada kernel: xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 6589.620829] armada kernel: xhci-hcd xhci-hcd.2.auto: Stopped on Transfer TRB for slot 4 ep 2
+[ 6589.621085] armada kernel: xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xffadd3000 (dma) in stream 0 URB 0000000023d2d5c8
+[ 6589.621341] armada kernel: xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xffadd3010, cycle 1
+[ 6589.621634] armada kernel: xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 6589.621873] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 0000000023d2d5c8 TD as cancel_status is 2
+[ 6589.622100] armada kernel: xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @ffadd3010
+[ 6589.622348] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 0000000023d2d5c8 TD
+[ 6589.622571] armada kernel: xhci-hcd xhci-hcd.2.auto: Giveback URB 0000000023d2d5c8, len = 0, expected = 1, status = -115
+[ 6589.622810] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[ 6589.623096] armada kernel: device: '1-1.3-port5': device_unregister
+[ 6589.623176] armada kernel: device: '1-1.3-port4': device_unregister
+[ 6589.623225] armada kernel: device: '1-1.3-port3': device_unregister
+[ 6589.623271] armada kernel: device: '1-1.3-port2': device_unregister
+[ 6589.623331] armada kernel: device: '1-1.3-port1': device_unregister
+[ 6589.623378] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 00000000c470cbaf
+[ 6589.623602] armada kernel: xhci-hcd xhci-hcd.2.auto: drop ep 0x81, slot id 4, new drop flags = 0x8, new add flags = 0x0
+[ 6589.623849] armada kernel: device: 'ep_00': device_unregister
+[ 6589.623901] armada kernel: xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 6589.652265] armada kernel: device: 'ep_81': device_unregister
+[ 6589.652369] armada kernel: xhci-hcd xhci-hcd.2.auto: Cancel URB 00000000f7e49f93, dev 1, ep 0x81, starting at offset 0xffaddb000
+[ 6589.652504] armada kernel: xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 6589.652574] armada kernel: xhci-hcd xhci-hcd.2.auto: Stopped on Transfer TRB for slot 1 ep 2
+[ 6589.652647] armada kernel: xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xffaddb000 (dma) in stream 0 URB 00000000f7e49f93
+[ 6589.652716] armada kernel: xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xffaddb010, cycle 1
+[ 6589.652785] armada kernel: xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 6589.652970] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 00000000f7e49f93 TD as cancel_status is 2
+[ 6589.653056] armada kernel: xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @ffaddb010
+[ 6589.653125] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 00000000f7e49f93 TD
+[ 6589.653189] armada kernel: xhci-hcd xhci-hcd.2.auto: Giveback URB 00000000f7e49f93, len = 0, expected = 1, status = -115
+[ 6589.653257] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[ 6589.653321] armada kernel: device: '1-1-port4': device_unregister
+[ 6589.653333] armada kernel: device: '1-1-port3': device_unregister
+[ 6589.653350] armada kernel: device: '1-1-port2': device_unregister
+[ 6589.653366] armada kernel: device: '1-1-port1': device_unregister
+[ 6589.653378] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 0000000037bcea23
+[ 6589.653445] armada kernel: xhci-hcd xhci-hcd.2.auto: drop ep 0x81, slot id 1, new drop flags = 0x8, new add flags = 0x0
+[ 6589.653514] armada kernel: device: 'ep_00': device_unregister
+[ 6589.653532] armada kernel: xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 6589.684667] armada kernel: device: 'ep_81': device_unregister
+[ 6589.684781] armada kernel: device: 'usb1-port1': device_unregister
+[ 6589.684835] armada kernel: xHCI xhci_drop_endpoint called for root hub
+[ 6589.684884] armada kernel: xHCI xhci_check_bandwidth called for root hub
+[ 6589.684932] armada kernel: device: 'ep_00': device_unregister
+[ 6589.684979] armada kernel: xhci-hcd xhci-hcd.2.auto: // Halt the HC
+[ 6589.685347] armada kernel: xhci-hcd xhci-hcd.2.auto: // Reset the HC
+[ 6589.685656] armada kernel: xhci-hcd xhci-hcd.2.auto: Wait for controller to be ready for doorbell rings
+[ 6589.688066] armada kernel: xhci-hcd xhci-hcd.2.auto: // Disabling event ring interrupts
+[ 6589.688611] armada kernel: xhci-hcd xhci-hcd.2.auto: cleaning up memory
+[ 6589.688973] armada kernel: xhci-hcd xhci-hcd.2.auto: Freed interrupters
+[ 6589.689442] armada kernel: xhci-hcd xhci-hcd.2.auto: Freed command ring
+[ 6589.689754] armada kernel: xhci-hcd xhci-hcd.2.auto: Freed segment pool
+[ 6589.690090] armada kernel: xhci-hcd xhci-hcd.2.auto: Freed device context pool
+[ 6589.690357] armada kernel: xhci-hcd xhci-hcd.2.auto: Freed small stream array pool
+[ 6589.690651] armada kernel: xhci-hcd xhci-hcd.2.auto: Freed xhci port bw array pool
+[ 6589.690933] armada kernel: xhci-hcd xhci-hcd.2.auto: Freed medium stream array pool
+[ 6589.691183] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_stop completed - status = 1
+[ 6589.691617] armada kernel: xhci-hcd xhci-hcd.2.auto: USB bus 1 deregistered
+[ 6589.711774] armada kernel: device: 'a600000.usb': device_add
+[ 6589.711849] armada kernel: device: 'gadget.0': device_add
+[ 6595.168105] armada kernel: dwc3-qcom a600000.usb: port-1 HS-PHY not in L2
+[ 6597.900101] armada kernel: device: 'port0-partner': device_add
+[ 6597.912080] armada kernel: qcom-qmp-combo-phy 88e8000.phy: phy initialization timed-out
+[ 6597.913326] armada kernel: phy phy-88e8000.phy.2: phy init failed --> -110
+[ 6598.116060] armada kernel: dwc3-qcom a600000.usb: Failed to resume device
+[ 6599.135809] armada kernel: device: 'pd0': device_add
+[ 6600.796221] armada kernel: dwc3-qcom a600000.usb: Failed to resume device
+[ 6600.800231] armada kernel: device: 'a600000.usb': device_unregister
+[ 6600.808077] armada kernel: device: 'xhci-hcd.2.auto': device_add
+[ 6600.812092] armada kernel: platform xhci-hcd.2.auto: bus: 'platform': __driver_probe_device: matched device with driver xhci-hcd
+[ 6600.813515] armada kernel: platform xhci-hcd.2.auto: bus: 'platform': really_probe: probing driver xhci-hcd with device
+[ 6600.814406] armada kernel: xhci-hcd xhci-hcd.2.auto: runtime PM trying to activate child device xhci-hcd.2.auto but parent (a600000.usb) is not active
+[ 6600.815324] armada kernel: xhci-hcd xhci-hcd.2.auto: xHCI Host Controller
+[ 6600.816434] armada kernel: xhci-hcd xhci-hcd.2.auto: new USB bus registered, assigned bus number 1
+[ 6600.817315] armada kernel: xhci-hcd xhci-hcd.2.auto: // Halt the HC
+[ 6600.818123] armada kernel: xhci-hcd xhci-hcd.2.auto: Resetting HCD
+[ 6600.818956] armada kernel: xhci-hcd xhci-hcd.2.auto: // Reset the HC
+[ 6601.858223] armada kernel: ------------[ cut here ]------------
+[ 6601.858504] armada kernel: gcc_usb3_prim_phy_pipe_clk already disabled
+[ 6601.858721] armada kernel: WARNING: drivers/clk/clk.c:1188 at clk_core_disable+0x2a0/0x310, CPU#0: kworker/0:2/167195
+[ 6601.858853] armada kernel: Modules linked in: exfat rfcomm q6prm_clocks q6apm_lpass_dais q6apm_dai snd_q6dsp_common q6prm snd_q6apm snd_soc_sc8280xp snd_soc_qcom_sdw snd_soc_qcom_common snd_soc_lpass_va_macro snd_soc_aw88166 soundwire_qcom snd_soc_wcd938x snd_soc_wcd938x_sdw regmap_sdw snd_soc_wcd_mbhc snd_soc_wcd_common snd_soc_hdmi_codec snd_soc_lpass_tx_macro snd_soc_wcd_classh snd_soc_aw88395_lib slimbus soundwire_bus snd_soc_lpass_wsa_macro ath12k_wifi7 snd_soc_lpass_rx_macro snd_soc_lpass_macro_common ath12k snd_soc_core snd_compress snd_pcm_dmaengine snd_seq snd_seq_device mac80211 hci_uart btqca btbcm qcom_iris v4l2_mem2mem bluetooth videobuf2_dma_contig videobuf2_memops snd_pcm cfg80211 videobuf2_v4l2 qcom_q6v5_pas videodev ecdh_generic qcom_pil_info videobuf2_common snd_timer ecc qcom_q6v5 libarc4 binfmt_misc snd pmic_pdcharger_ulog mc rfkill qcom_sysmon pci_pwrctrl_pwrseq soundcore qcomtee joydev zram zsmalloc overlay erofs rtc_pm8xxx gpio_sbu_mux nvmem_qcom_spmi_sdam pinctrl_sm8550_lpass_lpi pinctrl_lpass_lpi qcrypto
+[ 6601.859122] armada kernel:  qcom_battmgr nvmem_reboot_mode qcom_rng pwm_fan btrfs xor libblake2b raid6_pq dm_mirror dm_region_hash dm_log dm_mod rsinput qcom_hv_haptics fuse hid_sony cpufreq_conservative mangmi_pocket_max retroid qcom_common hid_playstation hid_nintendo hid_steam
+[ 6601.859183] armada kernel: CPU: 0 UID: 0 PID: 167195 Comm: kworker/0:2 Tainted: G S      W           7.2.6 #1 PREEMPT 
+[ 6601.859231] armada kernel: Tainted: [S]=CPU_OUT_OF_SPEC, [W]=WARN
+[ 6601.859279] armada kernel: Hardware name: Retroid Pocket 6 (DT)
+[ 6601.859325] armada kernel: Workqueue: events pmic_glink_altmode_worker
+[ 6601.859389] armada kernel: pstate: 634000c5 (nZCv daIF +PAN -UAO +TCO +DIT -SSBS BTYPE=--)
+[ 6601.859462] armada kernel: pc : clk_core_disable+0x2a0/0x310
+[ 6601.859526] armada kernel: lr : clk_core_disable+0x2a0/0x310
+[ 6601.859586] armada kernel: sp : ffff80009cbdbc60
+[ 6601.859665] armada kernel: x29: ffff80009cbdbc60 x28: 0000000000000000 x27: 0000000000000000
+[ 6601.859726] armada kernel: x26: ffff00097eecb000 x25: 0000000000000000 x24: ffff0008000c2605
+[ 6601.859783] armada kernel: x23: ffff0008065227e0 x22: ffffbdf17d8f2518 x21: ffff000806522110
+[ 6601.859826] armada kernel: x20: 0000000000000000 x19: ffff000800f1bc00 x18: ffff4217ff949000
+[ 6601.859869] armada kernel: x17: 0000000000000000 x16: ffffbdf17d7dfb30 x15: ffffbdf17f68ce60
+[ 6601.859911] armada kernel: x14: 0000000000000000 x13: 64656c6261736964 x12: 2079646165726c61
+[ 6601.859969] armada kernel: x11: 206b6c635f657069 x10: 705f7968705f6d69 x9 : ffffbdf17c22e368
+[ 6601.860091] armada kernel: x8 : 3ffffffffffff4b3 x7 : ffffbdf17f7117f8 x6 : 0000000000000001
+[ 6601.860188] armada kernel: x5 : ffff00097eeb7248 x4 : ffff4217ff949000 x3 : ffff00080247e780
+[ 6601.860235] armada kernel: x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff00080247e780
+[ 6601.860298] armada kernel: Call trace:
+[ 6601.860341] armada kernel:  clk_core_disable+0x2a0/0x310 (P)
+[ 6601.860399] armada kernel:  clk_disable+0x40/0x70
+[ 6601.860444] armada kernel:  qmp_combo_com_exit.isra.0+0x4c/0x98
+[ 6601.860490] armada kernel:  qmp_combo_typec_mux_set+0x194/0x260
+[ 6601.860556] armada kernel:  typec_mux_set+0x68/0xb0
+[ 6601.860603] armada kernel:  pmic_glink_altmode_worker+0x1b0/0x3c8
+[ 6601.860649] armada kernel:  process_one_work+0x168/0x4c0
+[ 6601.860711] armada kernel:  worker_thread+0x18c/0x2f8
+[ 6601.860760] armada kernel:  kthread+0x134/0x150
+[ 6601.860823] armada kernel:  ret_from_fork+0x10/0x20
+[ 6601.860867] armada kernel: ---[ end trace 0000000000000000 ]---
+[ 6601.860912] armada kernel: ------------[ cut here ]------------
+[ 6601.860955] armada kernel: gcc_usb3_prim_phy_pipe_clk already unprepared
+[ 6601.861029] armada kernel: WARNING: drivers/clk/clk.c:1047 at clk_core_unprepare+0x2e0/0x330, CPU#0: kworker/0:2/167195
+[ 6601.861091] armada kernel: Modules linked in: exfat rfcomm q6prm_clocks q6apm_lpass_dais q6apm_dai snd_q6dsp_common q6prm snd_q6apm snd_soc_sc8280xp snd_soc_qcom_sdw snd_soc_qcom_common snd_soc_lpass_va_macro snd_soc_aw88166 soundwire_qcom snd_soc_wcd938x snd_soc_wcd938x_sdw regmap_sdw snd_soc_wcd_mbhc snd_soc_wcd_common snd_soc_hdmi_codec snd_soc_lpass_tx_macro snd_soc_wcd_classh snd_soc_aw88395_lib slimbus soundwire_bus snd_soc_lpass_wsa_macro ath12k_wifi7 snd_soc_lpass_rx_macro snd_soc_lpass_macro_common ath12k snd_soc_core snd_compress snd_pcm_dmaengine snd_seq snd_seq_device mac80211 hci_uart btqca btbcm qcom_iris v4l2_mem2mem bluetooth videobuf2_dma_contig videobuf2_memops snd_pcm cfg80211 videobuf2_v4l2 qcom_q6v5_pas videodev ecdh_generic qcom_pil_info videobuf2_common snd_timer ecc qcom_q6v5 libarc4 binfmt_misc snd pmic_pdcharger_ulog mc rfkill qcom_sysmon pci_pwrctrl_pwrseq soundcore qcomtee joydev zram zsmalloc overlay erofs rtc_pm8xxx gpio_sbu_mux nvmem_qcom_spmi_sdam pinctrl_sm8550_lpass_lpi pinctrl_lpass_lpi qcrypto
+[ 6601.861317] armada kernel:  qcom_battmgr nvmem_reboot_mode qcom_rng pwm_fan btrfs xor libblake2b raid6_pq dm_mirror dm_region_hash dm_log dm_mod rsinput qcom_hv_haptics fuse hid_sony cpufreq_conservative mangmi_pocket_max retroid qcom_common hid_playstation hid_nintendo hid_steam
+[ 6601.861373] armada kernel: CPU: 0 UID: 0 PID: 167195 Comm: kworker/0:2 Tainted: G S      W           7.2.6 #1 PREEMPT 
+[ 6601.861439] armada kernel: Tainted: [S]=CPU_OUT_OF_SPEC, [W]=WARN
+[ 6601.861485] armada kernel: Hardware name: Retroid Pocket 6 (DT)
+[ 6601.861530] armada kernel: Workqueue: events pmic_glink_altmode_worker
+[ 6601.861574] armada kernel: pstate: 63400005 (nZCv daif +PAN -UAO +TCO +DIT -SSBS BTYPE=--)
+[ 6601.861642] armada kernel: pc : clk_core_unprepare+0x2e0/0x330
+[ 6601.861699] armada kernel: lr : clk_core_unprepare+0x2e0/0x330
+[ 6601.861783] armada kernel: sp : ffff80009cbdbc60
+[ 6601.861840] armada kernel: x29: ffff80009cbdbc60 x28: 0000000000000000 x27: 0000000000000000
+[ 6601.861887] armada kernel: x26: ffff00097eecb000 x25: 0000000000000000 x24: ffff0008000c2605
+[ 6601.861931] armada kernel: x23: ffff0008065227e0 x22: ffffbdf17d8f2518 x21: ffff000806522110
+[ 6601.861973] armada kernel: x20: ffffbdf17d8f2518 x19: ffff000800f1bc00 x18: ffff4217ff949000
+[ 6601.862016] armada kernel: x17: 0000000000000000 x16: ffffbdf17d7dfb30 x15: ffffbdf17f68ce60
+[ 6601.862058] armada kernel: x14: 0000000000000000 x13: 6465726170657270 x12: 6e75207964616572
+[ 6601.862121] armada kernel: x11: 6c61206b6c635f65 x10: 7069705f7968705f x9 : ffffbdf17c22e368
+[ 6601.862163] armada kernel: x8 : 3ffffffffffff4d6 x7 : ffffbdf17f7117f8 x6 : 0000000000000001
+[ 6601.862233] armada kernel: x5 : ffff00097eeb7248 x4 : ffff4217ff949000 x3 : ffff00080247e780
+[ 6601.862275] armada kernel: x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff00080247e780
+[ 6601.862331] armada kernel: Call trace:
+[ 6601.862386] armada kernel:  clk_core_unprepare+0x2e0/0x330 (P)
+[ 6601.862441] armada kernel:  clk_unprepare+0x38/0x60
+[ 6601.862483] armada kernel:  qmp_combo_com_exit.isra.0+0x54/0x98
+[ 6601.862524] armada kernel:  qmp_combo_typec_mux_set+0x194/0x260
+[ 6601.862564] armada kernel:  typec_mux_set+0x68/0xb0
+[ 6601.862607] armada kernel:  pmic_glink_altmode_worker+0x1b0/0x3c8
+[ 6601.862647] armada kernel:  process_one_work+0x168/0x4c0
+[ 6601.862690] armada kernel:  worker_thread+0x18c/0x2f8
+[ 6601.862744] armada kernel:  kthread+0x134/0x150
+[ 6601.862801] armada kernel:  ret_from_fork+0x10/0x20
+[ 6601.862841] armada kernel: ---[ end trace 0000000000000000 ]---
+[ 6601.872135] armada kernel: xhci-hcd xhci-hcd.2.auto: Wait for controller to be ready for doorbell rings
+[ 6601.873516] armada kernel: xhci-hcd xhci-hcd.2.auto: Reset complete
+[ 6601.874303] armada kernel: xhci-hcd xhci-hcd.2.auto: Enabling 64-bit DMA addresses.
+[ 6601.874987] armada kernel: xhci-hcd xhci-hcd.2.auto: HCD page size set to 4K
+[ 6601.877889] armada kernel: xhci-hcd xhci-hcd.2.auto: Starting xhci_mem_init
+[ 6601.878766] armada kernel: xhci-hcd xhci-hcd.2.auto: Allocating internal virtual device array
+[ 6601.879542] armada kernel: xhci-hcd xhci-hcd.2.auto: Device context base array address = 0x0000000ffadde000 (DMA), 0000000024c3eb57 (virt)
+[ 6601.880483] armada kernel: xhci-hcd xhci-hcd.2.auto: Allocated command ring at 0000000040c52a24
+[ 6601.881140] armada kernel: xhci-hcd xhci-hcd.2.auto: Allocating primary event ring
+[ 6601.881790] armada kernel: xhci-hcd xhci-hcd.2.auto: Allocating 2 scratchpad buffers
+[ 6601.882448] armada kernel: xhci-hcd xhci-hcd.2.auto: Ext Cap 00000000f86df92a, port offset = 1, count = 1, revision = 0x2
+[ 6601.883096] armada kernel: xhci-hcd xhci-hcd.2.auto: xHCI 1.0: support USB2 hardware lpm
+[ 6601.883735] armada kernel: xhci-hcd xhci-hcd.2.auto: Ext Cap 0000000079a5c439, port offset = 2, count = 1, revision = 0x3
+[ 6601.884427] armada kernel: xhci-hcd xhci-hcd.2.auto: PSIV:4 PSIE:3 PLT:0 PFD:1 LP:0 PSIM:5
+[ 6601.885084] armada kernel: xhci-hcd xhci-hcd.2.auto: PSIV:5 PSIE:3 PLT:0 PFD:1 LP:1 PSIM:10
+[ 6601.885723] armada kernel: xhci-hcd xhci-hcd.2.auto: Found 1 USB 2.0 ports and 1 USB 3.0 ports.
+[ 6601.886341] armada kernel: xhci-hcd xhci-hcd.2.auto: Finished xhci_mem_init
+[ 6601.886949] armada kernel: xhci-hcd xhci-hcd.2.auto: Starting xhci_init
+[ 6601.887612] armada kernel: xhci-hcd xhci-hcd.2.auto: xHC can handle at most 64 device slots
+[ 6601.888285] armada kernel: xhci-hcd xhci-hcd.2.auto: Setting Max device slots reg = 0x40
+[ 6601.888891] armada kernel: xhci-hcd xhci-hcd.2.auto: Setting command ring address to 0xffffb7001
+[ 6601.889493] armada kernel: xhci-hcd xhci-hcd.2.auto: Doorbell array is located at offset 0x2000 from cap regs base addr
+[ 6601.890139] armada kernel: xhci-hcd xhci-hcd.2.auto: // Write event ring dequeue pointer, preserving EHB bit
+[ 6601.890775] armada kernel: xhci-hcd xhci-hcd.2.auto: Finished xhci_init
+[ 6601.891420] armada kernel: xhci-hcd xhci-hcd.2.auto: hcc params 0x0110ffc5 hci version 0x110 quirks 0x0000808020000810
+[ 6601.892129] armada kernel: xhci-hcd xhci-hcd.2.auto: irq 194, io mem 0x0a600000
+[ 6601.892686] armada kernel: xhci-hcd xhci-hcd.2.auto: xhci_run
+[ 6601.893195] armada kernel: xhci-hcd xhci-hcd.2.auto: ERST deq = 64'hffade3000
+[ 6601.893728] armada kernel: xhci-hcd xhci-hcd.2.auto: Finished xhci_run for main hcd
+[ 6601.894256] armada kernel: xhci-hcd xhci-hcd.2.auto: xHCI Host Controller
+[ 6601.894774] armada kernel: xhci-hcd xhci-hcd.2.auto: new USB bus registered, assigned bus number 2
+[ 6601.895299] armada kernel: xhci-hcd xhci-hcd.2.auto: Host supports USB 3.1 Enhanced SuperSpeed
+[ 6601.895832] armada kernel: xhci-hcd xhci-hcd.2.auto: Enable interrupts
+[ 6601.896422] armada kernel: xhci-hcd xhci-hcd.2.auto: Enable primary interrupter
+[ 6601.896984] armada kernel: xhci-hcd xhci-hcd.2.auto: // Turn on HC, cmd = 0x5.
+[ 6601.897531] armada kernel: xhci-hcd xhci-hcd.2.auto: Port change event, 1-1, id 1, portsc: 0x206e1
+[ 6601.898074] armada kernel: xhci-hcd xhci-hcd.2.auto: handle_port_status: starting usb1 port polling.
+[ 6601.898598] armada kernel: usb usb1: runtime PM trying to activate child device usb1 but parent (xhci-hcd.2.auto) is not active
+[ 6601.899325] armada kernel: device: 'usb1': device_add
+[ 6601.899413] armada kernel: usb usb1: bus: 'usb': __driver_probe_device: matched device with driver usb
+[ 6601.899964] armada kernel: usb usb1: bus: 'usb': really_probe: probing driver usb with device
+[ 6601.900695] armada kernel: usb usb1: can't set config #1, error -16
+[ 6601.901164] armada kernel: usb usb1: driver: 'usb': driver_bound: bound to device
+[ 6601.901566] armada kernel: usb usb1: bus: 'usb': really_probe: bound device to driver usb
+[ 6601.901957] armada kernel: device: 'ep_00': device_add
+[ 6601.902011] armada kernel: usb usb2: runtime PM trying to activate child device usb2 but parent (xhci-hcd.2.auto) is not active
+[ 6601.902576] armada kernel: device: 'usb2': device_add
+[ 6601.902613] armada kernel: usb usb2: bus: 'usb': __driver_probe_device: matched device with driver usb
+[ 6601.903064] armada kernel: usb usb2: bus: 'usb': really_probe: probing driver usb with device
+[ 6601.904458] armada kernel: usb usb2: can't set config #1, error -16
+[ 6601.904956] armada kernel: usb usb2: driver: 'usb': driver_bound: bound to device
+[ 6601.905352] armada kernel: usb usb2: bus: 'usb': really_probe: bound device to driver usb
+[ 6601.905746] armada kernel: device: 'ep_00': device_add
+[ 6601.905780] armada kernel: xhci-hcd xhci-hcd.2.auto: driver: 'xhci-hcd': driver_bound: bound to device
+[ 6601.906230] armada kernel: xhci-hcd xhci-hcd.2.auto: bus: 'platform': really_probe: bound device to driver xhci-hcd
+[ 6601.906687] armada kernel: xhci-hcd xhci-hcd.2.auto: Port change event, 2-1, id 2, portsc: 0x2802a0
+[ 6601.907155] armada kernel: xhci-hcd xhci-hcd.2.auto: handle_port_status: starting usb2 port polling.
+[ 6601.964064] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR RFB STORAGE ERROR
+[ 6601.964351] armada kernel: [drm:msm_dp_link_process_request] *ERROR* PSR IRQ_HPD received
+[ 6601.972069] armada kernel: dwc3-qcom a600000.usb: Failed to resume device
