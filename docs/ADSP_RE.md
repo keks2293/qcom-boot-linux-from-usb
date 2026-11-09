@@ -481,8 +481,13 @@ can only arrive as a **property-service push** (RX callback → … → ctxB->+0
   `SetRerunApsd` is a no-op). See
   [the trigger-chain section](#the-setrerunapsd-trigger-chain-pmic_glink--dpm_usbc).
   The second path is the CC-edge-driven `charger_detection_event_handler`
-  @0x6014eab0 (needs a fresh physical edge). In the failing environment neither
-  fires (no fresh edge + `apsd-rerun-cfg`=0) → the wedge.
+  @0x6014eab0 (needs a fresh physical edge; fully decoded 2026-11-10,
+  including the **skip-while-sourcing gate** that suppresses the USB
+  charging-type write in the source role — see
+  [the handler section](#charger_detection_event_handler-and-the-skip-while-sourcing-gate-2026-11-10)).
+  In the failing environment neither fires (no fresh edge +
+  `apsd-rerun-cfg`=0; and even a fired edge would hit the skip gate in the
+  source role) → the wedge.
 - **Not found (remaining ceiling):** (1) the exact DPM state value that reaches the
   `SetRerunApsd` branch; (2) the specific pmic_glink message that drives it; (3) the
   exact `apsd-rerun-cfg` check site (FDT-only config, walked at runtime); (4) whether
@@ -651,7 +656,7 @@ the RP6 device tree (the active connector is `/pmic-glink/connector@0`).
 |---|---|---|---|
 | 1 | fresh CC edge (attach) | HW (physical) | OUT — cold-plug = plugged before power-on; cannot re-plug |
 | 2 | DPM USB-C rerun | AP **pmic_glink** → handler 0x60088eb0 → 0x60089bc0 → `dpm_usbc` @0x600d1dc0 → `SetRerunApsd(7)` | **GATED** by `apsd-rerun-cfg` (FDT, =0 in stock → `SetRerunApsd` no-op). Chain fully traced; exact DPM state + pmic_glink message + config check site not yet decoded; whether the AP reaches that state in the failing env = full-system fork test |
-| 3 | charger-detection SM event | event 0x25 broadcast (HW CC IRQ **or** AP glink/UCSI) | **OPEN** — sources pinned (HW IRQ setup + glink RX); ADSP-side flag gates eliminated (ULog-only) |
+| 3 | charger-detection SM event | event 0x25 broadcast (HW CC IRQ **or** AP glink/UCSI) | handler **fully decoded** (2026-11-10): in the **source role** it skips the USB charging-type classification entirely ("skip … while usb is sourcing", [handler section](#charger_detection_event_handler-and-the-skip-while-sourcing-gate-2026-11-10)) — so even a fresh edge cannot produce a `usb_type` write while the port sources |
 | 4 | periodic/autonomous | `SetAiclPeriodicRerun` / `SetAiclRerunTimeCfg` / `set_hw_aicl_rerun` | DEAD CODE (0 refs) |
 
 ## Cross-firmware comparison
@@ -686,6 +691,14 @@ the candidates narrow to:
    (USB events 2.716/3.182 s before the PDR at 3.498 s). The next step is the
    falsifiable test: re-probe `dwc3-qcom` + `xhci-hcd` inside the ≤30 s window
    in the initramfs and check whether the drive enumerates.
+   **Refinement (2026-11-10):** the dbgB capture plus the full handler decode
+   pin the *exact* missing step — in the source role (pre-plug stick, the
+   USB-boot scenario) the event handler takes the skip-while-sourcing gate
+   and never writes the USB charging-type property, so `usb_type=Unknown` is
+   **by-design firmware behavior** in that role, not a stuck/missing trigger.
+   See [the handler section](#charger_detection_event_handler-and-the-skip-while-sourcing-gate-2026-11-10)
+   (fix implication 1: the AP-side boot decision must not depend on
+   `usb_type` in the source role).
 2. **Fresh-edge window:** the replug-timing correlation (≤ ~24.7 s works, ≥ ~38 s
    fails; ~30 s boundary) points to a PPM/BC1.2 classification window. See
    [ADSP_CONFIG.md](ADSP_CONFIG.md#timer--replug-correlation).
@@ -814,3 +827,168 @@ stuck + `ncp_stby`, the dbg49 fingerprint) from *suppressed log* (tag/mask not
 enabled in the capture). The decision rule branches 1 and 2 in
 [INITRAMFS_CHANGES.md](INITRAMFS_CHANGES.md#decision-rule) and the
 fingerprint table in [ADSP_ULOG.md](ADSP_ULOG.md) are updated accordingly.
+
+## `charger_detection_event_handler` and the skip-while-sourcing gate (2026-11-10)
+
+The CC-edge-driven re-detection path (the second route in the
+[final answer](#final-answer-to-who-pulls-the-charger-type)) is now fully
+decoded, and the dbgB `FAIL-NO-CLASSIFY` fingerprint
+([run result](INITRAMFS_CHANGES.md#dbgB-run-result-2026-11-09--fail-no-classify))
+is explained in code: **in the source role the handler deliberately skips the
+USB charging-type classification and writes no property at all.**
+
+### The handler @0x6014eab0 (tag `charger_detection_event_handler` @0x6022ba2c)
+
+Source file (from the 2nd string copy): `charger_detection.c`.
+
+```
+entry (once, before the input loop):
+  -0x18 = 0x6016e900()                     # getter-ctx singleton
+  -0x28 = 0x60156e80()                     # input-ctx singleton
+  -0x2c = 0x60148250()                     # main ctx
+  PmHw_GetChargerPMICInfo(&-0x21, &-0x22, &-0x23)        # 0x6008dbd0
+  if (-0x21 <= 0xa)
+      PmSchgTypec_GetConnectionStatus(-0x21, &-0x20)     # 0x60093780
+  status = 0                                # -0x12, halfword
+
+for (in = 0; in < memw(0x60334b58); in++):  # per-input loop
+    if (in > 3) break
+    battmngr_platform_is_otg_enabled(&-0x1f)             # 0x6002db20
+        # fail → log "get otg sts failed" (0x6022b9d6), exit with status
+
+    if (in == 0 && -0x20 == 6 && -0x1f == 1) {          # *** the skip gate ***
+        w = ssdev_typec_get_status(in)                   # 0x601580b0, byte 0 of 7
+        b = ssdev_typec_get_partner_type(in)             # 0x601581e0
+        if (w == 0 || b == 0 || b == 1) {
+            log "skip checking usb charging type
+                 while usb is sourcing"                  # 0x6022ba9f, ULog-gated
+            continue                                     # no classification,
+                                                         # no property write
+        } else {
+            log "reset charger partner, typec_partner:%d"  # 0x6022ba4c
+            re-fetch otg status (0x60156860 / 0x60156760)
+            → fall through to the main path
+        }
+    }
+
+    # main path (0x6014ee74)
+    charger-present flag → -0x1d (0x60156860 / 0x60156760, status)
+    log "Input[%d] bPlugIn=%d"                              # 0x6022bbae
+    if (flag == 0)  0x6014f7e0()                            # no-charger path
+    else            0x6014f3d0()                            # detection:
+        #   → charger_detection_inital_detection 0x60152970 [sic]
+        #   → evaluate_typec_charger 0x60150d50 (the PartnerType= line)
+    0x6014fd90()   # evaluate; fail → "evaluation failed" 0x6022bbee
+    if (flag && memb(0x60334bad)) 0x60194380(in, 0)
+    0x6014fea0()   # charger update; fail → "charger update failed" 0x6022bc43
+```
+
+All log sites are ULog-gated like everything else; the skip-gate line was
+demonstrably emitted in the dbgB capture (tag enabled), so its presence in a
+drain is functional, not a logging artifact.
+
+### The skip-gate inputs, named (from their own ULog tags/fmts)
+
+| vaddr | name (ULog tag) | role in the handler |
+|---|---|---|
+| 0x6008dbd0 | `PmHw_GetChargerPMICInfo` (tag @0x601fb5ce; fmts 0x601fb58c / 0x601fb5e6 "No Charger PMICs found") | scans the 14-entry PMIC table @0x603252c0 (8 B/entry, `e = 0..0xd`); returns the first entry whose byte+2 type code ∈ {0x20, 0x29, 0x2e, 0x3c, 0x44, 0x47, 0x4c}; outputs: index → -0x21, byte+8 → -0x22, byte+2 → -0x23; NULL args → 0x202, no match → 0x201 |
+| 0x60093780 | `PmSchgTypec_GetConnectionStatus` (tag @0x601fd762; fmts 0x601fd718 / 0x601fd782 "Status = 0x%X") | per-PMIC fn-ptr dispatch: `fn = *(0x60325558 + idx*0xc)`, `callr fn(&out)`; `idx > 0xa` → 0x202, NULL fn → 0x201. Writes **-0x20 = the charger PMIC's TypeC connection status** |
+| 0x6002db20 | `battmngr_platform_is_otg_enabled` (tag @0x601def0d; fmt 0x601deec2 "Platform Get otg status func pointer is NULL") | `callr memw(0x602805a4)(arg0)`; NULL fn → 0x206 + ULog. Per-input OTG status → -0x1f |
+| 0x601580b0 | `ssdev_typec_get_status` (tag @0x6022d29a, fmt "[kevin-500]") | `in > 3` → 0x202; `ptr = memw(0x60256ef8 + in*0x14)`; NULL → 0x202; 7-byte memcpy from `ptr+0x7d` (the gate uses byte 0) |
+| 0x601581e0 | `ssdev_typec_get_partner_type` (tag @0x6022d2c8, fmt "[kevin-522]") | same guards; `*out = memub(ptr+0x84)` |
+
+The `ssdev_typec_*` family (`…_pd_req_current`, `…_pd_get_pdos`,
+`…_pd_get_max_votlage` [sic], `…_pd_get_min` [sic], …) is the Type-C port
+state block; the per-port state pointers live in the table at **0x60256ef8**
+(stride 0x14, ≤ 4 ports) — the same table `evaluate_typec_charger` uses.
+
+### The model, and the mapping to the measured environments
+
+`-0x20` is the **TypeC connection status** of the charger PMIC; the value
+**6** is the *sourcing* state (the log message says it itself). The full
+skip condition:
+
+```
+in == 0
+&& PmSchgTypec_GetConnectionStatus(charger_pmic) == 6      # "usb is sourcing"
+&& battmngr_platform_is_otg_enabled(0) == 1
+&& (typec_status[0] == 0 || typec_partner_type ∈ {0, 1})
+→ log + continue: no classification, no USB_TYPE property write
+```
+
+| environment | FPM (measured) | conn status | skip gate | AP `usb_type` |
+|---|---|---|---|---|
+| dbgB (pre-plug stick, **source role**) | `PowerDirection=1`, `ConnectPartnerType=2`, USB=1 | 6 (sourcing) | **taken** @17.67 | `Unknown` (0) |
+| full-system success (PD dock, **sink role**) | `PowerDirection=0`, PartnerType=15, 9 V / 2440 mA | ≠ 6 | not taken | `SDP` (1) |
+
+Consequences:
+
+- In the plain-USB-stick scenario (host/source role — exactly the USB-boot
+  scenario) the firmware **intentionally never classifies the USB charging
+  type**: a port that is sourcing has no charger to classify. The AP's
+  `usb_type` therefore stays at its default (`Unknown`) in precisely the
+  scenario USB boot needs.
+- **In the source role the skip branch itself is the write-gate for the
+  USB_TYPE(6) glink property** — there is no other gate upstream of it. This
+  matches the upstream sm8350-class observation that `USB_TYPE` is "stale":
+  here it is not even stale, it is never written in the source role.
+- It also explains the dbgB discrepancy `typec_detect_partner:
+  TypeCPartnerType=0` @5.35 vs the FPM's `ConnectPartnerType=2` @7.41: two
+  different subsystems (ssdev Type-C block vs FPM connector status); the skip
+  gate consumes the former (byte ∈ {0,1} → skip).
+
+### Fix implications
+
+1. **AP-side (practical):** do not gate the USB-boot decision on `usb_type`
+   in the source role — treat `Unknown` + VBUS present + partner as bootable.
+   The host controller does not need a charger type to enumerate the stick
+   (the full system enumerates with the UCSI core active; the wedge is about
+   the charger SM, not xHCI).
+2. **Firmware-side:** bypassing the skip gate requires patching the signed
+   `adsp.mbn` — not realistic.
+3. **USB_ADAP_TYPE(7):** the upstream sm8350-class patch (v2, Reviewed-by
+   Qualcomm) says `USB_ADAP_TYPE` is the *live* adapter-type property there
+   (PC 1/1, 5 V-PD dock 1/6, 65 W PPS 1/8) — but our 7.2.6 does not consume
+   it (absent from `sm8350_usb_prop_map`; a prop-7 push would hit
+   `dev_warn("unknown property %#x")`, `qcom_battmgr.c:1521`), and whether
+   *this* firmware writes it in the source role is still open (candidate
+   write sites: 0x6014fd90 / 0x6014fea0, not yet decoded).
+
+### Correction: earlier recorded string vaddrs were off by ~0x140 (2026-11-10)
+
+The string-dump script used in earlier sessions had a loop bug (the `lo+i`
+offset was applied to a shrinking slice while the base stayed fixed), so all
+string vaddrs recorded before 2026-11-10 were shifted by ~0x140. The values
+in this section were re-derived from the `##0x…` immediates in the
+disassembly (authoritative) and verified byte-by-byte against the firmware.
+Verified first-copy fmt vaddrs (the 2nd copy @0x60343000 carries the same
+texts with a `<file>.c:` prefix, which is how the source file names above
+were read):
+
+| string (content) | 1st copy | 2nd copy |
+|---|---|---|
+| `skip checking usb charging type while usb is sourcing` | 0x6022ba9f | 0x60385204 |
+| `reset charger partner, typec_partner:%d` | 0x6022ba4c | 0x603851a0 |
+| `should disable WLS charing when USB charger in` [sic] | 0x6022bb54 | 0x603852dc |
+| `Input[%d] bPlugIn=%d` (event_handler) | 0x6022bbae | 0x60385348 |
+| `Input[%d] bPlugIn=%d, Module type=%d` (inital_detection [sic]) | 0x6022c392 | 0x60385e70 |
+| `Input[%d] detection failed, status=0x%X` | 0x6022bb00 | 0x60385278 |
+| `Input[%d] evaluation failed, status=0x%X` | 0x6022bbee | 0x60385398 |
+| `Input[%d] get otg sts failed, status=0x%X` | 0x6022b9d6 | 0x60385138 |
+| `Input[%d] charger update failed, status=0x%X` | 0x6022bc43 | 0x60385400 |
+| `icm_ncp_stby_init: keeps in icm_ncp_stby utill [sic] charger_type updated` | 0x60238d14 | 0x6038e6c4 |
+| `icm_ncp_stby_main: keeps in icm_ncp_stby utill [sic] charger_type updated` | 0x60238da2 | 0x6038e75c |
+| `ncp_stby_db - chgr_stat=%x, soc=%d` | 0x60238e6c | 0x6038e82c |
+| `wlstx enable: %d` | 0x601e6b2f | 0x6034f1e4 |
+| `otg enable: %d` | 0x601e6bb7 | 0x6034f254 |
+| `wls tx source = %d` | 0x601e6c07 | 0x6034f2c0 |
+| `otg source = %d` | 0x601e6ce5 | 0x6034f3d8 |
+| `IDT in wrong state, disabling wls tx…` | 0x601e6c5b | 0x6034f330 |
+| `OTG source not available` | 0x601e6d36 | 0x6034f4b0 |
+
+Note: in this string region 3–4 bytes of data words are sometimes packed
+immediately in front of a string **without a NUL separator** (e.g.
+`c4 e6 38 60` precedes the init-keeps fmt at 0x60238d10+4; `58 55 36 60`
+precede the `PmSchgTypec` fmt at 0x601fd714+4). A walk-back-to-NUL string
+dump therefore lands *before* the real string start; the vaddr cited here is
+always the one the disassembly references.
