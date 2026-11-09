@@ -312,15 +312,40 @@ which preserves the byte. So T is either:
   flag section takes the "otherwise" branch: **flag = 1 on every event,
   unconditionally** — no property value can clear the wedge, and the
   `apsd-rerun-cfg` patch cannot help (dbg53 dead).
-- **H2 (FDT config-loader, candidate T = 2):** a firmware config loader writes T from
-  the PPM FDT (`adsp_dtb.mbn`). Evidence: the firmware contains the FDT symbol-node
-  name `__symbols__` (vaddr 0xb23e7341/0xb23e736c) and the tree anchor `battman`
-  (vaddr 0xf02fe8e1), but **no property-name strings at all** — so it walks the FDT by
-  symbol lookup + positional property reads. The `chg_icm_cfg` node (phandle 0x12)
-  carries exactly two properties, `force-eoc-5v = 0` and `ptm-cfg = 2`; no property is
-  named after the type byte, and `ptm-cfg = 2` is the only plausible T source. If
-  T = 2, the flag is `!(GET(0x270b) & 0x20)` and the `apsd-rerun-cfg = 0→1` patch
-  (dbg53) is viable, provided the re-detection path sets that bit.
+- **H2 (config-loader, candidate T = 2):** a firmware config loader writes T from
+  the config source. **Correction (2026-11-09):** the previously cited string evidence
+  was wrong — `__symbols__` @ vaddr 0xb23e7341 belongs to a **DAL device-tree overlay
+  embedded inside `adsp.mbn`** (an R/E segment whose string table holds `target-path`,
+  `__overlay__`, `__fixups__`, `DAL_DeviceAttachEx`), and `battman` @ vaddr 0xf02fe8e1
+  is the **`battman_policy.c` log tag**; the three code references to `0xd00dfeed`
+  (f0117dfc, f0053d38, f0053e68) are **RPC message magics**, not FDT parsing.
+  **The real evidence:** the firmware contains a **config-key name table at
+  vaddr 0x601d7c38–0x601d7e0a** — 34 keys that map 1:1 by name to the FDT nodes
+  (`ChgDetCfg`↔`chg_det_cfg`, `ChgIcmCfg`↔`chg_icm_cfg`, `TcpcCfg`↔`tcpc_cfg`,
+  `UcsiCapCfg`↔`ucsi_cap_cfg`, `UcsiConnectorCapCfg`↔`ucsi_conn_cap_cfg`,
+  `PDPoliciesCfg`↔`pd_policies_cfg`, `PDStaticInfo`↔`pd_static_info_cfg`,
+  `LpmCfg`↔`lpm_cfg`, `WirelessCfg`↔`wls_chg_cfg`, `ChargerLedCfg`↔`led_cfg`,
+  `BatteryAuthenticationCfg`↔`batt_auth_cfg`, `MaintenanceChgCfg`↔`mtc_chg_cfg`,
+  `ChargeTableCfg`↔`chg_table_cfg`, `ThermThresholdCfg`↔`therm_thresh_cfg`,
+  `QbgCfg`↔`qbg_cfg`, `IDTCfg`↔`chg_idt_cfg`, `LPDCfg`↔`chg_lpd_cfg`,
+  `BhargerCfg`↔`pl_chg_cfg`, plus `ADC_BSP`, `BattmngrBSP`, `ChargerTempCfg`,
+  `BatteryErrorCfg`, `VDMStaticInfo`, `UFCSCfg`, `owner`, `spmi_devices`,
+  `image_id`, `VADC_BSP`, `VADCTM_BSP`, `APQ123456`, `MPSS 1.0`) — followed
+  immediately by **baked binary config data** (vaddr 0x601d7e10, read-only
+  segment; records with type tags 0x12/0x14/0x18/0x11/0x02 ×0x80 and
+  0x00ff00ff "no value" markers). The config lookup `0x60084be0(name, index,
+  out, size)` decodes to: name check + `base = *(0x60324a98) + index*size` + a
+  generic unaligned/endianness memcpy (0x600080a0); the ICM init's
+  `config_get("ChgIcmCfg", 0, &h, 3)` writes three handle bytes to
+  0x603391e8/ea — **not** the T byte at 0x603391b9 — so the T write-site is still
+  unidentified (prime candidate: the config system's generic memcpy from an
+  FDT/baked config block, a write the taint analysis can miss when the
+  destination pointer is computed dynamically). The `chg_icm_cfg` node
+  (phandle 0x12) carries exactly two properties, `force-eoc-5v = 0` and
+  `ptm-cfg = 2`; no property is named after the type byte, and `ptm-cfg = 2` is
+  the only plausible T source. If T = 2, the flag is `!(GET(0x270b) & 0x20)` and
+  the `apsd-rerun-cfg = 0→1` patch (dbg53) is viable, provided the re-detection
+  path sets that bit.
 
 **Logical constraint (2026-11-09):** the ICM always passes through pre_chg (state 1) →
 ncp_stby (state 2) — pre_chg's **only** state write is `icm->+0xc = 2` @0x601a0bb8 —
@@ -328,9 +353,11 @@ and can leave ncp_stby only via `flag == 0`. The measured working system (full-s
 boot: `PartnerType=15`, 9 V / 2440 mA) *does* leave ncp_stby, so in a working system
 **T ∈ {2..23}**. H1 (T = 0) is therefore in tension with the working system unless the
 working system never enters ncp_stby — not supported by the ICM init, which sets state
-1 at boot (@0x6019ffc8). Decoding the config loader (the consumer of the `__symbols__`
-vaddr 0xb23e7341 — no direct immext references; the base is reached through a pointer
-global) is the next RE step and decides dbg53 viability directly.
+1 at boot (@0x6019ffc8). The next RE step is to **find the T write-site**: trace the
+config system's generic memcpy (0x600080a0) for a destination of 0x603391b8, decode the
+baked config block at vaddr 0x601d7e10 (does it carry `ptm-cfg`/T, and how is it mapped
+into the `ChgIcmCfg` block), and determine where the config base `*(0x60324a98)` comes
+from (runtime FDT parse vs the baked table). This decides dbg53 viability directly.
 
 ### Property 0x270b: every reference is a GET
 

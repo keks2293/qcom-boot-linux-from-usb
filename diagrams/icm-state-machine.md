@@ -82,7 +82,7 @@ screening −2, ncp_stby −7).
 
 | Input | Source |
 |---|---|
-| `T` (charger type) | `*(*(0x60339210) + 1)` — global pointer written **once** in the constructor @0x601a12c0; write-site search **closed (negative)**: the only store in the whole disassembly is the T-preserving init @0x6019ffe4 ⇒ the value is either BSS 0 (H1) or written by the FDT config loader (H2, candidate `ptm-cfg = 2`) — see [the value of T](../docs/ADSP_RE.md#the-value-of-t-two-hypotheses-2026-11-09) |
+| `T` (charger type) | `*(*(0x60339210) + 1)` — global pointer written **once** in the constructor @0x601a12c0; write-site search **closed (negative)**: the only store in the whole disassembly is the T-preserving init @0x6019ffe4 ⇒ the value is either BSS 0 (H1) or written by the config loader (H2, candidate `ptm-cfg = 2`) — see [the value of T](../docs/ADSP_RE.md#the-value-of-t-two-hypotheses-2026-11-09) |
 | `chgr_stat` | `(property 0x2606) & 7` — getter chain `0x601479b0` → `ctxA->+0x4c` = `0x601486d0` → `0x60169a00(ctxA, 0x2606, &out)`; property 0x2606 is **PMIC-backed and read-only** in the ADSP code |
 | `vbat` | ctxA voltage getter `0x60147d30` (guarded by `ctxA->+0x24 != 0` in `0x60147e90`) |
 | `GET(0x270b)` bit checks | ctxB methods `0x6016aad0` (+0x1c, `& 0x10`), `0x6016ab40` (+0x20, `& 0x20`), `0x6016abb0` (+0x24, `& 0x80`); each is `rc = 0x60169a00(ctxB, 0x270b, &out); rc == 0 ? (out & BIT) : 0` reached through the indirections `0x6016d2f0`/`0x6016d350` (`callr ctxB->+0x1c/+0x20`). The 0x270b value lives in the **central property service** (RPC, see [charger-type-chain.md](charger-type-chain.md)) |
