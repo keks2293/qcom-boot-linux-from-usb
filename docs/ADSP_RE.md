@@ -947,12 +947,18 @@ Consequences:
 2. **Firmware-side:** bypassing the skip gate requires patching the signed
    `adsp.mbn` — not realistic.
 3. **USB_ADAP_TYPE(7):** the upstream sm8350-class patch (v2, Reviewed-by
-   Qualcomm) says `USB_ADAP_TYPE` is the *live* adapter-type property there
-   (PC 1/1, 5 V-PD dock 1/6, 65 W PPS 1/8) — but our 7.2.6 does not consume
-   it (absent from `sm8350_usb_prop_map`; a prop-7 push would hit
-   `dev_warn("unknown property %#x")`, `qcom_battmgr.c:1521`), and whether
-   *this* firmware writes it in the source role is still open (candidate
-   write sites: 0x6014fd90 / 0x6014fea0, not yet decoded).
+   Qualcomm — full text and measurements in
+   [External corroboration](#external-corroboration-web-search-2026-11-10))
+   says `USB_ADAP_TYPE` is the *live* adapter-type property there (PC 1/1,
+   5 V-PD dock 1/6, 65 W PPS 1/8) — but our 7.2.6 does not consume it
+   (absent from `sm8350_usb_prop_map`; a prop-7 push would hit
+   `dev_warn("unknown property %#x")`, `qcom_battmgr.c:1521`). The earlier
+   open question ("does *this* firmware write it in the source role?") is
+   now closed by RE: the classifier writes the *same value* to both the
+   USB_TYPE (`ctx+0x72c`) and USB_ADAP_TYPE (`ctx+0x730`) slots in the sink
+   role, and in the source role the skip gate suppresses writes to *both* —
+   see [the override-table stride-4 correction](#the-override-table-stride-4-correction)
+   and [where the pre-plug `usb_type=0` comes from](#where-the-pre-plug-usb_type0-comes-from).
 
 ### Correction: earlier recorded string vaddrs were off by ~0x140 (2026-11-10)
 
@@ -992,3 +998,363 @@ immediately in front of a string **without a NUL separator** (e.g.
 precede the `PmSchgTypec` fmt at 0x601fd714+4). A walk-back-to-NUL string
 dump therefore lands *before* the real string start; the vaddr cited here is
 always the one the disassembly references.
+
+## The pmic_glink RX path: dispatcher, opcode map, USB GET/SET (2026-11-10)
+
+The full AP → glink → ADSP property path is now decoded end-to-end: every
+`usb_type` the AP logs is the value of one word in a 4-byte-stride
+"override table" inside the battmgr context, and the only writer of the
+USB_TYPE slot in the source role is — nothing (the skip gate).
+
+### RX dispatcher @0x60089bc0
+
+```
+allocframe(#0xf0); status = 0
+loop:
+  0x6008b840(&msg, &aux)                    # fetch next glink message
+  if (!msg || !aux) break
+  if (memw(msg+0x0) != 0x800a)              # owner PMIC_GLINK_OWNER_BATTMGR
+      → 0x6008b1a8                          # other owners (0x800b / 0x800c)
+                                            # dispatch on their own opcodes;
+                                            # anything else → drop
+  opcode = memw(msg+0x8)
+  if (opcode > 0x47) → 0x6008b1a0           # default stub: free msg, loop
+  fn = memw(opcode << 2 + 0x601fa8fc)       # JT, 0x48 entries
+  jumpr fn
+epilogue 0x6008b828: 0x600845a0(msg)        # free the message
+              jump 0x60089bf8               # ← back to the fetch (drain loop)
+```
+
+All JT handlers converge on the same epilogue, so a single glink callback
+drains a queue of messages.
+
+### Opcode map (JT @0x601fa8fc, 0x48 words, idx = raw opcode)
+
+| opcode | AP name (our 7.2.6 `qcom_battmgr.c`) | fw handler |
+|---|---|---|
+| 0x00 | (hello/version) | 0x60089c6c — responds `{0x800a, 1, 0, …}`, payload filled by 0x60176260 |
+| 0x04 | `BATTMGR_REQUEST_NOTIFICATION` | 0x60089f50 — subscribes to notifications |
+| 0x07 | `BATTMGR_NOTIFICATION` (fw→AP pushes only) | 0x6008b1a0 (stub) |
+| 0x10 | — | 0x6008a110 |
+| 0x30 | `BATTMGR_BAT_PROPERTY_GET` | 0x6008a3c4 |
+| 0x31 | `BATTMGR_BAT_PROPERTY_SET` | 0x6008a528 |
+| **0x32** | **`BATTMGR_USB_PROPERTY_GET`** | **0x6008a6f8** |
+| **0x33** | **`BATTMGR_USB_PROPERTY_SET`** | **0x6008a80c** |
+| 0x34 | `BATTMGR_WLS_PROPERTY_GET` | 0x6008a908 |
+| 0x35 | `BATTMGR_WLS_PROPERTY_SET` | 0x6008aa1c |
+| 0x36 | (none — our 7.2.6 numbers `BATTMGR_CHG_CTRL_LIMIT_EN` as **0x48**) | 0x6008a624 → `0x60178b20(memw(msg+0xc))` |
+| rest | — | 0x6008b1a0 (silent drop) |
+
+Numbering footnote: our 7.2.6 sends `BATTMGR_CHG_CTRL_LIMIT_EN = 0x48`
+(`qcom_battmgr.c:101`) at probe, but the firmware's dispatcher rejects
+`opcode > 0x47` (0x60089c54–0x60089c58) → the enable request is **silently
+dropped** by this firmware; the fw's 0x36 entry matches the *old* consecutive
+numbering (0x30..0x36). Side observation, not needed for USB boot.
+
+### Message layout (verified on both sides of the wire)
+
+```
+request (AP → ADSP):
+  +0x00  owner   = 0x800a
+  +0x04  type
+  +0x08  opcode
+  +0x10  property  (byte; USB props 0..9, fw guard ≤ 0x13)
+  +0x14  value / out-pointer
+
+response (ADSP → AP, 0x18 B via 0x60084420(0x18)):
+  +0x00  0x800a
+  +0x04  1
+  +0x08  opcode (0x32 / 0x33 / …)
+  +0x0c  property (echo)
+  +0x10  value
+  +0x14  status (halfword; 0 = ok, 0x202 = bad arg)
+  sent via 0x600895d0(0x603250d0, 0, 0x18, buf)
+```
+
+### USB GET: RX 0x6008a6f8 → handler 0x60177dc0 → wrapper 0x6002cc90 → getter 0x600452c0
+
+- **RX 0x6008a6f8:** `prop = memub(msg+0x10)`, `out = &stack_word`
+  (zero-init) → `call 0x60177dc0(prop, out)`; then builds the 0x18 response
+  (echo prop @0xc, the word @0x10, status @0x14) and sends it.
+- **Handler 0x60177dc0** (allocframe 0x10): `out == NULL` → 0x202;
+  `prop > 0x13` → 0x202; else `call 0x6002cc90(prop, out)`, status = ret.
+- **Wrapper 0x6002cc90:** `fn = memw(0x60280570)`; NULL → 0x202; `callr
+  fn(prop, out)`.
+- **Getter 0x600452c0** = the real USB property getter
+  (`battmngr_plat_scpqchg_qbg_r1_get_usb_power_supply_properties`; name from
+  its own ULog tag). Stack defaults: `0x4c4b40` (5,000,000 µV), `0x7a120`
+  (500,000), `0x186a0` (100,000). Per-property **live read** (refreshes the
+  override-table slot *before* the epilogue) for exactly:
+  prop 1 → 0x718 @0x600453a4, prop 3 → 0x720 @0x6004540c, prop 5 → 0x728
+  @0x60045468, prop 10 → 0x73c @0x600454c8, prop 12 → 0x744 @0x600455c0,
+  prop 13 → 0x748 @0x600456b0, prop 14 → 0x74c @0x60045708, prop 17 → 0x758
+  @0x60045840, prop 18 → 0x75c @0x600457d0, prop 19 → 0x760 @0x60045808.
+  **There is no live-read case for 6 or 7** — those are answered purely from
+  the table.
+- **Epilogue 0x6004586c–0x600458e0:**
+
+```
+ctx = memw(0x60256ee8)                      # the battmgr context
+if (memb(ctx+0x3a8) == 8 || == 9)
+    memw(ctx+0x714) = 0                     # clear slot 0 (ONLINE)
+*out = memw(ctx + prop*4 + 0x714)           # addasl(#0x2) = (prop<<2)
+status = 0
+```
+
+### USB SET: RX 0x6008a80c → handler 0x60177e30
+
+- **RX 0x6008a80c:** `prop = memub(msg+0x10)`, `value = memw(msg+0x14)` →
+  `call 0x60177e30(prop, value)`; same 0x18 response shape (op 0x33).
+- **Handler 0x60177e30** (allocframe 0x20): locals `-0x3`=prop, `-0x8`=value,
+  `-0xa`=status, plus per-prop scratch words. `prop > 0x13` → 0x202. Then:
+
+```
+# generic table write (0x60177e9c–0x60177ea0):
+ctx = memw(0x60256ee8)
+memw(ctx + prop*4 + 0x714) = value          # addasl(#0x2)
+
+# side effects (each ULog-gated like everything else):
+prop 5 (INPUT_CURR_LIMIT):
+    if (value != -1) value = (value * 0x10624dd3) >> 6   # 0x60177ec8–0x60177edc
+    status = 0x6002cba0(value)
+prop 8 (MOISTURE_DET_EN):
+    status = 0x6002da30(value != 0)
+prop 0xf:
+    status = 0x601786d0(0, 7, 0x2646, 1, &local)
+prop 0x11 / 0x12 / 0x13:
+    status = 0x60153910(0xb / 0xd / 0xc, &value)
+# *** no special case for 6 / 7 — the table write IS the whole story ***
+```
+
+### Slot map (the registered property getters)
+
+| slot | fn | role |
+|---|---|---|
+| 0x60280570 | 0x600452c0 | USB GET (op 0x32) — via wrapper 0x6002cc90 |
+| 0x60280574 | 0x600458f0 | WLS GET (op 0x34) — via wrapper 0x6002cd90 |
+| 0x60280578 | 0x6003ab00 | — via wrapper 0x6002ce90 |
+
+Related: `battmngr_plat_scpqchg_qbg_r1_set_usb_icl` @0x600449a0 (ULog tag
+@0x601e3b4a; fmt `Debug: %s: battmngr_plat_schpqchg_qbg_r1_set_usb_icl::usb
+type is %d, IclInMa:%d` @0x601e3af9 — note the `schpqchg` typo in the fmt)
+reads the "usb type" from **ctx+0x730** (0x60044a04, 0x60044a2c, and five
+more sites through 0x60044b10, branching on {1,3} / {6,7,8}).
+
+## The override table: stride-4 correction
+
+**Correction to earlier sessions:** the override table is base
+`ctx+0x714` with **stride 4** (one 32-bit word per property), *not* stride 2.
+Hexagon `addasl(rd, rs, #0x2)` computes `rd + (rs << 2)` = `rd + rs*4`; the
+SET handler's write (`r2 = addasl(ctx, prop, #0x2); memw(r2+0x714) = value`)
+and the GET epilogue's read (`r2 = addasl(ctx, prop, #0x2); *out =
+memw(r2+0x714)`) both use `#0x2`.
+
+Proof, independent of the two dynamic sites: the getter's live-read cache
+always writes `0x714 + p*4` —
+
+| prop | slot | store site |
+|---|---|---|
+| 1 (VOLT_NOW) | 0x718 | 0x600453a4 |
+| 3 (CURR_NOW) | 0x720 | 0x6004540c |
+| 5 (INPUT_CURR_LIMIT) | 0x728 | 0x60045468 |
+| 10 | 0x73c | 0x600454c8 |
+| 12 | 0x744 | 0x600455c0 |
+| 13 | 0x748 | 0x600456b0 |
+| 14 | 0x74c | 0x60045708 |
+| 17 | 0x758 | 0x60045840 |
+| 18 | 0x75c | 0x600457d0 |
+| 19 | 0x760 | 0x60045808 |
+
+ten points, all exactly `0x714 + p*4`; the successful boot really does read
+these props, so the epilogue must read the same slots. Consequence:
+
+- **prop 6 (USB_TYPE) = `ctx+0x72c`**
+- **prop 7 (USB_ADAP_TYPE) = `ctx+0x730`**
+
+(An earlier session concluded "prop 7 is dead" by scanning for `+#0x722` —
+the stride-2 address — which is why it found nothing. The correct slot is
+`+#0x730`, and it is *actively written*.)
+
+### "Prop 7 is not dead" — but the AP never reads it
+
+The charger-type classifier writes the **same value** into both 0x72c and
+0x730. Write sites (all verified in the disasm):
+
+```
+0x6002f184 / 0x6002f18c   (defaults block, value 0 — see below)
+0x6003d4c4 / 0x6003d4cc   (same r3 to both, + 0x740, 0x764)
+0x60042bd8 / 0x60042be0   (r3 = 0 — the "reset to Unknown" site, + 0x740)
+0x6004f1f4                (0x72c)
+0x60056420                (0x72c)
+0x60058b5c / 0x60058b7c
+0x60103694                (0x72c ← ##0x60103b50)
+0x6018d428                (0x72c)
+0x601907f0 / 0x60190d2c / 0x60191274
+```
+
+So on the *firmware* side prop 7 is alive (`set_usb_icl` reads it, the
+classifier feeds it). But the AP side of our 7.2.6 never requests prop 7:
+`sm8350_usb_prop_map` (`qcom_battmgr.c:971–979`) maps
+`POWER_SUPPLY_PROP_USB_TYPE` to `USB_TYPE` (6) only, and the rx-callback
+switch (`qcom_battmgr.c:1516–1518`) only consumes a pushed prop-6 value.
+For our purposes prop 7 remains irrelevant; the fix is unchanged.
+
+## Where the pre-plug `usb_type=0` comes from
+
+### The no-charger / defaults block
+
+Inside the init function @0x6002eb30 (allocframe 0x10; identity and callers
+still open — see Open items), the override table is filled with the
+no-charger defaults (0x6002f134–0x6002f1c0; `r3 = 0`, `r4 = 0x4c4b40`,
+later `r4 = -1`):
+
+| slot | prop | value | site |
+|---|---|---|---|
+| 0x734, 0x738 | (10/11-range) | 0 | 0x6002f140/0x6002f148 |
+| 0x718 (VOLT_NOW), 0x71c (VOLT_MAX) | 1, 2 | **0x4c4b40 = 5,000,000 µV** | 0x6002f158/0x6002f160 |
+| 0x720 (CURR_NOW), 0x724 (CURR_MAX) | 3, 4 | 0 | 0x6002f168/0x6002f170 |
+| 0x728 (INPUT_CURR_LIMIT) | 5 | **-1** | 0x6002f17c |
+| **0x72c (USB_TYPE)** | **6** | **0 (Unknown)** | **0x6002f184** |
+| **0x730 (USB_ADAP_TYPE)** | **7** | **0 (Unknown)** | **0x6002f18c** |
+| 0x740, 0x73c (prop 10), 0x748 (13), 0x74c (14), 0x744 (12) | — | 0 | 0x6002f194…0x6002f1b4 |
+| 0x750 (prop 15) | 15 | 1 | 0x6002f1c0 |
+
+### The bulk ctx-init @0x6017b080
+
+The large context initializer (allocframe 0x468) also writes the whole
+override table in one block (0x6017ceac–0x6017cf0c):
+
+```
+0x708, 0x70c, 0x714 (ONLINE), 0x718, 0x71c, 0x72c, 0x730, 0x734  = r6
+0x720, 0x724, 0x728                                            = r9
+0x710                                                          = r12
+r9 = 0x5f5e100 (100,000,000)      @0x6017c6ac
+r6 = memw(r30-0x45c)             @0x6017b64c   (stack — value PENDING)
+```
+
+### The root-cause chain, now closed in code
+
+```
+boot → ctx init: USB_TYPE(0x72c) = 0 (defaults block)
+       → source role (USB stick, host): charger_detection_event_handler
+         skip gate taken → no classification, no write of 0x72c
+       → AP GET 6 → epilogue reads 0x72c → 0
+       → AP usb_type = (Unknown) → our boot decision fails
+
+sink role (PD dock): classifier runs → writes type to 0x72c AND 0x730
+       → AP GET 6 → SDP(1) / PD(6) / … → boot decision passes
+```
+
+The dbgB fingerprint (`usb_type=(Unknown) online=0` in every poll,
+`skip checking usb charging type while usb is sourcing` @17.67) is exactly
+this chain. The pre-plug value is not "stale" — it is the *initialized
+default*, and nothing in the source role ever changes it.
+
+## External corroboration (web search 2026-11-10)
+
+Independent of the RE, the same property semantics are now documented in
+public kernel sources (found 2026-11-10):
+
+### 1. Upstream LKML: "qcom_battmgr: report the USB type from USB_ADAP_TYPE" (Oct 2026)
+
+- v1: `patchew.org/linux/20261007123932.1664-1-26rote@gmail.com/`;
+  v2: `20261012130053.442` (LKML thread 2026-10-12). Author: Joonhoe Kim;
+  **Reviewed-by: Kamal Wadhwa (Qualcomm)** — "Add fixes tag, with that I
+  think it should be good to go."
+- Patch text (v1): *"On SM8350 and SM8550 class firmware the USB power
+  supply reads its usb_type from the USB_TYPE property. On a Kaanapali
+  (SM8850) tablet that property is **1 (SDP) whatever is plugged in**, while
+  USB_ADAP_TYPE reports the adapter, using the same numbering as
+  POWER_SUPPLY_USB_TYPE_\**." Measured on a Lenovo Legion Tab Y700 gen 5
+  (`qcom,kaanapali-pmic-glink`, the SM8550 path):
+
+  | adapter | USB_TYPE (6) | USB_ADAP_TYPE (7) |
+  |---|---|---|
+  | PC port | 1 | 1 (SDP) |
+  | USB-C dock, 5 V PD | 1 | 6 (PD) |
+  | 65 W PPS charger | 1 | 8 (PD_PPS) |
+
+- Cover-letter facts: *"The downstream qti_battery_charger in SM8350,
+  SM8450, SM8550, SM8650 and SM7635 vendor kernels uses the same property
+  ids, maps USB_ADAP_TYPE to POWER_SUPPLY_PROP_USB_TYPE and reads it on
+  every USB change, so the firmware of this family should implement it.
+  Like downstream, values outside the enum (QC chargers, 0x80 and up there)
+  are passed through."* And: *"Once, when the USB gadget did not connect to
+  the PC after plugging, USB_ADAP_TYPE read 4 (ACA) until the cable was
+  plugged again; when the gadget connects, the PC port reads 1 (SDP)."*
+- The same author's second patch, "qcom_battmgr: Allow setting the USB input
+  current limit": *"The SM8350 class USB power supply reports
+  input_current_limit, but does not allow writing it, although the firmware
+  accepts BATTMGR_USB_PROPERTY_SET for USB_INPUT_CURR_LIMIT"* … *"With a USB
+  PD charger the firmware keeps its own limit and the written value is not
+  reflected."*
+- Kamal Wadhwa's multi-port series (Aug 2026,
+  `20260806-b4-battmgr-multiport-usb-v2`) makes the same USB_TYPE→
+  USB_ADAP_TYPE switch for X1E80100 (new `x1e80100_usb_prop_map`), leaving
+  the shared SM8350/SM8550 map on USB_TYPE — which is what this patch fixes.
+
+### 2. oneplus-pja110-mainline (SM8450, kernel 6.14, debugfs `raw_get`/`raw_set`)
+
+`docs/fastcharge-fix-20261023.md` in that repo documents a real-device
+investigation that hits the same walls:
+
+- **Bug 1 — same as the upstream patch:** their `usb_type` read `USB_TYPE`
+  (constantly 1/SDP); switching the map entry to `USB_ADAP_TYPE` made
+  `usb_type` report `[PD_PPS]` correctly.
+- **Bug 2 — the sm8350 rx-callback has no cases for the SET responses
+  (0x31/0x33):** they fall into `default:` → `dev_warn("unknown message
+  0x33")`. Their fix: add `case BATTMGR_BAT_PROPERTY_SET: case
+  BATTMGR_USB_PROPERTY_SET: battmgr->error = 0; break;`.
+  **Our 7.2.6 has the identical gap** (the callback switch at
+  `qcom_battmgr.c:1559–1564` covers `BATTMGR_REQUEST_NOTIFICATION` /
+  `BATTMGR_CHG_CTRL_LIMIT_EN` and the GET opcodes only).
+- **Bug 3 — no `set_property` on the USB power supply.**
+- **The firmware does not ack SET:** `raw_set` (0x31) returns `-110
+  (ETIMEDOUT)` — the doc treats that as **normal success** (`-104
+  ECONNRESET` is the real failure: ADSP not ready / channel down).
+- Writing `USB_INPUT_CURR_LIMIT` (prop 5) with a PD charger: the firmware
+  keeps its own limit (matches our SET decode — the prop-5 side-effect path
+  exists, but whether the charger SM adopts the value is its call).
+- **The limit can be reset by the ADSP on re-plug** → they re-issue via a
+  udev rule on `power_supply change` + `POWER_SUPPLY_ONLINE==1`.
+- The lever that actually worked for them: `BATTMGR_BAT_PROPERTY_SET (0x31)`
+  + `BATT_CHG_CTRL_LIM (10)` = 3,000,000 µA → USB input 460 mA → 2809 mA
+  (12.5 W), immediately.
+
+### Comparison: external measurements vs this RE
+
+| fact | external (Kaanapali / SM8450 write-ups) | this RP6 firmware (RE) |
+|---|---|---|
+| USB_TYPE (prop 6), sink role | **constant 1 (SDP)** | **live**: classifier writes the type to 0x72c (SDP on the PD-dock success) |
+| USB_ADAP_TYPE (prop 7) | live adapter type (1/6/8); 4 (ACA) transiently in a failed source attach | **alive on the fw side** (classifier writes the same value to 0x730; `set_usb_icl` reads it) but the AP (7.2.6) never requests it |
+| source role (host/PC) | ADAP_TYPE = 1 (SDP) when the gadget connects; 4 (ACA) once when it didn't | **never written**: skip gate suppresses classification → stays 0 (defaults) |
+| SET 0x31/0x33 ack | no ack (ETIMEDOUT = success) | fw builds a normal 0x18 response for 0x33 (0x6008a80c); our 7.2.6 callback ignores it ("unknown message 0x33") |
+| prop 5 write on PD | not reflected (fw keeps its own limit) | side-effect path present (0x60177eb8); adoption decided in the charger SM |
+
+### Implications for our fix
+
+1. **The AP-side fix is corroborated and sharpened.** In the source role,
+   prop 6 is unreliable in *both* directions across this firmware family:
+   stuck at SDP on the Kaanapali/SM8450 firmwares, never written (0) on ours.
+   The boot decision must not gate on `usb_type` when the port is sourcing —
+   use VBUS presence + partner/role state instead. Upstream's
+   USB_TYPE→USB_ADAP_TYPE remap does **not** by itself fix the source role
+   on our firmware (ADAP_TYPE is also 0 there).
+2. If we ever send SET (0x33) from an AP-side debug hook: the fw will
+   perform the table write + side effect, but our 7.2.6 callback will log
+   "unknown message 0x33" and time out on the ack — treat ETIMEDOUT as
+   success (external experience above).
+3. The `CHG_CTRL_LIMIT_EN` numbering mismatch (AP 0x48 vs fw 0x36, guard
+   `> 0x47`) means our AP's probe-time enable is silently dropped by this
+   firmware. Not needed for USB boot, but it explains why the feature never
+   engages.
+
+## Open RE items (as of 2026-11-10)
+
+1. Value of `r6` in the bulk ctx-init 0x6017b080 (it comes from the stack,
+   `memw(r30-0x45c)` — trace the store).
+2. Callers of the 0x72c/0x730 classifier writers — confirm they sit on the
+   charger-detection path under the skip gate.
+3. Identity/callers of the defaults fn 0x6002eb30 (boot init vs
+   charger-disconnect event).
+4. T-model: resolve the args of 0x601ccb10 at its call sites.
