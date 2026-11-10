@@ -80,6 +80,56 @@ So the ICM state machine stays in `icm_ncp_stby` until charger-detection updates
 `charger_type`. The questions are what re-triggers detection — and what value T
 has at runtime (below).
 
+### Who clears ncp_stby, and how to find the T update (2026-11-10)
+
+Full re-verification of every anchor of the wedge (line numbers in
+[`text_all.txt`](../logs/adsp-re/text_all.zst)):
+
+- **The only state writer is `icm_ncp_stby_main` itself.** It is registered as
+  the ICM inner callback at `+0x1c` (reg-fn 0x601a12c0, store @0x601a12ec) and
+  runs on **every** ICM event 7..0x18. `icm->+0xc = 3` is written in exactly
+  two places, both inside `main`:
+  1. the ev0xd handler @0x601a182c (JT index 6) → state 3 @0x601a1898,
+     **before** the flag section;
+  2. the common exit check (flag == 0 branch) @0x601a1ae0 → state 3
+     @0x601a1b4c.
+
+  Both are gated by `chgr_stat == 3 || (chgr_stat == 4 && vbat ≤ 0x2647)`
+  (chgr_stat = ctxA vtable +0x4c getter 0x601479b0; vbat = ctxA vtable +0x24
+  getter 0x60147e90). Everything else in `main` re-asserts state 2. The
+  epilogue returns the local OR of the vtable-GET error codes but controls
+  **logging only** (fmt 0x60238e02), not the state.
+- **The flag is recomputed into the static byte 0x60339214 on every event**,
+  from `T = cfg[1] = 0x603391b9`. The re-verified T-table refines one earlier
+  boundary: `cmp.gt(T, 0x14)` @0x601a1980 puts **T = 20 in the unconditional
+  set**, not in the 0x10-check range. Final: `T ∈ {0,1,17,18,20}` or
+  `T ≥ 24` → flag = 1 unconditionally (no 0x270b read);
+  `T ∈ {2..16,19}` → flag = `!(GET(0x270b) & 0x20)`; `T ∈ {21,22,23}` →
+  flag = `!(GET(0x270b) & 0x10)`.
+- **The "keeps in icm_ncp_stby utill charger_type updated" warn in the logs
+  IS the flag = 1 path** (ULog-gated @0x601a1a40–0x601a1a8c; log call
+  0x60007a18 @0x601a1ab0–0x601a1ab8, fmt 0x60238da2), immediately followed by
+  the force-stay `icm->+0xc = 2` @0x601a1ad8 — which overwrites a state 3 that
+  the ev0xd handler may have set during the same event.
+- **In our image T = 0.** The only direct write of the cfg halfword is the
+  ICM init @0x6019ffd0–0x6019ffe4:
+  `memh(0x603391b8) = (memuh(0x603391b8) & 0xfff0) | setbit(2)` — it sets
+  cfg[0]'s low nibble and **preserves T**; the byte is BSS (0). Hence
+  **flag = 1 on every event, no charger-type read, force-stay forever** — no
+  charger type can clear the wedge in this configuration. The firmware's own
+  exit condition ("until charger type updated") is unreachable while T = 0.
+- **How to find the T update:** (a) the T write-site is indirect — config
+  loader 0x60084be0 → generic memcpy 0x600080a0, baked config block
+  0x601d7e10, APSD-result path (`PmSchgUsb_GetApsdResultStatus` / property
+  0x2606); the FDT candidate is `ptm-cfg = 2` → T = 2; (b) dynamically: in a
+  working direct-stick run the exit is logged by the third registered
+  callback `ncp_stby_db_log` (inner +0x20 = 0x601a1c30, fmt 0x60238e6c
+  "ncp_stby_db - chgr_stat=%x, soc=%d") **before** "ICM run state: curr=2,
+  next=3"; repeated "keeps" warns prove the flag = 1 path; (c)
+  cross-firmware: all sm8550 variants share the byte-identical PPM-FDT
+  payload — there is no known-good config to copy; see [Cross-firmware
+  comparison](#cross-firmware-comparison).
+
 ## Detection and the trigger chain
 
 `charger_detection_inital_detection` @0x60152970 (typo "inital" verbatim) is the
@@ -358,6 +408,19 @@ config system's generic memcpy (0x600080a0) for a destination of 0x603391b8, dec
 baked config block at vaddr 0x601d7e10 (does it carry `ptm-cfg`/T, and how is it mapped
 into the `ChgIcmCfg` block), and determine where the config base `*(0x60324a98)` comes
 from (runtime FDT parse vs the baked table). This decides dbg53 viability directly.
+
+**Refined (2026-11-10):** the constraint above reads T as the *boot-time* value. Per
+the final exit model ([Who clears ncp_stby](#who-clears-ncp_stby-and-how-to-find-the-t-update-2026-11-10)):
+at T = 0 the exit gate is E = 1 unconditionally on every ICM event (force-stay, even
+over an ev0xd `state = 3` write), so a T = 0 boot can leave ncp_stby only if **T is
+updated at runtime** to a value whose E can be 0 (T ∈ {2..23}, reading 0x270b) before
+the exit event. H1 (boot T = 0) is therefore not refuted by the working system: the
+boot-1 working-system ULog capture has **zero** ncp_stby lines (no "keeps" warn, no
+`ncp_stby_db`), consistent with a fast enter→exit after a runtime T update — or with
+no entry at all. The discriminators are (a) the T write-site decode (config loader
+0x60084be0 → generic memcpy 0x600080a0) and (b) the direct-stick control run (an
+`ncp_stby_db - chgr_stat=.., soc=..` line **before** "ICM run state: curr=2, next=3"
+proves a runtime exit and pins chgr_stat/event).
 
 ### Property 0x270b: every reference is a GET
 
@@ -1357,4 +1420,8 @@ investigation that hits the same walls:
    charger-detection path under the skip gate.
 3. Identity/callers of the defaults fn 0x6002eb30 (boot init vs
    charger-disconnect event).
-4. T-model: resolve the args of 0x601ccb10 at its call sites.
+4. T-model: resolve the args of 0x601ccb10 at its call sites. (The T byte
+   itself has zero direct writes — only the init RMW, which preserves T; the
+   runtime write path is indirect: config loader 0x60084be0 -> generic memcpy
+   0x600080a0, baked config 0x601d7e10, APSD-result path; FDT candidate
+   `ptm-cfg = 2` -> T = 2.)
