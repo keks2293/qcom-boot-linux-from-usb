@@ -1,0 +1,6 @@
+     kworker/0:0-9       [000] d.h2.    12.741793: pmic_pdcharger_ulog_msg: 0x0000000014DFC5D1: Info: typec_detect_partner: ssdev_typec::InputNum=0, TypeCPartnerType=0
+     kworker/0:0-9       [000] d.h2.    12.741808: pmic_pdcharger_ulog_msg: 0x0000000014E010D8: Info: typec_detect_partner: ssdev_typec::InputNum=0, TypeCPartnerType=0
+     kworker/0:0-9       [000] d.h2.    12.741811: pmic_pdcharger_ulog_msg: 0x0000000014E014F2: Info: charger_detection_evaluate_typec_charger: charger detection: Input[0] bLpdEn=0, bLiquidDetected=0
+     kworker/0:0-9       [000] d.h2.    12.741830: pmic_pdcharger_ulog_msg: 0x0000000014E0B1C3: Info: battmngr_plat_scpqchg_qbg_r1_update_wlstx_otg_context: battmngr_plat_scpqchg_qbg_r1_update_wlstx_otg_context: otg enable: 1
+          <idle>-0       [000] d.h2.    25.022890: pmic_pdcharger_ulog_msg: 0x000000001B1B673F: Info: charger_detection_event_handler: charger_detection_event_handler: skip checking usb charging type while usb is sourcing
+          <idle>-0       [000] d.h2.    25.022901: pmic_pdcharger_ulog_msg: 0x000000001B1B6AD2: Warn: icm_ncp_stby_main: icm_ncp_stby_main: keeps in icm_ncp_stby utill charger_type updated

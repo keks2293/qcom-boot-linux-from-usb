@@ -1,0 +1,28 @@
+[    0.812873] armada kernel: scsi 0:0:0:0: Direct-Access     YMTC     YMUS8B4TF1D1C1   0304 PQ: 0 ANSI: 6
+[    0.813342] armada kernel: scsi 0:0:0:1: Direct-Access     YMTC     YMUS8B4TF1D1C1   0304 PQ: 0 ANSI: 6
+[    0.813814] armada kernel: scsi 0:0:0:2: Direct-Access     YMTC     YMUS8B4TF1D1C1   0304 PQ: 0 ANSI: 6
+[    0.814635] armada kernel: scsi 0:0:0:3: Direct-Access     YMTC     YMUS8B4TF1D1C1   0304 PQ: 0 ANSI: 6
+[    0.816157] armada kernel: scsi 0:0:0:4: Direct-Access     YMTC     YMUS8B4TF1D1C1   0304 PQ: 0 ANSI: 6
+[    0.816853] armada kernel: scsi 0:0:0:5: Direct-Access     YMTC     YMUS8B4TF1D1C1   0304 PQ: 0 ANSI: 6
+[    0.818308] armada kernel: sd 0:0:0:0: [sda] Attached SCSI disk
+[    0.818427] armada kernel: sd 0:0:0:2: [sdc] Attached SCSI disk
+[    0.818551] armada kernel: sd 0:0:0:5: [sdf] Attached SCSI disk
+[    0.818668] armada kernel: sd 0:0:0:3: [sdd] Attached SCSI disk
+[    0.819003] armada kernel: sd 0:0:0:1: [sdb] Attached SCSI disk
+[    0.819431] armada kernel: sd 0:0:0:4: [sde] Attached SCSI disk
+[   11.540099] armada kernel: remoteproc remoteproc0: powering up adsp
+[   12.398430] armada kernel: remoteproc remoteproc0: remote processor adsp is now up
+[   12.454124] armada kernel: PDR: Indication received from msm/adsp/charger_pd, state: 0x1fffffff, trans-id: 1
+[   12.787255] armada kernel: xhci-hcd xhci-hcd.2.auto: Port change event, 2-1, id 2, portsc: 0x2802a0
+[   12.828090] armada kernel: xhci-hcd xhci-hcd.2.auto: Port change event, 1-1, id 1, portsc: 0xa0206e1
+[   12.980036] armada kernel: xhci-hcd xhci-hcd.2.auto: Port change event, 1-1, id 1, portsc: 0x200e03
+[   13.052919] armada kernel: usb 1-1: new high-speed USB device number 2 using xhci-hcd
+[   13.100071] armada kernel: xhci-hcd xhci-hcd.2.auto: Port change event, 1-1, id 1, portsc: 0x200e03
+[   13.200291] armada kernel: usb-storage 1-1:1.0: USB Mass Storage device detected
+[   14.207976] armada kernel: scsi 1:0:0:0: Direct-Access     VendorCo ProductCode      2.00 PQ: 0 ANSI: 4
+[   14.210182] armada kernel: sd 1:0:0:0: [sdg] 122880000 512-byte logical blocks: (62.9 GB/58.6 GiB)
+[   14.210664] armada kernel: sd 1:0:0:0: [sdg] Write Protect is off
+[   14.210919] armada kernel: sd 1:0:0:0: [sdg] Mode Sense: 03 00 00 00
+[   14.211359] armada kernel: sd 1:0:0:0: [sdg] No Caching mode page found
+[   14.211608] armada kernel: sd 1:0:0:0: [sdg] Assuming drive cache: write through
+[   14.272172] armada kernel: sd 1:0:0:0: [sdg] Attached SCSI removable disk

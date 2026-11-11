@@ -122,6 +122,22 @@ to fire on device — but it does not enumerate the drive yet**:
   partner-type confound of the dock-based success measurement) runs alongside.
   Verdict → next boot mapping:
   [docs/INITRAMFS_CHANGES.md#next-step-the-enum-only-test](docs/INITRAMFS_CHANGES.md).
+- **2026-11-11: the control boot succeeded — `usb_type` is not the blocker and
+  the fix is a post-PDR rescan.** A full-system boot with the stick
+  **pre-plugged**, **directly attached**, in the **source** role and **normal**
+  orientation enumerated the drive at 13.05 s (`sdg` at 14.21 s), with PDR
+  12.454 s and the first xHCI port scan **post-PDR** (12.787 s). The PPM
+  fingerprint was the **failing side** — `usb_type=[Unknown]`,
+  `skip checking usb charging type while usb is sourcing`, ICM `ncp_stby` — so
+  classification is **irrelevant** to enumeration and the classification-first
+  levers (the `apsd-rerun-cfg` byte) are not needed. The initramfs (dbgB) fails
+  because its port scan is **pre-PDR** (2.7 s vs PDR 3.5 s); the fix is **lever
+  C** — a single post-PDR unbind/rebind of `dwc3-qcom`/xHCI inside the
+  initramfs. Also measured: **normal orientation is required** (reverse stayed
+  unrouted for 464 s), and a **separate** kernel bug kills xHCI on any runtime
+  source-role re-probe (`Host halt failed, -110`, hot-plug/re-plug only).
+  Evidence: [docs/FULL_SYSTEM_PREPLUG_SOURCE_ROLE.md](docs/FULL_SYSTEM_PREPLUG_SOURCE_ROLE.md),
+  [logs/preplug-source/](logs/preplug-source/).
 
 Background: the firmware RE removed the "runtime flag" hypothesis and named
 both ends of the AP↔PPM link (the in-kernel UCSI core fires the four
@@ -172,6 +188,7 @@ inside the ≤30 s window).
 - [docs/USB_TYPE_TIMING.md](docs/USB_TYPE_TIMING.md) — **when the port gets classified** (2026-11-08, new poller instrument): `usb_type = SDP` at `charger_pd` PDR + 55 ms, produced inside the PPM with no AP actor; the VBUS-bounce power sequence; the PPM-state discriminator vs the initramfs
 - [docs/ADSP_ULOG.md](docs/ADSP_ULOG.md) — **the PPM's own charger log, read from the AP** (2026-11-08): the stock `pmic_pdcharger_ulog.ko` instrument (never loaded before; already in the initramfs), the boot-1 success-side fingerprint (initial detection in the PDR + 22 ms drain, charger SM state 4, zero `ncp_stby`), and the diff vs dbg49's failing fingerprint
 - [docs/INITRAMFS_CHANGES.md](docs/INITRAMFS_CHANGES.md) — what a `linux usb` initramfs would have to contain: what PR #704 already added and verified, why no AP-side command can set `usb_type`, and the ranked remaining options (stage the ADSP start / poller + ADSP ULog in init / a ≤30 s post-PDR nudge / the `apsd-rerun-cfg` firmware byte)
+- [docs/FULL_SYSTEM_PREPLUG_SOURCE_ROLE.md](docs/FULL_SYSTEM_PREPLUG_SOURCE_ROLE.md) — **the control boot (2026-11-11)**: full-system source-role pre-plug enumerates with the failing-side PPM fingerprint (`usb_type=Unknown` + skip gate + `ncp_stby`), so `usb_type` is irrelevant; the initramfs failure is the pre-PDR scan and the fix is a post-PDR rescan (lever C); orientation and the `-110` role-switch bug
 - [docs/FULL_SYSTEM_COLDPLUG_TEST.md](docs/FULL_SYSTEM_COLDPLUG_TEST.md) — full-system test procedure
 - [docs/FULL_SYSTEM_PREPLUG_RESULT.md](docs/FULL_SYSTEM_PREPLUG_RESULT.md) — measured full-system pre-plug result (2026-11-05)
 - [docs/FULL_SYSTEM_MECHANISM_CAPTURE.md](docs/FULL_SYSTEM_MECHANISM_CAPTURE.md) — Q1–Q5 mechanism capture (2026-11-06): the attach is the first scan, not a fresh CC edge; **Q1 answered** — nothing holds the xHCI probe, the host controller is *created* only when the Type-C role flips to HOST (gadget→host, 2.7–4.4 s after the `charger_pd` PDR)

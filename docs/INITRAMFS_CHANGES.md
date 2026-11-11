@@ -223,8 +223,36 @@ replug). If the full system *also* fails to enumerate a pre-plugged direct
 stick until a replug, the discriminator is partner-type/pre-plug, not
 initramfs-vs-full, and the plan above changes.
 
+## Control boot result (2026-11-11) — the confound is resolved, C is the fix
+
+The cheap control boot was run (full system, **source** role, **directly
+attached** stick, pre-plugged, **normal** orientation). **It succeeded:** the
+stick enumerated at 13.05 s (`sdg` at 14.21 s), PDR 12.454 s, first xHCI port
+scan **12.787 s (post-PDR)**. And the PPM fingerprint was the **failing side** —
+`usb_type=[Unknown]`, `skip checking usb charging type while usb is sourcing`,
+ICM `ncp_stby`. So the discriminator is **not** partner-type/pre-plug and **not**
+`usb_type`/classification; it is the **pre-PDR scan** in the initramfs
+(dbgB: scan 2.7 s, PDR 3.5 s). The plan does not change — it sharpens:
+
+- **`usb_type` / classification is dead as a fix** (the full system enumerates
+  with the failing fingerprint). Lever **D** (the firmware `apsd-rerun-cfg`
+  byte) is not needed for enumeration.
+- **Lever C is the fix:** a post-PDR rescan inside the initramfs (wait for the
+  `PDR: Indication … charger_pd` line, then unbind/rebind `dwc3-qcom`/xHCI) so
+  the host scan lands **after** the PDR, exactly as in the working full system.
+- **Normal orientation is required** (reverse can leave the data path unrouted
+  for minutes).
+- A separate kernel bug makes any **runtime** source-role re-probe fail
+  (`Host halt failed, -110`); the rescan must be a **single, early** rebind, not
+  a runtime role change.
+
+Full evidence: [FULL_SYSTEM_PREPLUG_SOURCE_ROLE.md](FULL_SYSTEM_PREPLUG_SOURCE_ROLE.md),
+[../logs/preplug-source/](../logs/preplug-source/).
+
 ## References
 
+- Control boot (full-system source-role pre-plug, succeeded):
+  [FULL_SYSTEM_PREPLUG_SOURCE_ROLE.md](FULL_SYSTEM_PREPLUG_SOURCE_ROLE.md)
 - Success-side PPM ULog fingerprint: [ADSP_ULOG.md](ADSP_ULOG.md)
 - Measurement: [USB_TYPE_TIMING.md](USB_TYPE_TIMING.md)
 - Why the early scan existed: [ABL_DR_MODE_HOST.md](ABL_DR_MODE_HOST.md)

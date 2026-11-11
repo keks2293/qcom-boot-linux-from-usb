@@ -1,0 +1,1809 @@
+START 1794388344 Wed Nov 11 17:12:24 +08 2026
+[   12.352309] platform 6e80000.pinctrl: bus: 'platform': really_probe: probing driver qcom-sm8550-lpass-lpi-pinctrl with device
+[   12.352377] qcom-sm8550-lpass-lpi-pinctrl 6e80000.pinctrl: Driver qcom-sm8550-lpass-lpi-pinctrl requests probe deferral
+[   12.352397] platform 6e80000.pinctrl: Added to deferred list
+[   12.352419] devices_kset: Moving 6d44000.codec to end of list
+[   12.352423] devices_kset: Moving 6ae0000.codec to end of list
+[   12.352425] devices_kset: Moving 6d30000.soundwire to end of list
+[   12.352428] devices_kset: Moving 6ac0000.codec to end of list
+[   12.352430] devices_kset: Moving 6ad0000.soundwire to end of list
+[   12.352433] devices_kset: Moving 6aa0000.codec to end of list
+[   12.352436] platform 6d44000.codec: Retrying from deferred list
+[   12.353117] platform 6d44000.codec: bus: 'platform': __driver_probe_device: matched device with driver va_macro
+[   12.353123] platform 6d44000.codec: bus: 'platform': really_probe: probing driver va_macro with device
+[   12.353155] va_macro 6d44000.codec: error -EPROBE_DEFER: unable to get macro clock
+[   12.353160] va_macro 6d44000.codec: Driver va_macro requests probe deferral
+[   12.353169] platform 6d44000.codec: Added to deferred list
+[   12.353175] devices_kset: Moving 6ae0000.codec to end of list
+[   12.353177] devices_kset: Moving 6d30000.soundwire to end of list
+[   12.353179] platform 6ae0000.codec: Retrying from deferred list
+[   12.353744] platform 6ae0000.codec: bus: 'platform': __driver_probe_device: matched device with driver tx_macro
+[   12.353751] platform 6ae0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   12.353756] platform 6ae0000.codec: Added to deferred list
+[   12.393688] platform 6aa0000.codec: bus: 'platform': __driver_probe_device: matched device with driver wsa_macro
+[   12.393706] platform 6aa0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   12.393711] platform 6aa0000.codec: Added to deferred list
+[   12.393901] Extended deferred probe timeout by 10 secs
+[   12.539759] platform 6ac0000.codec: bus: 'platform': __driver_probe_device: matched device with driver rx_macro
+[   12.539796] platform 6ac0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   12.539811] platform 6ac0000.codec: Added to deferred list
+[   12.540401] Extended deferred probe timeout by 10 secs
+[   12.540554] platform 6ad0000.soundwire: bus: 'platform': __driver_probe_device: matched device with driver qcom-soundwire
+[   12.540597] platform 6ad0000.soundwire: error -EPROBE_DEFER: wait for supplier /soc@0/pinctrl@6e80000/rx-swr-active-state
+[   12.540618] platform 6ad0000.soundwire: Added to deferred list
+[   12.540634] platform 6d30000.soundwire: bus: 'platform': __driver_probe_device: matched device with driver qcom-soundwire
+[   12.540660] platform 6d30000.soundwire: error -EPROBE_DEFER: wait for supplier /soc@0/pinctrl@6e80000/tx-swr-active-state
+[   12.540680] platform 6d30000.soundwire: Added to deferred list
+[   12.541082] Extended deferred probe timeout by 10 secs
+[   12.578977] loop2: detected capacity change from 0 to 39448
+[   12.629154] mhi mhi0: Wait for device to enter SBL or Mission mode
+[   12.638857] Extended deferred probe timeout by 10 secs
+[   12.644152] audit: type=1130 audit(1794387839.967:76): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=steamos-manager comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   12.644893] audit: type=1130 audit(1794387839.967:77): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=avahi-daemon comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   12.648501] audit: type=1334 audit(1794387839.971:78): prog-id=55 op=LOAD
+[   12.655357] device: '6800000.remoteproc:glink-edge': device_add
+[   12.655534] device: '6800000.remoteproc:glink-edge.rpmsg_ctrl.0.0': device_add
+[   12.655605] rpmsg 6800000.remoteproc:glink-edge.rpmsg_ctrl.0.0: bus: 'rpmsg': __driver_probe_device: matched device with driver rpmsg_ctrl
+[   12.655614] rpmsg 6800000.remoteproc:glink-edge.rpmsg_ctrl.0.0: bus: 'rpmsg': really_probe: probing driver rpmsg_ctrl with device
+[   12.655654] device: 'rpmsg_ctrl1': device_add
+[   12.656179] rpmsg_ctrl 6800000.remoteproc:glink-edge.rpmsg_ctrl.0.0: driver: 'rpmsg_ctrl': driver_bound: bound to device
+[   12.656212] rpmsg_ctrl 6800000.remoteproc:glink-edge.rpmsg_ctrl.0.0: bus: 'rpmsg': really_probe: bound device to driver rpmsg_ctrl
+[   12.656212] devices_kset: Moving 6e80000.pinctrl to end of list
+[   12.656222] platform 6e80000.pinctrl: Retrying from deferred list
+[   12.656333] device: '6800000.remoteproc:glink-edge.pcie_drv.-1.-1': device_add
+[   12.656399] device: '6800000.remoteproc:glink-edge.mhi_sat.-1.-1': device_add
+[   12.656446] device: '6800000.remoteproc:glink-edge.IPCRTR.-1.-1': device_add
+[   12.656501] rpmsg 6800000.remoteproc:glink-edge.IPCRTR.-1.-1: bus: 'rpmsg': __driver_probe_device: matched device with driver qcom_smd_qrtr
+[   12.656507] rpmsg 6800000.remoteproc:glink-edge.IPCRTR.-1.-1: bus: 'rpmsg': really_probe: probing driver qcom_smd_qrtr with device
+[   12.656643] qcom_smd_qrtr 6800000.remoteproc:glink-edge.IPCRTR.-1.-1: driver: 'qcom_smd_qrtr': driver_bound: bound to device
+[   12.656669] qcom_smd_qrtr 6800000.remoteproc:glink-edge.IPCRTR.-1.-1: bus: 'rpmsg': really_probe: bound device to driver qcom_smd_qrtr
+[   12.656842] remoteproc remoteproc0: remote processor adsp is now up
+[   12.657301] platform 6e80000.pinctrl: bus: 'platform': __driver_probe_device: matched device with driver qcom-sm8550-lpass-lpi-pinctrl
+[   12.657311] platform 6e80000.pinctrl: bus: 'platform': really_probe: probing driver qcom-sm8550-lpass-lpi-pinctrl with device
+[   12.657633] qcom-sm8550-lpass-lpi-pinctrl 6e80000.pinctrl: Driver qcom-sm8550-lpass-lpi-pinctrl requests probe deferral
+[   12.657675] platform 6e80000.pinctrl: Added to deferred list
+[   12.657733] devices_kset: Moving 6d44000.codec to end of list
+[   12.657739] devices_kset: Moving 6ae0000.codec to end of list
+[   12.657742] devices_kset: Moving 6d30000.soundwire to end of list
+[   12.657746] devices_kset: Moving 6ac0000.codec to end of list
+[   12.657748] devices_kset: Moving 6ad0000.soundwire to end of list
+[   12.657751] devices_kset: Moving 6aa0000.codec to end of list
+[   12.657756] platform 6d44000.codec: Retrying from deferred list
+[   12.659270] platform 6d44000.codec: bus: 'platform': __driver_probe_device: matched device with driver va_macro
+[   12.659277] platform 6d44000.codec: bus: 'platform': really_probe: probing driver va_macro with device
+[   12.659324] va_macro 6d44000.codec: error -EPROBE_DEFER: unable to get macro clock
+[   12.659329] va_macro 6d44000.codec: Driver va_macro requests probe deferral
+[   12.659338] platform 6d44000.codec: Added to deferred list
+[   12.659349] devices_kset: Moving 6ae0000.codec to end of list
+[   12.659352] devices_kset: Moving 6d30000.soundwire to end of list
+[   12.659355] platform 6ae0000.codec: Retrying from deferred list
+[   12.660267] platform 6ae0000.codec: bus: 'platform': __driver_probe_device: matched device with driver tx_macro
+[   12.660275] platform 6ae0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   12.660279] platform 6ae0000.codec: Added to deferred list
+[   12.660283] devices_kset: Moving 6aa0000.codec to end of list
+[   12.660287] platform 6aa0000.codec: Retrying from deferred list
+[   12.661152] platform 6aa0000.codec: bus: 'platform': __driver_probe_device: matched device with driver wsa_macro
+[   12.661160] platform 6aa0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   12.661164] platform 6aa0000.codec: Added to deferred list
+[   12.661168] devices_kset: Moving 6ac0000.codec to end of list
+[   12.661171] devices_kset: Moving 6ad0000.soundwire to end of list
+[   12.661173] platform 6ac0000.codec: Retrying from deferred list
+[   12.661321] device: '6800000.remoteproc:glink-edge.LOOPBACK_CTL_LPASS.-1.-1': device_add
+[   12.661838] device: '6800000.remoteproc:glink-edge.fastrpcglink-apps-dsp.-1.-1': device_add
+[   12.661978] platform 6ac0000.codec: bus: 'platform': __driver_probe_device: matched device with driver rx_macro
+[   12.661985] platform 6ac0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   12.661988] platform 6ac0000.codec: Added to deferred list
+[   12.661992] devices_kset: Moving 6ad0000.soundwire to end of list
+[   12.661995] platform 6ad0000.soundwire: Retrying from deferred list
+[   12.662145] rpmsg 6800000.remoteproc:glink-edge.fastrpcglink-apps-dsp.-1.-1: bus: 'rpmsg': __driver_probe_device: matched device with driver qcom,fastrpc
+[   12.662158] rpmsg 6800000.remoteproc:glink-edge.fastrpcglink-apps-dsp.-1.-1: bus: 'rpmsg': really_probe: probing driver qcom,fastrpc with device
+[   12.662302] qcom,fastrpc 6800000.remoteproc:glink-edge.fastrpcglink-apps-dsp.-1.-1: no reserved DMA memory for FASTRPC
+[   12.662322] device: 'fastrpc-adsp': device_add
+[   12.662854] platform 6ad0000.soundwire: bus: 'platform': __driver_probe_device: matched device with driver qcom-soundwire
+[   12.662870] platform 6ad0000.soundwire: error -EPROBE_DEFER: wait for supplier /soc@0/pinctrl@6e80000/rx-swr-active-state
+[   12.662877] platform 6ad0000.soundwire: Added to deferred list
+[   12.662881] devices_kset: Moving 6d30000.soundwire to end of list
+[   12.662884] platform 6d30000.soundwire: Retrying from deferred list
+[   12.663660] platform 6d30000.soundwire: bus: 'platform': __driver_probe_device: matched device with driver qcom-soundwire
+[   12.663671] platform 6d30000.soundwire: error -EPROBE_DEFER: wait for supplier /soc@0/pinctrl@6e80000/tx-swr-active-state
+[   12.663677] platform 6d30000.soundwire: Added to deferred list
+[   12.667354] device: '6800000.remoteproc:glink-edge:fastrpc:compute-cb@3': device_add
+[   12.667594] device: 'platform:15000000.iommu--platform:6800000.remoteproc:glink-edge:fastrpc:compute-cb@3': device_add
+[   12.667655] devices_kset: Moving 6800000.remoteproc:glink-edge:fastrpc:compute-cb@3 to end of list
+[   12.667662] platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@3: Linked as a consumer to 15000000.iommu
+[   12.668351] platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@3: Adding to iommu group 21
+[   12.668873] /soc@0/remoteproc@6800000/glink-edge/fastrpc/compute-cb@3 Dropping the fwnode link to /soc@0/iommu@15000000
+[   12.670099] platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@3: bus: 'platform': __driver_probe_device: matched device with driver qcom,fastrpc-cb
+[   12.670111] platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@3: bus: 'platform': really_probe: probing driver qcom,fastrpc-cb with device
+[   12.670153] qcom,fastrpc-cb 6800000.remoteproc:glink-edge:fastrpc:compute-cb@3: driver: 'qcom,fastrpc-cb': driver_bound: bound to device
+[   12.670206] devices_kset: Moving 6e80000.pinctrl to end of list
+[   12.670215] platform 6e80000.pinctrl: Retrying from deferred list
+[   12.670235] qcom,fastrpc-cb 6800000.remoteproc:glink-edge:fastrpc:compute-cb@3: bus: 'platform': really_probe: bound device to driver qcom,fastrpc-cb
+[   12.670362] device: '6800000.remoteproc:glink-edge:fastrpc:compute-cb@4': device_add
+[   12.670522] device: 'platform:15000000.iommu--platform:6800000.remoteproc:glink-edge:fastrpc:compute-cb@4': device_add
+[   12.670577] devices_kset: Moving 6800000.remoteproc:glink-edge:fastrpc:compute-cb@4 to end of list
+[   12.670584] platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@4: Linked as a consumer to 15000000.iommu
+[   12.670878] platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@4: Adding to iommu group 22
+[   12.671201] platform 6e80000.pinctrl: bus: 'platform': __driver_probe_device: matched device with driver qcom-sm8550-lpass-lpi-pinctrl
+[   12.671208] platform 6e80000.pinctrl: bus: 'platform': really_probe: probing driver qcom-sm8550-lpass-lpi-pinctrl with device
+[   12.671614] /soc@0/remoteproc@6800000/glink-edge/fastrpc/compute-cb@4 Dropping the fwnode link to /soc@0/iommu@15000000
+[   12.671643] qcom-sm8550-lpass-lpi-pinctrl 6e80000.pinctrl: Driver qcom-sm8550-lpass-lpi-pinctrl requests probe deferral
+[   12.671687] platform 6e80000.pinctrl: Added to deferred list
+[   12.671724] devices_kset: Moving 6d44000.codec to end of list
+[   12.671729] devices_kset: Moving 6ae0000.codec to end of list
+[   12.671733] devices_kset: Moving 6d30000.soundwire to end of list
+[   12.671736] devices_kset: Moving 6ac0000.codec to end of list
+[   12.671740] devices_kset: Moving 6ad0000.soundwire to end of list
+[   12.671743] devices_kset: Moving 6aa0000.codec to end of list
+[   12.671747] platform 6d44000.codec: Retrying from deferred list
+[   12.673245] platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@4: bus: 'platform': __driver_probe_device: matched device with driver qcom,fastrpc-cb
+[   12.673258] platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@4: bus: 'platform': really_probe: probing driver qcom,fastrpc-cb with device
+[   12.673298] qcom,fastrpc-cb 6800000.remoteproc:glink-edge:fastrpc:compute-cb@4: driver: 'qcom,fastrpc-cb': driver_bound: bound to device
+[   12.673339] platform 6d44000.codec: bus: 'platform': __driver_probe_device: matched device with driver va_macro
+[   12.673347] platform 6d44000.codec: bus: 'platform': really_probe: probing driver va_macro with device
+[   12.673370] qcom,fastrpc-cb 6800000.remoteproc:glink-edge:fastrpc:compute-cb@4: bus: 'platform': really_probe: bound device to driver qcom,fastrpc-cb
+[   12.673389] va_macro 6d44000.codec: error -EPROBE_DEFER: unable to get macro clock
+[   12.673394] va_macro 6d44000.codec: Driver va_macro requests probe deferral
+[   12.673404] platform 6d44000.codec: Added to deferred list
+[   12.673415] devices_kset: Moving 6ae0000.codec to end of list
+[   12.673418] devices_kset: Moving 6d30000.soundwire to end of list
+[   12.673420] platform 6ae0000.codec: Retrying from deferred list
+[   12.673422] device: '6800000.remoteproc:glink-edge:fastrpc:compute-cb@5': device_add
+[   12.674062] platform 6ae0000.codec: bus: 'platform': __driver_probe_device: matched device with driver tx_macro
+[   12.674071] platform 6ae0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   12.674075] platform 6ae0000.codec: Added to deferred list
+[   12.674080] devices_kset: Moving 6aa0000.codec to end of list
+[   12.674084] platform 6aa0000.codec: Retrying from deferred list
+[   12.674685] platform 6aa0000.codec: bus: 'platform': __driver_probe_device: matched device with driver wsa_macro
+[   12.674693] platform 6aa0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   12.674697] platform 6aa0000.codec: Added to deferred list
+[   12.674701] devices_kset: Moving 6ac0000.codec to end of list
+[   12.674703] devices_kset: Moving 6ad0000.soundwire to end of list
+[   12.674706] platform 6ac0000.codec: Retrying from deferred list
+[   12.675297] platform 6ac0000.codec: bus: 'platform': __driver_probe_device: matched device with driver rx_macro
+[   12.675304] platform 6ac0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   12.675308] platform 6ac0000.codec: Added to deferred list
+[   12.675312] devices_kset: Moving 6ad0000.soundwire to end of list
+[   12.675315] platform 6ad0000.soundwire: Retrying from deferred list
+[   12.675960] platform 6ad0000.soundwire: bus: 'platform': __driver_probe_device: matched device with driver qcom-soundwire
+[   12.675973] platform 6ad0000.soundwire: error -EPROBE_DEFER: wait for supplier /soc@0/pinctrl@6e80000/rx-swr-active-state
+[   12.675981] platform 6ad0000.soundwire: Added to deferred list
+[   12.675985] devices_kset: Moving 6d30000.soundwire to end of list
+[   12.675988] platform 6d30000.soundwire: Retrying from deferred list
+[   12.676581] platform 6d30000.soundwire: bus: 'platform': __driver_probe_device: matched device with driver qcom-soundwire
+[   12.676594] platform 6d30000.soundwire: error -EPROBE_DEFER: wait for supplier /soc@0/pinctrl@6e80000/tx-swr-active-state
+[   12.676600] platform 6d30000.soundwire: Added to deferred list
+[   12.676604] devices_kset: Moving 6e80000.pinctrl to end of list
+[   12.676607] platform 6e80000.pinctrl: Retrying from deferred list
+[   12.677276] platform 6e80000.pinctrl: bus: 'platform': __driver_probe_device: matched device with driver qcom-sm8550-lpass-lpi-pinctrl
+[   12.677282] platform 6e80000.pinctrl: bus: 'platform': really_probe: probing driver qcom-sm8550-lpass-lpi-pinctrl with device
+[   12.677633] qcom-sm8550-lpass-lpi-pinctrl 6e80000.pinctrl: Driver qcom-sm8550-lpass-lpi-pinctrl requests probe deferral
+[   12.677657] platform 6e80000.pinctrl: Added to deferred list
+[   12.677993] device: 'lo': device_add
+[   12.678463] device: 'platform:15000000.iommu--platform:6800000.remoteproc:glink-edge:fastrpc:compute-cb@5': device_add
+[   12.679222] audit: type=1334 audit(1794387840.003:79): prog-id=56 op=LOAD
+[   12.679291] devices_kset: Moving 6800000.remoteproc:glink-edge:fastrpc:compute-cb@5 to end of list
+[   12.679303] platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@5: Linked as a consumer to 15000000.iommu
+[   12.679346] platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@5: Adding to iommu group 23
+[   12.679743] /soc@0/remoteproc@6800000/glink-edge/fastrpc/compute-cb@5 Dropping the fwnode link to /soc@0/iommu@15000000
+[   12.680991] platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@5: bus: 'platform': __driver_probe_device: matched device with driver qcom,fastrpc-cb
+[   12.681002] platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@5: bus: 'platform': really_probe: probing driver qcom,fastrpc-cb with device
+[   12.681037] qcom,fastrpc-cb 6800000.remoteproc:glink-edge:fastrpc:compute-cb@5: driver: 'qcom,fastrpc-cb': driver_bound: bound to device
+[   12.681077] devices_kset: Moving 6d44000.codec to end of list
+[   12.681085] devices_kset: Moving 6ae0000.codec to end of list
+[   12.681090] devices_kset: Moving 6d30000.soundwire to end of list
+[   12.681094] devices_kset: Moving 6ac0000.codec to end of list
+[   12.681096] qcom,fastrpc-cb 6800000.remoteproc:glink-edge:fastrpc:compute-cb@5: bus: 'platform': really_probe: bound device to driver qcom,fastrpc-cb
+[   12.681098] devices_kset: Moving 6ad0000.soundwire to end of list
+[   12.681102] devices_kset: Moving 6aa0000.codec to end of list
+[   12.681133] platform 6d44000.codec: Retrying from deferred list
+[   12.681239] device: '6800000.remoteproc:glink-edge:fastrpc:compute-cb@6': device_add
+[   12.681799] platform 6d44000.codec: bus: 'platform': __driver_probe_device: matched device with driver va_macro
+[   12.681806] platform 6d44000.codec: bus: 'platform': really_probe: probing driver va_macro with device
+[   12.682558] audit: type=1130 audit(1794387840.007:80): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=systemd-homed-activate comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   12.685064] device: 'platform:15000000.iommu--platform:6800000.remoteproc:glink-edge:fastrpc:compute-cb@6': device_add
+[   12.685191] devices_kset: Moving 6800000.remoteproc:glink-edge:fastrpc:compute-cb@6 to end of list
+[   12.685200] platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@6: Linked as a consumer to 15000000.iommu
+[   12.685248] platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@6: Adding to iommu group 24
+[   12.685633] /soc@0/remoteproc@6800000/glink-edge/fastrpc/compute-cb@6 Dropping the fwnode link to /soc@0/iommu@15000000
+[   12.685964] va_macro 6d44000.codec: error -EPROBE_DEFER: unable to get macro clock
+[   12.685974] va_macro 6d44000.codec: Driver va_macro requests probe deferral
+[   12.685996] platform 6d44000.codec: Added to deferred list
+[   12.686028] devices_kset: Moving 6ae0000.codec to end of list
+[   12.686034] devices_kset: Moving 6d30000.soundwire to end of list
+[   12.686040] platform 6ae0000.codec: Retrying from deferred list
+[   12.687671] platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@6: bus: 'platform': __driver_probe_device: matched device with driver qcom,fastrpc-cb
+[   12.687683] platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@6: bus: 'platform': really_probe: probing driver qcom,fastrpc-cb with device
+[   12.687727] qcom,fastrpc-cb 6800000.remoteproc:glink-edge:fastrpc:compute-cb@6: driver: 'qcom,fastrpc-cb': driver_bound: bound to device
+[   12.687816] qcom,fastrpc-cb 6800000.remoteproc:glink-edge:fastrpc:compute-cb@6: bus: 'platform': really_probe: bound device to driver qcom,fastrpc-cb
+[   12.688001] platform 6ae0000.codec: bus: 'platform': __driver_probe_device: matched device with driver tx_macro
+[   12.688016] platform 6ae0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   12.688024] platform 6ae0000.codec: Added to deferred list
+[   12.688032] devices_kset: Moving 6aa0000.codec to end of list
+[   12.688039] platform 6aa0000.codec: Retrying from deferred list
+[   12.688049] device: '6800000.remoteproc:glink-edge:fastrpc:compute-cb@7': device_add
+[   12.688343] device: 'platform:15000000.iommu--platform:6800000.remoteproc:glink-edge:fastrpc:compute-cb@7': device_add
+[   12.688426] devices_kset: Moving 6800000.remoteproc:glink-edge:fastrpc:compute-cb@7 to end of list
+[   12.688435] platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@7: Linked as a consumer to 15000000.iommu
+[   12.688484] platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@7: Adding to iommu group 25
+[   12.688936] /soc@0/remoteproc@6800000/glink-edge/fastrpc/compute-cb@7 Dropping the fwnode link to /soc@0/iommu@15000000
+[   12.690059] platform 6aa0000.codec: bus: 'platform': __driver_probe_device: matched device with driver wsa_macro
+[   12.690075] platform 6aa0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   12.690085] platform 6aa0000.codec: Added to deferred list
+[   12.690092] devices_kset: Moving 6ac0000.codec to end of list
+[   12.690098] devices_kset: Moving 6ad0000.soundwire to end of list
+[   12.690105] platform 6ac0000.codec: Retrying from deferred list
+[   12.691194] platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@7: bus: 'platform': __driver_probe_device: matched device with driver qcom,fastrpc-cb
+[   12.691206] platform 6800000.remoteproc:glink-edge:fastrpc:compute-cb@7: bus: 'platform': really_probe: probing driver qcom,fastrpc-cb with device
+[   12.691246] qcom,fastrpc-cb 6800000.remoteproc:glink-edge:fastrpc:compute-cb@7: driver: 'qcom,fastrpc-cb': driver_bound: bound to device
+[   12.691305] qcom,fastrpc-cb 6800000.remoteproc:glink-edge:fastrpc:compute-cb@7: bus: 'platform': really_probe: bound device to driver qcom,fastrpc-cb
+[   12.691349] qcom,fastrpc 6800000.remoteproc:glink-edge.fastrpcglink-apps-dsp.-1.-1: driver: 'qcom,fastrpc': driver_bound: bound to device
+[   12.691392] qcom,fastrpc 6800000.remoteproc:glink-edge.fastrpcglink-apps-dsp.-1.-1: bus: 'rpmsg': really_probe: bound device to driver qcom,fastrpc
+[   12.691415] device: '6800000.remoteproc:glink-edge.adsp_apps.-1.-1': device_add
+[   12.691997] platform 6ac0000.codec: bus: 'platform': __driver_probe_device: matched device with driver rx_macro
+[   12.692011] platform 6ac0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   12.692019] platform 6ac0000.codec: Added to deferred list
+[   12.692027] devices_kset: Moving 6ad0000.soundwire to end of list
+[   12.692033] platform 6ad0000.soundwire: Retrying from deferred list
+[   12.693663] platform 6ad0000.soundwire: bus: 'platform': __driver_probe_device: matched device with driver qcom-soundwire
+[   12.693687] platform 6ad0000.soundwire: error -EPROBE_DEFER: wait for supplier /soc@0/pinctrl@6e80000/rx-swr-active-state
+[   12.693701] platform 6ad0000.soundwire: Added to deferred list
+[   12.693709] devices_kset: Moving 6d30000.soundwire to end of list
+[   12.693715] platform 6d30000.soundwire: Retrying from deferred list
+[   12.694977] platform 6d30000.soundwire: bus: 'platform': __driver_probe_device: matched device with driver qcom-soundwire
+[   12.694997] platform 6d30000.soundwire: error -EPROBE_DEFER: wait for supplier /soc@0/pinctrl@6e80000/tx-swr-active-state
+[   12.695009] platform 6d30000.soundwire: Added to deferred list
+[   12.695015] devices_kset: Moving 6e80000.pinctrl to end of list
+[   12.695020] platform 6e80000.pinctrl: Retrying from deferred list
+[   12.695675] rpmsg 6800000.remoteproc:glink-edge.adsp_apps.-1.-1: bus: 'rpmsg': __driver_probe_device: matched device with driver qcom,apr
+[   12.695709] rpmsg 6800000.remoteproc:glink-edge.adsp_apps.-1.-1: bus: 'rpmsg': really_probe: probing driver qcom,apr with device
+[   12.696254] platform 6e80000.pinctrl: bus: 'platform': __driver_probe_device: matched device with driver qcom-sm8550-lpass-lpi-pinctrl
+[   12.696265] platform 6e80000.pinctrl: bus: 'platform': really_probe: probing driver qcom-sm8550-lpass-lpi-pinctrl with device
+[   12.696574] qcom-sm8550-lpass-lpi-pinctrl 6e80000.pinctrl: Driver qcom-sm8550-lpass-lpi-pinctrl requests probe deferral
+[   12.696811] platform 6e80000.pinctrl: Added to deferred list
+[   12.696831] devices_kset: Moving 6d44000.codec to end of list
+[   12.696833] devices_kset: Moving 6ae0000.codec to end of list
+[   12.696835] devices_kset: Moving 6d30000.soundwire to end of list
+[   12.696837] devices_kset: Moving 6ac0000.codec to end of list
+[   12.696838] devices_kset: Moving 6ad0000.soundwire to end of list
+[   12.696840] devices_kset: Moving 6aa0000.codec to end of list
+[   12.696842] platform 6d44000.codec: Retrying from deferred list
+[   12.697059] qcom,apr 6800000.remoteproc:glink-edge.adsp_apps.-1.-1: driver: 'qcom,apr': driver_bound: bound to device
+[   12.697202] platform 6d44000.codec: bus: 'platform': __driver_probe_device: matched device with driver va_macro
+[   12.697207] platform 6d44000.codec: bus: 'platform': really_probe: probing driver va_macro with device
+[   12.698109] va_macro 6d44000.codec: error -EPROBE_DEFER: unable to get macro clock
+[   12.698120] va_macro 6d44000.codec: Driver va_macro requests probe deferral
+[   12.698398] qcom,apr 6800000.remoteproc:glink-edge.adsp_apps.-1.-1: bus: 'rpmsg': really_probe: bound device to driver qcom,apr
+[   12.698484] device: '6800000.remoteproc:glink-edge.sleepmonglink-apps-adsp.-1.-1': device_add
+[   12.699306] qcom,apr 6800000.remoteproc:glink-edge.adsp_apps.-1.-1: Adding APR/GPR dev: gprsvc:service:2:1
+[   12.699314] device: 'gprsvc:service:2:1': device_add
+[   12.699354] platform 6d44000.codec: Added to deferred list
+[   12.699370] devices_kset: Moving 6ae0000.codec to end of list
+[   12.699374] devices_kset: Moving 6d30000.soundwire to end of list
+[   12.699378] platform 6ae0000.codec: Retrying from deferred list
+[   12.699876] platform 6ae0000.codec: bus: 'platform': __driver_probe_device: matched device with driver tx_macro
+[   12.699885] platform 6ae0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   12.699890] platform 6ae0000.codec: Added to deferred list
+[   12.699894] devices_kset: Moving 6aa0000.codec to end of list
+[   12.699897] platform 6aa0000.codec: Retrying from deferred list
+[   12.700350] platform 6aa0000.codec: bus: 'platform': __driver_probe_device: matched device with driver wsa_macro
+[   12.700356] platform 6aa0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   12.700360] platform 6aa0000.codec: Added to deferred list
+[   12.700363] devices_kset: Moving 6ac0000.codec to end of list
+[   12.700365] devices_kset: Moving 6ad0000.soundwire to end of list
+[   12.700367] platform 6ac0000.codec: Retrying from deferred list
+[   12.700806] platform 6ac0000.codec: bus: 'platform': __driver_probe_device: matched device with driver rx_macro
+[   12.700811] platform 6ac0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   12.700814] platform 6ac0000.codec: Added to deferred list
+[   12.700817] devices_kset: Moving 6ad0000.soundwire to end of list
+[   12.700820] platform 6ad0000.soundwire: Retrying from deferred list
+[   12.701454] platform 6ad0000.soundwire: bus: 'platform': __driver_probe_device: matched device with driver qcom-soundwire
+[   12.701464] platform 6ad0000.soundwire: error -EPROBE_DEFER: wait for supplier /soc@0/pinctrl@6e80000/rx-swr-active-state
+[   12.701469] platform 6ad0000.soundwire: Added to deferred list
+[   12.701471] devices_kset: Moving 6d30000.soundwire to end of list
+[   12.701474] platform 6d30000.soundwire: Retrying from deferred list
+[   12.701668] qcom,apr 6800000.remoteproc:glink-edge.adsp_apps.-1.-1: Adding APR/GPR dev: gprsvc:service:2:2
+[   12.701678] device: 'gprsvc:service:2:2': device_add
+[   12.701705] device: 'lo': device_add
+[   12.701888] platform 6d30000.soundwire: bus: 'platform': __driver_probe_device: matched device with driver qcom-soundwire
+[   12.701894] platform 6d30000.soundwire: error -EPROBE_DEFER: wait for supplier /soc@0/pinctrl@6e80000/tx-swr-active-state
+[   12.701899] platform 6d30000.soundwire: Added to deferred list
+[   12.701901] devices_kset: Moving 6e80000.pinctrl to end of list
+[   12.701904] platform 6e80000.pinctrl: Retrying from deferred list
+[   12.702338] platform 6e80000.pinctrl: bus: 'platform': __driver_probe_device: matched device with driver qcom-sm8550-lpass-lpi-pinctrl
+[   12.702342] platform 6e80000.pinctrl: bus: 'platform': really_probe: probing driver qcom-sm8550-lpass-lpi-pinctrl with device
+[   12.702398] qcom-sm8550-lpass-lpi-pinctrl 6e80000.pinctrl: Driver qcom-sm8550-lpass-lpi-pinctrl requests probe deferral
+[   12.702415] platform 6e80000.pinctrl: Added to deferred list
+[   12.702429] devices_kset: Moving 6d44000.codec to end of list
+[   12.702432] devices_kset: Moving 6ae0000.codec to end of list
+[   12.702433] devices_kset: Moving 6d30000.soundwire to end of list
+[   12.702435] devices_kset: Moving 6ac0000.codec to end of list
+[   12.702437] devices_kset: Moving 6ad0000.soundwire to end of list
+[   12.702439] devices_kset: Moving 6aa0000.codec to end of list
+[   12.702441] platform 6d44000.codec: Retrying from deferred list
+[   12.702881] platform 6d44000.codec: bus: 'platform': __driver_probe_device: matched device with driver va_macro
+[   12.702885] platform 6d44000.codec: bus: 'platform': really_probe: probing driver va_macro with device
+[   12.702908] va_macro 6d44000.codec: error -EPROBE_DEFER: unable to get macro clock
+[   12.702911] va_macro 6d44000.codec: Driver va_macro requests probe deferral
+[   12.703029] platform 6d44000.codec: Added to deferred list
+[   12.714594] PDR: Indication received from msm/adsp/charger_pd, state: 0x1fffffff, trans-id: 1
+[   12.735284] device: '6800000.remoteproc:glink-edge.PMIC_RTR_ADSP_APPS.-1.-1': device_add
+[   12.735567] rpmsg 6800000.remoteproc:glink-edge.PMIC_RTR_ADSP_APPS.-1.-1: bus: 'rpmsg': __driver_probe_device: matched device with driver qcom_pmic_glink_rpmsg
+[   12.735582] rpmsg 6800000.remoteproc:glink-edge.PMIC_RTR_ADSP_APPS.-1.-1: bus: 'rpmsg': really_probe: probing driver qcom_pmic_glink_rpmsg with device
+[   12.735884] qcom_pmic_glink_rpmsg 6800000.remoteproc:glink-edge.PMIC_RTR_ADSP_APPS.-1.-1: driver: 'qcom_pmic_glink_rpmsg': driver_bound: bound to device
+[   12.735912] devices_kset: Moving 6ae0000.codec to end of list
+[   12.735917] devices_kset: Moving 6d30000.soundwire to end of list
+[   12.735920] platform 6ae0000.codec: Retrying from deferred list
+[   12.735947] qcom_pmic_glink_rpmsg 6800000.remoteproc:glink-edge.PMIC_RTR_ADSP_APPS.-1.-1: bus: 'rpmsg': really_probe: bound device to driver qcom_pmic_glink_rpmsg
+[   12.735974] device: '6800000.remoteproc:glink-edge.PMIC_LOGS_ADSP_APPS.-1.-1': device_add
+[   12.736036] rpmsg 6800000.remoteproc:glink-edge.PMIC_LOGS_ADSP_APPS.-1.-1: bus: 'rpmsg': __driver_probe_device: matched device with driver qcom_pmic_pdcharger_ulog_rpmsg
+[   12.736045] rpmsg 6800000.remoteproc:glink-edge.PMIC_LOGS_ADSP_APPS.-1.-1: bus: 'rpmsg': really_probe: probing driver qcom_pmic_pdcharger_ulog_rpmsg with device
+[   12.736710] platform 6ae0000.codec: bus: 'platform': __driver_probe_device: matched device with driver tx_macro
+[   12.736716] platform 6ae0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   12.736721] platform 6ae0000.codec: Added to deferred list
+[   12.736723] devices_kset: Moving 6aa0000.codec to end of list
+[   12.736725] platform 6aa0000.codec: Retrying from deferred list
+[   12.737093] qcom_pmic_pdcharger_ulog_rpmsg 6800000.remoteproc:glink-edge.PMIC_LOGS_ADSP_APPS.-1.-1: driver: 'qcom_pmic_pdcharger_ulog_rpmsg': driver_bound: bound to device
+[   12.737160] platform 6aa0000.codec: bus: 'platform': __driver_probe_device: matched device with driver wsa_macro
+[   12.737165] platform 6aa0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   12.737167] platform 6aa0000.codec: Added to deferred list
+[   12.737170] devices_kset: Moving 6ac0000.codec to end of list
+[   12.737172] devices_kset: Moving 6ad0000.soundwire to end of list
+[   12.737173] platform 6ac0000.codec: Retrying from deferred list
+[   12.737173] qcom_pmic_pdcharger_ulog_rpmsg 6800000.remoteproc:glink-edge.PMIC_LOGS_ADSP_APPS.-1.-1: bus: 'rpmsg': really_probe: bound device to driver qcom_pmic_pdcharger_ulog_rpmsg
+[   12.737443] platform 6ac0000.codec: bus: 'platform': __driver_probe_device: matched device with driver rx_macro
+[   12.737447] platform 6ac0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   12.737449] platform 6ac0000.codec: Added to deferred list
+[   12.737452] devices_kset: Moving 6ad0000.soundwire to end of list
+[   12.737453] platform 6ad0000.soundwire: Retrying from deferred list
+[   12.737738] platform 6ad0000.soundwire: bus: 'platform': __driver_probe_device: matched device with driver qcom-soundwire
+[   12.737745] platform 6ad0000.soundwire: error -EPROBE_DEFER: wait for supplier /soc@0/pinctrl@6e80000/rx-swr-active-state
+[   12.737748] platform 6ad0000.soundwire: Added to deferred list
+[   12.737750] devices_kset: Moving 6d30000.soundwire to end of list
+[   12.737752] platform 6d30000.soundwire: Retrying from deferred list
+[   12.738017] platform 6d30000.soundwire: bus: 'platform': __driver_probe_device: matched device with driver qcom-soundwire
+[   12.738023] platform 6d30000.soundwire: error -EPROBE_DEFER: wait for supplier /soc@0/pinctrl@6e80000/tx-swr-active-state
+[   12.738026] platform 6d30000.soundwire: Added to deferred list
+[   12.738028] devices_kset: Moving 6e80000.pinctrl to end of list
+[   12.738029] platform 6e80000.pinctrl: Retrying from deferred list
+[   12.738337] platform 6e80000.pinctrl: bus: 'platform': __driver_probe_device: matched device with driver qcom-sm8550-lpass-lpi-pinctrl
+[   12.738340] platform 6e80000.pinctrl: bus: 'platform': really_probe: probing driver qcom-sm8550-lpass-lpi-pinctrl with device
+[   12.738410] qcom-sm8550-lpass-lpi-pinctrl 6e80000.pinctrl: Driver qcom-sm8550-lpass-lpi-pinctrl requests probe deferral
+[   12.738473] platform 6e80000.pinctrl: Added to deferred list
+[   12.738484] devices_kset: Moving 6d44000.codec to end of list
+[   12.738485] devices_kset: Moving 6ae0000.codec to end of list
+[   12.738487] devices_kset: Moving 6d30000.soundwire to end of list
+[   12.738489] devices_kset: Moving 6ac0000.codec to end of list
+[   12.738490] devices_kset: Moving 6ad0000.soundwire to end of list
+[   12.738492] devices_kset: Moving 6aa0000.codec to end of list
+[   12.738493] platform 6d44000.codec: Retrying from deferred list
+[   12.738801] platform 6d44000.codec: bus: 'platform': __driver_probe_device: matched device with driver va_macro
+[   12.738804] platform 6d44000.codec: bus: 'platform': really_probe: probing driver va_macro with device
+[   12.738862] va_macro 6d44000.codec: error -EPROBE_DEFER: unable to get macro clock
+[   12.738864] va_macro 6d44000.codec: Driver va_macro requests probe deferral
+[   12.738881] platform 6d44000.codec: Added to deferred list
+[   12.738887] devices_kset: Moving 6ae0000.codec to end of list
+[   12.738889] devices_kset: Moving 6d30000.soundwire to end of list
+[   12.738890] platform 6ae0000.codec: Retrying from deferred list
+[   12.739179] platform 6ae0000.codec: bus: 'platform': __driver_probe_device: matched device with driver tx_macro
+[   12.739182] platform 6ae0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   12.739184] platform 6ae0000.codec: Added to deferred list
+[   12.740576] device: 'lo': device_add
+[   12.745000] qcom_q6v5_pas 6800000.remoteproc: Handover signaled, but it already happened
+[   12.762575] aprbus gprsvc:service:2:1: bus: 'aprbus': __driver_probe_device: matched device with driver qcom-apm
+[   12.762582] aprbus gprsvc:service:2:1: bus: 'aprbus': really_probe: probing driver qcom-apm with device
+[   12.768307] device: 'ucsi-source-psy-pmic_glink.ucsi.01': device_add
+[   12.768456] device: 'ucsi-source-psy-pmic_glink.ucsi.01': dev_uevent: class uevent() returned -11
+[   12.768502] device: 'ucsi-source-psy-pmic_glink.ucsi.01': dev_uevent: class uevent() returned -11
+[   12.768517] device: 'wakeup13': device_add
+[   12.768643] device: 'hwmon44': device_add
+[   12.769165] device: 'port0': device_add
+[   12.769334] device: 'platform:usb0-sbu-mux--typec:port0': device_add
+[   12.769406] typec port0: Linked as a sync state only consumer to usb0-sbu-mux
+[   12.769414] /pmic-glink/connector@0 Dropping the fwnode link to /usb0-sbu-mux
+[   12.769431] device: 'platform:88e8000.phy--typec:port0': device_add
+[   12.769505] typec port0: Linked as a sync state only consumer to 88e8000.phy
+[   12.769511] /pmic-glink/connector@0 Dropping the fwnode link to /soc@0/phy@88e8000
+[   12.769530] device: 'platform:a600000.usb--typec:port0': device_add
+[   12.769575] typec port0: Linked as a sync state only consumer to a600000.usb
+[   12.769581] /pmic-glink/connector@0 Dropping the fwnode link to /soc@0/usb@a600000
+[   12.773649] device: 'port0-partner': device_add
+[   12.774164] device: 'a600000.usb': device_unregister
+[   12.776534] device: 'xhci-hcd.2.auto': device_add
+[   12.777541] platform xhci-hcd.2.auto: bus: 'platform': __driver_probe_device: matched device with driver xhci-hcd
+[   12.777554] platform xhci-hcd.2.auto: bus: 'platform': really_probe: probing driver xhci-hcd with device
+[   12.777931] xhci-hcd xhci-hcd.2.auto: xHCI Host Controller
+[   12.777951] xhci-hcd xhci-hcd.2.auto: new USB bus registered, assigned bus number 1
+[   12.778038] xhci-hcd xhci-hcd.2.auto: // Halt the HC
+[   12.778116] xhci-hcd xhci-hcd.2.auto: Resetting HCD
+[   12.778125] xhci-hcd xhci-hcd.2.auto: // Reset the HC
+[   12.780473] xhci-hcd xhci-hcd.2.auto: Wait for controller to be ready for doorbell rings
+[   12.780481] xhci-hcd xhci-hcd.2.auto: Reset complete
+[   12.780487] xhci-hcd xhci-hcd.2.auto: Enabling 64-bit DMA addresses.
+[   12.780495] xhci-hcd xhci-hcd.2.auto: HCD page size set to 4K
+[   12.780502] xhci-hcd xhci-hcd.2.auto: Starting xhci_mem_init
+[   12.780510] xhci-hcd xhci-hcd.2.auto: Allocating internal virtual device array
+[   12.780541] xhci-hcd xhci-hcd.2.auto: Device context base array address = 0x0000000fffffd000 (DMA), 000000004812ebc2 (virt)
+[   12.780566] xhci-hcd xhci-hcd.2.auto: Allocated command ring at 000000009f933c7c
+[   12.780573] xhci-hcd xhci-hcd.2.auto: Allocating primary event ring
+[   12.780599] xhci-hcd xhci-hcd.2.auto: Allocating 2 scratchpad buffers
+[   12.780637] xhci-hcd xhci-hcd.2.auto: Ext Cap 00000000244d1b0d, port offset = 1, count = 1, revision = 0x2
+[   12.780645] xhci-hcd xhci-hcd.2.auto: xHCI 1.0: support USB2 hardware lpm
+[   12.780659] xhci-hcd xhci-hcd.2.auto: Ext Cap 0000000007b88e66, port offset = 2, count = 1, revision = 0x3
+[   12.780669] xhci-hcd xhci-hcd.2.auto: PSIV:4 PSIE:3 PLT:0 PFD:1 LP:0 PSIM:5
+[   12.780764] xhci-hcd xhci-hcd.2.auto: PSIV:5 PSIE:3 PLT:0 PFD:1 LP:1 PSIM:10
+[   12.780771] xhci-hcd xhci-hcd.2.auto: Found 1 USB 2.0 ports and 1 USB 3.0 ports.
+[   12.780779] xhci-hcd xhci-hcd.2.auto: Finished xhci_mem_init
+[   12.780785] xhci-hcd xhci-hcd.2.auto: Starting xhci_init
+[   12.780791] xhci-hcd xhci-hcd.2.auto: xHC can handle at most 64 device slots
+[   12.780799] xhci-hcd xhci-hcd.2.auto: Setting Max device slots reg = 0x40
+[   12.780809] xhci-hcd xhci-hcd.2.auto: Setting command ring address to 0xfffffc001
+[   12.780823] xhci-hcd xhci-hcd.2.auto: Doorbell array is located at offset 0x2000 from cap regs base addr
+[   12.780839] xhci-hcd xhci-hcd.2.auto: // Write event ring dequeue pointer, preserving EHB bit
+[   12.780846] xhci-hcd xhci-hcd.2.auto: Finished xhci_init
+[   12.780852] xhci-hcd xhci-hcd.2.auto: hcc params 0x0110ffc5 hci version 0x110 quirks 0x0000808020000810
+[   12.780934] xhci-hcd xhci-hcd.2.auto: irq 194, io mem 0x0a600000
+[   12.780947] xhci-hcd xhci-hcd.2.auto: xhci_run
+[   12.780956] xhci-hcd xhci-hcd.2.auto: ERST deq = 64'hffffde000
+[   12.780963] xhci-hcd xhci-hcd.2.auto: Finished xhci_run for main hcd
+[   12.781105] xhci-hcd xhci-hcd.2.auto: xHCI Host Controller
+[   12.781157] xhci-hcd xhci-hcd.2.auto: new USB bus registered, assigned bus number 2
+[   12.781168] xhci-hcd xhci-hcd.2.auto: Host supports USB 3.1 Enhanced SuperSpeed
+[   12.781175] xhci-hcd xhci-hcd.2.auto: Enable interrupts
+[   12.781183] xhci-hcd xhci-hcd.2.auto: Enable primary interrupter
+[   12.781194] xhci-hcd xhci-hcd.2.auto: // Turn on HC, cmd = 0x5.
+[   12.781342] device: 'usb1': device_add
+[   12.781758] usb usb1: bus: 'usb': __driver_probe_device: matched device with driver usb
+[   12.781768] usb usb1: bus: 'usb': really_probe: probing driver usb with device
+[   12.781806] xHCI xhci_add_endpoint called for root hub
+[   12.781812] xHCI xhci_check_bandwidth called for root hub
+[   12.781855] device: '1-0:1.0': device_add
+[   12.781981] usb 1-0:1.0: bus: 'usb': __driver_probe_device: matched device with driver hub
+[   12.781989] usb 1-0:1.0: bus: 'usb': really_probe: probing driver hub with device
+[   12.782025] hub 1-0:1.0: USB hub found
+[   12.782063] hub 1-0:1.0: 1 port detected
+[   12.782143] device: 'usb1-port1': device_add
+[   12.782225] xhci-hcd xhci-hcd.2.auto: set port power 1-1 ON, portsc: 0x2a0
+[   12.782272] hub 1-0:1.0: driver: 'hub': driver_bound: bound to device
+[   12.782302] devices_kset: Moving 6aa0000.codec to end of list
+[   12.782314] platform 6aa0000.codec: Retrying from deferred list
+[   12.782327] hub 1-0:1.0: bus: 'usb': really_probe: bound device to driver hub
+[   12.782341] device: 'ep_81': device_add
+[   12.782395] usb usb1: driver: 'usb': driver_bound: bound to device
+[   12.782443] usb usb1: bus: 'usb': really_probe: bound device to driver usb
+[   12.782453] device: 'ep_00': device_add
+[   12.782641] device: 'usb2': device_add
+[   12.782994] usb usb2: bus: 'usb': __driver_probe_device: matched device with driver usb
+[   12.783003] usb usb2: bus: 'usb': really_probe: probing driver usb with device
+[   12.783025] xHCI xhci_add_endpoint called for root hub
+[   12.783030] xHCI xhci_check_bandwidth called for root hub
+[   12.783079] device: '2-0:1.0': device_add
+[   12.783181] usb 2-0:1.0: bus: 'usb': __driver_probe_device: matched device with driver hub
+[   12.783189] usb 2-0:1.0: bus: 'usb': really_probe: probing driver hub with device
+[   12.783203] hub 2-0:1.0: USB hub found
+[   12.783236] hub 2-0:1.0: 1 port detected
+[   12.783294] device: 'usb2-port1': device_add
+[   12.783367] xhci-hcd xhci-hcd.2.auto: set port power 2-1 ON, portsc: 0x2b0
+[   12.783401] hub 2-0:1.0: driver: 'hub': driver_bound: bound to device
+[   12.783457] hub 2-0:1.0: bus: 'usb': really_probe: bound device to driver hub
+[   12.783469] device: 'ep_81': device_add
+[   12.783533] usb usb2: driver: 'usb': driver_bound: bound to device
+[   12.783574] usb usb2: bus: 'usb': really_probe: bound device to driver usb
+[   12.783585] device: 'ep_00': device_add
+[   12.783628] xhci-hcd xhci-hcd.2.auto: driver: 'xhci-hcd': driver_bound: bound to device
+[   12.783660] xhci-hcd xhci-hcd.2.auto: bus: 'platform': really_probe: bound device to driver xhci-hcd
+[   12.784395] platform 6aa0000.codec: bus: 'platform': __driver_probe_device: matched device with driver wsa_macro
+[   12.784413] platform 6aa0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   12.784424] platform 6aa0000.codec: Added to deferred list
+[   12.784433] devices_kset: Moving 6ac0000.codec to end of list
+[   12.784439] devices_kset: Moving 6ad0000.soundwire to end of list
+[   12.784445] platform 6ac0000.codec: Retrying from deferred list
+[   12.785985] platform 6ac0000.codec: bus: 'platform': __driver_probe_device: matched device with driver rx_macro
+[   12.786002] platform 6ac0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   12.786010] platform 6ac0000.codec: Added to deferred list
+[   12.786019] devices_kset: Moving 6ad0000.soundwire to end of list
+[   12.786025] platform 6ad0000.soundwire: Retrying from deferred list
+[   12.787365] platform 6ad0000.soundwire: bus: 'platform': __driver_probe_device: matched device with driver qcom-soundwire
+[   12.787388] platform 6ad0000.soundwire: error -EPROBE_DEFER: wait for supplier /soc@0/pinctrl@6e80000/rx-swr-active-state
+[   12.787401] platform 6ad0000.soundwire: Added to deferred list
+[   12.787409] devices_kset: Moving 6d30000.soundwire to end of list
+[   12.787415] platform 6d30000.soundwire: Retrying from deferred list
+[   12.788625] platform 6d30000.soundwire: bus: 'platform': __driver_probe_device: matched device with driver qcom-soundwire
+[   12.788645] platform 6d30000.soundwire: error -EPROBE_DEFER: wait for supplier /soc@0/pinctrl@6e80000/tx-swr-active-state
+[   12.788657] platform 6d30000.soundwire: Added to deferred list
+[   12.788665] devices_kset: Moving 6e80000.pinctrl to end of list
+[   12.788672] platform 6e80000.pinctrl: Retrying from deferred list
+[   12.789992] platform 6e80000.pinctrl: bus: 'platform': __driver_probe_device: matched device with driver qcom-sm8550-lpass-lpi-pinctrl
+[   12.790004] platform 6e80000.pinctrl: bus: 'platform': really_probe: probing driver qcom-sm8550-lpass-lpi-pinctrl with device
+[   12.790223] qcom-sm8550-lpass-lpi-pinctrl 6e80000.pinctrl: Driver qcom-sm8550-lpass-lpi-pinctrl requests probe deferral
+[   12.790281] platform 6e80000.pinctrl: Added to deferred list
+[   12.790365] devices_kset: Moving 6d44000.codec to end of list
+[   12.790370] devices_kset: Moving 6ae0000.codec to end of list
+[   12.790375] devices_kset: Moving 6d30000.soundwire to end of list
+[   12.790379] devices_kset: Moving 6ac0000.codec to end of list
+[   12.790383] devices_kset: Moving 6ad0000.soundwire to end of list
+[   12.790388] devices_kset: Moving 6aa0000.codec to end of list
+[   12.790393] platform 6d44000.codec: Retrying from deferred list
+[   12.791667] platform 6d44000.codec: bus: 'platform': __driver_probe_device: matched device with driver va_macro
+[   12.791677] platform 6d44000.codec: bus: 'platform': really_probe: probing driver va_macro with device
+[   12.791737] va_macro 6d44000.codec: error -EPROBE_DEFER: unable to get macro clock
+[   12.791745] va_macro 6d44000.codec: Driver va_macro requests probe deferral
+[   12.791861] platform 6d44000.codec: Added to deferred list
+[   12.791880] devices_kset: Moving 6ae0000.codec to end of list
+[   12.791887] devices_kset: Moving 6d30000.soundwire to end of list
+[   12.791892] platform 6ae0000.codec: Retrying from deferred list
+[   12.793280] platform 6ae0000.codec: bus: 'platform': __driver_probe_device: matched device with driver tx_macro
+[   12.793294] platform 6ae0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   12.793301] platform 6ae0000.codec: Added to deferred list
+[   12.795630] xhci-hcd xhci-hcd.2.auto: Port change event, 2-1, id 2, portsc: 0x2802a0
+[   12.795642] xhci-hcd xhci-hcd.2.auto: handle_port_status: starting usb2 port polling.
+[   12.802008] platform audio-codec: bus: 'platform': __driver_probe_device: matched device with driver wcd938x_codec
+[   12.802017] platform audio-codec: bus: 'platform': really_probe: probing driver wcd938x_codec with device
+[   12.802262] device: 'regulator:regulator.28--platform:audio-codec': device_add
+[   12.802306] devices_kset: Moving audio-codec to end of list
+[   12.802309] wcd938x_codec audio-codec: Linked as a consumer to regulator.28
+[   12.802356] device: 'regulator:regulator.16--platform:audio-codec': device_add
+[   12.802375] devices_kset: Moving audio-codec to end of list
+[   12.802377] wcd938x_codec audio-codec: Linked as a consumer to regulator.16
+[   12.802488] wcd938x_codec audio-codec: driver: 'wcd938x_codec': driver_bound: bound to device
+[   12.802519] wcd938x_codec audio-codec: bus: 'platform': really_probe: bound device to driver wcd938x_codec
+[   12.802599] Extended deferred probe timeout by 10 secs
+[   12.802871] devices_kset: Moving 6aa0000.codec to end of list
+[   12.802875] platform 6aa0000.codec: Retrying from deferred list
+[   12.803425] platform 6aa0000.codec: bus: 'platform': __driver_probe_device: matched device with driver wsa_macro
+[   12.803432] platform 6aa0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   12.803436] platform 6aa0000.codec: Added to deferred list
+[   12.803439] devices_kset: Moving 6ac0000.codec to end of list
+[   12.803441] devices_kset: Moving 6ad0000.soundwire to end of list
+[   12.803443] platform 6ac0000.codec: Retrying from deferred list
+[   12.803764] platform 6ac0000.codec: bus: 'platform': __driver_probe_device: matched device with driver rx_macro
+[   12.803768] platform 6ac0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   12.803772] platform 6ac0000.codec: Added to deferred list
+[   12.803775] devices_kset: Moving 6ad0000.soundwire to end of list
+[   12.803777] platform 6ad0000.soundwire: Retrying from deferred list
+[   12.804098] platform 6ad0000.soundwire: bus: 'platform': __driver_probe_device: matched device with driver qcom-soundwire
+[   12.804105] platform 6ad0000.soundwire: error -EPROBE_DEFER: wait for supplier /soc@0/pinctrl@6e80000/rx-swr-active-state
+[   12.804109] platform 6ad0000.soundwire: Added to deferred list
+[   12.804111] devices_kset: Moving 6d30000.soundwire to end of list
+[   12.804113] platform 6d30000.soundwire: Retrying from deferred list
+[   12.804412] platform 6d30000.soundwire: bus: 'platform': __driver_probe_device: matched device with driver qcom-soundwire
+[   12.804417] platform 6d30000.soundwire: error -EPROBE_DEFER: wait for supplier /soc@0/pinctrl@6e80000/tx-swr-active-state
+[   12.804420] platform 6d30000.soundwire: Added to deferred list
+[   12.804422] devices_kset: Moving 6e80000.pinctrl to end of list
+[   12.804424] platform 6e80000.pinctrl: Retrying from deferred list
+[   12.804739] platform 6e80000.pinctrl: bus: 'platform': __driver_probe_device: matched device with driver qcom-sm8550-lpass-lpi-pinctrl
+[   12.804742] platform 6e80000.pinctrl: bus: 'platform': really_probe: probing driver qcom-sm8550-lpass-lpi-pinctrl with device
+[   12.804798] qcom-sm8550-lpass-lpi-pinctrl 6e80000.pinctrl: Driver qcom-sm8550-lpass-lpi-pinctrl requests probe deferral
+[   12.804813] platform 6e80000.pinctrl: Added to deferred list
+[   12.804824] devices_kset: Moving 6d44000.codec to end of list
+[   12.804826] devices_kset: Moving 6ae0000.codec to end of list
+[   12.804827] devices_kset: Moving 6d30000.soundwire to end of list
+[   12.804829] devices_kset: Moving 6ac0000.codec to end of list
+[   12.804830] devices_kset: Moving 6ad0000.soundwire to end of list
+[   12.804831] devices_kset: Moving 6aa0000.codec to end of list
+[   12.804833] platform 6d44000.codec: Retrying from deferred list
+[   12.805179] platform 6d44000.codec: bus: 'platform': __driver_probe_device: matched device with driver va_macro
+[   12.805183] platform 6d44000.codec: bus: 'platform': really_probe: probing driver va_macro with device
+[   12.805205] va_macro 6d44000.codec: error -EPROBE_DEFER: unable to get macro clock
+[   12.805207] va_macro 6d44000.codec: Driver va_macro requests probe deferral
+[   12.805232] platform 6d44000.codec: Added to deferred list
+[   12.805236] devices_kset: Moving 6ae0000.codec to end of list
+[   12.805238] devices_kset: Moving 6d30000.soundwire to end of list
+[   12.805239] platform 6ae0000.codec: Retrying from deferred list
+[   12.805551] platform 6ae0000.codec: bus: 'platform': __driver_probe_device: matched device with driver tx_macro
+[   12.805555] platform 6ae0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   12.805557] platform 6ae0000.codec: Added to deferred list
+[   12.805568] xhci-hcd xhci-hcd.2.auto: Get port status 1-1 read: 0x2a0, return 0x100
+[   12.805624] xhci-hcd xhci-hcd.2.auto: xhci_hub_status_data: stopping usb1 port polling
+[   12.810765] platform sound: bus: 'platform': __driver_probe_device: matched device with driver snd-sc8280xp
+[   12.810778] platform sound: error -EPROBE_DEFER: wait for supplier /soc@0/pinctrl@6e80000/lpi_i2s3-active-state
+[   12.810783] platform sound: Added to deferred list
+[   12.810904] Extended deferred probe timeout by 10 secs
+[   12.845478] Bluetooth: hci0: QCA Downloading qca/hmtnv20.bin
+[   12.885860] xhci-hcd xhci-hcd.2.auto: Get port status 2-1 read: 0x2802a0, return 0x3002a0
+[   12.885889] xhci-hcd xhci-hcd.2.auto: clear port1 reset change, portsc: 0x802a0
+[   12.885981] xhci-hcd xhci-hcd.2.auto: clear port1 warm(BH) reset change, portsc: 0x2a0
+[   12.989218] xhci-hcd xhci-hcd.2.auto: set port remote wake mask, actual port 2-1 status  = 0xe0002a0
+[   13.020983] ath12k_wifi7_pci 0000:01:00.0: driver: 'ath12k_wifi7_pci': driver_bound: bound to device
+[   13.021023] device: 'mhi0_IPCR': device_add
+[   13.021023] devices_kset: Moving 6aa0000.codec to end of list
+[   13.021036] platform 6aa0000.codec: Retrying from deferred list
+[   13.021047] ath12k_wifi7_pci 0000:01:00.0: bus: 'pci': really_probe: bound device to driver ath12k_wifi7_pci
+[   13.021081] Extended deferred probe timeout by 10 secs
+[   13.021082] mhi mhi0_IPCR: bus: 'mhi': __driver_probe_device: matched device with driver qcom_mhi_qrtr
+[   13.021089] mhi mhi0_IPCR: bus: 'mhi': really_probe: probing driver qcom_mhi_qrtr with device
+[   13.022939] qcom_mhi_qrtr mhi0_IPCR: driver: 'qcom_mhi_qrtr': driver_bound: bound to device
+[   13.022978] qcom_mhi_qrtr mhi0_IPCR: bus: 'mhi': really_probe: bound device to driver qcom_mhi_qrtr
+[   13.023904] platform 6aa0000.codec: bus: 'platform': __driver_probe_device: matched device with driver wsa_macro
+[   13.023930] platform 6aa0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   13.023942] platform 6aa0000.codec: Added to deferred list
+[   13.023953] devices_kset: Moving 6ac0000.codec to end of list
+[   13.023962] devices_kset: Moving 6ad0000.soundwire to end of list
+[   13.023971] platform 6ac0000.codec: Retrying from deferred list
+[   13.025165] xhci-hcd xhci-hcd.2.auto: Get port status 2-1 read: 0x2a0, return 0x2a0
+[   13.026091] platform 6ac0000.codec: bus: 'platform': __driver_probe_device: matched device with driver rx_macro
+[   13.026115] platform 6ac0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   13.026127] platform 6ac0000.codec: Added to deferred list
+[   13.026138] devices_kset: Moving 6ad0000.soundwire to end of list
+[   13.026146] platform 6ad0000.soundwire: Retrying from deferred list
+[   13.028251] platform 6ad0000.soundwire: bus: 'platform': __driver_probe_device: matched device with driver qcom-soundwire
+[   13.028351] platform 6ad0000.soundwire: error -EPROBE_DEFER: wait for supplier /soc@0/pinctrl@6e80000/rx-swr-active-state
+[   13.028371] platform 6ad0000.soundwire: Added to deferred list
+[   13.028381] devices_kset: Moving 6d30000.soundwire to end of list
+[   13.028391] platform 6d30000.soundwire: Retrying from deferred list
+[   13.030216] platform 6d30000.soundwire: bus: 'platform': __driver_probe_device: matched device with driver qcom-soundwire
+[   13.030249] platform 6d30000.soundwire: error -EPROBE_DEFER: wait for supplier /soc@0/pinctrl@6e80000/tx-swr-active-state
+[   13.030267] platform 6d30000.soundwire: Added to deferred list
+[   13.030276] devices_kset: Moving 6e80000.pinctrl to end of list
+[   13.030284] platform 6e80000.pinctrl: Retrying from deferred list
+[   13.032685] platform 6e80000.pinctrl: bus: 'platform': __driver_probe_device: matched device with driver qcom-sm8550-lpass-lpi-pinctrl
+[   13.032708] platform 6e80000.pinctrl: bus: 'platform': really_probe: probing driver qcom-sm8550-lpass-lpi-pinctrl with device
+[   13.032924] qcom-sm8550-lpass-lpi-pinctrl 6e80000.pinctrl: Driver qcom-sm8550-lpass-lpi-pinctrl requests probe deferral
+[   13.032976] platform 6e80000.pinctrl: Added to deferred list
+[   13.033060] devices_kset: Moving 6d44000.codec to end of list
+[   13.033068] devices_kset: Moving 6ae0000.codec to end of list
+[   13.033076] devices_kset: Moving 6d30000.soundwire to end of list
+[   13.033084] devices_kset: Moving 6ac0000.codec to end of list
+[   13.033091] devices_kset: Moving 6ad0000.soundwire to end of list
+[   13.033098] devices_kset: Moving 6aa0000.codec to end of list
+[   13.033106] platform 6d44000.codec: Retrying from deferred list
+[   13.035235] platform 6d44000.codec: bus: 'platform': __driver_probe_device: matched device with driver va_macro
+[   13.035252] platform 6d44000.codec: bus: 'platform': really_probe: probing driver va_macro with device
+[   13.035336] va_macro 6d44000.codec: error -EPROBE_DEFER: unable to get macro clock
+[   13.035346] va_macro 6d44000.codec: Driver va_macro requests probe deferral
+[   13.035371] platform 6d44000.codec: Added to deferred list
+[   13.035407] devices_kset: Moving 6ae0000.codec to end of list
+[   13.035414] devices_kset: Moving 6d30000.soundwire to end of list
+[   13.035421] platform 6ae0000.codec: Retrying from deferred list
+[   13.037350] platform 6ae0000.codec: bus: 'platform': __driver_probe_device: matched device with driver tx_macro
+[   13.037370] platform 6ae0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   13.037380] platform 6ae0000.codec: Added to deferred list
+[   13.037390] devices_kset: Moving sound to end of list
+[   13.037399] platform sound: Retrying from deferred list
+[   13.037651] ath12k_wifi7_pci 0000:01:00.0: chip_id 0x2 chip_family 0x4 board_id 0xff soc_id 0x40170200
+[   13.037661] ath12k_wifi7_pci 0000:01:00.0: fw_version 0x110cffff fw_build_timestamp 2025-06-25 09:26 fw_build_id QC_IMAGE_VERSION_STRING=WLAN.HMT.1.1.c5-00302-QCAHMTSWPL_V1.0_V2.0_SILICONZ-1.115823.3
+[   13.040067] platform sound: bus: 'platform': __driver_probe_device: matched device with driver snd-sc8280xp
+[   13.040097] platform sound: error -EPROBE_DEFER: wait for supplier /soc@0/pinctrl@6e80000/lpi_i2s3-active-state
+[   13.040114] platform sound: Added to deferred list
+[   13.229234] xhci-hcd xhci-hcd.2.auto: set port remote wake mask, actual port 2-1 status  = 0xe0002a0
+[   13.265200] xhci-hcd xhci-hcd.2.auto: Get port status 2-1 read: 0x2a0, return 0x2a0
+[   13.301150] xhci-hcd xhci-hcd.2.auto: xhci_hub_status_data: stopping usb2 port polling
+[   13.425441] ath12k_wifi7_pci 0000:01:00.0: Generated MAC_ADDR: 00:03:7f:44:70:00
+[   13.425451] ath12k_wifi7_pci 0000:01:00.0: MAC_ADDR set to 00:03:7f:44:70:00
+[   13.425555] device: 'phy0': device_add
+[   13.425679] device: 'rfkill1': device_add
+[   13.425762] device: 'wlan0': device_add
+[   13.426429] device: 'cooling_device5': device_add
+[   13.430927] device: 'hwmon45': device_add
+[   13.438013] ath12k_wifi7_pci 0000:01:00.0 wlp1s0: renamed from wlan0
+[   13.438020] net wlan0: renaming to wlp1s0
+[   13.473210] xhci-hcd xhci-hcd.2.auto: set port remote wake mask, actual port 2-1 status  = 0xe0002a0
+[   13.473296] xhci-hcd xhci-hcd.2.auto: xhci_hub_status_data: stopping usb2 port polling
+[   13.501198] device: 'vcs2': device_add
+[   13.501619] device: 'vcsu2': device_add
+[   13.502106] device: 'vcsa2': device_add
+[   13.502239] device: 'vcs3': device_add
+[   13.502330] device: 'vcsu3': device_add
+[   13.502404] device: 'vcsa3': device_add
+[   13.502531] device: 'vcs4': device_add
+[   13.502588] device: 'vcsu4': device_add
+[   13.502659] device: 'vcsa4': device_add
+[   13.503768] device: 'vcs5': device_add
+[   13.503850] device: 'vcsu5': device_add
+[   13.503906] device: 'vcsa5': device_add
+[   13.504083] device: 'vcs6': device_add
+[   13.504209] device: 'vcsu6': device_add
+[   13.504289] device: 'vcsa6': device_add
+[   13.575209] Bluetooth: hci0: QCA FW build version: BTFW.HAMILTON.2.0.1-00349-WOS_PATCHZ-2
+[   13.575220] Bluetooth: hci0: Generated BD_ADDR: 00:03:7f:00:70:44
+[   13.576353] Bluetooth: hci0: BD_ADDR set to 00:03:7f:00:70:44
+[   13.576362] Bluetooth: hci0: QCA setup on UART is completed
+[   13.576413] Bluetooth: hci0: HFP non-HCI data transport is supported
+[   13.610315] Bluetooth: MGMT ver 1.23
+[   15.579434] device: 'input10': device_add
+[   15.579551] input: InputPlumber Keyboard as /devices/virtual/input/input10
+[   15.579562] device: 'event6': device_add
+[   15.580144] device: 'input11': device_add
+[   15.580557] input: Microsoft X-Box One Elite 2 pad as /devices/virtual/input/input11
+[   15.580597] device: 'event7': device_add
+[   15.580932] device: 'js1': device_add
+[   16.191373] device: '0003:28DE:12F0.0001': device_add
+[   16.191438] hid 0003:28DE:12F0.0001: bus: 'hid': __driver_probe_device: matched device with driver hid-generic
+[   16.191444] hid 0003:28DE:12F0.0001: bus: 'hid': really_probe: probing driver hid-generic with device
+[   16.191514] device: 'hidraw0': device_add
+[   16.191697] hid-generic 0003:28DE:12F0.0001: hidraw0: USB HID v10.00 Device [Generic Steam Controller] on 
+[   16.191703] hid-generic 0003:28DE:12F0.0001: driver: 'hid-generic': driver_bound: bound to device
+[   16.191718] hid-generic 0003:28DE:12F0.0001: bus: 'hid': really_probe: bound device to driver hid-generic
+[   16.191734] devices_kset: Moving 6aa0000.codec to end of list
+[   16.191751] platform 6aa0000.codec: Retrying from deferred list
+[   16.194847] platform 6aa0000.codec: bus: 'platform': __driver_probe_device: matched device with driver wsa_macro
+[   16.194877] platform 6aa0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   16.194891] platform 6aa0000.codec: Added to deferred list
+[   16.194904] devices_kset: Moving 6ac0000.codec to end of list
+[   16.194913] devices_kset: Moving 6ad0000.soundwire to end of list
+[   16.194922] platform 6ac0000.codec: Retrying from deferred list
+[   16.197165] platform 6ac0000.codec: bus: 'platform': __driver_probe_device: matched device with driver rx_macro
+[   16.197187] platform 6ac0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   16.197199] platform 6ac0000.codec: Added to deferred list
+[   16.197210] devices_kset: Moving 6ad0000.soundwire to end of list
+[   16.197218] platform 6ad0000.soundwire: Retrying from deferred list
+[   16.199295] platform 6ad0000.soundwire: bus: 'platform': __driver_probe_device: matched device with driver qcom-soundwire
+[   16.199331] platform 6ad0000.soundwire: error -EPROBE_DEFER: wait for supplier /soc@0/pinctrl@6e80000/rx-swr-active-state
+[   16.199354] platform 6ad0000.soundwire: Added to deferred list
+[   16.199366] devices_kset: Moving 6d30000.soundwire to end of list
+[   16.199376] platform 6d30000.soundwire: Retrying from deferred list
+[   16.201430] platform 6d30000.soundwire: bus: 'platform': __driver_probe_device: matched device with driver qcom-soundwire
+[   16.201465] platform 6d30000.soundwire: error -EPROBE_DEFER: wait for supplier /soc@0/pinctrl@6e80000/tx-swr-active-state
+[   16.201486] platform 6d30000.soundwire: Added to deferred list
+[   16.201496] devices_kset: Moving 6e80000.pinctrl to end of list
+[   16.201505] platform 6e80000.pinctrl: Retrying from deferred list
+[   16.203522] platform 6e80000.pinctrl: bus: 'platform': __driver_probe_device: matched device with driver qcom-sm8550-lpass-lpi-pinctrl
+[   16.203538] platform 6e80000.pinctrl: bus: 'platform': really_probe: probing driver qcom-sm8550-lpass-lpi-pinctrl with device
+[   16.203713] qcom-sm8550-lpass-lpi-pinctrl 6e80000.pinctrl: Driver qcom-sm8550-lpass-lpi-pinctrl requests probe deferral
+[   16.203763] platform 6e80000.pinctrl: Added to deferred list
+[   16.203840] devices_kset: Moving 6d44000.codec to end of list
+[   16.203848] devices_kset: Moving 6ae0000.codec to end of list
+[   16.203856] devices_kset: Moving 6d30000.soundwire to end of list
+[   16.203863] devices_kset: Moving 6ac0000.codec to end of list
+[   16.203870] devices_kset: Moving 6ad0000.soundwire to end of list
+[   16.203877] devices_kset: Moving 6aa0000.codec to end of list
+[   16.203885] platform 6d44000.codec: Retrying from deferred list
+[   16.206030] platform 6d44000.codec: bus: 'platform': __driver_probe_device: matched device with driver va_macro
+[   16.206051] platform 6d44000.codec: bus: 'platform': really_probe: probing driver va_macro with device
+[   16.206148] va_macro 6d44000.codec: error -EPROBE_DEFER: unable to get macro clock
+[   16.206159] va_macro 6d44000.codec: Driver va_macro requests probe deferral
+[   16.206209] platform 6d44000.codec: Added to deferred list
+[   16.206245] devices_kset: Moving 6ae0000.codec to end of list
+[   16.206253] devices_kset: Moving 6d30000.soundwire to end of list
+[   16.206262] platform 6ae0000.codec: Retrying from deferred list
+[   16.208281] platform 6ae0000.codec: bus: 'platform': __driver_probe_device: matched device with driver tx_macro
+[   16.208300] platform 6ae0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   16.208312] platform 6ae0000.codec: Added to deferred list
+[   16.208324] devices_kset: Moving sound to end of list
+[   16.208334] platform sound: Retrying from deferred list
+[   16.210817] platform sound: bus: 'platform': __driver_probe_device: matched device with driver snd-sc8280xp
+[   16.210850] platform sound: error -EPROBE_DEFER: wait for supplier /soc@0/pinctrl@6e80000/lpi_i2s3-active-state
+[   16.210869] platform sound: Added to deferred list
+[   17.885309] qcom-apm gprsvc:service:2:1: CMD timeout for [1001021] opcode
+[   17.885361] device: '6800000.remoteproc:glink-edge:gpr:service@1:dais': device_add
+[   17.885497] device: 'platform:15000000.iommu--platform:6800000.remoteproc:glink-edge:gpr:service@1:dais': device_add
+[   17.885555] devices_kset: Moving 6800000.remoteproc:glink-edge:gpr:service@1:dais to end of list
+[   17.885558] platform 6800000.remoteproc:glink-edge:gpr:service@1:dais: Linked as a consumer to 15000000.iommu
+[   17.885576] platform 6800000.remoteproc:glink-edge:gpr:service@1:dais: Adding to iommu group 26
+[   17.885782] /soc@0/remoteproc@6800000/glink-edge/gpr/service@1/dais Dropping the fwnode link to /soc@0/iommu@15000000
+[   17.887276] device: '6800000.remoteproc:glink-edge:gpr:service@1:bedais': device_add
+[   17.887819] qcom-apm gprsvc:service:2:1: driver: 'qcom-apm': driver_bound: bound to device
+[   17.887840] devices_kset: Moving 6aa0000.codec to end of list
+[   17.887847] platform 6aa0000.codec: Retrying from deferred list
+[   17.887852] qcom-apm gprsvc:service:2:1: bus: 'aprbus': really_probe: bound device to driver qcom-apm
+[   17.887872] Extended deferred probe timeout by 10 secs
+[   17.888181] platform 6aa0000.codec: bus: 'platform': __driver_probe_device: matched device with driver wsa_macro
+[   17.888189] platform 6aa0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   17.888193] platform 6aa0000.codec: Added to deferred list
+[   17.888197] devices_kset: Moving 6ac0000.codec to end of list
+[   17.888199] devices_kset: Moving 6ad0000.soundwire to end of list
+[   17.888201] platform 6ac0000.codec: Retrying from deferred list
+[   17.888478] platform 6ac0000.codec: bus: 'platform': __driver_probe_device: matched device with driver rx_macro
+[   17.888484] platform 6ac0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   17.888486] platform 6ac0000.codec: Added to deferred list
+[   17.888488] devices_kset: Moving 6ad0000.soundwire to end of list
+[   17.888490] platform 6ad0000.soundwire: Retrying from deferred list
+[   17.888790] platform 6ad0000.soundwire: bus: 'platform': __driver_probe_device: matched device with driver qcom-soundwire
+[   17.888798] platform 6ad0000.soundwire: error -EPROBE_DEFER: wait for supplier /soc@0/pinctrl@6e80000/rx-swr-active-state
+[   17.888802] platform 6ad0000.soundwire: Added to deferred list
+[   17.888804] devices_kset: Moving 6d30000.soundwire to end of list
+[   17.888806] platform 6d30000.soundwire: Retrying from deferred list
+[   17.889095] platform 6d30000.soundwire: bus: 'platform': __driver_probe_device: matched device with driver qcom-soundwire
+[   17.889103] platform 6d30000.soundwire: error -EPROBE_DEFER: wait for supplier /soc@0/pinctrl@6e80000/tx-swr-active-state
+[   17.889106] platform 6d30000.soundwire: Added to deferred list
+[   17.889109] devices_kset: Moving 6e80000.pinctrl to end of list
+[   17.889111] platform 6e80000.pinctrl: Retrying from deferred list
+[   17.889432] platform 6e80000.pinctrl: bus: 'platform': __driver_probe_device: matched device with driver qcom-sm8550-lpass-lpi-pinctrl
+[   17.889435] platform 6e80000.pinctrl: bus: 'platform': really_probe: probing driver qcom-sm8550-lpass-lpi-pinctrl with device
+[   17.889515] qcom-sm8550-lpass-lpi-pinctrl 6e80000.pinctrl: Driver qcom-sm8550-lpass-lpi-pinctrl requests probe deferral
+[   17.889541] platform 6e80000.pinctrl: Added to deferred list
+[   17.889553] devices_kset: Moving 6d44000.codec to end of list
+[   17.889555] devices_kset: Moving 6ae0000.codec to end of list
+[   17.889556] devices_kset: Moving 6d30000.soundwire to end of list
+[   17.889557] devices_kset: Moving 6ac0000.codec to end of list
+[   17.889558] devices_kset: Moving 6ad0000.soundwire to end of list
+[   17.889559] devices_kset: Moving 6aa0000.codec to end of list
+[   17.889560] platform 6d44000.codec: Retrying from deferred list
+[   17.889875] platform 6d44000.codec: bus: 'platform': __driver_probe_device: matched device with driver va_macro
+[   17.889879] platform 6d44000.codec: bus: 'platform': really_probe: probing driver va_macro with device
+[   17.889900] va_macro 6d44000.codec: error -EPROBE_DEFER: unable to get macro clock
+[   17.889902] va_macro 6d44000.codec: Driver va_macro requests probe deferral
+[   17.889908] platform 6d44000.codec: Added to deferred list
+[   17.889914] devices_kset: Moving 6ae0000.codec to end of list
+[   17.889915] devices_kset: Moving 6d30000.soundwire to end of list
+[   17.889917] platform 6ae0000.codec: Retrying from deferred list
+[   17.890205] platform 6ae0000.codec: bus: 'platform': __driver_probe_device: matched device with driver tx_macro
+[   17.890209] platform 6ae0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   17.890211] platform 6ae0000.codec: Added to deferred list
+[   17.890213] devices_kset: Moving sound to end of list
+[   17.890216] platform sound: Retrying from deferred list
+[   17.890646] platform sound: bus: 'platform': __driver_probe_device: matched device with driver snd-sc8280xp
+[   17.890652] platform sound: error -EPROBE_DEFER: wait for supplier /soc@0/pinctrl@6e80000/lpi_i2s3-active-state
+[   17.890655] platform sound: Added to deferred list
+[   17.894070] aprbus gprsvc:service:2:2: bus: 'aprbus': __driver_probe_device: matched device with driver qcom-prm
+[   17.894077] aprbus gprsvc:service:2:2: bus: 'aprbus': really_probe: probing driver qcom-prm with device
+[   17.894457] device: '6800000.remoteproc:glink-edge:gpr:service@2:clock-controller': device_add
+[   17.895196] qcom-prm gprsvc:service:2:2: driver: 'qcom-prm': driver_bound: bound to device
+[   17.895220] qcom-prm gprsvc:service:2:2: bus: 'aprbus': really_probe: bound device to driver qcom-prm
+[   17.895234] Extended deferred probe timeout by 10 secs
+[   17.895963] devices_kset: Moving 6aa0000.codec to end of list
+[   17.895969] platform 6aa0000.codec: Retrying from deferred list
+[   17.896464] platform 6aa0000.codec: bus: 'platform': __driver_probe_device: matched device with driver wsa_macro
+[   17.896470] platform 6aa0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   17.896473] platform 6aa0000.codec: Added to deferred list
+[   17.896476] devices_kset: Moving 6ac0000.codec to end of list
+[   17.896478] devices_kset: Moving 6ad0000.soundwire to end of list
+[   17.896479] platform 6ac0000.codec: Retrying from deferred list
+[   17.896919] platform 6ac0000.codec: bus: 'platform': __driver_probe_device: matched device with driver rx_macro
+[   17.896924] platform 6ac0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   17.896926] platform 6ac0000.codec: Added to deferred list
+[   17.896928] devices_kset: Moving 6ad0000.soundwire to end of list
+[   17.896930] platform 6ad0000.soundwire: Retrying from deferred list
+[   17.897406] platform 6ad0000.soundwire: bus: 'platform': __driver_probe_device: matched device with driver qcom-soundwire
+[   17.897414] platform 6ad0000.soundwire: error -EPROBE_DEFER: wait for supplier /soc@0/pinctrl@6e80000/rx-swr-active-state
+[   17.897418] platform 6ad0000.soundwire: Added to deferred list
+[   17.897420] devices_kset: Moving 6d30000.soundwire to end of list
+[   17.897421] platform 6d30000.soundwire: Retrying from deferred list
+[   17.897826] platform 6d30000.soundwire: bus: 'platform': __driver_probe_device: matched device with driver qcom-soundwire
+[   17.897831] platform 6d30000.soundwire: error -EPROBE_DEFER: wait for supplier /soc@0/pinctrl@6e80000/tx-swr-active-state
+[   17.897834] platform 6d30000.soundwire: Added to deferred list
+[   17.897836] devices_kset: Moving 6e80000.pinctrl to end of list
+[   17.897838] platform 6e80000.pinctrl: Retrying from deferred list
+[   17.898257] platform 6e80000.pinctrl: bus: 'platform': __driver_probe_device: matched device with driver qcom-sm8550-lpass-lpi-pinctrl
+[   17.898259] platform 6e80000.pinctrl: bus: 'platform': really_probe: probing driver qcom-sm8550-lpass-lpi-pinctrl with device
+[   17.898310] qcom-sm8550-lpass-lpi-pinctrl 6e80000.pinctrl: Driver qcom-sm8550-lpass-lpi-pinctrl requests probe deferral
+[   17.898508] platform 6e80000.pinctrl: Added to deferred list
+[   17.898524] devices_kset: Moving 6d44000.codec to end of list
+[   17.898525] devices_kset: Moving 6ae0000.codec to end of list
+[   17.898526] devices_kset: Moving 6d30000.soundwire to end of list
+[   17.898528] devices_kset: Moving 6ac0000.codec to end of list
+[   17.898529] devices_kset: Moving 6ad0000.soundwire to end of list
+[   17.898530] devices_kset: Moving 6aa0000.codec to end of list
+[   17.898531] platform 6d44000.codec: Retrying from deferred list
+[   17.898956] platform 6d44000.codec: bus: 'platform': __driver_probe_device: matched device with driver va_macro
+[   17.898959] platform 6d44000.codec: bus: 'platform': really_probe: probing driver va_macro with device
+[   17.899395] va_macro 6d44000.codec: error -EPROBE_DEFER: unable to get macro clock
+[   17.899399] va_macro 6d44000.codec: Driver va_macro requests probe deferral
+[   17.899795] platform 6d44000.codec: Added to deferred list
+[   17.899807] devices_kset: Moving 6ae0000.codec to end of list
+[   17.899808] devices_kset: Moving 6d30000.soundwire to end of list
+[   17.899810] platform 6ae0000.codec: Retrying from deferred list
+[   17.900238] platform 6ae0000.codec: bus: 'platform': __driver_probe_device: matched device with driver tx_macro
+[   17.900243] platform 6ae0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   17.900246] platform 6ae0000.codec: Added to deferred list
+[   17.900248] devices_kset: Moving sound to end of list
+[   17.900250] platform sound: Retrying from deferred list
+[   17.900776] platform sound: bus: 'platform': __driver_probe_device: matched device with driver snd-sc8280xp
+[   17.900784] platform sound: error -EPROBE_DEFER: wait for supplier /soc@0/pinctrl@6e80000/lpi_i2s3-active-state
+[   17.900787] platform sound: Added to deferred list
+[   17.903569] platform 6800000.remoteproc:glink-edge:gpr:service@1:dais: bus: 'platform': __driver_probe_device: matched device with driver q6apm-dai
+[   17.903577] platform 6800000.remoteproc:glink-edge:gpr:service@1:dais: bus: 'platform': really_probe: probing driver q6apm-dai with device
+[   17.903614] q6apm-dai 6800000.remoteproc:glink-edge:gpr:service@1:dais: driver: 'q6apm-dai': driver_bound: bound to device
+[   17.903648] q6apm-dai 6800000.remoteproc:glink-edge:gpr:service@1:dais: bus: 'platform': really_probe: bound device to driver q6apm-dai
+[   17.903729] devices_kset: Moving 6aa0000.codec to end of list
+[   17.903735] platform 6aa0000.codec: Retrying from deferred list
+[   17.904150] platform 6aa0000.codec: bus: 'platform': __driver_probe_device: matched device with driver wsa_macro
+[   17.904155] platform 6aa0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   17.904158] platform 6aa0000.codec: Added to deferred list
+[   17.904160] devices_kset: Moving 6ac0000.codec to end of list
+[   17.904162] devices_kset: Moving 6ad0000.soundwire to end of list
+[   17.904163] platform 6ac0000.codec: Retrying from deferred list
+[   17.904559] platform 6ac0000.codec: bus: 'platform': __driver_probe_device: matched device with driver rx_macro
+[   17.904562] platform 6ac0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   17.904564] platform 6ac0000.codec: Added to deferred list
+[   17.904566] devices_kset: Moving 6ad0000.soundwire to end of list
+[   17.904568] platform 6ad0000.soundwire: Retrying from deferred list
+[   17.904987] platform 6ad0000.soundwire: bus: 'platform': __driver_probe_device: matched device with driver qcom-soundwire
+[   17.904995] platform 6ad0000.soundwire: error -EPROBE_DEFER: wait for supplier /soc@0/pinctrl@6e80000/rx-swr-active-state
+[   17.904999] platform 6ad0000.soundwire: Added to deferred list
+[   17.905001] devices_kset: Moving 6d30000.soundwire to end of list
+[   17.905003] platform 6d30000.soundwire: Retrying from deferred list
+[   17.905260] Extended deferred probe timeout by 10 secs
+[   17.905440] platform 6d30000.soundwire: bus: 'platform': __driver_probe_device: matched device with driver qcom-soundwire
+[   17.905447] platform 6d30000.soundwire: error -EPROBE_DEFER: wait for supplier /soc@0/pinctrl@6e80000/tx-swr-active-state
+[   17.905450] platform 6d30000.soundwire: Added to deferred list
+[   17.905452] devices_kset: Moving 6e80000.pinctrl to end of list
+[   17.905454] platform 6e80000.pinctrl: Retrying from deferred list
+[   17.906414] platform 6e80000.pinctrl: bus: 'platform': __driver_probe_device: matched device with driver qcom-sm8550-lpass-lpi-pinctrl
+[   17.906419] platform 6e80000.pinctrl: bus: 'platform': really_probe: probing driver qcom-sm8550-lpass-lpi-pinctrl with device
+[   17.906466] qcom-sm8550-lpass-lpi-pinctrl 6e80000.pinctrl: Driver qcom-sm8550-lpass-lpi-pinctrl requests probe deferral
+[   17.906585] platform 6e80000.pinctrl: Added to deferred list
+[   17.906610] devices_kset: Moving 6d44000.codec to end of list
+[   17.906612] devices_kset: Moving 6ae0000.codec to end of list
+[   17.906613] devices_kset: Moving 6d30000.soundwire to end of list
+[   17.906615] devices_kset: Moving 6ac0000.codec to end of list
+[   17.906616] devices_kset: Moving 6ad0000.soundwire to end of list
+[   17.906617] devices_kset: Moving 6aa0000.codec to end of list
+[   17.906619] platform 6d44000.codec: Retrying from deferred list
+[   17.906941] platform 6d44000.codec: bus: 'platform': __driver_probe_device: matched device with driver va_macro
+[   17.906945] platform 6d44000.codec: bus: 'platform': really_probe: probing driver va_macro with device
+[   17.906972] va_macro 6d44000.codec: error -EPROBE_DEFER: unable to get macro clock
+[   17.906975] va_macro 6d44000.codec: Driver va_macro requests probe deferral
+[   17.906981] platform 6d44000.codec: Added to deferred list
+[   17.906987] devices_kset: Moving 6ae0000.codec to end of list
+[   17.906988] devices_kset: Moving 6d30000.soundwire to end of list
+[   17.906990] platform 6ae0000.codec: Retrying from deferred list
+[   17.907280] platform 6ae0000.codec: bus: 'platform': __driver_probe_device: matched device with driver tx_macro
+[   17.907284] platform 6ae0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   17.907287] platform 6ae0000.codec: Added to deferred list
+[   17.907289] devices_kset: Moving sound to end of list
+[   17.907290] platform sound: Retrying from deferred list
+[   17.907705] platform sound: bus: 'platform': __driver_probe_device: matched device with driver snd-sc8280xp
+[   17.907712] platform sound: error -EPROBE_DEFER: wait for supplier /soc@0/pinctrl@6e80000/lpi_i2s3-active-state
+[   17.907716] platform sound: Added to deferred list
+[   17.914499] platform 6800000.remoteproc:glink-edge:gpr:service@2:clock-controller: bus: 'platform': __driver_probe_device: matched device with driver q6prm-lpass-clock
+[   17.914507] platform 6800000.remoteproc:glink-edge:gpr:service@2:clock-controller: bus: 'platform': really_probe: probing driver q6prm-lpass-clock with device
+[   17.915122] q6prm-lpass-clock 6800000.remoteproc:glink-edge:gpr:service@2:clock-controller: driver: 'q6prm-lpass-clock': driver_bound: bound to device
+[   17.915146] devices_kset: Moving 6aa0000.codec to end of list
+[   17.915151] platform 6aa0000.codec: Retrying from deferred list
+[   17.915161] q6prm-lpass-clock 6800000.remoteproc:glink-edge:gpr:service@2:clock-controller: bus: 'platform': really_probe: bound device to driver q6prm-lpass-clock
+[   17.915178] Extended deferred probe timeout by 10 secs
+[   17.915564] platform 6aa0000.codec: bus: 'platform': __driver_probe_device: matched device with driver wsa_macro
+[   17.915570] platform 6aa0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   17.915574] platform 6aa0000.codec: Added to deferred list
+[   17.915577] devices_kset: Moving 6ac0000.codec to end of list
+[   17.915579] devices_kset: Moving 6ad0000.soundwire to end of list
+[   17.915581] platform 6ac0000.codec: Retrying from deferred list
+[   17.915969] platform 6ac0000.codec: bus: 'platform': __driver_probe_device: matched device with driver rx_macro
+[   17.915973] platform 6ac0000.codec: error -EPROBE_DEFER: supplier 6d44000.codec not ready
+[   17.915975] platform 6ac0000.codec: Added to deferred list
+[   17.915977] devices_kset: Moving 6ad0000.soundwire to end of list
+[   17.915978] platform 6ad0000.soundwire: Retrying from deferred list
+[   17.916413] platform 6ad0000.soundwire: bus: 'platform': __driver_probe_device: matched device with driver qcom-soundwire
+[   17.916421] platform 6ad0000.soundwire: error -EPROBE_DEFER: wait for supplier /soc@0/pinctrl@6e80000/rx-swr-active-state
+[   17.916425] platform 6ad0000.soundwire: Added to deferred list
+[   17.916427] devices_kset: Moving 6d30000.soundwire to end of list
+[   17.916428] platform 6d30000.soundwire: Retrying from deferred list
+[   17.916816] platform 6d30000.soundwire: bus: 'platform': __driver_probe_device: matched device with driver qcom-soundwire
+[   17.916822] platform 6d30000.soundwire: error -EPROBE_DEFER: wait for supplier /soc@0/pinctrl@6e80000/tx-swr-active-state
+[   17.916825] platform 6d30000.soundwire: Added to deferred list
+[   17.916826] devices_kset: Moving 6e80000.pinctrl to end of list
+[   17.916828] platform 6e80000.pinctrl: Retrying from deferred list
+[   17.917238] platform 6e80000.pinctrl: bus: 'platform': __driver_probe_device: matched device with driver qcom-sm8550-lpass-lpi-pinctrl
+[   17.917241] platform 6e80000.pinctrl: bus: 'platform': really_probe: probing driver qcom-sm8550-lpass-lpi-pinctrl with device
+[   17.918554] device: 'gpiochip5': device_add
+[   17.918685] qcom-sm8550-lpass-lpi-pinctrl 6e80000.pinctrl: driver: 'qcom-sm8550-lpass-lpi-pinctrl': driver_bound: bound to device
+[   17.918690] /soc@0/soundwire@6d30000 Linked as a fwnode consumer to /soc@0/pinctrl@6e80000
+[   17.918697] /soc@0/soundwire@6d30000 Dropping the fwnode link to /soc@0/pinctrl@6e80000/tx-swr-active-state
+[   17.918707] /soc@0/soundwire@6ad0000 Linked as a fwnode consumer to /soc@0/pinctrl@6e80000
+[   17.918712] /soc@0/soundwire@6ad0000 Dropping the fwnode link to /soc@0/pinctrl@6e80000/rx-swr-active-state
+[   17.918726] /sound Linked as a fwnode consumer to /soc@0/pinctrl@6e80000
+[   17.918729] /sound Dropping the fwnode link to /soc@0/pinctrl@6e80000/lpi_i2s3-active-state
+[   17.918738] device: 'platform:6e80000.pinctrl--platform:sound': device_add
+[   17.918769] devices_kset: Moving sound to end of list
+[   17.918771] platform sound: Linked as a consumer to 6e80000.pinctrl
+[   17.918773] /sound Dropping the fwnode link to /soc@0/pinctrl@6e80000
+[   17.918777] device: 'platform:6e80000.pinctrl--platform:6ad0000.soundwire': device_add
+[   17.918820] devices_kset: Moving 6ad0000.soundwire to end of list
+[   17.918821] platform 6ad0000.soundwire: Linked as a consumer to 6e80000.pinctrl
+[   17.918823] /soc@0/soundwire@6ad0000 Dropping the fwnode link to /soc@0/pinctrl@6e80000
+[   17.918828] device: 'platform:6e80000.pinctrl--platform:6d30000.soundwire': device_add
+[   17.919295] devices_kset: Moving 6d30000.soundwire to end of list
+[   17.919300] platform 6d30000.soundwire: Linked as a consumer to 6e80000.pinctrl
+[   17.919302] /soc@0/soundwire@6d30000 Dropping the fwnode link to /soc@0/pinctrl@6e80000
+[   17.919336] qcom-sm8550-lpass-lpi-pinctrl 6e80000.pinctrl: bus: 'platform': really_probe: bound device to driver qcom-sm8550-lpass-lpi-pinctrl
+[   17.919341] devices_kset: Moving 6d44000.codec to end of list
+[   17.919342] devices_kset: Moving 6ae0000.codec to end of list
+[   17.919344] devices_kset: Moving 6d30000.soundwire to end of list
+[   17.919345] devices_kset: Moving 6ac0000.codec to end of list
+[   17.919346] devices_kset: Moving 6ad0000.soundwire to end of list
+[   17.919347] devices_kset: Moving 6aa0000.codec to end of list
+[   17.919349] platform 6d44000.codec: Retrying from deferred list
+[   17.919790] platform 6d44000.codec: bus: 'platform': __driver_probe_device: matched device with driver va_macro
+[   17.919793] platform 6d44000.codec: bus: 'platform': really_probe: probing driver va_macro with device
+[   17.920195] va_macro 6d44000.codec: driver: 'va_macro': driver_bound: bound to device
+[   17.920220] va_macro 6d44000.codec: bus: 'platform': really_probe: bound device to driver va_macro
+[   17.920224] devices_kset: Moving 6ae0000.codec to end of list
+[   17.920225] devices_kset: Moving 6d30000.soundwire to end of list
+[   17.920226] platform 6ae0000.codec: Retrying from deferred list
+[   17.920647] platform 6ae0000.codec: bus: 'platform': __driver_probe_device: matched device with driver tx_macro
+[   17.920650] platform 6ae0000.codec: bus: 'platform': really_probe: probing driver tx_macro with device
+[   17.920959] tx_macro 6ae0000.codec: driver: 'tx_macro': driver_bound: bound to device
+[   17.920985] tx_macro 6ae0000.codec: bus: 'platform': really_probe: bound device to driver tx_macro
+[   17.920988] devices_kset: Moving sound to end of list
+[   17.920990] platform sound: Retrying from deferred list
+[   17.921754] platform sound: bus: 'platform': __driver_probe_device: matched device with driver snd-sc8280xp
+[   17.921759] platform sound: bus: 'platform': really_probe: probing driver snd-sc8280xp with device
+[   17.921884] snd-sc8280xp sound: error -EPROBE_DEFER: Primary MI2S Playback: error getting cpu dai name
+[   17.921886] snd-sc8280xp sound: Driver snd-sc8280xp requests probe deferral
+[   17.921910] platform sound: Added to deferred list
+[   17.921914] devices_kset: Moving 6aa0000.codec to end of list
+[   17.921916] platform 6aa0000.codec: Retrying from deferred list
+[   17.922316] platform 6aa0000.codec: bus: 'platform': __driver_probe_device: matched device with driver wsa_macro
+[   17.922319] platform 6aa0000.codec: bus: 'platform': really_probe: probing driver wsa_macro with device
+[   17.922352] wsa_macro 6aa0000.codec: Driver needs fixing: Unsorted reg_defaults, sorting the copy
+[   17.922572] wsa_macro 6aa0000.codec: driver: 'wsa_macro': driver_bound: bound to device
+[   17.922606] wsa_macro 6aa0000.codec: bus: 'platform': really_probe: bound device to driver wsa_macro
+[   17.922610] devices_kset: Moving 6ac0000.codec to end of list
+[   17.922612] devices_kset: Moving 6ad0000.soundwire to end of list
+[   17.922613] platform 6ac0000.codec: Retrying from deferred list
+[   17.923015] platform 6ac0000.codec: bus: 'platform': __driver_probe_device: matched device with driver rx_macro
+[   17.923019] platform 6ac0000.codec: bus: 'platform': really_probe: probing driver rx_macro with device
+[   17.923055] rx_macro 6ac0000.codec: Driver needs fixing: Unsorted reg_defaults, sorting the copy
+[   17.923306] rx_macro 6ac0000.codec: driver: 'rx_macro': driver_bound: bound to device
+[   17.923335] rx_macro 6ac0000.codec: bus: 'platform': really_probe: bound device to driver rx_macro
+[   17.923342] devices_kset: Moving 6ad0000.soundwire to end of list
+[   17.923343] platform 6ad0000.soundwire: Retrying from deferred list
+[   17.923793] platform 6ad0000.soundwire: bus: 'platform': __driver_probe_device: matched device with driver qcom-soundwire
+[   17.923797] platform 6ad0000.soundwire: bus: 'platform': really_probe: probing driver qcom-soundwire with device
+[   17.924156] device: 'sdw-master-2-0': device_add
+[   17.924233] device: 'sdw:2:0:0217:010d:00:4': device_add
+[   17.924258] soundwire sdw:2:0:0217:010d:00:4: bus: 'soundwire': __driver_probe_device: matched device with driver wcd9380-codec
+[   17.924261] soundwire sdw:2:0:0217:010d:00:4: bus: 'soundwire': really_probe: probing driver wcd9380-codec with device
+[   17.924365] wcd9380-codec sdw:2:0:0217:010d:00:4: driver: 'wcd9380-codec': driver_bound: bound to device
+[   17.924380] wcd9380-codec sdw:2:0:0217:010d:00:4: bus: 'soundwire': really_probe: bound device to driver wcd9380-codec
+[   17.925527] qcom-soundwire 6ad0000.soundwire: driver: 'qcom-soundwire': driver_bound: bound to device
+[   17.925558] qcom-soundwire 6ad0000.soundwire: bus: 'platform': really_probe: bound device to driver qcom-soundwire
+[   17.925562] devices_kset: Moving 6d30000.soundwire to end of list
+[   17.925564] platform 6d30000.soundwire: Retrying from deferred list
+[   17.925804] device: 'sdw:2:0:0217:f002:00:0': device_add
+[   17.925987] platform 6d30000.soundwire: bus: 'platform': __driver_probe_device: matched device with driver qcom-soundwire
+[   17.925991] platform 6d30000.soundwire: bus: 'platform': really_probe: probing driver qcom-soundwire with device
+[   17.926238] qcom-soundwire 6d30000.soundwire: dout-ports (0) mismatch with controller (1)
+[   17.926558] device: 'sdw-master-3-0': device_add
+[   17.926606] device: 'sdw:3:0:0217:010d:00:3': device_add
+[   17.926628] soundwire sdw:3:0:0217:010d:00:3: bus: 'soundwire': __driver_probe_device: matched device with driver wcd9380-codec
+[   17.926631] soundwire sdw:3:0:0217:010d:00:3: bus: 'soundwire': really_probe: probing driver wcd9380-codec with device
+[   17.926695] wcd938x_codec audio-codec: bound sdw:2:0:0217:010d:00:4 (ops wcd_sdw_component_ops [snd_soc_wcd_common])
+[   17.926703] wcd938x_codec audio-codec: bound sdw:3:0:0217:010d:00:3 (ops wcd_sdw_component_ops [snd_soc_wcd_common])
+[   17.926710] device: 'soundwire:sdw:3:0:0217:010d:00:3--soundwire:sdw:2:0:0217:010d:00:4': device_add
+[   17.926742] devices_kset: Moving sdw:2:0:0217:010d:00:4 to end of list
+[   17.926744] wcd9380-codec sdw:2:0:0217:010d:00:4: Linked as a consumer to sdw:3:0:0217:010d:00:3
+[   17.926747] device: 'soundwire:sdw:3:0:0217:010d:00:3--platform:audio-codec': device_add
+[   17.926766] devices_kset: Moving audio-codec to end of list
+[   17.926768] wcd938x_codec audio-codec: Linked as a consumer to sdw:3:0:0217:010d:00:3
+[   17.926770] device: 'soundwire:sdw:2:0:0217:010d:00:4--platform:audio-codec': device_add
+[   17.926811] devices_kset: Moving audio-codec to end of list
+[   17.926813] wcd938x_codec audio-codec: Linked as a consumer to sdw:2:0:0217:010d:00:4
+[   17.926952] wcd9380-codec sdw:3:0:0217:010d:00:3: driver: 'wcd9380-codec': driver_bound: bound to device
+[   17.926967] wcd9380-codec sdw:3:0:0217:010d:00:3: bus: 'soundwire': really_probe: bound device to driver wcd9380-codec
+[   17.928426] qcom-soundwire 6d30000.soundwire: driver: 'qcom-soundwire': driver_bound: bound to device
+[   17.928466] qcom-soundwire 6d30000.soundwire: bus: 'platform': really_probe: bound device to driver qcom-soundwire
+[   17.928471] devices_kset: Moving sound to end of list
+[   17.928473] platform sound: Retrying from deferred list
+[   17.929061] platform sound: bus: 'platform': __driver_probe_device: matched device with driver snd-sc8280xp
+[   17.929065] platform sound: bus: 'platform': really_probe: probing driver snd-sc8280xp with device
+[   17.929147] snd-sc8280xp sound: error -EPROBE_DEFER: Primary MI2S Playback: error getting cpu dai name
+[   17.929150] snd-sc8280xp sound: Driver snd-sc8280xp requests probe deferral
+[   17.929162] platform sound: Added to deferred list
+[   17.931237] platform 6800000.remoteproc:glink-edge:gpr:service@1:bedais: bus: 'platform': __driver_probe_device: matched device with driver q6apm-lpass-dais
+[   17.931262] platform 6800000.remoteproc:glink-edge:gpr:service@1:bedais: bus: 'platform': really_probe: probing driver q6apm-lpass-dais with device
+[   17.931727] q6apm-lpass-dais 6800000.remoteproc:glink-edge:gpr:service@1:bedais: driver: 'q6apm-lpass-dais': driver_bound: bound to device
+[   17.931800] devices_kset: Moving sound to end of list
+[   17.931806] platform sound: Retrying from deferred list
+[   17.931927] q6apm-lpass-dais 6800000.remoteproc:glink-edge:gpr:service@1:bedais: bus: 'platform': really_probe: bound device to driver q6apm-lpass-dais
+[   17.932031] Extended deferred probe timeout by 10 secs
+[   17.932888] platform sound: bus: 'platform': __driver_probe_device: matched device with driver snd-sc8280xp
+[   17.932893] platform sound: bus: 'platform': really_probe: probing driver snd-sc8280xp with device
+[   17.933139] device: 'Primary MI2S Playback': device_add
+[   17.933159] device: 'WCD Playback': device_add
+[   17.933178] device: 'WCD Capture': device_add
+[   17.933192] device: 'DP0 Playback': device_add
+[   17.980780] kauditd_printk_skb: 42 callbacks suppressed
+[   17.980786] audit: type=1131 audit(1794387845.303:119): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=bootc-generic-growpart comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   18.087677] audit: type=1130 audit(1794387845.411:120): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=user@1000 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   18.115630] audit: type=1105 audit(1794387845.439:121): pid=3194 uid=0 auid=1000 ses=1 msg='op=PAM:session_open grantors=pam_selinux,pam_loginuid,pam_selinux,pam_keyinit,pam_namespace,pam_keyinit,pam_limits,pam_systemd,pam_unix,pam_umask,pam_lastlog2 acct="armada" exe="/usr/libexec/sddm-helper" hostname=armada addr=? terminal=/dev/tty1 res=success'
+[   18.137210] audit: type=1131 audit(1794387845.459:122): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=run-p962-i28873 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   18.184191] audit: type=1131 audit(1794387845.507:123): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=run-p939-i16490 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   18.217720] audit: type=1131 audit(1794387845.543:124): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=run-p935-i20596 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   18.588143] audit: type=1131 audit(1794387845.911:125): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=systemd-rfkill comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   19.105730] device: 'MultiMedia1 Playback': device_add
+[   19.105946] device: 'MultiMedia2 Playback': device_add
+[   19.106008] device: 'MultiMedia3 Capture': device_add
+[   19.106471] snd-sc8280xp sound: ASoC: Parent card not yet available, widget card binding deferred
+[   19.127285] device: 'platform:6800000.remoteproc:glink-edge:gpr:service@1:dais--platform:sound': device_add
+[   19.127684] devices_kset: Moving sound to end of list
+[   19.127724] devices_kset: Moving Primary MI2S Playback to end of list
+[   19.127730] devices_kset: Moving WCD Playback to end of list
+[   19.127735] devices_kset: Moving WCD Capture to end of list
+[   19.127741] devices_kset: Moving DP0 Playback to end of list
+[   19.127745] devices_kset: Moving MultiMedia1 Playback to end of list
+[   19.127750] devices_kset: Moving MultiMedia2 Playback to end of list
+[   19.127754] devices_kset: Moving MultiMedia3 Capture to end of list
+[   19.127761] snd-sc8280xp sound: Linked as a consumer to 6800000.remoteproc:glink-edge:gpr:service@1:dais
+[   19.127775] device: 'platform:hdmi-audio-codec.1.auto--platform:sound': device_add
+[   19.127856] devices_kset: Moving sound to end of list
+[   19.127862] devices_kset: Moving Primary MI2S Playback to end of list
+[   19.127866] devices_kset: Moving WCD Playback to end of list
+[   19.127870] devices_kset: Moving WCD Capture to end of list
+[   19.127874] devices_kset: Moving DP0 Playback to end of list
+[   19.127879] devices_kset: Moving MultiMedia1 Playback to end of list
+[   19.127910] devices_kset: Moving MultiMedia2 Playback to end of list
+[   19.127915] devices_kset: Moving MultiMedia3 Capture to end of list
+[   19.127920] snd-sc8280xp sound: Linked as a consumer to hdmi-audio-codec.1.auto
+[   19.127932] device: 'platform:6ae0000.codec--platform:sound': device_add
+[   19.128007] devices_kset: Moving sound to end of list
+[   19.128011] devices_kset: Moving Primary MI2S Playback to end of list
+[   19.128016] devices_kset: Moving WCD Playback to end of list
+[   19.128020] devices_kset: Moving WCD Capture to end of list
+[   19.128024] devices_kset: Moving DP0 Playback to end of list
+[   19.128028] devices_kset: Moving MultiMedia1 Playback to end of list
+[   19.128032] devices_kset: Moving MultiMedia2 Playback to end of list
+[   19.128036] devices_kset: Moving MultiMedia3 Capture to end of list
+[   19.128041] snd-sc8280xp sound: Linked as a consumer to 6ae0000.codec
+[   19.128052] device: 'platform:6d30000.soundwire--platform:sound': device_add
+[   19.128195] devices_kset: Moving sound to end of list
+[   19.128201] devices_kset: Moving Primary MI2S Playback to end of list
+[   19.128206] devices_kset: Moving WCD Playback to end of list
+[   19.128210] devices_kset: Moving WCD Capture to end of list
+[   19.128214] devices_kset: Moving DP0 Playback to end of list
+[   19.128218] devices_kset: Moving MultiMedia1 Playback to end of list
+[   19.128223] devices_kset: Moving MultiMedia2 Playback to end of list
+[   19.128227] devices_kset: Moving MultiMedia3 Capture to end of list
+[   19.128232] snd-sc8280xp sound: Linked as a consumer to 6d30000.soundwire
+[   19.128242] device: 'platform:6ac0000.codec--platform:sound': device_add
+[   19.128291] devices_kset: Moving sound to end of list
+[   19.128296] devices_kset: Moving Primary MI2S Playback to end of list
+[   19.128300] devices_kset: Moving WCD Playback to end of list
+[   19.128304] devices_kset: Moving WCD Capture to end of list
+[   19.128309] devices_kset: Moving DP0 Playback to end of list
+[   19.128313] devices_kset: Moving MultiMedia1 Playback to end of list
+[   19.128317] devices_kset: Moving MultiMedia2 Playback to end of list
+[   19.128321] devices_kset: Moving MultiMedia3 Capture to end of list
+[   19.128326] snd-sc8280xp sound: Linked as a consumer to 6ac0000.codec
+[   19.128336] device: 'platform:6ad0000.soundwire--platform:sound': device_add
+[   19.128381] devices_kset: Moving sound to end of list
+[   19.128385] devices_kset: Moving Primary MI2S Playback to end of list
+[   19.128390] devices_kset: Moving WCD Playback to end of list
+[   19.128393] devices_kset: Moving WCD Capture to end of list
+[   19.128397] devices_kset: Moving DP0 Playback to end of list
+[   19.128401] devices_kset: Moving MultiMedia1 Playback to end of list
+[   19.128405] devices_kset: Moving MultiMedia2 Playback to end of list
+[   19.128409] devices_kset: Moving MultiMedia3 Capture to end of list
+[   19.128415] snd-sc8280xp sound: Linked as a consumer to 6ad0000.soundwire
+[   19.128424] device: 'platform:audio-codec--platform:sound': device_add
+[   19.128522] devices_kset: Moving sound to end of list
+[   19.128527] devices_kset: Moving Primary MI2S Playback to end of list
+[   19.128531] devices_kset: Moving WCD Playback to end of list
+[   19.128535] devices_kset: Moving WCD Capture to end of list
+[   19.128539] devices_kset: Moving DP0 Playback to end of list
+[   19.128543] devices_kset: Moving MultiMedia1 Playback to end of list
+[   19.128547] devices_kset: Moving MultiMedia2 Playback to end of list
+[   19.128551] devices_kset: Moving MultiMedia3 Capture to end of list
+[   19.128555] snd-sc8280xp sound: Linked as a consumer to audio-codec
+[   19.128566] device: 'aprbus:gprsvc:service:2:1--platform:sound': device_add
+[   19.128695] devices_kset: Moving sound to end of list
+[   19.128700] devices_kset: Moving Primary MI2S Playback to end of list
+[   19.128704] devices_kset: Moving WCD Playback to end of list
+[   19.128708] devices_kset: Moving WCD Capture to end of list
+[   19.128713] devices_kset: Moving DP0 Playback to end of list
+[   19.128717] devices_kset: Moving MultiMedia1 Playback to end of list
+[   19.128721] devices_kset: Moving MultiMedia2 Playback to end of list
+[   19.128725] devices_kset: Moving MultiMedia3 Capture to end of list
+[   19.128730] snd-sc8280xp sound: Linked as a consumer to gprsvc:service:2:1
+[   19.128741] device: 'i2c:0-0035--platform:sound': device_add
+[   19.128791] devices_kset: Moving sound to end of list
+[   19.128796] devices_kset: Moving Primary MI2S Playback to end of list
+[   19.128800] devices_kset: Moving WCD Playback to end of list
+[   19.128804] devices_kset: Moving WCD Capture to end of list
+[   19.128808] devices_kset: Moving DP0 Playback to end of list
+[   19.128811] devices_kset: Moving MultiMedia1 Playback to end of list
+[   19.128816] devices_kset: Moving MultiMedia2 Playback to end of list
+[   19.128820] devices_kset: Moving MultiMedia3 Capture to end of list
+[   19.128825] snd-sc8280xp sound: Linked as a consumer to 0-0035
+[   19.128835] device: 'i2c:0-0034--platform:sound': device_add
+[   19.128917] devices_kset: Moving sound to end of list
+[   19.128922] devices_kset: Moving Primary MI2S Playback to end of list
+[   19.128927] devices_kset: Moving WCD Playback to end of list
+[   19.128931] devices_kset: Moving WCD Capture to end of list
+[   19.128935] devices_kset: Moving DP0 Playback to end of list
+[   19.128939] devices_kset: Moving MultiMedia1 Playback to end of list
+[   19.128943] devices_kset: Moving MultiMedia2 Playback to end of list
+[   19.128948] devices_kset: Moving MultiMedia3 Capture to end of list
+[   19.128952] snd-sc8280xp sound: Linked as a consumer to 0-0034
+[   19.128962] device: 'platform:6800000.remoteproc:glink-edge:gpr:service@1:bedais--platform:sound': device_add
+[   19.129008] devices_kset: Moving sound to end of list
+[   19.129013] devices_kset: Moving Primary MI2S Playback to end of list
+[   19.129017] devices_kset: Moving WCD Playback to end of list
+[   19.129022] devices_kset: Moving WCD Capture to end of list
+[   19.129025] devices_kset: Moving DP0 Playback to end of list
+[   19.129030] devices_kset: Moving MultiMedia1 Playback to end of list
+[   19.129034] devices_kset: Moving MultiMedia2 Playback to end of list
+[   19.129038] devices_kset: Moving MultiMedia3 Capture to end of list
+[   19.129042] snd-sc8280xp sound: Linked as a consumer to 6800000.remoteproc:glink-edge:gpr:service@1:bedais
+[   19.129592] ALSA: Control name 'stream0.vol_ctrl0 MultiMedia1 Playback Volume' truncated to 'stream0.vol_ctrl0 MultiMedia1 Playback Volu'
+[   19.129651] ALSA: Control name 'stream1.vol_ctrl1 MultiMedia2 Playback Volume' truncated to 'stream1.vol_ctrl1 MultiMedia2 Playback Volu'
+[   19.132090] device: 'card0': device_add
+[   19.132195] device: 'pcmC0D0p': device_add
+[   19.132391] device: 'pcmC0D1p': device_add
+[   19.132514] device: 'pcmC0D2c': device_add
+[   19.132626] device: 'input12': device_add
+[   19.132721] input: AYN-Odin2 Headset Jack as /devices/platform/sound/sound/card0/input12
+[   19.132744] device: 'event7': device_add
+[   19.132846] device: 'input13': device_add
+[   19.132923] input: AYN-Odin2 DP0 Jack as /devices/platform/sound/sound/card0/input13
+[   19.132933] device: 'event8': device_add
+[   19.133039] device: 'controlC0': device_add
+[   19.133268] snd-sc8280xp sound: driver: 'snd-sc8280xp': driver_bound: bound to device
+[   19.133379] snd-sc8280xp sound: bus: 'platform': really_probe: bound device to driver snd-sc8280xp
+[   19.362117] audit: type=1130 audit(1794387846.687:126): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=alsa-state comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   23.025126] wlp1s0: authenticate with a6:39:b3:70:cb:2d (local address=00:03:7f:44:70:00)
+[   23.025147] wlp1s0: send auth to a6:39:b3:70:cb:2d (try 1/3)
+[   23.031749] wlp1s0: authenticated
+[   23.033503] wlp1s0: associate with a6:39:b3:70:cb:2d (try 1/3)
+[   23.037367] wlp1s0: RX AssocResp from a6:39:b3:70:cb:2d (capab=0x11 status=0 aid=3)
+[   23.057716] wlp1s0: associated
+[   23.138313] audit: type=1334 audit(1794387850.459:127): prog-id=63 op=LOAD
+[   23.138331] audit: type=1300 audit(1794387850.459:127): arch=c00000b7 syscall=280 success=yes exit=25 a0=5 a1=fffffef9ee38 a2=a8 a3=7f items=0 ppid=1 pid=1311 auid=4294967295 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=(none) ses=4294967295 comm="NetworkManager" exe="/usr/bin/NetworkManager" key=(null)
+[   23.138343] audit: type=1327 audit(1794387850.459:127): proctitle=2F7573722F62696E2F4E6574776F726B4D616E61676572002D2D6E6F2D6461656D6F6E
+[   23.356064] audit: type=1334 audit(1794387850.679:128): prog-id=64 op=LOAD
+[   23.356093] audit: type=1300 audit(1794387850.679:128): arch=c00000b7 syscall=280 success=yes exit=25 a0=5 a1=fffffef9ee38 a2=a8 a3=7f items=0 ppid=1 pid=1311 auid=4294967295 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=(none) ses=4294967295 comm="NetworkManager" exe="/usr/bin/NetworkManager" key=(null)
+[   23.356106] audit: type=1327 audit(1794387850.679:128): proctitle=2F7573722F62696E2F4E6574776F726B4D616E61676572002D2D6E6F2D6461656D6F6E
+[   23.381762] audit: type=1334 audit(1794387850.707:129): prog-id=63 op=UNLOAD
+[   24.511482] soundwire sdw-master-2-0: clock stop deprepare wait failed:-110
+[   24.526949] fb0: Framebuffer is not in virtual address space.
+[   24.686429] audit: type=1131 audit(1794387852.011:130): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=armada-splash-early comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   26.276238] Bluetooth: RFCOMM socket layer initialized
+[   26.276253] Bluetooth: RFCOMM ver 1.11
+[   26.626516] device: '0:81': device_add
+[   28.126242] gcc-sm8550 100000.clock-controller: sync_state() pending due to 3d6a000.gmu
+[   28.126283] gpu_cc-sm8550 3d90000.clock-controller: sync_state() pending due to 3d6a000.gmu
+[   28.683412] systemd-journald[725]: Time jumped backwards, rotating.
+[   31.702427] hap-swr-slave-reg: disabling
+[   33.340202] audit: type=1131 audit(1794387852.690:131): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=armada-boot-hotkeys comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   33.921570] audit: type=1131 audit(1794387853.270:132): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=armada-splash-stall comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   35.986131] audit: type=1130 audit(1794387855.334:133): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=rpm-ostreed comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   38.337221] audit: type=1103 audit(1794387857.686:134): pid=9114 uid=0 auid=4294967295 ses=4294967295 msg='op=PAM:setcred grantors=pam_rootok acct="armada" exe="/usr/bin/runuser" hostname=? addr=? terminal=? res=success'
+[   38.350095] audit: type=1105 audit(1794387857.698:135): pid=9114 uid=0 auid=4294967295 ses=4294967295 msg='op=PAM:session_open grantors=pam_keyinit,pam_limits,pam_unix acct="armada" exe="/usr/bin/runuser" hostname=? addr=? terminal=? res=success'
+[   38.370104] audit: type=1106 audit(1794387857.718:136): pid=9114 uid=0 auid=4294967295 ses=4294967295 msg='op=PAM:session_close grantors=pam_keyinit,pam_limits,pam_unix acct="armada" exe="/usr/bin/runuser" hostname=? addr=? terminal=? res=success'
+[   38.370154] audit: type=1104 audit(1794387857.718:137): pid=9114 uid=0 auid=4294967295 ses=4294967295 msg='op=PAM:setcred grantors=pam_rootok acct="armada" exe="/usr/bin/runuser" hostname=? addr=? terminal=? res=success'
+[   40.514131] device: 'input14': device_add
+[   40.514326] input: Microsoft X-Box 360 pad 0 as /devices/virtual/input/input14
+[   40.514347] device: 'event9': device_add
+[   40.514530] device: 'js1': device_add
+[   43.287894] audit: type=1131 audit(1794387862.638:138): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=NetworkManager-dispatcher comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   48.158505] audit: type=1131 audit(1794387867.505:139): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=systemd-hostnamed comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   48.223061] audit: type=1334 audit(1794387867.573:140): prog-id=57 op=UNLOAD
+[   54.107695] audit: type=1131 audit(1794387873.457:141): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=boot-deferred-sampler comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   57.449211] device: '0:81': device_unregister
+[   57.449422] device: '0:81': device_create_release
+[   57.698531] audit: type=1106 audit(1794387877.045:142): pid=3194 uid=0 auid=1000 ses=1 msg='op=PAM:session_close grantors=pam_selinux,pam_loginuid,pam_selinux,pam_keyinit,pam_namespace,pam_keyinit,pam_limits,pam_systemd,pam_unix,pam_umask,pam_lastlog2 acct="armada" exe="/usr/libexec/sddm-helper" hostname=armada addr=? terminal=/dev/tty1 res=success'
+[   57.699287] audit: type=1104 audit(1794387877.045:143): pid=3194 uid=0 auid=1000 ses=1 msg='op=PAM:setcred grantors=pam_permit acct="armada" exe="/usr/libexec/sddm-helper" hostname=armada addr=? terminal=/dev/tty1 res=success'
+[   57.772579] audit: type=1100 audit(1794387877.121:144): pid=12958 uid=0 auid=4294967295 ses=4294967295 msg='op=PAM:authentication grantors=pam_permit acct="armada" exe="/usr/libexec/sddm-helper" hostname=? addr=? terminal=? res=success'
+[   57.774762] audit: type=1101 audit(1794387877.121:145): pid=12958 uid=0 auid=4294967295 ses=4294967295 msg='op=PAM:accounting grantors=pam_unix acct="armada" exe="/usr/libexec/sddm-helper" hostname=? addr=? terminal=? res=success'
+[   57.776086] audit: type=1103 audit(1794387877.125:146): pid=12958 uid=0 auid=4294967295 ses=4294967295 msg='op=PAM:setcred grantors=pam_permit acct="armada" exe="/usr/libexec/sddm-helper" hostname=? addr=? terminal=? res=success'
+[   57.776157] audit: type=1006 audit(1794387877.125:147): pid=12958 uid=0 old-auid=4294967295 auid=1000 tty=(none) old-ses=4294967295 ses=3 res=1
+[   57.776167] audit: type=1300 audit(1794387877.125:147): arch=c00000b7 syscall=64 success=yes exit=4 a0=c a1=ffffcf7fa210 a2=4 a3=0 items=0 ppid=3100 pid=12958 auid=1000 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=(none) ses=3 comm="sddm-helper" exe="/usr/libexec/sddm-helper" key=(null)
+[   57.776171] audit: type=1327 audit(1794387877.125:147): proctitle=2F7573722F6C6962657865632F7364646D2D68656C706572002D2D736F636B6574002F746D702F7364646D2D617574682D39663731623364652D666263372D346165642D383636332D386431333231656530363631002D2D69640032002D2D7374617274002F7573722F6C6962657865632F61726D6164612F61726D6164612D
+[   57.885340] audit: type=1105 audit(1794387877.233:148): pid=12958 uid=0 auid=1000 ses=3 msg='op=PAM:session_open grantors=pam_selinux,pam_loginuid,pam_selinux,pam_keyinit,pam_namespace,pam_keyinit,pam_limits,pam_systemd,pam_unix,pam_umask,pam_lastlog2 acct="armada" exe="/usr/libexec/sddm-helper" hostname=armada addr=? terminal=/dev/tty1 res=success'
+[   57.947483] device: 'lo': device_add
+[   59.509344] kauditd_printk_skb: 6 callbacks suppressed
+[   59.509359] audit: type=1334 audit(1794387878.857:155): prog-id=68 op=LOAD
+[   59.510442] audit: type=1334 audit(1794387878.857:156): prog-id=69 op=LOAD
+[   59.511478] audit: type=1334 audit(1794387878.861:157): prog-id=70 op=LOAD
+[   59.562637] device: 'lo': device_add
+[   59.660720] audit: type=1130 audit(1794387879.009:158): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=systemd-localed comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   67.405971] audit: type=1130 audit(1794387886.753:159): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.discretegpuhelper@0 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   67.582925] audit: type=1130 audit(1794387886.929:160): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.chargethresholdhelper@0 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   67.714109] audit: type=1130 audit(1794387887.061:161): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.backlighthelper@0 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   68.497879] device: '0:84': device_add
+[   78.010784] audit: type=1131 audit(1794387897.356:162): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.discretegpuhelper@0 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   78.011425] audit: type=1131 audit(1794387897.356:163): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.chargethresholdhelper@0 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   79.014320] audit: type=1131 audit(1794387898.360:164): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.backlighthelper@0 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   88.053517] audit: type=1131 audit(1794387907.400:165): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=systemd-hostnamed comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   88.100663] audit: type=1334 audit(1794387907.448:166): prog-id=65 op=UNLOAD
+[   89.673831] audit: type=1131 audit(1794387909.020:167): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=systemd-localed comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   89.764827] audit: type=1334 audit(1794387909.112:168): prog-id=70 op=UNLOAD
+[   89.764866] audit: type=1334 audit(1794387909.112:169): prog-id=69 op=UNLOAD
+[   89.764878] audit: type=1334 audit(1794387909.112:170): prog-id=68 op=UNLOAD
+[  100.019233] audit: type=1131 audit(1794387919.364:171): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=rpm-ostreed comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  135.118066] audit: type=1130 audit(1794387954.462:172): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.backlighthelper@1 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  146.029013] audit: type=1131 audit(1794387965.373:173): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.backlighthelper@1 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  255.128487] audit: type=1130 audit(1794388074.468:174): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.backlighthelper@2 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  267.029407] audit: type=1131 audit(1794388086.368:175): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.backlighthelper@2 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  457.647230] device: 'port0-partner': device_unregister
+[  457.648511] xhci-hcd xhci-hcd.2.auto: remove, state 4
+[  457.648558] usb usb2: USB disconnect, device number 1
+[  457.648586] device: 'ep_81': device_unregister
+[  457.649401] device: 'usb2-port1': device_unregister
+[  457.650012] xHCI xhci_drop_endpoint called for root hub
+[  457.650036] xHCI xhci_check_bandwidth called for root hub
+[  457.650062] device: 'ep_00': device_unregister
+[  457.655460] xhci-hcd xhci-hcd.2.auto: USB bus 2 deregistered
+[  457.655530] xhci-hcd xhci-hcd.2.auto: remove, state 4
+[  457.655560] usb usb1: USB disconnect, device number 1
+[  457.655583] device: 'ep_81': device_unregister
+[  457.656603] device: 'usb1-port1': device_unregister
+[  457.657301] xHCI xhci_drop_endpoint called for root hub
+[  457.657328] xHCI xhci_check_bandwidth called for root hub
+[  457.657353] device: 'ep_00': device_unregister
+[  457.659776] xhci-hcd xhci-hcd.2.auto: // Halt the HC
+[  457.659816] xhci-hcd xhci-hcd.2.auto: // Reset the HC
+[  457.662182] xhci-hcd xhci-hcd.2.auto: Wait for controller to be ready for doorbell rings
+[  457.662461] xhci-hcd xhci-hcd.2.auto: // Disabling event ring interrupts
+[  457.662495] xhci-hcd xhci-hcd.2.auto: cleaning up memory
+[  457.662585] xhci-hcd xhci-hcd.2.auto: Freed interrupters
+[  457.662609] xhci-hcd xhci-hcd.2.auto: Freed command ring
+[  457.662728] xhci-hcd xhci-hcd.2.auto: Freed segment pool
+[  457.662754] xhci-hcd xhci-hcd.2.auto: Freed device context pool
+[  457.662773] xhci-hcd xhci-hcd.2.auto: Freed small stream array pool
+[  457.662794] xhci-hcd xhci-hcd.2.auto: Freed xhci port bw array pool
+[  457.662813] xhci-hcd xhci-hcd.2.auto: Freed medium stream array pool
+[  457.663337] xhci-hcd xhci-hcd.2.auto: xhci_stop completed - status = 1
+[  457.663443] xhci-hcd xhci-hcd.2.auto: USB bus 1 deregistered
+[  457.690465] device: 'a600000.usb': device_add
+[  457.690844] device: 'gadget.0': device_add
+[  463.305839] dwc3-qcom a600000.usb: port-1 HS-PHY not in L2
+[  464.173574] device: 'port0-partner': device_add
+[  464.174553] device: 'a600000.usb': device_unregister
+[  464.180867] device: 'xhci-hcd.2.auto': device_add
+[  464.182863] platform xhci-hcd.2.auto: bus: 'platform': __driver_probe_device: matched device with driver xhci-hcd
+[  464.182914] platform xhci-hcd.2.auto: bus: 'platform': really_probe: probing driver xhci-hcd with device
+[  464.183706] xhci-hcd xhci-hcd.2.auto: xHCI Host Controller
+[  464.183775] xhci-hcd xhci-hcd.2.auto: new USB bus registered, assigned bus number 1
+[  464.183836] xhci-hcd xhci-hcd.2.auto: // Halt the HC
+[  464.183863] xhci-hcd xhci-hcd.2.auto: Resetting HCD
+[  464.183884] xhci-hcd xhci-hcd.2.auto: // Reset the HC
+[  464.186258] xhci-hcd xhci-hcd.2.auto: Wait for controller to be ready for doorbell rings
+[  464.186287] xhci-hcd xhci-hcd.2.auto: Reset complete
+[  464.186306] xhci-hcd xhci-hcd.2.auto: Enabling 64-bit DMA addresses.
+[  464.186330] xhci-hcd xhci-hcd.2.auto: HCD page size set to 4K
+[  464.186351] xhci-hcd xhci-hcd.2.auto: Starting xhci_mem_init
+[  464.186370] xhci-hcd xhci-hcd.2.auto: Allocating internal virtual device array
+[  464.186455] xhci-hcd xhci-hcd.2.auto: Device context base array address = 0x0000000ffffe1000 (DMA), 00000000a06f38c4 (virt)
+[  464.186530] xhci-hcd xhci-hcd.2.auto: Allocated command ring at 00000000d11d630e
+[  464.186553] xhci-hcd xhci-hcd.2.auto: Allocating primary event ring
+[  464.186640] xhci-hcd xhci-hcd.2.auto: Allocating 2 scratchpad buffers
+[  464.186739] xhci-hcd xhci-hcd.2.auto: Ext Cap 000000004c3fd813, port offset = 1, count = 1, revision = 0x2
+[  464.186768] xhci-hcd xhci-hcd.2.auto: xHCI 1.0: support USB2 hardware lpm
+[  464.186797] xhci-hcd xhci-hcd.2.auto: Ext Cap 000000005d00bc8d, port offset = 2, count = 1, revision = 0x3
+[  464.186828] xhci-hcd xhci-hcd.2.auto: PSIV:4 PSIE:3 PLT:0 PFD:1 LP:0 PSIM:5
+[  464.186854] xhci-hcd xhci-hcd.2.auto: PSIV:5 PSIE:3 PLT:0 PFD:1 LP:1 PSIM:10
+[  464.186879] xhci-hcd xhci-hcd.2.auto: Found 1 USB 2.0 ports and 1 USB 3.0 ports.
+[  464.186903] xhci-hcd xhci-hcd.2.auto: Finished xhci_mem_init
+[  464.186923] xhci-hcd xhci-hcd.2.auto: Starting xhci_init
+[  464.186942] xhci-hcd xhci-hcd.2.auto: xHC can handle at most 64 device slots
+[  464.186965] xhci-hcd xhci-hcd.2.auto: Setting Max device slots reg = 0x40
+[  464.186991] xhci-hcd xhci-hcd.2.auto: Setting command ring address to 0xffffe3001
+[  464.187020] xhci-hcd xhci-hcd.2.auto: Doorbell array is located at offset 0x2000 from cap regs base addr
+[  464.187054] xhci-hcd xhci-hcd.2.auto: // Write event ring dequeue pointer, preserving EHB bit
+[  464.187077] xhci-hcd xhci-hcd.2.auto: Finished xhci_init
+[  464.187096] xhci-hcd xhci-hcd.2.auto: hcc params 0x0110ffc5 hci version 0x110 quirks 0x0000808020000810
+[  464.187237] xhci-hcd xhci-hcd.2.auto: irq 194, io mem 0x0a600000
+[  464.187272] xhci-hcd xhci-hcd.2.auto: xhci_run
+[  464.187292] xhci-hcd xhci-hcd.2.auto: ERST deq = 64'hfffffb000
+[  464.187315] xhci-hcd xhci-hcd.2.auto: Finished xhci_run for main hcd
+[  464.187834] xhci-hcd xhci-hcd.2.auto: xHCI Host Controller
+[  464.187876] xhci-hcd xhci-hcd.2.auto: new USB bus registered, assigned bus number 2
+[  464.187913] xhci-hcd xhci-hcd.2.auto: Host supports USB 3.1 Enhanced SuperSpeed
+[  464.187935] xhci-hcd xhci-hcd.2.auto: Enable interrupts
+[  464.187956] xhci-hcd xhci-hcd.2.auto: Enable primary interrupter
+[  464.187979] xhci-hcd xhci-hcd.2.auto: // Turn on HC, cmd = 0x5.
+[  464.190054] device: 'usb1': device_add
+[  464.191714] usb usb1: bus: 'usb': __driver_probe_device: matched device with driver usb
+[  464.191743] usb usb1: bus: 'usb': really_probe: probing driver usb with device
+[  464.191792] xHCI xhci_add_endpoint called for root hub
+[  464.191806] xHCI xhci_check_bandwidth called for root hub
+[  464.191932] device: '1-0:1.0': device_add
+[  464.192132] usb 1-0:1.0: bus: 'usb': __driver_probe_device: matched device with driver hub
+[  464.192155] usb 1-0:1.0: bus: 'usb': really_probe: probing driver hub with device
+[  464.192201] hub 1-0:1.0: USB hub found
+[  464.192312] hub 1-0:1.0: 1 port detected
+[  464.192459] device: 'usb1-port1': device_add
+[  464.192789] xhci-hcd xhci-hcd.2.auto: set port power 1-1 ON, portsc: 0x2a0
+[  464.192896] hub 1-0:1.0: driver: 'hub': driver_bound: bound to device
+[  464.193040] hub 1-0:1.0: bus: 'usb': really_probe: bound device to driver hub
+[  464.193077] device: 'ep_81': device_add
+[  464.193179] usb usb1: driver: 'usb': driver_bound: bound to device
+[  464.193414] usb usb1: bus: 'usb': really_probe: bound device to driver usb
+[  464.193452] device: 'ep_00': device_add
+[  464.194069] device: 'usb2': device_add
+[  464.194619] usb usb2: bus: 'usb': __driver_probe_device: matched device with driver usb
+[  464.194646] usb usb2: bus: 'usb': really_probe: probing driver usb with device
+[  464.194682] xHCI xhci_add_endpoint called for root hub
+[  464.194696] xHCI xhci_check_bandwidth called for root hub
+[  464.194859] device: '2-0:1.0': device_add
+[  464.195145] usb 2-0:1.0: bus: 'usb': __driver_probe_device: matched device with driver hub
+[  464.195169] usb 2-0:1.0: bus: 'usb': really_probe: probing driver hub with device
+[  464.195208] hub 2-0:1.0: USB hub found
+[  464.195312] hub 2-0:1.0: 1 port detected
+[  464.195451] device: 'usb2-port1': device_add
+[  464.196031] xhci-hcd xhci-hcd.2.auto: set port power 2-1 ON, portsc: 0x2b0
+[  464.196216] hub 2-0:1.0: driver: 'hub': driver_bound: bound to device
+[  464.196391] hub 2-0:1.0: bus: 'usb': really_probe: bound device to driver hub
+[  464.196423] device: 'ep_81': device_add
+[  464.196585] usb usb2: driver: 'usb': driver_bound: bound to device
+[  464.196698] usb usb2: bus: 'usb': really_probe: bound device to driver usb
+[  464.196726] device: 'ep_00': device_add
+[  464.196807] xhci-hcd xhci-hcd.2.auto: driver: 'xhci-hcd': driver_bound: bound to device
+[  464.196900] xhci-hcd xhci-hcd.2.auto: bus: 'platform': really_probe: bound device to driver xhci-hcd
+[  464.200976] xhci-hcd xhci-hcd.2.auto: Port change event, 2-1, id 2, portsc: 0x2802a0
+[  464.201002] xhci-hcd xhci-hcd.2.auto: handle_port_status: starting usb2 port polling.
+[  464.213423] xhci-hcd xhci-hcd.2.auto: Get port status 1-1 read: 0x2a0, return 0x100
+[  464.213710] xhci-hcd xhci-hcd.2.auto: xhci_hub_status_data: stopping usb1 port polling
+[  464.228282] xhci-hcd xhci-hcd.2.auto: Port change event, 1-1, id 1, portsc: 0xa0206e1
+[  464.228305] xhci-hcd xhci-hcd.2.auto: resume root hub
+[  464.228344] xhci-hcd xhci-hcd.2.auto: handle_port_status: starting usb1 port polling.
+[  464.228500] xhci-hcd xhci-hcd.2.auto: Get port status 1-1 read: 0x206e1, return 0x10101
+[  464.228666] xhci-hcd xhci-hcd.2.auto: clear port1 connect change, portsc: 0x6e1
+[  464.297848] xhci-hcd xhci-hcd.2.auto: Get port status 2-1 read: 0x2802a0, return 0x3002a0
+[  464.297957] xhci-hcd xhci-hcd.2.auto: clear port1 reset change, portsc: 0x802a0
+[  464.298020] xhci-hcd xhci-hcd.2.auto: clear port1 warm(BH) reset change, portsc: 0x2a0
+[  464.329478] xhci-hcd xhci-hcd.2.auto: Get port status 1-1 read: 0x6e1, return 0x101
+[  464.329619] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  464.329801] xhci-hcd xhci-hcd.2.auto: Slot 1 output ctx = 0x0000000fffff5000 (dma)
+[  464.329842] xhci-hcd xhci-hcd.2.auto: Slot 1 input ctx = 0x0000000fffff4000 (dma)
+[  464.329883] xhci-hcd xhci-hcd.2.auto: Set slot id 1 dcbaa entry 000000007ea44018 to 0xfffff5000
+[  464.330005] xhci-hcd xhci-hcd.2.auto: set port reset, actual port 1-1 status  = 0x6f1
+[  464.333347] xhci-hcd xhci-hcd.2.auto: xhci_hub_status_data: stopping usb1 port polling
+[  464.380333] xhci-hcd xhci-hcd.2.auto: Port change event, 1-1, id 1, portsc: 0x200e03
+[  464.380364] xhci-hcd xhci-hcd.2.auto: handle_port_status: starting usb1 port polling.
+[  464.393446] xhci-hcd xhci-hcd.2.auto: Get port status 1-1 read: 0x200e03, return 0x100503
+[  464.393551] xhci-hcd xhci-hcd.2.auto: clear port1 reset change, portsc: 0xe03
+[  464.401486] xhci-hcd xhci-hcd.2.auto: set port remote wake mask, actual port 2-1 status  = 0xe0002a0
+[  464.425366] xhci-hcd xhci-hcd.2.auto: xhci_hub_status_data: stopping usb1 port polling
+[  464.442101] xhci-hcd xhci-hcd.2.auto: Get port status 2-1 read: 0x2a0, return 0x2a0
+[  464.453443] usb 1-1: new high-speed USB device number 2 using xhci-hcd
+[  464.453498] xhci-hcd xhci-hcd.2.auto: Slot ID 1: HW portnum 0, hcd portnum 0
+[  464.453522] xhci-hcd xhci-hcd.2.auto: udev->tt = 0000000000000000
+[  464.453541] xhci-hcd xhci-hcd.2.auto: udev->ttport = 0x0
+[  464.453569] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  464.453716] xhci-hcd xhci-hcd.2.auto: Successful setup context command
+[  464.453744] xhci-hcd xhci-hcd.2.auto: Op regs DCBAA ptr = 0x00000ffffe1000
+[  464.453766] xhci-hcd xhci-hcd.2.auto: Slot ID 1 dcbaa entry @000000007ea44018 = 0x00000fffff5000
+[  464.453791] xhci-hcd xhci-hcd.2.auto: Output Context DMA address = 0xfffff5000
+[  464.453811] xhci-hcd xhci-hcd.2.auto: Internal device address = 0
+[  464.454197] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[  464.454407] xhci-hcd xhci-hcd.2.auto: set port reset, actual port 1-1 status  = 0xef1
+[  464.504728] xhci-hcd xhci-hcd.2.auto: Port change event, 1-1, id 1, portsc: 0x200e03
+[  464.504778] xhci-hcd xhci-hcd.2.auto: handle_port_status: starting usb1 port polling.
+[  464.517439] xhci-hcd xhci-hcd.2.auto: Get port status 1-1 read: 0x200e03, return 0x100503
+[  464.517568] xhci-hcd xhci-hcd.2.auto: clear port1 reset change, portsc: 0xe03
+[  464.573623] xhci-hcd xhci-hcd.2.auto: Resetting device with slot ID 1
+[  464.573679] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  464.573764] xhci-hcd xhci-hcd.2.auto: Completed reset device command.
+[  464.573855] xhci-hcd xhci-hcd.2.auto: Can't reset device (slot ID 1) in default state
+[  464.573884] xhci-hcd xhci-hcd.2.auto: Not freeing device rings.
+[  464.573933] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  464.574069] xhci-hcd xhci-hcd.2.auto: Successful setup address command
+[  464.574096] xhci-hcd xhci-hcd.2.auto: Op regs DCBAA ptr = 0x00000ffffe1000
+[  464.574118] xhci-hcd xhci-hcd.2.auto: Slot ID 1 dcbaa entry @000000007ea44018 = 0x00000fffff5000
+[  464.574143] xhci-hcd xhci-hcd.2.auto: Output Context DMA address = 0xfffff5000
+[  464.574163] xhci-hcd xhci-hcd.2.auto: Internal device address = 1
+[  464.591833] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[  464.593197] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[  464.594518] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[  464.595139] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[  464.595290] device: '1-1': device_add
+[  464.596281] usb 1-1: bus: 'usb': __driver_probe_device: matched device with driver usb
+[  464.596319] usb 1-1: bus: 'usb': really_probe: probing driver usb with device
+[  464.596624] xhci-hcd xhci-hcd.2.auto: add ep 0x1, slot id 1, new drop flags = 0x0, new add flags = 0x4
+[  464.596723] xhci-hcd xhci-hcd.2.auto: add ep 0x82, slot id 1, new drop flags = 0x0, new add flags = 0x24
+[  464.596747] xhci-hcd xhci-hcd.2.auto: xhci_check_bandwidth called for udev 000000001a66f72d
+[  464.596789] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  464.596952] xhci-hcd xhci-hcd.2.auto: Successful Endpoint Configure command
+[  464.597126] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  464.597212] xhci-hcd xhci-hcd.2.auto: Stopped on No-op or Link TRB for slot 1 ep 1
+[  464.597297] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  464.597442] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  464.597508] xhci-hcd xhci-hcd.2.auto: Stopped on No-op or Link TRB for slot 1 ep 4
+[  464.597577] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  464.597836] device: '1-1:1.0': device_add
+[  464.599908] usb 1-1:1.0: bus: 'usb': __driver_probe_device: matched device with driver usb-storage
+[  464.599944] usb 1-1:1.0: bus: 'usb': really_probe: probing driver usb-storage with device
+[  464.600052] usb-storage 1-1:1.0: USB Mass Storage device detected
+[  464.600594] device: 'scsi_tmf_1': device_add
+[  464.601249] scsi host1: usb-storage 1-1:1.0
+[  464.601467] device: 'host1': device_add
+[  464.601828] device: 'host1': device_add
+[  464.602404] usb-storage 1-1:1.0: driver: 'usb-storage': driver_bound: bound to device
+[  464.602556] usb-storage 1-1:1.0: bus: 'usb': really_probe: bound device to driver usb-storage
+[  464.602600] device: 'ep_01': device_add
+[  464.602754] device: 'ep_82': device_add
+[  464.602905] usb 1-1: driver: 'usb': driver_bound: bound to device
+[  464.603026] usb 1-1: bus: 'usb': really_probe: bound device to driver usb
+[  464.603078] device: 'ep_00': device_add
+[  464.645430] xhci-hcd xhci-hcd.2.auto: set port remote wake mask, actual port 2-1 status  = 0xe0002a0
+[  464.669405] xhci-hcd xhci-hcd.2.auto: xhci_hub_status_data: stopping usb1 port polling
+[  464.685430] xhci-hcd xhci-hcd.2.auto: Get port status 2-1 read: 0x2a0, return 0x2a0
+[  464.689382] xhci-hcd xhci-hcd.2.auto: xhci_hub_status_data: stopping usb2 port polling
+[  464.889388] xhci-hcd xhci-hcd.2.auto: set port remote wake mask, actual port 2-1 status  = 0xe0002a0
+[  464.889452] xhci-hcd xhci-hcd.2.auto: xhci_hub_status_data: stopping usb2 port polling
+[  465.610865] scsi 1:0:0:0: Direct-Access     VendorCo ProductCode      2.00 PQ: 0 ANSI: 4
+[  465.610930] device: 'target1:0:0': device_add
+[  465.611311] device: '1:0:0:0': device_add
+[  465.611664] scsi 1:0:0:0: bus: 'scsi': __driver_probe_device: matched device with driver ufs_device_wlun
+[  465.611698] scsi 1:0:0:0: bus: 'scsi': really_probe: probing driver ufs_device_wlun with device
+[  465.611852] ufs_device_wlun 1:0:0:0: probe with driver ufs_device_wlun rejects match -19
+[  465.611923] scsi 1:0:0:0: scheduling asynchronous probe
+[  465.611982] device: '1:0:0:0': device_add
+[  465.612444] device: '1:0:0:0': device_add
+[  465.612582] scsi 1:0:0:0: bus: 'scsi': __driver_probe_device: matched device with driver sd
+[  465.612605] scsi 1:0:0:0: bus: 'scsi': really_probe: probing driver sd with device
+[  465.612739] device: '1:0:0:0': device_add
+[  465.615621] sd 1:0:0:0: [sdg] 122880000 512-byte logical blocks: (62.9 GB/58.6 GiB)
+[  465.615810] xhci-hcd xhci-hcd.2.auto: Giveback URB 00000000a78d499f, len = 4, expected = 192, status = 0
+[  465.616024] sd 1:0:0:0: [sdg] Write Protect is off
+[  465.616035] sd 1:0:0:0: [sdg] Mode Sense: 03 00 00 00
+[  465.616200] xhci-hcd xhci-hcd.2.auto: Giveback URB 00000000a78d499f, len = 4, expected = 192, status = 0
+[  465.616469] sd 1:0:0:0: [sdg] No Caching mode page found
+[  465.616476] sd 1:0:0:0: [sdg] Assuming drive cache: write through
+[  465.616500] device: 'sdg': device_add
+[  465.637673] device: '8:96': device_add
+[  465.639060] xhci-hcd xhci-hcd.2.auto: Giveback URB 00000000a78d499f, len = 4, expected = 192, status = 0
+[  465.640334] xhci-hcd xhci-hcd.2.auto: Giveback URB 00000000a78d499f, len = 4, expected = 192, status = 0
+[  465.670931]  sdg: sdg1 sdg2 sdg3
+[  465.670957] device: 'sdg1': device_add
+[  465.671195] device: 'sdg2': device_add
+[  465.671354] device: 'sdg3': device_add
+[  465.671762] sd 1:0:0:0: [sdg] Attached SCSI removable disk
+[  465.671773] sd 1:0:0:0: driver: 'sd': driver_bound: bound to device
+[  465.671818] sd 1:0:0:0: bus: 'scsi': really_probe: bound device to driver sd
+[  465.671829] sd 1:0:0:0: async probe completed
+[  539.535405] xhci-hcd xhci-hcd.2.auto: Port change event, 1-1, id 1, portsc: 0x202a0
+[  539.535475] xhci-hcd xhci-hcd.2.auto: handle_port_status: starting usb1 port polling.
+[  539.535678] xhci-hcd xhci-hcd.2.auto: Get port status 1-1 read: 0x202a0, return 0x10100
+[  539.535848] xhci-hcd xhci-hcd.2.auto: clear port1 connect change, portsc: 0x2a0
+[  539.535961] usb 1-1: USB disconnect, device number 2
+[  539.535993] device: 'ep_01': device_unregister
+[  539.536607] device: 'ep_82': device_unregister
+[  539.538065] device: '1:0:0:0': device_unregister
+[  539.553027] device: '8:96': device_unregister
+[  539.553358] device: '8:96': device_create_release
+[  539.568428] xhci-hcd xhci-hcd.2.auto: xhci_hub_status_data: stopping usb1 port polling
+[  539.582006] device: 'port0-partner': device_unregister
+[  539.583069] xhci-hcd xhci-hcd.2.auto: remove, state 4
+[  539.583118] usb usb2: USB disconnect, device number 1
+[  539.583143] device: 'ep_81': device_unregister
+[  539.583758] device: 'usb2-port1': device_unregister
+[  539.584549] xHCI xhci_drop_endpoint called for root hub
+[  539.584573] xHCI xhci_check_bandwidth called for root hub
+[  539.584640] device: 'ep_00': device_unregister
+[  539.586188] xhci-hcd xhci-hcd.2.auto: USB bus 2 deregistered
+[  539.586247] xhci-hcd xhci-hcd.2.auto: remove, state 1
+[  539.586280] usb usb1: USB disconnect, device number 1
+[  539.640514] device: 'host1': device_unregister
+[  539.688417] device: 'scsi_tmf_1': device_unregister
+[  539.688992] xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 000000001a66f72d
+[  539.689053] xhci-hcd xhci-hcd.2.auto: drop ep 0x1, slot id 1, new drop flags = 0x4, new add flags = 0x0
+[  539.689063] xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 000000001a66f72d
+[  539.689100] xhci-hcd xhci-hcd.2.auto: drop ep 0x82, slot id 1, new drop flags = 0x24, new add flags = 0x0
+[  539.689187] device: 'ep_00': device_unregister
+[  539.690273] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  539.690437] device: 'ep_81': device_unregister
+[  539.690778] device: 'usb1-port1': device_unregister
+[  539.690982] xHCI xhci_drop_endpoint called for root hub
+[  539.690990] xHCI xhci_check_bandwidth called for root hub
+[  539.690999] device: 'ep_00': device_unregister
+[  539.691895] xhci-hcd xhci-hcd.2.auto: // Halt the HC
+[  539.691912] xhci-hcd xhci-hcd.2.auto: // Reset the HC
+[  539.694278] xhci-hcd xhci-hcd.2.auto: Wait for controller to be ready for doorbell rings
+[  539.694445] xhci-hcd xhci-hcd.2.auto: // Disabling event ring interrupts
+[  539.694461] xhci-hcd xhci-hcd.2.auto: cleaning up memory
+[  539.694526] xhci-hcd xhci-hcd.2.auto: Freed interrupters
+[  539.694534] xhci-hcd xhci-hcd.2.auto: Freed command ring
+[  539.694634] xhci-hcd xhci-hcd.2.auto: Freed segment pool
+[  539.694668] xhci-hcd xhci-hcd.2.auto: Freed device context pool
+[  539.694675] xhci-hcd xhci-hcd.2.auto: Freed small stream array pool
+[  539.694682] xhci-hcd xhci-hcd.2.auto: Freed xhci port bw array pool
+[  539.694688] xhci-hcd xhci-hcd.2.auto: Freed medium stream array pool
+[  539.694872] xhci-hcd xhci-hcd.2.auto: xhci_stop completed - status = 1
+[  539.694923] xhci-hcd xhci-hcd.2.auto: USB bus 1 deregistered
+[  539.718030] device: 'a600000.usb': device_add
+[  539.718186] device: 'gadget.0': device_add
+[  545.057040] dwc3-qcom a600000.usb: port-1 HS-PHY not in L2
+[  547.277142] device: 'port0-partner': device_add
+[  547.277978] device: 'a600000.usb': device_unregister
+[  547.286616] device: 'xhci-hcd.2.auto': device_add
+[  547.289291] platform xhci-hcd.2.auto: bus: 'platform': __driver_probe_device: matched device with driver xhci-hcd
+[  547.289330] platform xhci-hcd.2.auto: bus: 'platform': really_probe: probing driver xhci-hcd with device
+[  547.290000] xhci-hcd xhci-hcd.2.auto: xHCI Host Controller
+[  547.291604] xhci-hcd xhci-hcd.2.auto: new USB bus registered, assigned bus number 1
+[  547.291667] xhci-hcd xhci-hcd.2.auto: // Halt the HC
+[  547.291695] xhci-hcd xhci-hcd.2.auto: Resetting HCD
+[  547.291715] xhci-hcd xhci-hcd.2.auto: // Reset the HC
+[  547.294091] xhci-hcd xhci-hcd.2.auto: Wait for controller to be ready for doorbell rings
+[  547.294119] xhci-hcd xhci-hcd.2.auto: Reset complete
+[  547.294136] xhci-hcd xhci-hcd.2.auto: Enabling 64-bit DMA addresses.
+[  547.294160] xhci-hcd xhci-hcd.2.auto: HCD page size set to 4K
+[  547.294180] xhci-hcd xhci-hcd.2.auto: Starting xhci_mem_init
+[  547.294200] xhci-hcd xhci-hcd.2.auto: Allocating internal virtual device array
+[  547.294279] xhci-hcd xhci-hcd.2.auto: Device context base array address = 0x0000000ffffec000 (DMA), 0000000053cc4a40 (virt)
+[  547.294349] xhci-hcd xhci-hcd.2.auto: Allocated command ring at 000000009a645b61
+[  547.294371] xhci-hcd xhci-hcd.2.auto: Allocating primary event ring
+[  547.294457] xhci-hcd xhci-hcd.2.auto: Allocating 2 scratchpad buffers
+[  547.294552] xhci-hcd xhci-hcd.2.auto: Ext Cap 0000000027a415d0, port offset = 1, count = 1, revision = 0x2
+[  547.294581] xhci-hcd xhci-hcd.2.auto: xHCI 1.0: support USB2 hardware lpm
+[  547.294607] xhci-hcd xhci-hcd.2.auto: Ext Cap 00000000a470e692, port offset = 2, count = 1, revision = 0x3
+[  547.294637] xhci-hcd xhci-hcd.2.auto: PSIV:4 PSIE:3 PLT:0 PFD:1 LP:0 PSIM:5
+[  547.294663] xhci-hcd xhci-hcd.2.auto: PSIV:5 PSIE:3 PLT:0 PFD:1 LP:1 PSIM:10
+[  547.294688] xhci-hcd xhci-hcd.2.auto: Found 1 USB 2.0 ports and 1 USB 3.0 ports.
+[  547.294711] xhci-hcd xhci-hcd.2.auto: Finished xhci_mem_init
+[  547.294732] xhci-hcd xhci-hcd.2.auto: Starting xhci_init
+[  547.294751] xhci-hcd xhci-hcd.2.auto: xHC can handle at most 64 device slots
+[  547.294911] xhci-hcd xhci-hcd.2.auto: Setting Max device slots reg = 0x40
+[  547.294937] xhci-hcd xhci-hcd.2.auto: Setting command ring address to 0xfffff8001
+[  547.294966] xhci-hcd xhci-hcd.2.auto: Doorbell array is located at offset 0x2000 from cap regs base addr
+[  547.294997] xhci-hcd xhci-hcd.2.auto: // Write event ring dequeue pointer, preserving EHB bit
+[  547.295018] xhci-hcd xhci-hcd.2.auto: Finished xhci_init
+[  547.295037] xhci-hcd xhci-hcd.2.auto: hcc params 0x0110ffc5 hci version 0x110 quirks 0x0000808020000810
+[  547.295161] xhci-hcd xhci-hcd.2.auto: irq 194, io mem 0x0a600000
+[  547.295193] xhci-hcd xhci-hcd.2.auto: xhci_run
+[  547.295214] xhci-hcd xhci-hcd.2.auto: ERST deq = 64'hfffed1000
+[  547.295236] xhci-hcd xhci-hcd.2.auto: Finished xhci_run for main hcd
+[  547.295610] xhci-hcd xhci-hcd.2.auto: xHCI Host Controller
+[  547.295645] xhci-hcd xhci-hcd.2.auto: new USB bus registered, assigned bus number 2
+[  547.295677] xhci-hcd xhci-hcd.2.auto: Host supports USB 3.1 Enhanced SuperSpeed
+[  547.295699] xhci-hcd xhci-hcd.2.auto: Enable interrupts
+[  547.295719] xhci-hcd xhci-hcd.2.auto: Enable primary interrupter
+[  547.295743] xhci-hcd xhci-hcd.2.auto: // Turn on HC, cmd = 0x5.
+[  547.296266] device: 'usb1': device_add
+[  547.298081] usb usb1: bus: 'usb': __driver_probe_device: matched device with driver usb
+[  547.298122] usb usb1: bus: 'usb': really_probe: probing driver usb with device
+[  547.298175] xHCI xhci_add_endpoint called for root hub
+[  547.298193] xHCI xhci_check_bandwidth called for root hub
+[  547.298320] device: '1-0:1.0': device_add
+[  547.298563] usb 1-0:1.0: bus: 'usb': __driver_probe_device: matched device with driver hub
+[  547.298591] usb 1-0:1.0: bus: 'usb': really_probe: probing driver hub with device
+[  547.298644] hub 1-0:1.0: USB hub found
+[  547.298926] hub 1-0:1.0: 1 port detected
+[  547.299134] device: 'usb1-port1': device_add
+[  547.299584] xhci-hcd xhci-hcd.2.auto: set port power 1-1 ON, portsc: 0x2a0
+[  547.299721] hub 1-0:1.0: driver: 'hub': driver_bound: bound to device
+[  547.299904] hub 1-0:1.0: bus: 'usb': really_probe: bound device to driver hub
+[  547.299948] device: 'ep_81': device_add
+[  547.300070] usb usb1: driver: 'usb': driver_bound: bound to device
+[  547.300233] usb usb1: bus: 'usb': really_probe: bound device to driver usb
+[  547.300273] device: 'ep_00': device_add
+[  547.302266] device: 'usb2': device_add
+[  547.303491] usb usb2: bus: 'usb': __driver_probe_device: matched device with driver usb
+[  547.303529] usb usb2: bus: 'usb': really_probe: probing driver usb with device
+[  547.303612] xHCI xhci_add_endpoint called for root hub
+[  547.303630] xHCI xhci_check_bandwidth called for root hub
+[  547.303810] device: '2-0:1.0': device_add
+[  547.304147] usb 2-0:1.0: bus: 'usb': __driver_probe_device: matched device with driver hub
+[  547.304177] usb 2-0:1.0: bus: 'usb': really_probe: probing driver hub with device
+[  547.304225] hub 2-0:1.0: USB hub found
+[  547.304342] hub 2-0:1.0: 1 port detected
+[  547.304499] device: 'usb2-port1': device_add
+[  547.304839] xhci-hcd xhci-hcd.2.auto: set port power 2-1 ON, portsc: 0x2b0
+[  547.304999] hub 2-0:1.0: driver: 'hub': driver_bound: bound to device
+[  547.305189] hub 2-0:1.0: bus: 'usb': really_probe: bound device to driver hub
+[  547.305226] device: 'ep_81': device_add
+[  547.305478] usb usb2: driver: 'usb': driver_bound: bound to device
+[  547.305619] usb usb2: bus: 'usb': really_probe: bound device to driver usb
+[  547.305651] device: 'ep_00': device_add
+[  547.305749] xhci-hcd xhci-hcd.2.auto: driver: 'xhci-hcd': driver_bound: bound to device
+[  547.305872] xhci-hcd xhci-hcd.2.auto: bus: 'platform': really_probe: bound device to driver xhci-hcd
+[  547.308904] xhci-hcd xhci-hcd.2.auto: Port change event, 2-1, id 2, portsc: 0x2802a0
+[  547.308937] xhci-hcd xhci-hcd.2.auto: handle_port_status: starting usb2 port polling.
+[  547.320686] xhci-hcd xhci-hcd.2.auto: Get port status 1-1 read: 0x2a0, return 0x100
+[  547.320790] xhci-hcd xhci-hcd.2.auto: xhci_hub_status_data: stopping usb1 port polling
+[  547.330951] xhci-hcd xhci-hcd.2.auto: Port change event, 1-1, id 1, portsc: 0xa0206e1
+[  547.330977] xhci-hcd xhci-hcd.2.auto: resume root hub
+[  547.331017] xhci-hcd xhci-hcd.2.auto: handle_port_status: starting usb1 port polling.
+[  547.340743] xhci-hcd xhci-hcd.2.auto: Get port status 1-1 read: 0x206e1, return 0x10101
+[  547.340854] xhci-hcd xhci-hcd.2.auto: clear port1 connect change, portsc: 0x6e1
+[  547.408663] xhci-hcd xhci-hcd.2.auto: Get port status 2-1 read: 0x2802a0, return 0x3002a0
+[  547.408710] xhci-hcd xhci-hcd.2.auto: clear port1 reset change, portsc: 0x802a0
+[  547.408782] xhci-hcd xhci-hcd.2.auto: clear port1 warm(BH) reset change, portsc: 0x2a0
+[  547.444909] xhci-hcd xhci-hcd.2.auto: Get port status 1-1 read: 0x6e1, return 0x101
+[  547.445020] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  547.445234] xhci-hcd xhci-hcd.2.auto: Slot 1 output ctx = 0x0000000fffe9b000 (dma)
+[  547.445271] xhci-hcd xhci-hcd.2.auto: Slot 1 input ctx = 0x0000000fffe5f000 (dma)
+[  547.445323] xhci-hcd xhci-hcd.2.auto: Set slot id 1 dcbaa entry 000000007d9fd5ea to 0xfffe9b000
+[  547.445456] xhci-hcd xhci-hcd.2.auto: set port reset, actual port 1-1 status  = 0x6f1
+[  547.448671] xhci-hcd xhci-hcd.2.auto: xhci_hub_status_data: stopping usb1 port polling
+[  547.496501] xhci-hcd xhci-hcd.2.auto: Port change event, 1-1, id 1, portsc: 0x200e03
+[  547.496550] xhci-hcd xhci-hcd.2.auto: handle_port_status: starting usb1 port polling.
+[  547.508800] xhci-hcd xhci-hcd.2.auto: Get port status 1-1 read: 0x200e03, return 0x100503
+[  547.508919] xhci-hcd xhci-hcd.2.auto: clear port1 reset change, portsc: 0xe03
+[  547.512768] xhci-hcd xhci-hcd.2.auto: set port remote wake mask, actual port 2-1 status  = 0xe0002a0
+[  547.549499] xhci-hcd xhci-hcd.2.auto: Get port status 2-1 read: 0x2a0, return 0x2a0
+[  547.564919] usb 1-1: new high-speed USB device number 2 using xhci-hcd
+[  547.564984] xhci-hcd xhci-hcd.2.auto: Slot ID 1: HW portnum 0, hcd portnum 0
+[  547.565011] xhci-hcd xhci-hcd.2.auto: udev->tt = 0000000000000000
+[  547.565032] xhci-hcd xhci-hcd.2.auto: udev->ttport = 0x0
+[  547.565063] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  547.565236] xhci-hcd xhci-hcd.2.auto: Successful setup context command
+[  547.565264] xhci-hcd xhci-hcd.2.auto: Op regs DCBAA ptr = 0x00000ffffec000
+[  547.565322] xhci-hcd xhci-hcd.2.auto: Slot ID 1 dcbaa entry @000000007d9fd5ea = 0x00000fffe9b000
+[  547.565346] xhci-hcd xhci-hcd.2.auto: Output Context DMA address = 0xfffe9b000
+[  547.565365] xhci-hcd xhci-hcd.2.auto: Internal device address = 0
+[  547.565756] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[  547.565916] xhci-hcd xhci-hcd.2.auto: set port reset, actual port 1-1 status  = 0xef1
+[  547.616977] xhci-hcd xhci-hcd.2.auto: Port change event, 1-1, id 1, portsc: 0x200e03
+[  547.617038] xhci-hcd xhci-hcd.2.auto: handle_port_status: starting usb1 port polling.
+[  547.628888] xhci-hcd xhci-hcd.2.auto: Get port status 1-1 read: 0x200e03, return 0x100503
+[  547.629031] xhci-hcd xhci-hcd.2.auto: clear port1 reset change, portsc: 0xe03
+[  547.684867] xhci-hcd xhci-hcd.2.auto: Resetting device with slot ID 1
+[  547.684922] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  547.685005] xhci-hcd xhci-hcd.2.auto: Completed reset device command.
+[  547.685070] xhci-hcd xhci-hcd.2.auto: Can't reset device (slot ID 1) in default state
+[  547.685094] xhci-hcd xhci-hcd.2.auto: Not freeing device rings.
+[  547.685138] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  547.685275] xhci-hcd xhci-hcd.2.auto: Successful setup address command
+[  547.685301] xhci-hcd xhci-hcd.2.auto: Op regs DCBAA ptr = 0x00000ffffec000
+[  547.685322] xhci-hcd xhci-hcd.2.auto: Slot ID 1 dcbaa entry @000000007d9fd5ea = 0x00000fffe9b000
+[  547.685347] xhci-hcd xhci-hcd.2.auto: Output Context DMA address = 0xfffe9b000
+[  547.685367] xhci-hcd xhci-hcd.2.auto: Internal device address = 1
+[  547.701974] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[  547.702419] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[  547.702947] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[  547.703391] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[  547.703505] device: '1-1': device_add
+[  547.704346] usb 1-1: bus: 'usb': __driver_probe_device: matched device with driver usb
+[  547.704383] usb 1-1: bus: 'usb': really_probe: probing driver usb with device
+[  547.704826] xhci-hcd xhci-hcd.2.auto: add ep 0x1, slot id 1, new drop flags = 0x0, new add flags = 0x4
+[  547.704921] xhci-hcd xhci-hcd.2.auto: add ep 0x82, slot id 1, new drop flags = 0x0, new add flags = 0x24
+[  547.704947] xhci-hcd xhci-hcd.2.auto: xhci_check_bandwidth called for udev 00000000c5a9ec67
+[  547.704985] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  547.705157] xhci-hcd xhci-hcd.2.auto: Successful Endpoint Configure command
+[  547.705323] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  547.705398] xhci-hcd xhci-hcd.2.auto: Stopped on No-op or Link TRB for slot 1 ep 1
+[  547.705474] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  547.705596] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  547.705660] xhci-hcd xhci-hcd.2.auto: Stopped on No-op or Link TRB for slot 1 ep 4
+[  547.705720] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  547.705940] device: '1-1:1.0': device_add
+[  547.706450] usb 1-1:1.0: bus: 'usb': __driver_probe_device: matched device with driver usb-storage
+[  547.706482] usb 1-1:1.0: bus: 'usb': really_probe: probing driver usb-storage with device
+[  547.706587] usb-storage 1-1:1.0: USB Mass Storage device detected
+[  547.708430] device: 'scsi_tmf_1': device_add
+[  547.712772] scsi host1: usb-storage 1-1:1.0
+[  547.712907] device: 'host1': device_add
+[  547.713159] device: 'host1': device_add
+[  547.715268] usb-storage 1-1:1.0: driver: 'usb-storage': driver_bound: bound to device
+[  547.715396] usb-storage 1-1:1.0: bus: 'usb': really_probe: bound device to driver usb-storage
+[  547.715439] device: 'ep_01': device_add
+[  547.715564] device: 'ep_82': device_add
+[  547.715841] usb 1-1: driver: 'usb': driver_bound: bound to device
+[  547.715992] usb 1-1: bus: 'usb': really_probe: bound device to driver usb
+[  547.716227] device: 'ep_00': device_add
+[  547.752689] xhci-hcd xhci-hcd.2.auto: xhci_hub_status_data: stopping usb1 port polling
+[  547.752845] xhci-hcd xhci-hcd.2.auto: set port remote wake mask, actual port 2-1 status  = 0xe0002a0
+[  547.788754] xhci-hcd xhci-hcd.2.auto: Get port status 2-1 read: 0x2a0, return 0x2a0
+[  547.996724] xhci-hcd xhci-hcd.2.auto: set port remote wake mask, actual port 2-1 status  = 0xe0002a0
+[  547.996853] xhci-hcd xhci-hcd.2.auto: xhci_hub_status_data: stopping usb2 port polling
+[  548.004643] xhci-hcd xhci-hcd.2.auto: xhci_hub_status_data: stopping usb2 port polling
+[  548.719093] scsi 1:0:0:0: Direct-Access     VendorCo ProductCode      2.00 PQ: 0 ANSI: 4
+[  548.719123] device: 'target1:0:0': device_add
+[  548.719325] device: '1:0:0:0': device_add
+[  548.719472] scsi 1:0:0:0: bus: 'scsi': __driver_probe_device: matched device with driver ufs_device_wlun
+[  548.719488] scsi 1:0:0:0: bus: 'scsi': really_probe: probing driver ufs_device_wlun with device
+[  548.719568] ufs_device_wlun 1:0:0:0: probe with driver ufs_device_wlun rejects match -19
+[  548.719601] scsi 1:0:0:0: scheduling asynchronous probe
+[  548.719625] device: '1:0:0:0': device_add
+[  548.719663] scsi 1:0:0:0: bus: 'scsi': __driver_probe_device: matched device with driver sd
+[  548.719686] scsi 1:0:0:0: bus: 'scsi': really_probe: probing driver sd with device
+[  548.719713] device: '1:0:0:0': device_add
+[  548.719835] device: '1:0:0:0': device_add
+[  548.731169] sd 1:0:0:0: [sdg] 122880000 512-byte logical blocks: (62.9 GB/58.6 GiB)
+[  548.731401] xhci-hcd xhci-hcd.2.auto: Giveback URB 00000000b5adca73, len = 4, expected = 192, status = 0
+[  548.731645] sd 1:0:0:0: [sdg] Write Protect is off
+[  548.731657] sd 1:0:0:0: [sdg] Mode Sense: 03 00 00 00
+[  548.731843] xhci-hcd xhci-hcd.2.auto: Giveback URB 00000000b5adca73, len = 4, expected = 192, status = 0
+[  548.732050] sd 1:0:0:0: [sdg] No Caching mode page found
+[  548.732059] sd 1:0:0:0: [sdg] Assuming drive cache: write through
+[  548.732086] device: 'sdg': device_add
+[  548.748903] device: '8:96': device_add
+[  548.750856] xhci-hcd xhci-hcd.2.auto: Giveback URB 00000000b5adca73, len = 4, expected = 192, status = 0
+[  548.751337] xhci-hcd xhci-hcd.2.auto: Giveback URB 00000000b5adca73, len = 4, expected = 192, status = 0
+[  548.770956]  sdg: sdg1 sdg2 sdg3
+[  548.771003] device: 'sdg1': device_add
+[  548.771272] device: 'sdg2': device_add
+[  548.771384] device: 'sdg3': device_add
+[  548.771658] sd 1:0:0:0: [sdg] Attached SCSI removable disk
+[  548.771670] sd 1:0:0:0: driver: 'sd': driver_bound: bound to device
+[  548.771718] sd 1:0:0:0: bus: 'scsi': really_probe: bound device to driver sd
+[  548.771730] sd 1:0:0:0: async probe completed
+[  902.387335] audit: type=1130 audit(1794388721.698:176): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=systemd-tmpfiles-clean comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  902.387366] audit: type=1131 audit(1794388721.698:177): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=systemd-tmpfiles-clean comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[ 1209.624988] audit: type=1130 audit(1794389028.923:178): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.backlighthelper@3 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[ 1220.059087] audit: type=1131 audit(1794389039.358:179): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.backlighthelper@3 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[ 1222.528893] device: '0:84': device_unregister
+[ 1222.532903] device: '0:84': device_create_release
+[ 1222.748161] audit: type=1106 audit(1794389042.046:180): pid=12958 uid=0 auid=1000 ses=3 msg='op=PAM:session_close grantors=pam_selinux,pam_loginuid,pam_selinux,pam_keyinit,pam_namespace,pam_keyinit,pam_limits,pam_systemd,pam_unix,pam_umask,pam_lastlog2 acct="armada" exe="/usr/libexec/sddm-helper" hostname=armada addr=? terminal=/dev/tty1 res=success'
+[ 1222.748685] audit: type=1104 audit(1794389042.046:181): pid=12958 uid=0 auid=1000 ses=3 msg='op=PAM:setcred grantors=pam_permit acct="armada" exe="/usr/libexec/sddm-helper" hostname=armada addr=? terminal=/dev/tty1 res=success'
+[ 1222.771832] audit: type=1131 audit(1794389042.070:182): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=systemd-udev-load-credentials comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[ 1222.781683] audit: type=1131 audit(1794389042.078:183): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=avahi-daemon comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[ 1222.782957] audit: type=1131 audit(1794389042.082:184): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=chronyd comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[ 1222.785814] audit: type=1131 audit(1794389042.082:185): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=rtkit-daemon comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[ 1222.787858] audit: type=1131 audit(1794389042.086:186): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=seatd comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[ 1222.791135] audit: type=1131 audit(1794389042.090:187): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=accounts-daemon comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[ 1222.792274] audit: type=1131 audit(1794389042.090:188): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=bluetooth comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'

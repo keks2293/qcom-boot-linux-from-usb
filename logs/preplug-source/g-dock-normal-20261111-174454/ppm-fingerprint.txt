@@ -1,0 +1,11 @@
+          <idle>-0       [000] d.h2.    12.476800: pmic_pdcharger_ulog_msg: 0x0000000012A14CDD: Info: typec_detect_partner: ssdev_typec::InputNum=0, TypeCPartnerType=0
+          <idle>-0       [000] d.h2.    12.476811: pmic_pdcharger_ulog_msg: 0x0000000012A19D84: Info: typec_detect_partner: ssdev_typec::InputNum=0, TypeCPartnerType=0
+          <idle>-0       [000] d.h2.    12.476814: pmic_pdcharger_ulog_msg: 0x0000000012A1A1E4: Info: charger_detection_evaluate_typec_charger: charger detection: Input[0] bLpdEn=0, bLiquidDetected=0
+          <idle>-0       [000] d.h2.    12.476841: pmic_pdcharger_ulog_msg: 0x0000000012A246F1: Info: battmngr_plat_scpqchg_qbg_r1_update_wlstx_otg_context: battmngr_plat_scpqchg_qbg_r1_update_wlstx_otg_context: otg enable: 1
+          <idle>-0       [000] d.h2.    12.476847: pmic_pdcharger_ulog_msg: 0x0000000012A25367: Info: battmngr_plat_scpqchg_qbg_r1_set_otg_status_to_sdam: battmngr_plat_scpqchg_qbg_r1_set_otg_status_to_sdam:: otg enable = 0 set in SDAM
+          <idle>-0       [000] d.h2.    14.526956: pmic_pdcharger_ulog_msg: 0x0000000014266DA2: Info: ppm_proccess_immediate_command: PPM: GET_CONNECTOR_STATUS: Port[0]: ConnectorStatusChange=0x0000, PowerOpMode=5, ConnectStatus=1, PowerDirection=1, ConnectPartnerType=2, [USB=1, AltMode=0], RDO=0x00000000
+          <idle>-0       [000] d.h2.    24.770995: pmic_pdcharger_ulog_msg: 0x00000000192A9161: Info: charger_detection_event_handler: charger_detection_event_handler: skip checking usb charging type while usb is sourcing
+          <idle>-0       [000] d.h2.    24.771008: pmic_pdcharger_ulog_msg: 0x00000000192A9517: Warn: icm_ncp_stby_main: icm_ncp_stby_main: keeps in icm_ncp_stby utill charger_type updated
+          <idle>-0       [000] d.h2.    42.175570: pmic_pdcharger_ulog_msg: 0x000000002BFE0F8B: Warn: icm_ncp_stby_main: icm_ncp_stby_main: keeps in icm_ncp_stby utill charger_type updated
+          <idle>-0       [000] d.h2.    42.175661: pmic_pdcharger_ulog_msg: 0x000000002BFF5ED1: Info: ncp_stby_db_log: ncp_stby_db - chgr_stat=7, soc=8490
+          <idle>-0       [000] d.h2.    42.175663: pmic_pdcharger_ulog_msg: 0x000000002BFF5EEA: Warn: icm_ncp_stby_main: icm_ncp_stby_main: keeps in icm_ncp_stby utill charger_type updated

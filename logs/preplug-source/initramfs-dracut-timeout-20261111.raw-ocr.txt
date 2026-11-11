@@ -1,0 +1,364 @@
+### source: IMG_20261111_173458.jpg (3472x4624)
+### tesseract 5.5.4 -l eng+rus, original
+
+В лесная SDP OCP CDP ACH 6 POD PO_ONP О.Р HeickiD ontine=6 U=6068000 внсз(СУ PD PD_PFS sx¢_on~
+
+пит чо обр бд 6 PD POLDNP PD_PPS ВееИЮ online=6 05666260 вне(6У #0 70.999 ave on
+Зе вии
+
+® Fw state ЕЕ и ОР DO СОЯ re ry ИИС are-1C! 1 PULIVS не.
+ee eT ae tte ee Бер COP ACA © FD РО РР Р.Р SeickiO ontine+6 U-6067008 are-161 РО Р.Р вне. не
+а! wa осо не ЩИ
+ыы ЗРЯ ре online=0 4-606460б энееЕУ РО 7О.7РЭ вес. оне
+SEE ЕР СВР Ach © PD PD_ONP PD_PPS SrickiD online=6 45662660 sre=tCt РО РО. 7РЭ arc_ow
+ЕТС
+ея ch COP ACA © PD РО_РИР PD_PPS BrickiD online=6 4-6062000 sre=(C1 PD PO_PPS sre_on=
+clap ened eae SOP DCP COP Ach © PD РО_ РР Setckt® ont ine=0
+
+onono,
+
+«
+
+_
+Z
+НИ
+
+te
+
+if
+
+079013 wp=86s ulog_ok=1 seen=28 {Unknown
+eet! Seees Sak О eat Sere РО ВАР РО. РИО bricht свич чес 06} В РО. РРЗ sre_on-
+
+т DCP COP ACA © PD РО ВАР PD_PPS BrickID online-6 4-5065000 src={C} FD FDLPPS sre_on-
+
+"SEE pel cor лос PD. ИР FD. FPS BrickID online=@ 455066000 sre=fCT FD FD_PFS re_on-
+я DCP COP ACA С PD FD_DRP PD_FPS BrickID online-@ V=5061000 sre={C3 PD РБ.РРБ sre_on=
+(Unknown) арене т ри обе ооо фор
+
+seen=29 У SDP DCP СОР ach С FD
+Я GO BCP COP ACE У ЕЯ БРИЗ атс не
+
+BCP CDP ACA C PD PD_SRP РО_РРЗ BrickID ов с=© 45063000 sre=C} PD РВ.УРЗ src_ow=
+
+an BCP CDP ACA С PD PD_ORP FD_FPS BrickID anline-@ 5065000 src=fC) PD РО_РРБ src_on=
+} SBP DCP CDP ACA С PD PD_DRP РО_РРЗ BrickID online-@ V-5064000 src=IC} PD PD_PFS src_on=
+
+ыы Ао aM
+pover=[source] ink datasthost} ice
+АРУ nt =[Unknowun] SDP DCP CDP ACA С PD PD_DRP PD_PPS BrickID online=@ V=5064000 src=[C} PD PD_PPS src_on=
+
+CH РО
+НЕЕ
+sf
+
+:
+}
+;
+i
+i
+Я
+
+ni
+
+ie
+heh
+
+=
+8
+é
+
+ie
+:
+
+т
+ии
+
+Hl
+sist
+
+ARMADA-B USB wey А
+об ta=thost] ice partner=yes
+лак 8 UND: opis cl tad og oot reeled peta
+р иги ink data=(hast]
+ие ТАНИ status о ulog piel sccn-23 ush_type=[Unknown} SDP DCP CBP GOA С РО FD_DRP РР.РРЗ BrickID online=s
+} ее onl ine=@ V=5063000 src=[C] PD PD_PPS src_on=
+pover=[source] sink data=[host) device
+138 .240010) ARMADA-B USB: usb_type= 3 DCP CDP ACA С PD PD_DRP PD_PPS BrickID online=@ 95062000 src={C} PD PD_PPS src_on=
+pover=[source] sink data=thost 1 device
+13&.491743} ARMADA-B USB: usb_' DCP CBP ACA C PD PD_DRP PD_PPS BrickID online=@ U=5064000 sre=fC} РО PD_PPS sre_an=
+
+pover=[source] sink data=fhost}
+134.742848) ARMADA-B USB: usb_type=[Unknown] SDP DCP CBP ACA С PD PD_DRP PD_PPS BrickID online=0 ¥=5065000 src=[C] PD PD_PPS src_on=
+
+power=[source] sink data=Chost } device partner-yes
+ARMADA-B USB: usb_type=(Unknoun] SDP DCP CDP ACA С PD PD_DRP PD_PPS BrickID online=0 V=5067000 src={C] PD PD_PPS src_on=
+
+J ap sink data=(host] device
+139.2295881 ARMADA-B USB: usb_! DCP CDP ACA С PD PD_DRP PD_PPS BrickID online=@ V=5063000 згс=[С1 PD PD_PPS src_on=
+© power=[source] sink data=[host] device
+139 .2578651 ARMADA-B t epeids & seen=30 usb_ nt amp HP ng a ng a en | or eg
+141 0179351] dracut- : Warning: dracut-initqueue: timeout, still waiting Гог following initqueue hooks:
+141 022031) dracut~initqueue(5Z3): Warning: /lib/dracut/hooks/ ini tqueue/fin
+„ЗВ: “if 1 grep -qs - target -service: thea
+141.0500851 dracut-ini : Г -е “sdevedisksby-us
+141 .062811) dracut—initqueue(SZ3): fi”
+41 dracut-in Uarning: dracut-initqueve: start
+141.526056) dracut-initqueue[523]: Varning: dracut-initqueue: pry still ber. Гог following initqueue hooks:
+141.5780811 ие Цаги! ид: /lib/dracutvhooks,initqueue/f inished/devexists-\x2fdev\x2fd isk\xZfby-uu
+: ага A sid оны - fs-pre.target . -service: then
+
+tqueue[523) : ng: dracut-initqueue: starting tineout scripts
+149190} dracut-initqueue(S23]: Warning: dracut-initqueue: tineout, still waiting for following in hooks:
+
+dracut- initqueue(S23}: Yarning: /1libvdracutvhooks/ ini tquane’f inished dovax ists \atdevuztaleineatbe os
+142. 157769) GrocatinitquenetS233" as “AeuishAy-enid-teedcba S38 т чиению. sie
+142.1612391 dracut-initqueue(523}: fi"
+
+142. 163117) dracut-initqueue[5Z3}: Warning: dracut-initqueue: starting timeout scr
+729510) арын лит 2 Warning: dracut-initqueue: ыы still eae on following ini hooks:
+initqueue/fin инь До aired кист ИИ
+
+se
+
+an
+Е
+
+142.
+142 .733608) dracut-in stores Е Varning: /1ib/dracut/hooks/ in
+hy grep -qs After-renote-fs-pre. -service: then
+р arr at О -e “/deu/disk/by-uu id/49a99c0a- 3
+* “> ng: -in ing scripts
+143.318018) dracut-ini 1: Varning: dracut-ini
+am. - ее Uae pare > in = ин. still waiting for following aes hooks:
+> After=renote-fs-pre. target -service: then
+325734) dracut-ini НЫ cr
+1, Е ЕН = -e “/dev/disk/by-uu id/49a99c0a- }
+- 328909) dracut-initqueue(5S23): Warning: dracut-initqueue: starting timeout scripts
+143916892) dracut-ini (5233: Warning: dracut-ini tineout, hooks :
+aot ее с: ro ее tqueue: = atl vaiting for following initqueue е
+; grep -qs fs-pre. -Service: then
+143923179) dracut-initqueue(523): ( “deu/d isk, by-uu 1d/49a99c0a-
+у аа ов fi” a : ь
+„326264) dracut-initqueue Varning: dracut-initqueue: starting timeout scr scripts
+144.525825] dracut~initqueue[523}: Маги! dracut-initqueue: pater, lowing
+144,528227) dracut-initqueue(523): Varning: Mw teas wor er ier Inshedoeeeta tuo eign et
+Sh: "if 1 grep After=renote-fs-pre.target
+144532306) pint Cperoasint ef ~ Te. “sdeusd isk/by-uu 1d/49a99c0a- 1
+595130) dracut-initqueue(523): Warning: dracut-initqueue: starting timeout scr scripts
+127145) dracut-initqueue(523); Warn Warning dracut-initqueue: tineout lowing hooks
+120163) dracut~-initqueue(523); warning: нон ЯН , а < -
+
+93-4ac0-W516-be6AGbSeabc.shs "If 1 grep
+, we чт м sree er
+
+} dracut-\nitqueuslS23)1 Warning; dracut-initquene: starting tineout scripts
+
+В
+Г
+
+<
+
+и мы м о мм SF FRB VR eee FF ee See ee 5 >,
+
+### psm4 gray
+ох Won Usb: web, seu eS decun) SbP Бер COP ACA 6 PD POOP PD.PPS HrichiD oni ine=6 56066000 are=tCi 9 70.779 ere_on-
+
+ах a Oh eshte БИ м COP ACA 6 № МР PO.PPS Srtchi® ontines6 06062000 весел 20 es wage
+aX ы н У — . COP ACh 6 90 POON 20.209 бек ont
+
+| А. Wavee-s реа в cP к OFF OT svichin onl tenet 7 р г” РТ
+
+Зах ‘ pe st web, lee parler ses eo ach CPD POON? POLPPS MrickiD online<6 U-G667000 cre-161 РО Р.И are_on-
+
+а ew я ee CoP Ach CPD POOR? РО РЭ SrickID online=6 6664006 are=(Ci РО РОВ вне.
+
+| reas ra roy CE Oe ee et pn PD PS Ве onl нее «5064660 are-tC! РО Р.Р весе. т
+{Pea cron) ви Usb ecb, о бит SOF PP CoP ACA © PD PD_ONP PD_PPS SrickiO online U-S062600 ere-IC1 РО РО. РР вне
+
+079013 log_ok=1 seen=20 usb_! {Unknown} SDP DCP СОР ACA C PD РЭР Brick1D onl ine=0
+О Usb: ash aupestUnkaaun) SDP DCP CBP ACA © PD PD_DAP PD_PPS BrickID online- sve=tC} РО РО. РРЗ sve_on-
+
+t Ех рат" She DCP CBP ACA C PD PD_DRP PD_PPS DrickID online-6 45065000 src={C} FD FD_FPS sre_on=
+
+partner=yes
+ARMADA-B зав `- stat=7, #9236
+
+Е я DCP COP ACA С PD FD_DRP PD_FPS BrickID online-@ 445064000 sre=(C3 PD РБ.РРБ sre_on-
+СО ЕСН зай: wh (Waknown} SDP BCP CDP ACA С PD PD_DRP PD_PPS BrickID anline-@ 5058000 src=fC} PD PD_FPS зге ди
+® power-(source) data=Chost partner-yes
+
+520271) ARMADA-B status: =1 seen=29 (Unknown) SDP DCP CDP ACA С FD PD_PPS BrickiD onl ine=0
+: ПТИ В ребре SOP CP COP ACNE FD FOBT Ро BricKID cain НОВО ет PD PRPS ати
+Ра иво в USD: ch 1 BCP CDP ACA C PD PD_DRP PD_FPS BrickID cnline-@ ¥=5063000 src=fC} PD PR_PPS згс ри
+Tyne ВОК АВВ WEB: ocd (unk } SBP BCP CDP ACA С PD РО_ВЕР PD_FFS BrickID anline-@ 445065000 src={C] PD PR_PFS sre_on-
+
+© power=[source] sink data=[hest) device
+т 121 2404461 ARNADA-B status: tp i2ie ulog okel socn-25 ush_type-lUnhnown} SDP DCP CBP ACA С FD PD_BRP РО_РРЗ BrickID online=s
+
+Г 123,499103] ARMADA-B ULOG: ncp_sthy_db_log: ~ chgr_stat=?, soc=9234
+
+Г 125.7458161 ARNADA-B USB: "а bet Ge ACA С PD РО ЛИР PD_PPS BrickID on) ine=0 9=5063000 src=[C) PD PD_PPS src_on=
+© pover=[source] sink data=[host)] device
+
+Г 1380,240010] ARMADA-B USB: usb_type= 3 DCP CDP ACA С PD PD_DRP PD_PPS BrickID online-@ 9=5062000 src=[C) PD PD_PPS src_on=
+© pover=[source] sink data=[host] device
+
+Г 332.4917431 ARMADA-B USB: usb_: DCP CBP ACA C PD РР ИР PR_PPS BrickID online=@ U=5064000 sre=fC} PD PD_FPS sre_an=
+© pover=[source] sink data=[host partner=yes
+
+Г 134.7429481 ARMADA-B USB: usb_type=[Unknown] SDP DCP СЭР ACA С PD PD_DAP PD_PPS BrickID online=-0 ¥=5065000 згс=[С} PD PD_PPS src_on=
+© powers[source] sink data=[host] device
+
+Г 136.9804111 ARMADA-B USB: usb_type=(Unknowun) SDP DCP CDP ACA С PD PD_DRP PD_PPS BrickID online-@ V=5067000 src={C] PD PD_PPS src_on=
+© pover=(source] sink data=[host] device
+
+{ 139.2295881 ARMADA-B USB: usb_type= 3 DCP CDP ACA С PD PD_DRP PD_PPS BrickID online=0 95063000 згс=(С1 PD PD_PPS src_on=
+© power=[source] sink data=[hest] device уу
+
+1 139.257865] ARMADA-B status: up=i39s seen=30 usb_type={linknova] SDP DCP CBP ACA С PD PD_DRP PD_PPS BrickID online=®
+
+Г 141.0179351 dracut-initquevelSZ3}: Warning: dracut-initqueue: tineout, still waiting Гог following initqueue hooks:
+
+€ 141,022031) dracut-initqueuc(323]: Warning: /1ibdracut/hooks, ini tqueue, f ipished/devexists-\u2 fdev\x2fd isk\xZ2fby-uu id\x249a99e0a-—3e
+service: thea
+
+pyaar “if 1 grep -qs pa whntorran Pele rte eh i mee
+141.050085) dracut-initqueue[SZ3): Г -e “/devedisk/by-us
+Г 141.0628113 dracut—initqueue S23): #1”
+Г 141.0706731 dracut—initquevelSZ3}: Varning: dracut-initqueve: starting tincout scripts
+C€ 141,526056] dracut-initqueue[S23]: Маги! у: dracut-initqueve: timeout, still waiting fer following initqueue hooks:
+Г 141.578081) dracut-initqueue(523}: Warning: /lib/dracut-hooks/ ini tqueue/f inished/devexists-\x2fdevx2fd
+93-4ac0-8516-be646b3cabc0.sh: “if ? grep -qs After-renote-fs-pre.target SO EN URES ал atin ore then
+Г 141,580914) dracut-initqueue(523]: Г -e “sdeu/disk/by-uu id/49a99c0a- 3
+Г 141.582230) dracut-initqueue[523]: fi”
+Г 141.5835551 dracut-initqueue(5Z3]: Warning: dracut-initqueue: starting tineout scripts
+{ 142.149130} dracut-initqueue[S23]: Warning: dracut-initqueue: timeout, still waiting for following initqueue hooks:
+Г 142.199596) phone CTY = 3: Warning: /libvdracut/hooks/initqueue/f inished/devex ists-\x2fdew\x2fd
+93-4ac®-8516-be646b9cabcO.sh: “if After=renote— = : У
+Г 142.157769) dracut-initqueue(Sz3}; WE Reyer il. Pye 3 ——
+И
+in 3 ing : -initqueue: starting tincout scripts
+Г 142.729510) dracut-initqueue[523]: Warning: dracut-ini : timeout, still waiting for follow :
+Г 142.7336081 dracut-initqueue[523}: Varning: одно ry initquene/f inisheddevex ra ии Дн чае,
+93-4ac0-8516-be646b9cabcO.sh: “if 1 grep -qs After=renote-fs-pre.target -service: then
+Г 142.739599) dracut-initqueue[523): Г -е “sdeu/disk/by-uu id/49a99c0a- 3
+Г 142.742240) dracut-initqueue[523}: fi"
+= ре paar era poten ceoent fotepumne: starting timeout scripts
+-310018) dracut-initqueue : Warning: dracut-initqueue: timeout, still waiting for fol tqueue hooks:
+{ 2143.322032) dracut-initqueve(523}: Warning: о eee
+93-4ac0-8516-be646b3cabcO0.sh: “if 1 grep After=renote-fs-pre.target -service: then
+{ 143.3259734) dracut-initqueue[523): -e ревет ee eee ee
+‘ t+ Cpe fi"
+- 328909) dracut-initqueue(S23): Warning: dracut-initqueue: starting timeout scripts
+Г 143,916892) dracut-initqueue(523}: Warning: dracut-initqueue: timeout, still vait tqueue hooks:
+Г 143,919613) dracut-initqueue[523}: Warning: а о eee .
+Г 143,923179) dracut-i ИА Го “sdeusdish/by-wi ld-45eocbe
+. ad 11] 23]: -e “¢
+; у pce praia fi” ,
+926264) dracut-initqueue(523}: Varning: dracut-initqueue: starting tineout
+Г 144.525025) dracut-initqueue(S23}: Varning: dracut-initqueue: timeout. stil were
+
+Г 144,528227) dracut-initqueue(523)}: Varning: “A ibedracut hooks/ initqueuest inished-devex ists аа ааа зе
+93-4ас9-8516-Бе646Ь9саЪсо
+: «Service: then
+
+-Service: then
+
+Shi “If 1 grep After=renote-fs-pre. target
+Г 144,532306) dracut-initqueue(523 “sdeu/d isk by-uu 1d/49a99C0a-:
+Г 444,599715) dracut-initqueuetS23}: AAG
+Г 144,595130) dracut-ini
+
+J: Warning: dracut-initqueue: starting timeout scripts
+Г 145,127145) dracut-initqueue(523); Warning: dracut- tqueue: tineout, Jowlng hooks,
+Г 145,120163) pre that ey mr Varning: И, IG < :
+93-4ас0-9516-Ье646ЬЭсаЬсо sh; ” grep
+
+ГО отт ел 1 ый
+Г 195,159790) dracut-initqueue!523}; Warning: Aracut-initquene: starting timeout scripts
+
+### top_inv2x psm6
+ha IE rom: Sb: wah type и SUP OCP DP AGA 6 PD POOP PD.PPS SrickiO oni ine=6 U-6066060 sretCi PD 70.975 ere_on=
+А Wah wah pe tonal ВИ CBP А РО LPP eich ent iene ЧАН aren FW РО exe.
+s data= partner -yes
+we. : usb type СОР с Pe PD 29 Brick!D onl ine-0
+р РР COP € РОС РОЛИ НЕМ ent tens ЧБ eres FY РО ov.
+еее я bch GOP ACH © PD РО ВАР РО_РРО SrickID ontine-6 U-G061000 are*tCi РО 70.995 ere_on=
+s = Ао partner -yes
+. ) ULBG | = #7,
+t Tami oma ai, ante Tat be РО FPS ВЕК оо баб 5064600 sre-tC1 РО OFFS весне
+рр, се гу
+т \ Рави USE usb ке tena DCP СОР ACA С PD PD_ORP PD_PPS HrickiD online 46062000 ere-(CI PD РО.РРЭ arc_ow
+Зак sink data=thost) device А
+т ‘ А-а } DCP СОР ACA C PD PD_DRP PD_PPS BrickID online<6 4=6069000 зте-(С7 РО РО_РРЭ 876.00
+Е АОИ В USD: ush, type-tUnknoun) SBP. рр Р.Р ne=6 4-6062000 sre=(CI РО Р.7РЗ see_on-
+t @&. } USB: usb types } DCP CBP ACA C PD PD. PD BrickID onli 7 PD PD. src.
+®@ pouer=(source) sink data=(host) device partner =yes
+т 85.9730 ANADA-D states: up-Be ulog_oh=1 seen-20 usb_type={Ucknown) SOF ВСР СВР ach С РО РО ОС Ве оно
+t чаи ARNADA-D USD: at the gerne aati С PD PD_DRP PD_PPS Brick! ontine-0 $76260) PD PD_PPS те ди
+® power={source) sink data-thost] рт
+т 0 SEES ED: о } DCP CBP ACA С PD РР ВАР PD_PPS BrickID online-6 95065000 згс=(С) FD PD_PPS sre_on=-
+® power={source) sink data=[host) device partner=yes
+t 99. 207026) ARMADA-B ULOG: ncp_sthy_db_log: = - chgr_stat=7. 30629236
+с о ren CDP ACA С PD PD_DRP PD_PPS BrickID online=@ 4=5066000 зге=(С1 PD РО_РРЗ src_an-
+t OL. ЗВАЛ CHPRRA-O LNB: wel, type-Fikinman? SP ВСР COP Add © FD OSE FO_FEE ВАО anltan-@ УЧИ eyentCd FB PALES asf”
+@ power=[source] sink data=[host partnersyes |
+t ИЕР МОВА UND: wed, type-Ciheman! SOP OCP COP АС © FD FOLSEP РОЛИ ВО оброс УЧИ event) FP FELIS алии
+®@ power=l(source) sink data=(host partner=yes PPS BrickID ine=0
+фе ета A др IR
+Е о or on cw mew mee ee ate eon etd VE me
+Ф pover={source] sink data={host} И ОН а ”
+t SECURES) GHNDD-S UES: woh пробоины? SOP ВСР COP G08 © FD FD_SEP FO_IVS ВЫ enllann0 ОВО rented FD FRIIS Sree”
+О О В ит SF Dor COP о
+© рег ee} sink дача t] device adh | С PD PD_DRP PD_PPS BrickID online=-0 95062000 згс=(С] PD PD_PPS src_on=
+р и mw anee
+р и t soar annie an ress device ааа А PD_PPS BrickID online=@ 4=5065000 src=[C] PD PD_PPS src_on=
+. 248446 aban S etek atte akg one seen=Z3 usb_type-(Unknown) SDP DCP CBP ACA С PD PD_DRP
+tee cen oe EBS Ot ee toe ro НИ
+© power-Lsource) sink data-thost} device partner=yes PD BrickID onli V=5063000 згс=[С1 PD PD_PPS src_on=
+eet дин eta р Aaa gl led A Anan) Ck 9068000 arc=(C) РЭ РЭ_УРЗ атс. я
+
+### bot_gray2x psm6
+f SEL. SPOUS Ls агасис INITQUEUCLICIs- Warning. /110/GPacut/NOOKS/ IN i tqueue/t IR lShed/Gdevex IStsS-\XcIGewNxcid ISK\XZfby-uu 1ldNxZf43aF93c0a—3ce
+93-4ac0-8516-he646b9cabcO.sh: “if ? grep -qs After-renote—fs-pre.target RRO Ea ey ware оао then
+Г 141,580914) dracut-initqueue(523): _ С -e “sdeu/disk,by-uu id/49a99c0a-— 3
+Г 141.582230) dracut-initqueue[52Z3): fi"
+Г 141.5835551 dracut-initqueue[S23]: Varning: dracut-initqueue: starting timeout scripts
+Г 142.149130} dracut-initqueue(S523]: Warning: dracut-initqueue: timeout, still waiting for following initqueue hooks:
+{ 142.193596) dracut-initqueue(S23}: Warning: /1ibvdracut/hooks, ini tqueue/f inished/devexists-\x2fdev\x2fd isk\x2fby—uu id\x2£49a99c0a-3c
+93-4ac®-8516-be616b9cabcO.sh: “if 1 grep в After=renote—fs-pre .target ALR ea) ren ere Ag ee then
+Г 142.957769) dracut-initqueue([523): -e “/deu/disk,by-uu id/49a99c0a- }
+{ 142.1612391 dracut-initqueue(523): fi”
+Г 142.1631171 dracut-initqueue[523]: Warning: dracut-initqueue: starting timeout scripts
+Г 142,7235101 dracut-initqueue(SZ3]: Warning: dracut-initqueue: timeout, still waiting for following ini hooks :
+Г 142.7336081 dracut-initqueue[523): Varning: Aibsarecut/hooks/initquene finished dovexiats мова Са ОБЬ anid u2itaSicte-Se
+93-4ac0-8516-be616b9cabcO.sh: “if 1 grep -qs After=renote-fs-pre.target A GRETA пот SS Отан then
+Г 142.739999) dracut-initqueue(523]: [ -е “/sdev/sdisk/by-uu id/49a99c0a- bc” }
+{ 142.742240) dracut-initqueue[523): fi"
+Г 142.7437761 dracut-initqueue[523]: Varning: dracut-initqueue: starting tineout scripts
+Г 143.318016) dracut-initqueue[523]: Warning: dracut-initqueue: timeout, still waiting for following initqueue hooks:
+{ 143.322032) она А UVarning: /libsdracutvhooks, initqueue/f inished/devex ists-\x2 fdeu\x2 fd isk\x2 fby-uu id\x2£49a99e0a-3e
+93-4ac0-85 16-be616b3cabcO.sh: “ grep After=renote-fs-pre. target -service: then
+{ 143.329734) dracut-initqueue[523): Uc етот wild teach cS 4nd Wee eo ee
+Г 143,327206) dracut-initqueue(523): fi"
+Г 143.328909) dracut-initqueue([523]: Warning: dracut-initqueue: starting timeout scripts
+Г 143,916892) dracut-initqueue(523}: Warning: dracut-initqueue: timeout, still vaiting for following initqueue hooks:
+Г 143,919613) dracut-initqueue[523}: Warning: /libsdracut/hooks, initqueue/f inished/devex ists-\x2fdeu\x2 fd isk\x2 fby-uu 1d\x2149a99e0a-3e
+93-4ac0-8516-be646b9cabcO.sh: “if 1 grep -qs After=renote-fs-pre. target -Service: then
+Г 143.923179) dracut-initqueue[523):  -е “/deuv/disk/by-uu id/49a99c0a- i
+Е 313 aengen) тащит Au
+A -т J}: Warning: dracut-initqueue: starting timeout scri
+Г 144.525025) dracut-initqueue(523): Varning: dracut-initqueue: tineout, still waiting f for following hooks :
+{ 144,8282271 pee thee sp ТИПЕ Varning: дас Лови ini tqueue/f inisheddevexists \x2tdew acid она nc hdaahtaStcta-de
+93-4ac0-8516-be616b9cabcO.sh: ” grep After=renote-fs-pre. target .service: then
+Г 144,532306) dracut-initqueue(523): Tes "/deu/dish/by-uald/45e%c0n- 309 -4ecd ele eee ee
+; peop у trace ааа fi” , ь
+‚535130) dracut-initqueue(523): Warning: dracut-initqueue: starting timeout scripts
+Г 145,117145) dracut-initqueue(523); Varning: dracut-initqueue: timeout, still vai lowing hooks,
+Г 145,120163) dracut-initqueue(523); сын» о бы ВЫ <
+93-4ac0-8516-be616b9cabcO.sh: "if 1 grep т After=renote-fs-pre, target «service: then
+Г 145,144093) dracut~initqueue(523); -e "Adeusdish/by-wulaaeeIcde Sao decd ele ewe ee
+Г 245.152012) dracut-initqueue(523); £1"
+Г 195,159790) dracut-initqueuel5Z3); Warning: dracut-initquene: starting timeout scripts
+=

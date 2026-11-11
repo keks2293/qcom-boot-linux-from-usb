@@ -1,0 +1,16 @@
+[    0.908371] armada kernel: scsi 0:0:0:0: Direct-Access     YMTC     YMUS8B4TF1D1C1   0304 PQ: 0 ANSI: 6
+[    0.908514] armada kernel: scsi 0:0:0:1: Direct-Access     YMTC     YMUS8B4TF1D1C1   0304 PQ: 0 ANSI: 6
+[    0.909402] armada kernel: scsi 0:0:0:2: Direct-Access     YMTC     YMUS8B4TF1D1C1   0304 PQ: 0 ANSI: 6
+[    0.910333] armada kernel: scsi 0:0:0:3: Direct-Access     YMTC     YMUS8B4TF1D1C1   0304 PQ: 0 ANSI: 6
+[    0.911990] armada kernel: scsi 0:0:0:4: Direct-Access     YMTC     YMUS8B4TF1D1C1   0304 PQ: 0 ANSI: 6
+[    0.912873] armada kernel: scsi 0:0:0:5: Direct-Access     YMTC     YMUS8B4TF1D1C1   0304 PQ: 0 ANSI: 6
+[    0.913947] armada kernel: sd 0:0:0:1: [sdb] Attached SCSI disk
+[    0.914091] armada kernel: sd 0:0:0:3: [sdd] Attached SCSI disk
+[    0.914204] armada kernel: sd 0:0:0:2: [sdc] Attached SCSI disk
+[    0.914320] armada kernel: sd 0:0:0:0: [sda] Attached SCSI disk
+[    0.914970] armada kernel: sd 0:0:0:4: [sde] Attached SCSI disk
+[    0.915619] armada kernel: sd 0:0:0:5: [sdf] Attached SCSI disk
+[   11.660046] armada kernel: remoteproc remoteproc0: powering up adsp
+[   12.658495] armada kernel: remoteproc remoteproc0: remote processor adsp is now up
+[   12.739611] armada kernel: PDR: Indication received from msm/adsp/charger_pd, state: 0x1fffffff, trans-id: 1
+[   12.799625] armada kernel: xhci-hcd xhci-hcd.2.auto: Port change event, 2-1, id 2, portsc: 0x2802a0

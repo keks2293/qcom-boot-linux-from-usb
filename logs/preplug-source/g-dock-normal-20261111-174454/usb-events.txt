@@ -1,0 +1,34 @@
+[    0.799681] armada kernel: scsi 0:0:0:0: Direct-Access     YMTC     YMUS8B4TF1D1C1   0304 PQ: 0 ANSI: 6
+[    0.800405] armada kernel: scsi 0:0:0:1: Direct-Access     YMTC     YMUS8B4TF1D1C1   0304 PQ: 0 ANSI: 6
+[    0.801193] armada kernel: scsi 0:0:0:2: Direct-Access     YMTC     YMUS8B4TF1D1C1   0304 PQ: 0 ANSI: 6
+[    0.802097] armada kernel: scsi 0:0:0:3: Direct-Access     YMTC     YMUS8B4TF1D1C1   0304 PQ: 0 ANSI: 6
+[    0.802762] armada kernel: scsi 0:0:0:4: Direct-Access     YMTC     YMUS8B4TF1D1C1   0304 PQ: 0 ANSI: 6
+[    0.803574] armada kernel: scsi 0:0:0:5: Direct-Access     YMTC     YMUS8B4TF1D1C1   0304 PQ: 0 ANSI: 6
+[    0.805554] armada kernel: sd 0:0:0:2: [sdc] Attached SCSI disk
+[    0.806146] armada kernel: sd 0:0:0:0: [sda] Attached SCSI disk
+[    0.806747] armada kernel: sd 0:0:0:5: [sdf] Attached SCSI disk
+[    0.806870] armada kernel: sd 0:0:0:1: [sdb] Attached SCSI disk
+[    0.806981] armada kernel: sd 0:0:0:4: [sde] Attached SCSI disk
+[    0.807576] armada kernel: sd 0:0:0:3: [sdd] Attached SCSI disk
+[    9.670928] armada kernel: remoteproc remoteproc0: powering up adsp
+[   11.746801] armada kernel: remoteproc remoteproc0: remote processor adsp is now up
+[   11.801608] armada kernel: PDR: Indication received from msm/adsp/audio_pd, state: 0x1fffffff, trans-id: 1
+[   11.801732] armada kernel: PDR: Indication received from msm/adsp/charger_pd, state: 0x1fffffff, trans-id: 1
+[   14.052563] armada kernel: xhci-hcd xhci-hcd.2.auto: Port change event, 1-1, id 1, portsc: 0x206e1
+[   14.061879] armada kernel: xhci-hcd xhci-hcd.2.auto: Port change event, 2-1, id 2, portsc: 0x2802a0
+[   14.191035] armada kernel: xhci-hcd xhci-hcd.2.auto: Port change event, 1-1, id 1, portsc: 0x200e03
+[   14.268023] armada kernel: usb 1-1: new high-speed USB device number 2 using xhci-hcd
+[   14.316033] armada kernel: xhci-hcd xhci-hcd.2.auto: Port change event, 1-1, id 1, portsc: 0x200e03
+[   14.748026] armada kernel: usb 1-1.1: new full-speed USB device number 3 using xhci-hcd
+[   15.004066] armada kernel: usb 1-1.2: new high-speed USB device number 4 using xhci-hcd
+[   15.268038] armada kernel: usb 1-1.3: new high-speed USB device number 5 using xhci-hcd
+[   15.448932] armada kernel: usb-storage 1-1.3:1.0: USB Mass Storage device detected
+[   15.900014] armada kernel: usb 1-1.2.2: new high-speed USB device number 6 using xhci-hcd
+[   16.452027] armada kernel: scsi 1:0:0:0: Direct-Access     Netac    MobileDataStar   1101 PQ: 0 ANSI: 6
+[   16.616024] armada kernel: usb 1-1.2.4: new full-speed USB device number 7 using xhci-hcd
+[   16.960576] armada kernel: usb 1-1.2.5: new high-speed USB device number 8 using xhci-hcd
+[   16.967767] armada kernel: sd 1:0:0:0: [sdg] 976773168 512-byte logical blocks: (500 GB/466 GiB)
+[   16.970187] armada kernel: sd 1:0:0:0: [sdg] Write Protect is off
+[   16.970387] armada kernel: sd 1:0:0:0: [sdg] Mode Sense: 47 00 00 08
+[   16.972798] armada kernel: sd 1:0:0:0: [sdg] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+[   17.032079] armada kernel: sd 1:0:0:0: [sdg] Attached SCSI disk

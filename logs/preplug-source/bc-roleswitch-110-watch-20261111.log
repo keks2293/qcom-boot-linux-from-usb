@@ -1,0 +1,1802 @@
+START 1794387183 Wed Nov 11 16:53:03 +08 2026
+[   95.891489] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[   95.892004] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[   95.892089] device: '1-1.3': device_add
+[   95.892763] usb 1-1.3: bus: 'usb': __driver_probe_device: matched device with driver usb
+[   95.892793] usb 1-1.3: bus: 'usb': really_probe: probing driver usb with device
+[   95.892990] xhci-hcd xhci-hcd.2.auto: add ep 0x81, slot id 4, new drop flags = 0x0, new add flags = 0x8
+[   95.893017] xhci-hcd xhci-hcd.2.auto: xhci_check_bandwidth called for udev 00000000eb0d08cd
+[   95.893048] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   95.922941] xhci-hcd xhci-hcd.2.auto: Successful Endpoint Configure command
+[   95.923079] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   95.923148] xhci-hcd xhci-hcd.2.auto: Stopped on No-op or Link TRB for slot 4 ep 2
+[   95.923213] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   95.955324] device: '1-1.3:1.0': device_add
+[   95.955522] usb 1-1.3:1.0: bus: 'usb': __driver_probe_device: matched device with driver hub
+[   95.955549] usb 1-1.3:1.0: bus: 'usb': really_probe: probing driver hub with device
+[   95.955648] hub 1-1.3:1.0: USB hub found
+[   95.955735] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[   95.955844] hub 1-1.3:1.0: 5 ports detected
+[   95.955870] xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 00000000eb0d08cd
+[   95.955969] xhci-hcd xhci-hcd.2.auto: drop ep 0x81, slot id 4, new drop flags = 0x8, new add flags = 0x0
+[   95.956061] xhci-hcd xhci-hcd.2.auto: add ep 0x81, slot id 4, new drop flags = 0x8, new add flags = 0x8
+[   95.956084] xhci-hcd xhci-hcd.2.auto: xhci_check_bandwidth called for udev 00000000eb0d08cd
+[   95.956114] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   95.986374] xhci-hcd xhci-hcd.2.auto: Successful Endpoint Configure command
+[   95.986567] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   95.986619] xhci-hcd xhci-hcd.2.auto: Stopped on No-op or Link TRB for slot 4 ep 2
+[   95.986675] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   96.018921] device: 'ep_81': device_add
+[   96.019327] device: '1-1.3-port1': device_add
+[   96.019490] device: '1-1.3-port2': device_add
+[   96.019607] device: '1-1.3-port3': device_add
+[   96.019719] device: '1-1.3-port4': device_add
+[   96.019827] device: '1-1.3-port5': device_add
+[   96.020007] xhci-hcd xhci-hcd.2.auto: xHCI version 110 needs hub TT think time and number of ports
+[   96.020029] xhci-hcd xhci-hcd.2.auto: Set up configure endpoint for hub device.
+[   96.020054] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   96.020152] xhci-hcd xhci-hcd.2.auto: Successful Endpoint Configure command
+[   96.020628] hub 1-1.3:1.0: driver: 'hub': driver_bound: bound to device
+[   96.020784] hub 1-1.3:1.0: bus: 'usb': really_probe: bound device to driver hub
+[   96.020821] usb 1-1.3: driver: 'usb': driver_bound: bound to device
+[   96.020927] usb 1-1.3: bus: 'usb': really_probe: bound device to driver usb
+[   96.020990] device: 'ep_00': device_add
+[   96.099500] scsi 1:0:0:0: Direct-Access     Netac    MobileDataStar   1101 PQ: 0 ANSI: 6
+[   96.099538] device: 'target1:0:0': device_add
+[   96.099719] device: '1:0:0:0': device_add
+[   96.099909] scsi 1:0:0:0: bus: 'scsi': __driver_probe_device: matched device with driver ufs_device_wlun
+[   96.099928] scsi 1:0:0:0: bus: 'scsi': really_probe: probing driver ufs_device_wlun with device
+[   96.100129] ufs_device_wlun 1:0:0:0: probe with driver ufs_device_wlun rejects match -19
+[   96.100220] scsi 1:0:0:0: scheduling asynchronous probe
+[   96.100249] device: '1:0:0:0': device_add
+[   96.100258] scsi 1:0:0:0: bus: 'scsi': __driver_probe_device: matched device with driver sd
+[   96.100265] scsi 1:0:0:0: bus: 'scsi': really_probe: probing driver sd with device
+[   96.100313] device: '1:0:0:0': device_add
+[   96.100377] device: '1:0:0:0': device_add
+[   96.100628] xhci-hcd xhci-hcd.2.auto: Giveback URB 00000000aa05714b, len = 18, expected = 96, status = 0
+[   96.100697] xhci-hcd xhci-hcd.2.auto: Stalled endpoint for slot 3 ep 2
+[   96.100713] xhci-hcd xhci-hcd.2.auto: Hard-reset ep 2, slot 3
+[   96.100730] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   96.100762] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[   96.100774] xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xfffffe060 (dma) in stream 0 URB 000000005a1df4bb
+[   96.100793] xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xfffffe070, cycle 1
+
+[   96.100804] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   96.100816] xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 000000005a1df4bb TD as cancel_status is 2
+[   96.100833] xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @fffffe070
+[   96.100845] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 000000005a1df4bb TD
+[   96.100857] xhci-hcd xhci-hcd.2.auto: Giveback URB 000000005a1df4bb, len = 0, expected = 13, status = -32
+[   96.100873] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[   96.617871] sd 1:0:0:0: [sdg] 976773168 512-byte logical blocks: (500 GB/466 GiB)
+[   96.618414] xhci-hcd xhci-hcd.2.auto: Giveback URB 000000008d9e980a, len = 72, expected = 192, status = 0
+[   96.618623] xhci-hcd xhci-hcd.2.auto: Stalled endpoint for slot 3 ep 2
+[   96.618658] xhci-hcd xhci-hcd.2.auto: Hard-reset ep 2, slot 3
+[   96.618687] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   96.618741] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[   96.618769] xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xfffffe0e0 (dma) in stream 0 URB 000000005a1df4bb
+[   96.618802] xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xfffffe0f0, cycle 1
+
+[   96.618821] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   96.618842] xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 000000005a1df4bb TD as cancel_status is 2
+[   96.618870] xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @fffffe0f0
+[   96.618893] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 000000005a1df4bb TD
+[   96.618913] xhci-hcd xhci-hcd.2.auto: Giveback URB 000000005a1df4bb, len = 0, expected = 13, status = -32
+[   96.618943] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[   96.619250] sd 1:0:0:0: [sdg] Write Protect is off
+[   96.619259] sd 1:0:0:0: [sdg] Mode Sense: 47 00 00 08
+[   96.619559] xhci-hcd xhci-hcd.2.auto: Giveback URB 000000008d9e980a, len = 72, expected = 192, status = 0
+[   96.619679] xhci-hcd xhci-hcd.2.auto: Stalled endpoint for slot 3 ep 2
+[   96.619705] xhci-hcd xhci-hcd.2.auto: Hard-reset ep 2, slot 3
+[   96.619731] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   96.619781] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[   96.619800] xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xfffffe110 (dma) in stream 0 URB 000000005a1df4bb
+[   96.619826] xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xfffffe120, cycle 1
+
+[   96.619845] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   96.619865] xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 000000005a1df4bb TD as cancel_status is 2
+[   96.619892] xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @fffffe120
+[   96.619912] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 000000005a1df4bb TD
+[   96.619930] xhci-hcd xhci-hcd.2.auto: Giveback URB 000000005a1df4bb, len = 0, expected = 13, status = -32
+[   96.619956] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[   96.620220] sd 1:0:0:0: [sdg] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+[   96.620249] device: 'sdg': device_add
+[   96.645923] device: '8:96': device_add
+[   96.647250] xhci-hcd xhci-hcd.2.auto: Giveback URB 000000002f802aac, len = 72, expected = 192, status = 0
+[   96.647379] xhci-hcd xhci-hcd.2.auto: Stalled endpoint for slot 3 ep 2
+[   96.647408] xhci-hcd xhci-hcd.2.auto: Hard-reset ep 2, slot 3
+[   96.647444] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   96.647497] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[   96.647516] xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xfffffe190 (dma) in stream 0 URB 000000005a1df4bb
+[   96.647544] xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xfffffe1a0, cycle 1
+
+[   96.647563] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   96.647582] xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 000000005a1df4bb TD as cancel_status is 2
+[   96.647611] xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @fffffe1a0
+[   96.647630] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 000000005a1df4bb TD
+[   96.647649] xhci-hcd xhci-hcd.2.auto: Giveback URB 000000005a1df4bb, len = 0, expected = 13, status = -32
+[   96.647675] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[   96.648192] xhci-hcd xhci-hcd.2.auto: Giveback URB 000000002f802aac, len = 72, expected = 192, status = 0
+[   96.648305] xhci-hcd xhci-hcd.2.auto: Stalled endpoint for slot 3 ep 2
+[   96.648331] xhci-hcd xhci-hcd.2.auto: Hard-reset ep 2, slot 3
+[   96.648357] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   96.648416] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[   96.648436] xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xfffffe1c0 (dma) in stream 0 URB 000000005a1df4bb
+[   96.648462] xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xfffffe1d0, cycle 1
+
+[   96.648481] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   96.648499] xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 000000005a1df4bb TD as cancel_status is 2
+[   96.648526] xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @fffffe1d0
+[   96.648544] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 000000005a1df4bb TD
+[   96.648562] xhci-hcd xhci-hcd.2.auto: Giveback URB 000000005a1df4bb, len = 0, expected = 13, status = -32
+[   96.648587] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[   96.649891] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   96.649967] xhci-hcd xhci-hcd.2.auto: Slot 5 output ctx = 0x0000000ffffd2000 (dma)
+[   96.650064] xhci-hcd xhci-hcd.2.auto: Slot 5 input ctx = 0x0000000ffffa4000 (dma)
+[   96.650080] xhci-hcd xhci-hcd.2.auto: Set slot id 5 dcbaa entry 00000000e6a24d5c to 0xffffd2000
+[   96.680992]  sdg: sdg1 sdg2
+[   96.681036] device: 'sdg1': device_add
+[   96.681269] device: 'sdg2': device_add
+[   96.681572] sd 1:0:0:0: [sdg] Attached SCSI disk
+[   96.681585] sd 1:0:0:0: driver: 'sd': driver_bound: bound to device
+[   96.681702] sd 1:0:0:0: bus: 'scsi': really_probe: bound device to driver sd
+[   96.681716] sd 1:0:0:0: async probe completed
+[   96.725690] usb 1-1.3.2: new high-speed USB device number 6 using xhci-hcd
+[   96.725723] xhci-hcd xhci-hcd.2.auto: Slot ID 5: HW portnum 0, hcd portnum 0
+[   96.725733] xhci-hcd xhci-hcd.2.auto: udev->tt = 0000000000000000
+[   96.725742] xhci-hcd xhci-hcd.2.auto: udev->ttport = 0x0
+[   96.725754] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   96.725851] xhci-hcd xhci-hcd.2.auto: Successful setup context command
+[   96.725863] xhci-hcd xhci-hcd.2.auto: Op regs DCBAA ptr = 0x00000fffffd000
+[   96.725871] xhci-hcd xhci-hcd.2.auto: Slot ID 5 dcbaa entry @00000000e6a24d5c = 0x00000ffffd2000
+[   96.725883] xhci-hcd xhci-hcd.2.auto: Output Context DMA address = 0xffffd2000
+[   96.725889] xhci-hcd xhci-hcd.2.auto: Internal device address = 0
+[   96.726010] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[   96.797674] xhci-hcd xhci-hcd.2.auto: Resetting device with slot ID 5
+[   96.797700] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   96.797769] xhci-hcd xhci-hcd.2.auto: Completed reset device command.
+[   96.797841] xhci-hcd xhci-hcd.2.auto: Can't reset device (slot ID 5) in default state
+[   96.797852] xhci-hcd xhci-hcd.2.auto: Not freeing device rings.
+[   96.797877] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   96.797953] xhci-hcd xhci-hcd.2.auto: Successful setup address command
+[   96.797964] xhci-hcd xhci-hcd.2.auto: Op regs DCBAA ptr = 0x00000fffffd000
+[   96.797973] xhci-hcd xhci-hcd.2.auto: Slot ID 5 dcbaa entry @00000000e6a24d5c = 0x00000ffffd2000
+[   96.797983] xhci-hcd xhci-hcd.2.auto: Output Context DMA address = 0xffffd2000
+[   96.797990] xhci-hcd xhci-hcd.2.auto: Internal device address = 5
+[   96.814308] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[   96.814501] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[   96.814655] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[   96.814750] device: '1-1.3.2': device_add
+[   96.815136] usb 1-1.3.2: bus: 'usb': __driver_probe_device: matched device with driver usb
+[   96.815152] usb 1-1.3.2: bus: 'usb': really_probe: probing driver usb with device
+[   96.815308] xhci-hcd xhci-hcd.2.auto: add ep 0x81, slot id 5, new drop flags = 0x0, new add flags = 0x8
+[   96.815343] xhci-hcd xhci-hcd.2.auto: add ep 0x82, slot id 5, new drop flags = 0x0, new add flags = 0x28
+[   96.815375] xhci-hcd xhci-hcd.2.auto: add ep 0x83, slot id 5, new drop flags = 0x0, new add flags = 0xa8
+[   96.815406] xhci-hcd xhci-hcd.2.auto: add ep 0x4, slot id 5, new drop flags = 0x0, new add flags = 0x1a8
+[   96.815432] xhci-hcd xhci-hcd.2.auto: add ep 0x5, slot id 5, new drop flags = 0x0, new add flags = 0x5a8
+[   96.815440] xhci-hcd xhci-hcd.2.auto: xhci_check_bandwidth called for udev 000000002cf45c41
+[   96.815454] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   96.820037] xhci-hcd xhci-hcd.2.auto: Giveback URB 00000000c39ea7cc, len = 22, expected = 96, status = 0
+[   96.820176] xhci-hcd xhci-hcd.2.auto: Stalled endpoint for slot 3 ep 2
+[   96.820203] xhci-hcd xhci-hcd.2.auto: Hard-reset ep 2, slot 3
+[   96.820228] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   96.820272] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[   96.820291] xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xfffffe450 (dma) in stream 0 URB 000000005a1df4bb
+[   96.820316] xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xfffffe460, cycle 1
+
+[   96.820333] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   96.820350] xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 000000005a1df4bb TD as cancel_status is 2
+[   96.820378] xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @fffffe460
+[   96.820396] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 000000005a1df4bb TD
+[   96.820412] xhci-hcd xhci-hcd.2.auto: Giveback URB 000000005a1df4bb, len = 0, expected = 13, status = -32
+[   96.820442] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[   96.821684] xhci-hcd xhci-hcd.2.auto: Successful Endpoint Configure command
+[   96.821843] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   96.821899] xhci-hcd xhci-hcd.2.auto: Stopped on No-op or Link TRB for slot 5 ep 2
+[   96.821986] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   96.850401] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   96.850463] xhci-hcd xhci-hcd.2.auto: Stopped on No-op or Link TRB for slot 5 ep 4
+[   96.850522] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   96.882389] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   96.882455] xhci-hcd xhci-hcd.2.auto: Stopped on No-op or Link TRB for slot 5 ep 6
+[   96.882528] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   96.914391] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   96.914452] xhci-hcd xhci-hcd.2.auto: Stopped on No-op or Link TRB for slot 5 ep 7
+[   96.914545] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   96.946405] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   96.946455] xhci-hcd xhci-hcd.2.auto: Stopped on No-op or Link TRB for slot 5 ep 9
+[   96.946503] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   96.979895] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[   96.980145] device: '1-1.3.2:1.0': device_add
+[   96.980269] usb 1-1.3.2:1.0: bus: 'usb': __driver_probe_device: matched device with driver usbhid
+[   96.980280] usb 1-1.3.2:1.0: bus: 'usb': really_probe: probing driver usbhid with device
+[   96.980842] device: '0003:0C45:0256.0002': device_add
+[   96.980912] hid 0003:0C45:0256.0002: bus: 'hid': __driver_probe_device: matched device with driver hid-generic
+[   96.980918] hid 0003:0C45:0256.0002: bus: 'hid': really_probe: probing driver hid-generic with device
+[   96.981078] device: 'wakeup14': device_add
+[   96.981184] device: 'input15': device_add
+[   96.981476] input: IO IO Type 68 Magnetic BL as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.2/1-1.3.2:1.0/0003:0C45:0256.0002/input/input15
+[   97.037691] device: 'input15::numlock': device_add
+[   97.065723] device: 'input15::capslock': device_add
+[   97.089780] device: 'input15::scrolllock': device_add
+[   97.113701] device: 'input15::compose': device_add
+[   97.113750] device: 'input15::kana': device_add
+[   97.133715] device: 'event10': device_add
+[   97.133830] device: 'hidraw1': device_add
+[   97.133922] hid-generic 0003:0C45:0256.0002: input,hidraw1: USB HID v1.10 Keyboard [IO IO Type 68 Magnetic BL] on usb-xhci-hcd.2.auto-1.3.2/input0
+[   97.133929] hid-generic 0003:0C45:0256.0002: driver: 'hid-generic': driver_bound: bound to device
+[   97.133954] hid-generic 0003:0C45:0256.0002: bus: 'hid': really_probe: bound device to driver hid-generic
+[   97.133963] usbhid 1-1.3.2:1.0: driver: 'usbhid': driver_bound: bound to device
+[   97.133980] usbhid 1-1.3.2:1.0: bus: 'usb': really_probe: bound device to driver usbhid
+[   97.133985] device: 'ep_81': device_add
+[   97.134000] device: '1-1.3.2:1.1': device_add
+[   97.134056] usb 1-1.3.2:1.1: bus: 'usb': __driver_probe_device: matched device with driver usbhid
+[   97.134060] usb 1-1.3.2:1.1: bus: 'usb': really_probe: probing driver usbhid with device
+[   97.134514] device: '0003:0C45:0256.0003': device_add
+[   97.134548] hid 0003:0C45:0256.0003: bus: 'hid': __driver_probe_device: matched device with driver hid-generic
+[   97.134550] hid 0003:0C45:0256.0003: bus: 'hid': really_probe: probing driver hid-generic with device
+[   97.134687] device: 'input16': device_add
+[   97.134746] input: IO IO Type 68 Magnetic BL Consumer Control as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.2/1-1.3.2:1.1/0003:0C45:0256.0003/input/input16
+[   97.189637] device: 'event11': device_add
+[   97.189766] device: 'input17': device_add
+[   97.189806] input: IO IO Type 68 Magnetic BL System Control as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.2/1-1.3.2:1.1/0003:0C45:0256.0003/input/input17
+[   97.189813] device: 'event12': device_add
+[   97.189850] device: 'input18': device_add
+[   97.189879] input: IO IO Type 68 Magnetic BL Keyboard as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.2/1-1.3.2:1.1/0003:0C45:0256.0003/input/input18
+[   97.189884] device: 'event13': device_add
+[   97.189915] device: 'input19': device_add
+[   97.189940] input: IO IO Type 68 Magnetic BL Mouse as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.2/1-1.3.2:1.1/0003:0C45:0256.0003/input/input19
+[   97.189943] device: 'event14': device_add
+[   97.189977] device: 'hidraw2': device_add
+[   97.190055] hid-generic 0003:0C45:0256.0003: input,hidraw2: USB HID v1.10 Keyboard [IO IO Type 68 Magnetic BL] on usb-xhci-hcd.2.auto-1.3.2/input1
+[   97.190060] hid-generic 0003:0C45:0256.0003: driver: 'hid-generic': driver_bound: bound to device
+[   97.190080] hid-generic 0003:0C45:0256.0003: bus: 'hid': really_probe: bound device to driver hid-generic
+[   97.190089] usbhid 1-1.3.2:1.1: driver: 'usbhid': driver_bound: bound to device
+[   97.190103] usbhid 1-1.3.2:1.1: bus: 'usb': really_probe: bound device to driver usbhid
+[   97.190110] device: 'ep_82': device_add
+[   97.190123] device: '1-1.3.2:1.2': device_add
+[   97.190157] usb 1-1.3.2:1.2: bus: 'usb': __driver_probe_device: matched device with driver usbhid
+[   97.190160] usb 1-1.3.2:1.2: bus: 'usb': really_probe: probing driver usbhid with device
+[   97.190662] device: '0003:0C45:0256.0004': device_add
+[   97.190687] hid 0003:0C45:0256.0004: bus: 'hid': __driver_probe_device: matched device with driver hid-generic
+[   97.190689] hid 0003:0C45:0256.0004: bus: 'hid': really_probe: probing driver hid-generic with device
+[   97.190748] device: 'hidraw3': device_add
+[   97.190797] hid-generic 0003:0C45:0256.0004: hidraw3: USB HID v1.10 Device [IO IO Type 68 Magnetic BL] on usb-xhci-hcd.2.auto-1.3.2/input2
+[   97.190800] hid-generic 0003:0C45:0256.0004: driver: 'hid-generic': driver_bound: bound to device
+[   97.190813] hid-generic 0003:0C45:0256.0004: bus: 'hid': really_probe: bound device to driver hid-generic
+[   97.190816] usbhid 1-1.3.2:1.2: driver: 'usbhid': driver_bound: bound to device
+[   97.190827] usbhid 1-1.3.2:1.2: bus: 'usb': really_probe: bound device to driver usbhid
+[   97.190830] device: 'ep_83': device_add
+[   97.190840] device: 'ep_04': device_add
+[   97.190849] device: '1-1.3.2:1.3': device_add
+[   97.190870] usb 1-1.3.2:1.3: bus: 'usb': __driver_probe_device: matched device with driver usbhid
+[   97.190872] usb 1-1.3.2:1.3: bus: 'usb': really_probe: probing driver usbhid with device
+[   97.190881] usbhid 1-1.3.2:1.3: couldn't find an input interrupt endpoint
+[   97.190883] usbhid 1-1.3.2:1.3: probe with driver usbhid rejects match -19
+[   97.190902] device: 'ep_05': device_add
+[   97.190914] usb 1-1.3.2: driver: 'usb': driver_bound: bound to device
+[   97.190927] usb 1-1.3.2: bus: 'usb': really_probe: bound device to driver usb
+[   97.190939] device: 'ep_00': device_add
+[   97.317766] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   97.317807] xhci-hcd xhci-hcd.2.auto: Slot 6 output ctx = 0x0000000ffff74000 (dma)
+[   97.317829] xhci-hcd xhci-hcd.2.auto: Slot 6 input ctx = 0x0000000fffda9000 (dma)
+[   97.317845] xhci-hcd xhci-hcd.2.auto: Set slot id 6 dcbaa entry 000000001bfdd5c7 to 0xffff74000
+[   97.389657] usb 1-1.3.4: new full-speed USB device number 7 using xhci-hcd
+[   97.389676] xhci-hcd xhci-hcd.2.auto: Slot ID 6: HW portnum 0, hcd portnum 0
+[   97.389682] xhci-hcd xhci-hcd.2.auto: udev->tt = 000000005ff331f5
+[   97.389686] xhci-hcd xhci-hcd.2.auto: udev->ttport = 0x4
+[   97.389692] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   97.389750] xhci-hcd xhci-hcd.2.auto: Successful setup context command
+[   97.389757] xhci-hcd xhci-hcd.2.auto: Op regs DCBAA ptr = 0x00000fffffd000
+[   97.389761] xhci-hcd xhci-hcd.2.auto: Slot ID 6 dcbaa entry @000000001bfdd5c7 = 0x00000ffff74000
+[   97.389765] xhci-hcd xhci-hcd.2.auto: Output Context DMA address = 0xffff74000
+[   97.389767] xhci-hcd xhci-hcd.2.auto: Internal device address = 0
+[   97.390162] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[   97.461677] xhci-hcd xhci-hcd.2.auto: Resetting device with slot ID 6
+[   97.461698] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   97.461735] xhci-hcd xhci-hcd.2.auto: Completed reset device command.
+[   97.461776] xhci-hcd xhci-hcd.2.auto: Can't reset device (slot ID 6) in default state
+[   97.461788] xhci-hcd xhci-hcd.2.auto: Not freeing device rings.
+[   97.461811] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   97.461977] xhci-hcd xhci-hcd.2.auto: Successful setup address command
+[   97.461988] xhci-hcd xhci-hcd.2.auto: Op regs DCBAA ptr = 0x00000fffffd000
+[   97.461995] xhci-hcd xhci-hcd.2.auto: Slot ID 6 dcbaa entry @000000001bfdd5c7 = 0x00000ffff74000
+[   97.462004] xhci-hcd xhci-hcd.2.auto: Output Context DMA address = 0xffff74000
+[   97.462010] xhci-hcd xhci-hcd.2.auto: Internal device address = 6
+[   97.481510] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[   97.482365] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[   97.482745] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[   97.482800] device: '1-1.3.4': device_add
+[   97.483086] usb 1-1.3.4: bus: 'usb': __driver_probe_device: matched device with driver usb
+[   97.483098] usb 1-1.3.4: bus: 'usb': really_probe: probing driver usb with device
+[   97.483211] xhci-hcd xhci-hcd.2.auto: add ep 0x81, slot id 6, new drop flags = 0x0, new add flags = 0x8
+[   97.483238] xhci-hcd xhci-hcd.2.auto: add ep 0x82, slot id 6, new drop flags = 0x0, new add flags = 0x28
+[   97.483246] xhci-hcd xhci-hcd.2.auto: xhci_check_bandwidth called for udev 0000000097bd69b4
+[   97.483259] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   97.490358] xhci-hcd xhci-hcd.2.auto: Successful Endpoint Configure command
+[   97.490426] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   97.490478] xhci-hcd xhci-hcd.2.auto: Stopped on No-op or Link TRB for slot 6 ep 2
+[   97.490521] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   97.522760] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   97.522817] xhci-hcd xhci-hcd.2.auto: Stopped on No-op or Link TRB for slot 6 ep 4
+[   97.522930] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   97.554792] device: '1-1.3.4:1.0': device_add
+[   97.554913] usb 1-1.3.4:1.0: bus: 'usb': __driver_probe_device: matched device with driver usbhid
+[   97.554925] usb 1-1.3.4:1.0: bus: 'usb': really_probe: probing driver usbhid with device
+[   97.556838] device: '0003:25A7:FA07.0005': device_add
+[   97.556948] hid 0003:25A7:FA07.0005: bus: 'hid': __driver_probe_device: matched device with driver hid-generic
+[   97.556957] hid 0003:25A7:FA07.0005: bus: 'hid': really_probe: probing driver hid-generic with device
+[   97.557196] device: 'input20': device_add
+[   97.557346] input: Compx 2.4G Wireless Receiver as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.4/1-1.3.4:1.0/0003:25A7:FA07.0005/input/input20
+[   97.557368] device: 'event15': device_add
+[   97.557731] device: 'hidraw4': device_add
+[   97.557872] hid-generic 0003:25A7:FA07.0005: input,hidraw4: USB HID v1.10 Mouse [Compx 2.4G Wireless Receiver] on usb-xhci-hcd.2.auto-1.3.4/input0
+[   97.557887] hid-generic 0003:25A7:FA07.0005: driver: 'hid-generic': driver_bound: bound to device
+[   97.557935] hid-generic 0003:25A7:FA07.0005: bus: 'hid': really_probe: bound device to driver hid-generic
+[   97.557952] usbhid 1-1.3.4:1.0: driver: 'usbhid': driver_bound: bound to device
+[   97.557994] usbhid 1-1.3.4:1.0: bus: 'usb': really_probe: bound device to driver usbhid
+[   97.558008] device: 'ep_81': device_add
+[   97.558196] device: '1-1.3.4:1.1': device_add
+[   97.558296] usb 1-1.3.4:1.1: bus: 'usb': __driver_probe_device: matched device with driver usbhid
+[   97.558305] usb 1-1.3.4:1.1: bus: 'usb': really_probe: probing driver usbhid with device
+[   97.561565] device: '0003:25A7:FA07.0006': device_add
+[   97.561690] hid 0003:25A7:FA07.0006: bus: 'hid': __driver_probe_device: matched device with driver hid-generic
+[   97.561699] hid 0003:25A7:FA07.0006: bus: 'hid': really_probe: probing driver hid-generic with device
+[   97.562037] device: 'wakeup15': device_add
+[   97.562284] device: 'input21': device_add
+[   97.562686] input: Compx 2.4G Wireless Receiver Keyboard as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.4/1-1.3.4:1.1/0003:25A7:FA07.0006/input/input21
+[   97.619302] device: 'event16': device_add
+[   97.619587] device: 'input22': device_add
+[   97.619725] input: Compx 2.4G Wireless Receiver as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.4/1-1.3.4:1.1/0003:25A7:FA07.0006/input/input22
+[   97.619742] device: 'event17': device_add
+[   97.619942] device: 'input23': device_add
+[   97.620065] input: Compx 2.4G Wireless Receiver as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.4/1-1.3.4:1.1/0003:25A7:FA07.0006/input/input23
+[   97.620078] device: 'event18': device_add
+[   97.620302] device: 'hidraw5': device_add
+[   97.620469] hid-generic 0003:25A7:FA07.0006: input,hidraw5: USB HID v1.10 Keyboard [Compx 2.4G Wireless Receiver] on usb-xhci-hcd.2.auto-1.3.4/input1
+[   97.620483] hid-generic 0003:25A7:FA07.0006: driver: 'hid-generic': driver_bound: bound to device
+[   97.620543] hid-generic 0003:25A7:FA07.0006: bus: 'hid': really_probe: bound device to driver hid-generic
+[   97.620561] usbhid 1-1.3.4:1.1: driver: 'usbhid': driver_bound: bound to device
+[   97.620606] usbhid 1-1.3.4:1.1: bus: 'usb': really_probe: bound device to driver usbhid
+[   97.620625] device: 'ep_82': device_add
+[   97.620675] usb 1-1.3.4: driver: 'usb': driver_bound: bound to device
+[   97.620719] usb 1-1.3.4: bus: 'usb': really_probe: bound device to driver usb
+[   97.621015] device: 'ep_00': device_add
+[   97.621227] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   97.621279] xhci-hcd xhci-hcd.2.auto: Slot 7 output ctx = 0x0000000fffd90000 (dma)
+[   97.621319] xhci-hcd xhci-hcd.2.auto: Slot 7 input ctx = 0x0000000fffd89000 (dma)
+[   97.621349] xhci-hcd xhci-hcd.2.auto: Set slot id 7 dcbaa entry 000000007aaaab06 to 0xfffd90000
+[   97.711727] usb 1-1.3.5: new high-speed USB device number 8 using xhci-hcd
+[   97.711751] xhci-hcd xhci-hcd.2.auto: Slot ID 7: HW portnum 0, hcd portnum 0
+[   97.711758] xhci-hcd xhci-hcd.2.auto: udev->tt = 0000000000000000
+[   97.711763] xhci-hcd xhci-hcd.2.auto: udev->ttport = 0x0
+[   97.711771] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   97.711846] xhci-hcd xhci-hcd.2.auto: Successful setup context command
+[   97.711855] xhci-hcd xhci-hcd.2.auto: Op regs DCBAA ptr = 0x00000fffffd000
+[   97.711860] xhci-hcd xhci-hcd.2.auto: Slot ID 7 dcbaa entry @000000007aaaab06 = 0x00000fffd90000
+[   97.711867] xhci-hcd xhci-hcd.2.auto: Output Context DMA address = 0xfffd90000
+[   97.711871] xhci-hcd xhci-hcd.2.auto: Internal device address = 0
+[   97.712360] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[   97.798478] xhci-hcd xhci-hcd.2.auto: Resetting device with slot ID 7
+[   97.798500] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   97.798603] xhci-hcd xhci-hcd.2.auto: Completed reset device command.
+[   97.798634] xhci-hcd xhci-hcd.2.auto: Can't reset device (slot ID 7) in default state
+[   97.798640] xhci-hcd xhci-hcd.2.auto: Not freeing device rings.
+[   97.798655] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   97.798708] xhci-hcd xhci-hcd.2.auto: Successful setup address command
+[   97.798717] xhci-hcd xhci-hcd.2.auto: Op regs DCBAA ptr = 0x00000fffffd000
+[   97.798722] xhci-hcd xhci-hcd.2.auto: Slot ID 7 dcbaa entry @000000007aaaab06 = 0x00000fffd90000
+[   97.798728] xhci-hcd xhci-hcd.2.auto: Output Context DMA address = 0xfffd90000
+[   97.798732] xhci-hcd xhci-hcd.2.auto: Internal device address = 7
+[   97.814126] xhci-hcd xhci-hcd.2.auto: Cancel URB 00000000061cb2f8, dev 1.3.4, ep 0x81, starting at offset 0xfffd94000
+[   97.814148] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   97.814190] xhci-hcd xhci-hcd.2.auto: Stopped on Transfer TRB for slot 6 ep 2
+[   97.814204] xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xfffd94000 (dma) in stream 0 URB 00000000061cb2f8
+[   97.814219] xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xfffd94010, cycle 1
+
+[   97.814226] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   97.814236] xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 00000000061cb2f8 TD as cancel_status is 2
+[   97.814259] xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @fffd94010
+[   97.814267] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 00000000061cb2f8 TD
+[   97.814275] xhci-hcd xhci-hcd.2.auto: Giveback URB 00000000061cb2f8, len = 0, expected = 7, status = -115
+[   97.814288] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[   97.816685] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[   97.817185] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[   97.817706] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[   97.821683] device: '1-1.3.5': device_add
+[   97.822014] usb 1-1.3.5: bus: 'usb': __driver_probe_device: matched device with driver usb
+[   97.822025] usb 1-1.3.5: bus: 'usb': really_probe: probing driver usb with device
+[   97.822127] xhci-hcd xhci-hcd.2.auto: add ep 0x81, slot id 7, new drop flags = 0x0, new add flags = 0x8
+[   97.822149] xhci-hcd xhci-hcd.2.auto: add ep 0x1, slot id 7, new drop flags = 0x0, new add flags = 0xc
+[   97.822155] xhci-hcd xhci-hcd.2.auto: xhci_check_bandwidth called for udev 000000008d388305
+[   97.822166] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   97.842350] xhci-hcd xhci-hcd.2.auto: Successful Endpoint Configure command
+[   97.842423] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   97.842467] xhci-hcd xhci-hcd.2.auto: Stopped on No-op or Link TRB for slot 7 ep 2
+[   97.842507] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   97.874908] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   97.874964] xhci-hcd xhci-hcd.2.auto: Stopped on No-op or Link TRB for slot 7 ep 1
+[   97.875014] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   97.906458] device: '1-1.3.5:1.0': device_add
+[   97.907006] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[   97.907175] usb 1-1.3.5:1.0: bus: 'usb': __driver_probe_device: matched device with driver usbhid
+[   97.907186] usb 1-1.3.5:1.0: bus: 'usb': really_probe: probing driver usbhid with device
+[   97.908379] device: '0003:0424:274B.0007': device_add
+[   97.908555] hid 0003:0424:274B.0007: bus: 'hid': __driver_probe_device: matched device with driver hid-generic
+[   97.908564] hid 0003:0424:274B.0007: bus: 'hid': really_probe: probing driver hid-generic with device
+[   97.908685] device: 'hidraw6': device_add
+[   97.908928] hid-generic 0003:0424:274B.0007: hidraw6: USB HID v1.10 Device [Microchip Tech Hub Controller] on usb-xhci-hcd.2.auto-1.3.5/input0
+[   97.908941] hid-generic 0003:0424:274B.0007: driver: 'hid-generic': driver_bound: bound to device
+[   97.908982] hid-generic 0003:0424:274B.0007: bus: 'hid': really_probe: bound device to driver hid-generic
+[   97.908995] usbhid 1-1.3.5:1.0: driver: 'usbhid': driver_bound: bound to device
+[   97.909031] usbhid 1-1.3.5:1.0: bus: 'usb': really_probe: bound device to driver usbhid
+[   97.909042] device: 'ep_81': device_add
+[   97.909228] device: 'ep_01': device_add
+[   97.909259] usb 1-1.3.5: driver: 'usb': driver_bound: bound to device
+[   97.909296] usb 1-1.3.5: bus: 'usb': really_probe: bound device to driver usb
+[   97.909379] device: 'ep_00': device_add
+[   98.027143] audit: type=1131 audit(1794381447.172:200): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=rpm-ostreed comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[   98.112849] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 6 ep 4 on endpoint
+[   98.112884] xhci-hcd xhci-hcd.2.auto: Hard-reset ep 4, slot 6
+[   98.112901] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.112945] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[   98.112956] xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xfffd92000 (dma) in stream 0 URB 000000000f0c61ec
+[   98.112976] xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xfffd92010, cycle 1
+
+[   98.112986] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.112997] xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 000000000f0c61ec TD as cancel_status is 2
+[   98.113013] xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @fffd92010
+[   98.113023] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 000000000f0c61ec TD
+[   98.113033] xhci-hcd xhci-hcd.2.auto: Giveback URB 000000000f0c61ec, len = 0, expected = 17, status = -71
+[   98.113051] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[   98.113578] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 5 ep 2 on endpoint
+[   98.113590] xhci-hcd xhci-hcd.2.auto: Soft-reset ep 2, slot 5
+[   98.113602] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.113640] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[   98.114831] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 6 ep 2 on endpoint
+[   98.114848] xhci-hcd xhci-hcd.2.auto: Hard-reset ep 2, slot 6
+[   98.114860] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.114896] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[   98.114906] xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xfffd94010 (dma) in stream 0 URB 00000000061cb2f8
+[   98.114919] xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xfffd94020, cycle 1
+
+[   98.114928] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.114938] xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 00000000061cb2f8 TD as cancel_status is 2
+[   98.114952] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 5 ep 4 on endpoint
+[   98.114963] xhci-hcd xhci-hcd.2.auto: Soft-reset ep 4, slot 5
+[   98.114971] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.114983] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 5 ep 2 on endpoint
+[   98.114992] xhci-hcd xhci-hcd.2.auto: Soft-reset ep 2, slot 5
+[   98.115000] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.115011] xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @fffd94020
+[   98.115020] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 00000000061cb2f8 TD
+[   98.115029] xhci-hcd xhci-hcd.2.auto: Giveback URB 00000000061cb2f8, len = 0, expected = 7, status = -71
+[   98.115042] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[   98.115053] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[   98.115066] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[   98.115575] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 5 ep 4 on endpoint
+[   98.115586] xhci-hcd xhci-hcd.2.auto: Soft-reset ep 4, slot 5
+[   98.115595] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.115606] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 5 ep 2 on endpoint
+[   98.115614] xhci-hcd xhci-hcd.2.auto: Soft-reset ep 2, slot 5
+[   98.115622] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.115633] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[   98.115646] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[   98.118710] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 5 ep 4 on endpoint
+[   98.118727] xhci-hcd xhci-hcd.2.auto: Soft-reset ep 4, slot 5
+[   98.118739] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.118751] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 5 ep 2 on endpoint
+[   98.118760] xhci-hcd xhci-hcd.2.auto: Soft-reset ep 2, slot 5
+[   98.118769] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.118780] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[   98.118795] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[   98.119208] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 5 ep 4 on endpoint
+[   98.119222] xhci-hcd xhci-hcd.2.auto: Soft-reset ep 4, slot 5
+[   98.119234] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.119270] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[   98.119325] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 5 ep 2 on endpoint
+[   98.119336] xhci-hcd xhci-hcd.2.auto: Hard-reset ep 2, slot 5
+[   98.119347] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.119380] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[   98.119389] xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xffff80010 (dma) in stream 0 URB 000000008b5f9504
+[   98.119402] xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xffff80020, cycle 1
+
+[   98.119411] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.119423] xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 000000008b5f9504 TD as cancel_status is 2
+[   98.119436] xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @ffff80020
+[   98.119445] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 000000008b5f9504 TD
+[   98.119453] xhci-hcd xhci-hcd.2.auto: Giveback URB 000000008b5f9504, len = 0, expected = 8, status = -71
+[   98.119471] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[   98.119706] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 5 ep 4 on endpoint
+[   98.119719] xhci-hcd xhci-hcd.2.auto: Hard-reset ep 4, slot 5
+[   98.119732] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.119768] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[   98.119777] xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xffff7e000 (dma) in stream 0 URB 00000000415bb2e4
+[   98.119789] xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xffff7e010, cycle 1
+
+[   98.119798] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.119808] xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 00000000415bb2e4 TD as cancel_status is 2
+[   98.119821] xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @ffff7e010
+[   98.119830] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 00000000415bb2e4 TD
+[   98.119839] xhci-hcd xhci-hcd.2.auto: Giveback URB 00000000415bb2e4, len = 0, expected = 16, status = -71
+[   98.119852] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[   98.130601] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 6 ep 4 on endpoint
+[   98.130616] xhci-hcd xhci-hcd.2.auto: Hard-reset ep 4, slot 6
+[   98.130627] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.130663] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[   98.130672] xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xfffd92010 (dma) in stream 0 URB 000000000f0c61ec
+[   98.130684] xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xfffd92020, cycle 1
+
+[   98.130693] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.130703] xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 000000000f0c61ec TD as cancel_status is 2
+[   98.130715] xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @fffd92020
+[   98.130724] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 000000000f0c61ec TD
+[   98.130732] xhci-hcd xhci-hcd.2.auto: Giveback URB 000000000f0c61ec, len = 0, expected = 17, status = -71
+[   98.130744] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[   98.134616] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 6 ep 2 on endpoint
+[   98.134634] xhci-hcd xhci-hcd.2.auto: Hard-reset ep 2, slot 6
+[   98.134646] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.134691] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[   98.134700] xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xfffd94020 (dma) in stream 0 URB 00000000061cb2f8
+[   98.134712] xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xfffd94030, cycle 1
+
+[   98.134720] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.134731] xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 00000000061cb2f8 TD as cancel_status is 2
+[   98.134743] xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @fffd94030
+[   98.134752] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 00000000061cb2f8 TD
+[   98.134761] xhci-hcd xhci-hcd.2.auto: Giveback URB 00000000061cb2f8, len = 0, expected = 7, status = -71
+[   98.134773] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[   98.138074] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 5 ep 4 on endpoint
+[   98.138087] xhci-hcd xhci-hcd.2.auto: Hard-reset ep 4, slot 5
+[   98.138097] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.138109] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 5 ep 2 on endpoint
+[   98.138117] xhci-hcd xhci-hcd.2.auto: Hard-reset ep 2, slot 5
+[   98.138126] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.138137] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[   98.138146] xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xffff7e010 (dma) in stream 0 URB 00000000415bb2e4
+[   98.138158] xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xffff7e020, cycle 1
+
+[   98.138166] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.138176] xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 00000000415bb2e4 TD as cancel_status is 2
+[   98.138187] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[   98.138195] xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xffff80020 (dma) in stream 0 URB 000000008b5f9504
+[   98.138206] xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xffff80030, cycle 1
+
+[   98.138214] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.138224] xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 000000008b5f9504 TD as cancel_status is 2
+[   98.138235] xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @ffff7e020
+[   98.138244] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 00000000415bb2e4 TD
+[   98.138252] xhci-hcd xhci-hcd.2.auto: Giveback URB 00000000415bb2e4, len = 0, expected = 16, status = -71
+[   98.138265] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[   98.138275] xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @ffff80030
+[   98.138283] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 000000008b5f9504 TD
+[   98.138291] xhci-hcd xhci-hcd.2.auto: Giveback URB 000000008b5f9504, len = 0, expected = 8, status = -71
+[   98.138301] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[   98.162635] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 6 ep 4 on endpoint
+[   98.162652] xhci-hcd xhci-hcd.2.auto: Hard-reset ep 4, slot 6
+[   98.162666] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.162710] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[   98.162720] xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xfffd92020 (dma) in stream 0 URB 000000000f0c61ec
+[   98.162735] xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xfffd92030, cycle 1
+
+[   98.162745] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.162757] xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 000000000f0c61ec TD as cancel_status is 2
+[   98.162772] xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @fffd92030
+[   98.162782] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 000000000f0c61ec TD
+[   98.162793] xhci-hcd xhci-hcd.2.auto: Giveback URB 000000000f0c61ec, len = 0, expected = 17, status = -71
+[   98.162806] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[   98.163127] usb 1-1.3: USB disconnect, device number 5
+[   98.163142] usb 1-1.3.2: USB disconnect, device number 6
+[   98.163157] device: 'ep_81': device_unregister
+[   98.257829] device: 'input15::numlock': device_unregister
+[   98.258040] device: 'input15::numlock': device_create_release
+[   98.285768] device: 'input15::capslock': device_unregister
+[   98.286024] device: 'input15::capslock': device_create_release
+[   98.325821] device: 'input15::scrolllock': device_unregister
+[   98.326201] device: 'input15::scrolllock': device_create_release
+[   98.326228] device: 'input15::compose': device_unregister
+[   98.326448] device: 'input15::compose': device_create_release
+[   98.349975] device: 'input15::kana': device_unregister
+[   98.350456] device: 'input15::kana': device_create_release
+[   98.422415] device: 'hidraw1': device_unregister
+[   98.423413] device: 'hidraw1': device_create_release
+[   98.423867] device: 'ep_82': device_unregister
+[   98.602118] device: 'hidraw2': device_unregister
+[   98.602373] device: 'hidraw2': device_create_release
+[   98.602768] device: 'ep_83': device_unregister
+[   98.602879] device: 'ep_04': device_unregister
+[   98.603518] device: 'hidraw3': device_unregister
+[   98.604108] device: 'hidraw3': device_create_release
+[   98.604329] device: 'ep_05': device_unregister
+[   98.605005] xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 000000002cf45c41
+[   98.605073] xhci-hcd xhci-hcd.2.auto: drop ep 0x81, slot id 5, new drop flags = 0x8, new add flags = 0x0
+[   98.605086] xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 000000002cf45c41
+[   98.605129] xhci-hcd xhci-hcd.2.auto: drop ep 0x82, slot id 5, new drop flags = 0x28, new add flags = 0x0
+[   98.605141] xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 000000002cf45c41
+[   98.605187] xhci-hcd xhci-hcd.2.auto: drop ep 0x83, slot id 5, new drop flags = 0xa8, new add flags = 0x0
+[   98.605198] xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 000000002cf45c41
+[   98.605243] xhci-hcd xhci-hcd.2.auto: drop ep 0x4, slot id 5, new drop flags = 0x1a8, new add flags = 0x0
+[   98.605254] xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 000000002cf45c41
+[   98.605300] xhci-hcd xhci-hcd.2.auto: drop ep 0x5, slot id 5, new drop flags = 0x5a8, new add flags = 0x0
+[   98.605312] xhci-hcd xhci-hcd.2.auto: xhci_check_bandwidth called for udev 000000002cf45c41
+[   98.605338] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.610901] xhci-hcd xhci-hcd.2.auto: Successful Endpoint Configure command
+[   98.610946] xhci-hcd xhci-hcd.2.auto: endpoint disable with ep_state 0x40
+[   98.610957] xhci-hcd xhci-hcd.2.auto: endpoint disable with ep_state 0x40
+[   98.611126] device: 'ep_00': device_unregister
+[   98.629728] device: 'wakeup14': device_unregister
+[   98.630040] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.630159] usb 1-1.3.4: USB disconnect, device number 7
+[   98.630172] device: 'ep_81': device_unregister
+[   98.654028] device: 'hidraw4': device_unregister
+[   98.654756] device: 'hidraw4': device_create_release
+[   98.655046] device: 'ep_82': device_unregister
+[   98.674460] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 4 ep 2 on endpoint
+[   98.674481] xhci-hcd xhci-hcd.2.auto: Soft-reset ep 2, slot 4
+[   98.674494] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.674531] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[   98.782010] device: 'hidraw5': device_unregister
+[   98.782415] device: 'hidraw5': device_create_release
+[   98.782782] xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 0000000097bd69b4
+[   98.782837] xhci-hcd xhci-hcd.2.auto: drop ep 0x81, slot id 6, new drop flags = 0x8, new add flags = 0x0
+[   98.782846] xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 0000000097bd69b4
+[   98.782881] xhci-hcd xhci-hcd.2.auto: drop ep 0x82, slot id 6, new drop flags = 0x28, new add flags = 0x0
+[   98.782891] xhci-hcd xhci-hcd.2.auto: xhci_check_bandwidth called for udev 0000000097bd69b4
+[   98.782912] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.802975] xhci-hcd xhci-hcd.2.auto: Successful Endpoint Configure command
+[   98.803009] xhci-hcd xhci-hcd.2.auto: endpoint disable with ep_state 0x40
+[   98.803018] xhci-hcd xhci-hcd.2.auto: endpoint disable with ep_state 0x40
+[   98.803053] device: 'ep_00': device_unregister
+[   98.804042] device: 'wakeup15': device_unregister
+[   98.804474] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.804568] usb 1-1.3.5: USB disconnect, device number 8
+[   98.804582] device: 'ep_81': device_unregister
+[   98.804795] device: 'ep_01': device_unregister
+[   98.805786] device: 'hidraw6': device_unregister
+[   98.806120] device: 'hidraw6': device_create_release
+[   98.806411] xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 000000008d388305
+[   98.806466] xhci-hcd xhci-hcd.2.auto: drop ep 0x1, slot id 7, new drop flags = 0x4, new add flags = 0x0
+[   98.806476] xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 000000008d388305
+[   98.806518] xhci-hcd xhci-hcd.2.auto: drop ep 0x81, slot id 7, new drop flags = 0xc, new add flags = 0x0
+[   98.806528] xhci-hcd xhci-hcd.2.auto: xhci_check_bandwidth called for udev 000000008d388305
+[   98.806546] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.834351] xhci-hcd xhci-hcd.2.auto: Successful Endpoint Configure command
+[   98.834423] device: 'ep_00': device_unregister
+[   98.835496] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.835596] device: 'ep_81': device_unregister
+[   98.835932] xhci-hcd xhci-hcd.2.auto: Cancel URB 00000000c620c059, dev 1.3, ep 0x81, starting at offset 0xffffd4020
+[   98.835947] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.835987] xhci-hcd xhci-hcd.2.auto: Stopped on Transfer TRB for slot 4 ep 2
+[   98.836001] xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xffffd4020 (dma) in stream 0 URB 00000000c620c059
+[   98.836013] xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xffffd4030, cycle 1
+
+[   98.836019] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.836029] xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 00000000c620c059 TD as cancel_status is 2
+[   98.836040] xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @ffffd4030
+[   98.836049] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 00000000c620c059 TD
+[   98.836057] xhci-hcd xhci-hcd.2.auto: Giveback URB 00000000c620c059, len = 0, expected = 1, status = -115
+[   98.836069] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[   98.836132] device: '1-1.3-port5': device_unregister
+[   98.836222] device: '1-1.3-port4': device_unregister
+[   98.836295] device: '1-1.3-port3': device_unregister
+[   98.836368] device: '1-1.3-port2': device_unregister
+[   98.836437] device: '1-1.3-port1': device_unregister
+[   98.836597] xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 00000000eb0d08cd
+[   98.836649] xhci-hcd xhci-hcd.2.auto: drop ep 0x81, slot id 4, new drop flags = 0x8, new add flags = 0x0
+[   98.836658] xhci-hcd xhci-hcd.2.auto: xhci_check_bandwidth called for udev 00000000eb0d08cd
+[   98.836675] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.866363] xhci-hcd xhci-hcd.2.auto: Successful Endpoint Configure command
+[   98.866429] device: 'ep_00': device_unregister
+[   98.867620] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.997919] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   98.998013] xhci-hcd xhci-hcd.2.auto: Slot 4 output ctx = 0x0000000ffffc8000 (dma)
+[   98.998033] xhci-hcd xhci-hcd.2.auto: Slot 4 input ctx = 0x0000000ffffce000 (dma)
+[   98.998054] xhci-hcd xhci-hcd.2.auto: Set slot id 4 dcbaa entry 0000000025aae7d5 to 0xffffc8000
+[   99.069890] usb 1-1.3: new high-speed USB device number 9 using xhci-hcd
+[   99.069944] xhci-hcd xhci-hcd.2.auto: Slot ID 4: HW portnum 0, hcd portnum 0
+[   99.069967] xhci-hcd xhci-hcd.2.auto: udev->tt = 0000000000000000
+[   99.069985] xhci-hcd xhci-hcd.2.auto: udev->ttport = 0x0
+[   99.070013] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   99.070171] xhci-hcd xhci-hcd.2.auto: Successful setup context command
+[   99.070198] xhci-hcd xhci-hcd.2.auto: Op regs DCBAA ptr = 0x00000fffffd000
+[   99.070218] xhci-hcd xhci-hcd.2.auto: Slot ID 4 dcbaa entry @0000000025aae7d5 = 0x00000ffffc8000
+[   99.070241] xhci-hcd xhci-hcd.2.auto: Output Context DMA address = 0xffffc8000
+[   99.070260] xhci-hcd xhci-hcd.2.auto: Internal device address = 0
+[   99.070395] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[   99.141908] xhci-hcd xhci-hcd.2.auto: Resetting device with slot ID 4
+[   99.141972] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   99.142058] xhci-hcd xhci-hcd.2.auto: Completed reset device command.
+[   99.142124] xhci-hcd xhci-hcd.2.auto: Can't reset device (slot ID 4) in default state
+[   99.142147] xhci-hcd xhci-hcd.2.auto: Not freeing device rings.
+[   99.142194] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   99.142336] xhci-hcd xhci-hcd.2.auto: Successful setup address command
+[   99.142364] xhci-hcd xhci-hcd.2.auto: Op regs DCBAA ptr = 0x00000fffffd000
+[   99.142388] xhci-hcd xhci-hcd.2.auto: Slot ID 4 dcbaa entry @0000000025aae7d5 = 0x00000ffffc8000
+[   99.142419] xhci-hcd xhci-hcd.2.auto: Output Context DMA address = 0xffffc8000
+[   99.142441] xhci-hcd xhci-hcd.2.auto: Internal device address = 4
+[   99.159452] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[   99.159896] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[   99.160443] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[   99.160630] device: '1-1.3': device_add
+[   99.164196] usb 1-1.3: bus: 'usb': __driver_probe_device: matched device with driver usb
+[   99.164237] usb 1-1.3: bus: 'usb': really_probe: probing driver usb with device
+[   99.164420] xhci-hcd xhci-hcd.2.auto: add ep 0x81, slot id 4, new drop flags = 0x0, new add flags = 0x8
+[   99.164452] xhci-hcd xhci-hcd.2.auto: xhci_check_bandwidth called for udev 00000000eb0d08cd
+[   99.164492] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   99.186396] xhci-hcd xhci-hcd.2.auto: Successful Endpoint Configure command
+[   99.186548] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   99.186632] xhci-hcd xhci-hcd.2.auto: Stopped on No-op or Link TRB for slot 4 ep 2
+[   99.186713] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   99.218806] device: '1-1.3:1.0': device_add
+[   99.219040] usb 1-1.3:1.0: bus: 'usb': __driver_probe_device: matched device with driver hub
+[   99.219071] usb 1-1.3:1.0: bus: 'usb': really_probe: probing driver hub with device
+[   99.219352] hub 1-1.3:1.0: USB hub found
+[   99.219480] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[   99.219622] hub 1-1.3:1.0: 5 ports detected
+[   99.219654] xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 00000000eb0d08cd
+[   99.219770] xhci-hcd xhci-hcd.2.auto: drop ep 0x81, slot id 4, new drop flags = 0x8, new add flags = 0x0
+[   99.219813] xhci-hcd xhci-hcd.2.auto: add ep 0x81, slot id 4, new drop flags = 0x8, new add flags = 0x8
+[   99.219839] xhci-hcd xhci-hcd.2.auto: xhci_check_bandwidth called for udev 00000000eb0d08cd
+[   99.219873] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   99.250411] xhci-hcd xhci-hcd.2.auto: Successful Endpoint Configure command
+[   99.250706] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   99.250779] xhci-hcd xhci-hcd.2.auto: Stopped on No-op or Link TRB for slot 4 ep 2
+[   99.250849] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   99.282441] device: 'ep_81': device_add
+[   99.282937] device: '1-1.3-port1': device_add
+[   99.283145] device: '1-1.3-port2': device_add
+[   99.283462] device: '1-1.3-port3': device_add
+[   99.283686] device: '1-1.3-port4': device_add
+[   99.283823] device: '1-1.3-port5': device_add
+[   99.284019] xhci-hcd xhci-hcd.2.auto: xHCI version 110 needs hub TT think time and number of ports
+[   99.284045] xhci-hcd xhci-hcd.2.auto: Set up configure endpoint for hub device.
+[   99.284076] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   99.284233] xhci-hcd xhci-hcd.2.auto: Successful Endpoint Configure command
+[   99.284729] hub 1-1.3:1.0: driver: 'hub': driver_bound: bound to device
+[   99.284946] hub 1-1.3:1.0: bus: 'usb': really_probe: bound device to driver hub
+[   99.284996] usb 1-1.3: driver: 'usb': driver_bound: bound to device
+[   99.285124] usb 1-1.3: bus: 'usb': really_probe: bound device to driver usb
+[   99.285207] device: 'ep_00': device_add
+[   99.914481] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 4 ep 0 on endpoint
+[   99.914552] xhci-hcd xhci-hcd.2.auto: TRB error 4, halted endpoint index = 0
+[   99.914582] xhci-hcd xhci-hcd.2.auto: Hard-reset ep 0, slot 4
+[   99.914617] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   99.914684] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[   99.914710] xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xffffcf470 (dma) in stream 0 URB 000000006fe7454d
+[   99.914752] xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xffffcf4a0, cycle 1
+
+[   99.914776] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   99.914799] xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 000000006fe7454d TD as cancel_status is 2
+[   99.914835] xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @ffffcf4a0
+[   99.914862] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 000000006fe7454d TD
+[   99.914887] xhci-hcd xhci-hcd.2.auto: Giveback URB 000000006fe7454d, len = 0, expected = 4, status = -71
+[   99.914923] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[   99.915588] hub 1-1.3:1.0: hub_ext_port_status failed (err = -71)
+[   99.915721] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 4 ep 0 on endpoint
+[   99.915759] xhci-hcd xhci-hcd.2.auto: TRB error 4, halted endpoint index = 0
+[   99.915783] xhci-hcd xhci-hcd.2.auto: Hard-reset ep 0, slot 4
+[   99.915813] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   99.915868] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[   99.915891] xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xffffcf4a0 (dma) in stream 0 URB 000000006fe7454d
+[   99.915923] xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xffffcf4d0, cycle 1
+
+[   99.915946] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   99.915968] xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 000000006fe7454d TD as cancel_status is 2
+[   99.916002] xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @ffffcf4d0
+[   99.916025] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 000000006fe7454d TD
+[   99.916049] xhci-hcd xhci-hcd.2.auto: Giveback URB 000000006fe7454d, len = 0, expected = 4, status = -71
+[   99.916085] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[   99.921783] hub 1-1.3:1.0: hub_ext_port_status failed (err = -71)
+[   99.921887] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 4 ep 0 on endpoint
+[   99.921934] xhci-hcd xhci-hcd.2.auto: TRB error 4, halted endpoint index = 0
+[   99.921959] xhci-hcd xhci-hcd.2.auto: Hard-reset ep 0, slot 4
+[   99.921990] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   99.922045] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[   99.922069] xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xffffcf4d0 (dma) in stream 0 URB 000000006fe7454d
+[   99.922101] xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xffffcf500, cycle 1
+
+[   99.922124] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   99.922146] xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 000000006fe7454d TD as cancel_status is 2
+[   99.922179] xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @ffffcf500
+[   99.922203] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 000000006fe7454d TD
+[   99.922227] xhci-hcd xhci-hcd.2.auto: Giveback URB 000000006fe7454d, len = 0, expected = 4, status = -71
+[   99.922261] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[   99.922449] hub 1-1.3:1.0: hub_ext_port_status failed (err = -71)
+[   99.922523] xhci-hcd xhci-hcd.2.auto: Cancel URB 00000000270caf1d, dev 1.3, ep 0x81, starting at offset 0xfffd87000
+[   99.922553] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   99.922619] xhci-hcd xhci-hcd.2.auto: Stopped on Transfer TRB for slot 4 ep 2
+[   99.922673] xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xfffd87000 (dma) in stream 0 URB 00000000270caf1d
+[   99.922712] xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xfffd87010, cycle 1
+
+[   99.922735] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   99.922756] xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 00000000270caf1d TD as cancel_status is 2
+[   99.922793] xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @fffd87010
+[   99.922817] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 00000000270caf1d TD
+[   99.922840] xhci-hcd xhci-hcd.2.auto: Giveback URB 00000000270caf1d, len = 0, expected = 1, status = -115
+[   99.922877] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[   99.923072] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 4 ep 0 on endpoint
+[   99.923104] xhci-hcd xhci-hcd.2.auto: TRB error 4, halted endpoint index = 0
+[   99.923129] xhci-hcd xhci-hcd.2.auto: Hard-reset ep 0, slot 4
+[   99.923158] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   99.923212] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[   99.923235] xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xffffcf500 (dma) in stream 0 URB 000000009cd18e37
+[   99.923268] xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xffffcf520, cycle 1
+
+[   99.923292] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   99.923314] xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 000000009cd18e37 TD as cancel_status is 2
+[   99.923346] xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @ffffcf520
+[   99.923370] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 000000009cd18e37 TD
+[   99.923394] xhci-hcd xhci-hcd.2.auto: Giveback URB 000000009cd18e37, len = 0, expected = 0, status = -71
+[   99.923427] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[   99.923554] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 4 ep 0 on endpoint
+[   99.923581] xhci-hcd xhci-hcd.2.auto: TRB error 4, halted endpoint index = 0
+[   99.923604] xhci-hcd xhci-hcd.2.auto: Hard-reset ep 0, slot 4
+[   99.923631] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   99.923684] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[   99.923706] xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xffffcf520 (dma) in stream 0 URB 000000009cd18e37
+[   99.923737] xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xffffcf550, cycle 1
+
+[   99.923760] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   99.923782] xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 000000009cd18e37 TD as cancel_status is 2
+[   99.923813] xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @ffffcf550
+[   99.923837] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 000000009cd18e37 TD
+[   99.923860] xhci-hcd xhci-hcd.2.auto: Giveback URB 000000009cd18e37, len = 0, expected = 2, status = -71
+[   99.923892] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[   99.923968] usb 1-1.3: Failed to suspend device, error -71
+[   99.955049] usb 1-1.3: USB disconnect, device number 9
+[   99.955084] device: 'ep_81': device_unregister
+[   99.956095] device: '1-1.3-port5': device_unregister
+[   99.956437] device: '1-1.3-port4': device_unregister
+[   99.956770] device: '1-1.3-port3': device_unregister
+[   99.957022] device: '1-1.3-port2': device_unregister
+[   99.957346] device: '1-1.3-port1': device_unregister
+[   99.958171] xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 00000000eb0d08cd
+[   99.958310] xhci-hcd xhci-hcd.2.auto: drop ep 0x81, slot id 4, new drop flags = 0x8, new add flags = 0x0
+[   99.958341] xhci-hcd xhci-hcd.2.auto: xhci_check_bandwidth called for udev 00000000eb0d08cd
+[   99.958381] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[   99.986390] xhci-hcd xhci-hcd.2.auto: Successful Endpoint Configure command
+[   99.986490] device: 'ep_00': device_unregister
+[   99.989460] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  100.118069] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  100.118208] xhci-hcd xhci-hcd.2.auto: Slot 4 output ctx = 0x0000000ffffc8000 (dma)
+[  100.118230] xhci-hcd xhci-hcd.2.auto: Slot 4 input ctx = 0x0000000ffffce000 (dma)
+[  100.118251] xhci-hcd xhci-hcd.2.auto: Set slot id 4 dcbaa entry 0000000025aae7d5 to 0xffffc8000
+[  100.189989] usb 1-1.3: new high-speed USB device number 10 using xhci-hcd
+[  100.190042] xhci-hcd xhci-hcd.2.auto: Slot ID 4: HW portnum 0, hcd portnum 0
+[  100.190067] xhci-hcd xhci-hcd.2.auto: udev->tt = 0000000000000000
+[  100.190088] xhci-hcd xhci-hcd.2.auto: udev->ttport = 0x0
+[  100.190118] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  100.190270] xhci-hcd xhci-hcd.2.auto: Successful setup context command
+[  100.190297] xhci-hcd xhci-hcd.2.auto: Op regs DCBAA ptr = 0x00000fffffd000
+[  100.190318] xhci-hcd xhci-hcd.2.auto: Slot ID 4 dcbaa entry @0000000025aae7d5 = 0x00000ffffc8000
+[  100.190455] xhci-hcd xhci-hcd.2.auto: Output Context DMA address = 0xffffc8000
+[  100.190476] xhci-hcd xhci-hcd.2.auto: Internal device address = 0
+[  100.190584] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[  100.261843] xhci-hcd xhci-hcd.2.auto: Resetting device with slot ID 4
+[  100.261898] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  100.261979] xhci-hcd xhci-hcd.2.auto: Completed reset device command.
+[  100.262103] xhci-hcd xhci-hcd.2.auto: Can't reset device (slot ID 4) in default state
+[  100.262124] xhci-hcd xhci-hcd.2.auto: Not freeing device rings.
+[  100.262170] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  100.262309] xhci-hcd xhci-hcd.2.auto: Successful setup address command
+[  100.262334] xhci-hcd xhci-hcd.2.auto: Op regs DCBAA ptr = 0x00000fffffd000
+[  100.262354] xhci-hcd xhci-hcd.2.auto: Slot ID 4 dcbaa entry @0000000025aae7d5 = 0x00000ffffc8000
+[  100.262379] xhci-hcd xhci-hcd.2.auto: Output Context DMA address = 0xffffc8000
+[  100.262397] xhci-hcd xhci-hcd.2.auto: Internal device address = 4
+[  100.279524] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[  100.280162] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[  100.280813] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[  100.280976] device: '1-1.3': device_add
+[  100.281950] usb 1-1.3: bus: 'usb': __driver_probe_device: matched device with driver usb
+[  100.281987] usb 1-1.3: bus: 'usb': really_probe: probing driver usb with device
+[  100.282321] xhci-hcd xhci-hcd.2.auto: add ep 0x81, slot id 4, new drop flags = 0x0, new add flags = 0x8
+[  100.282354] xhci-hcd xhci-hcd.2.auto: xhci_check_bandwidth called for udev 00000000b3f224a6
+[  100.282394] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  100.309583] xhci-hcd xhci-hcd.2.auto: Successful Endpoint Configure command
+[  100.309865] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  100.309951] xhci-hcd xhci-hcd.2.auto: Stopped on No-op or Link TRB for slot 4 ep 2
+[  100.310010] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  100.338848] device: '1-1.3:1.0': device_add
+[  100.339083] usb 1-1.3:1.0: bus: 'usb': __driver_probe_device: matched device with driver hub
+[  100.339113] usb 1-1.3:1.0: bus: 'usb': really_probe: probing driver hub with device
+[  100.339252] hub 1-1.3:1.0: USB hub found
+[  100.339374] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[  100.339562] hub 1-1.3:1.0: 5 ports detected
+[  100.339594] xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 00000000b3f224a6
+[  100.339716] xhci-hcd xhci-hcd.2.auto: drop ep 0x81, slot id 4, new drop flags = 0x8, new add flags = 0x0
+[  100.339757] xhci-hcd xhci-hcd.2.auto: add ep 0x81, slot id 4, new drop flags = 0x8, new add flags = 0x8
+[  100.339781] xhci-hcd xhci-hcd.2.auto: xhci_check_bandwidth called for udev 00000000b3f224a6
+[  100.339819] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  100.370411] xhci-hcd xhci-hcd.2.auto: Successful Endpoint Configure command
+[  100.370719] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  100.370791] xhci-hcd xhci-hcd.2.auto: Stopped on No-op or Link TRB for slot 4 ep 2
+[  100.370861] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  100.402891] device: 'ep_81': device_add
+[  100.403666] device: '1-1.3-port1': device_add
+[  100.403847] device: '1-1.3-port2': device_add
+[  100.403983] device: '1-1.3-port3': device_add
+[  100.404109] device: '1-1.3-port4': device_add
+[  100.404231] device: '1-1.3-port5': device_add
+[  100.404431] xhci-hcd xhci-hcd.2.auto: xHCI version 110 needs hub TT think time and number of ports
+[  100.404455] xhci-hcd xhci-hcd.2.auto: Set up configure endpoint for hub device.
+[  100.404484] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  100.404661] xhci-hcd xhci-hcd.2.auto: Successful Endpoint Configure command
+[  100.405303] hub 1-1.3:1.0: driver: 'hub': driver_bound: bound to device
+[  100.405511] hub 1-1.3:1.0: bus: 'usb': really_probe: bound device to driver hub
+[  100.405554] usb 1-1.3: driver: 'usb': driver_bound: bound to device
+[  100.405673] usb 1-1.3: bus: 'usb': really_probe: bound device to driver usb
+[  100.405854] device: 'ep_00': device_add
+[  101.034079] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  101.034154] xhci-hcd xhci-hcd.2.auto: Slot 5 output ctx = 0x0000000fffd90000 (dma)
+[  101.034166] xhci-hcd xhci-hcd.2.auto: Slot 5 input ctx = 0x0000000fffd89000 (dma)
+[  101.034176] xhci-hcd xhci-hcd.2.auto: Set slot id 5 dcbaa entry 00000000e6a24d5c to 0xfffd90000
+[  101.113770] usb 1-1.3.2: new high-speed USB device number 11 using xhci-hcd
+[  101.113791] xhci-hcd xhci-hcd.2.auto: Slot ID 5: HW portnum 0, hcd portnum 0
+[  101.113798] xhci-hcd xhci-hcd.2.auto: udev->tt = 0000000000000000
+[  101.113804] xhci-hcd xhci-hcd.2.auto: udev->ttport = 0x0
+[  101.113812] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  101.113907] xhci-hcd xhci-hcd.2.auto: Successful setup context command
+[  101.113917] xhci-hcd xhci-hcd.2.auto: Op regs DCBAA ptr = 0x00000fffffd000
+[  101.113923] xhci-hcd xhci-hcd.2.auto: Slot ID 5 dcbaa entry @00000000e6a24d5c = 0x00000fffd90000
+[  101.113930] xhci-hcd xhci-hcd.2.auto: Output Context DMA address = 0xfffd90000
+[  101.113935] xhci-hcd xhci-hcd.2.auto: Internal device address = 0
+[  101.114031] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[  101.189766] xhci-hcd xhci-hcd.2.auto: Resetting device with slot ID 5
+[  101.189784] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  101.189845] xhci-hcd xhci-hcd.2.auto: Completed reset device command.
+[  101.189907] xhci-hcd xhci-hcd.2.auto: Can't reset device (slot ID 5) in default state
+[  101.189915] xhci-hcd xhci-hcd.2.auto: Not freeing device rings.
+[  101.189929] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  101.190002] xhci-hcd xhci-hcd.2.auto: Successful setup address command
+[  101.190011] xhci-hcd xhci-hcd.2.auto: Op regs DCBAA ptr = 0x00000fffffd000
+[  101.190019] xhci-hcd xhci-hcd.2.auto: Slot ID 5 dcbaa entry @00000000e6a24d5c = 0x00000fffd90000
+[  101.190026] xhci-hcd xhci-hcd.2.auto: Output Context DMA address = 0xfffd90000
+[  101.190032] xhci-hcd xhci-hcd.2.auto: Internal device address = 5
+[  101.206241] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[  101.206384] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[  101.206512] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[  101.206583] device: '1-1.3.2': device_add
+[  101.206907] usb 1-1.3.2: bus: 'usb': __driver_probe_device: matched device with driver usb
+[  101.206917] usb 1-1.3.2: bus: 'usb': really_probe: probing driver usb with device
+[  101.206989] xhci-hcd xhci-hcd.2.auto: add ep 0x81, slot id 5, new drop flags = 0x0, new add flags = 0x8
+[  101.207000] xhci-hcd xhci-hcd.2.auto: add ep 0x82, slot id 5, new drop flags = 0x0, new add flags = 0x28
+[  101.207009] xhci-hcd xhci-hcd.2.auto: add ep 0x83, slot id 5, new drop flags = 0x0, new add flags = 0xa8
+[  101.207017] xhci-hcd xhci-hcd.2.auto: add ep 0x4, slot id 5, new drop flags = 0x0, new add flags = 0x1a8
+[  101.207025] xhci-hcd xhci-hcd.2.auto: add ep 0x5, slot id 5, new drop flags = 0x0, new add flags = 0x5a8
+[  101.207030] xhci-hcd xhci-hcd.2.auto: xhci_check_bandwidth called for udev 0000000006836223
+[  101.207040] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  101.234351] xhci-hcd xhci-hcd.2.auto: Successful Endpoint Configure command
+[  101.234440] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  101.234495] xhci-hcd xhci-hcd.2.auto: Stopped on No-op or Link TRB for slot 5 ep 2
+[  101.234556] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  101.266386] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  101.266442] xhci-hcd xhci-hcd.2.auto: Stopped on No-op or Link TRB for slot 5 ep 4
+[  101.266503] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  101.298372] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  101.298426] xhci-hcd xhci-hcd.2.auto: Stopped on No-op or Link TRB for slot 5 ep 6
+[  101.298501] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  101.330378] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  101.330437] xhci-hcd xhci-hcd.2.auto: Stopped on No-op or Link TRB for slot 5 ep 7
+[  101.330496] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  101.362371] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  101.362427] xhci-hcd xhci-hcd.2.auto: Stopped on No-op or Link TRB for slot 5 ep 9
+[  101.362480] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  101.394723] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[  101.394818] device: '1-1.3.2:1.0': device_add
+[  101.394915] usb 1-1.3.2:1.0: bus: 'usb': __driver_probe_device: matched device with driver usbhid
+[  101.394925] usb 1-1.3.2:1.0: bus: 'usb': really_probe: probing driver usbhid with device
+[  101.395338] device: '0003:0C45:0256.0008': device_add
+[  101.395401] hid 0003:0C45:0256.0008: bus: 'hid': __driver_probe_device: matched device with driver hid-generic
+[  101.395407] hid 0003:0C45:0256.0008: bus: 'hid': really_probe: probing driver hid-generic with device
+[  101.395540] device: 'wakeup14': device_add
+[  101.395646] device: 'input24': device_add
+[  101.395779] input: IO IO Type 68 Magnetic BL as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.2/1-1.3.2:1.0/0003:0C45:0256.0008/input/input24
+[  101.449849] device: 'input24::numlock': device_add
+[  101.469924] device: 'input24::capslock': device_add
+[  101.501826] device: 'input24::scrolllock': device_add
+[  101.534664] device: 'input24::compose': device_add
+[  101.534727] device: 'input24::kana': device_add
+[  101.565834] device: 'event10': device_add
+[  101.566027] device: 'hidraw1': device_add
+[  101.566156] hid-generic 0003:0C45:0256.0008: input,hidraw1: USB HID v1.10 Keyboard [IO IO Type 68 Magnetic BL] on usb-xhci-hcd.2.auto-1.3.2/input0
+[  101.566168] hid-generic 0003:0C45:0256.0008: driver: 'hid-generic': driver_bound: bound to device
+[  101.566214] hid-generic 0003:0C45:0256.0008: bus: 'hid': really_probe: bound device to driver hid-generic
+[  101.566228] usbhid 1-1.3.2:1.0: driver: 'usbhid': driver_bound: bound to device
+[  101.566255] usbhid 1-1.3.2:1.0: bus: 'usb': really_probe: bound device to driver usbhid
+[  101.566263] device: 'ep_81': device_add
+[  101.566292] device: '1-1.3.2:1.1': device_add
+[  101.566367] usb 1-1.3.2:1.1: bus: 'usb': __driver_probe_device: matched device with driver usbhid
+[  101.566373] usb 1-1.3.2:1.1: bus: 'usb': really_probe: probing driver usbhid with device
+[  101.566884] device: '0003:0C45:0256.0009': device_add
+[  101.566958] hid 0003:0C45:0256.0009: bus: 'hid': __driver_probe_device: matched device with driver hid-generic
+[  101.566969] hid 0003:0C45:0256.0009: bus: 'hid': really_probe: probing driver hid-generic with device
+[  101.567290] device: 'input25': device_add
+[  101.567459] input: IO IO Type 68 Magnetic BL Consumer Control as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.2/1-1.3.2:1.1/0003:0C45:0256.0009/input/input25
+[  101.621787] device: 'event11': device_add
+[  101.621992] device: 'input26': device_add
+[  101.622080] input: IO IO Type 68 Magnetic BL System Control as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.2/1-1.3.2:1.1/0003:0C45:0256.0009/input/input26
+[  101.622096] device: 'event12': device_add
+[  101.622183] device: 'input27': device_add
+[  101.622264] input: IO IO Type 68 Magnetic BL Keyboard as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.2/1-1.3.2:1.1/0003:0C45:0256.0009/input/input27
+[  101.622275] device: 'event13': device_add
+[  101.622352] device: 'input28': device_add
+[  101.622418] input: IO IO Type 68 Magnetic BL Mouse as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.2/1-1.3.2:1.1/0003:0C45:0256.0009/input/input28
+[  101.622428] device: 'event14': device_add
+[  101.622506] device: 'hidraw2': device_add
+[  101.622689] hid-generic 0003:0C45:0256.0009: input,hidraw2: USB HID v1.10 Keyboard [IO IO Type 68 Magnetic BL] on usb-xhci-hcd.2.auto-1.3.2/input1
+[  101.622699] hid-generic 0003:0C45:0256.0009: driver: 'hid-generic': driver_bound: bound to device
+[  101.622737] hid-generic 0003:0C45:0256.0009: bus: 'hid': really_probe: bound device to driver hid-generic
+[  101.622749] usbhid 1-1.3.2:1.1: driver: 'usbhid': driver_bound: bound to device
+[  101.622772] usbhid 1-1.3.2:1.1: bus: 'usb': really_probe: bound device to driver usbhid
+[  101.622781] device: 'ep_82': device_add
+[  101.622808] device: '1-1.3.2:1.2': device_add
+[  101.622879] usb 1-1.3.2:1.2: bus: 'usb': __driver_probe_device: matched device with driver usbhid
+[  101.622885] usb 1-1.3.2:1.2: bus: 'usb': really_probe: probing driver usbhid with device
+[  101.623310] device: '0003:0C45:0256.000A': device_add
+[  101.623403] hid 0003:0C45:0256.000A: bus: 'hid': __driver_probe_device: matched device with driver hid-generic
+[  101.623411] hid 0003:0C45:0256.000A: bus: 'hid': really_probe: probing driver hid-generic with device
+[  101.623496] device: 'hidraw3': device_add
+[  101.623638] hid-generic 0003:0C45:0256.000A: hidraw3: USB HID v1.10 Device [IO IO Type 68 Magnetic BL] on usb-xhci-hcd.2.auto-1.3.2/input2
+[  101.623646] hid-generic 0003:0C45:0256.000A: driver: 'hid-generic': driver_bound: bound to device
+[  101.623680] hid-generic 0003:0C45:0256.000A: bus: 'hid': really_probe: bound device to driver hid-generic
+[  101.623690] usbhid 1-1.3.2:1.2: driver: 'usbhid': driver_bound: bound to device
+[  101.623712] usbhid 1-1.3.2:1.2: bus: 'usb': really_probe: bound device to driver usbhid
+[  101.623720] device: 'ep_83': device_add
+[  101.623749] device: 'ep_04': device_add
+[  101.623777] device: '1-1.3.2:1.3': device_add
+[  101.623866] usb 1-1.3.2:1.3: bus: 'usb': __driver_probe_device: matched device with driver usbhid
+[  101.623872] usb 1-1.3.2:1.3: bus: 'usb': really_probe: probing driver usbhid with device
+[  101.623891] usbhid 1-1.3.2:1.3: couldn't find an input interrupt endpoint
+[  101.623897] usbhid 1-1.3.2:1.3: probe with driver usbhid rejects match -19
+[  101.623919] device: 'ep_05': device_add
+[  101.623945] usb 1-1.3.2: driver: 'usb': driver_bound: bound to device
+[  101.623978] usb 1-1.3.2: bus: 'usb': really_probe: bound device to driver usb
+[  101.624004] device: 'ep_00': device_add
+[  101.624200] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  101.624269] xhci-hcd xhci-hcd.2.auto: Slot 6 output ctx = 0x0000000ffff74000 (dma)
+[  101.624278] xhci-hcd xhci-hcd.2.auto: Slot 6 input ctx = 0x0000000fffda9000 (dma)
+[  101.624290] xhci-hcd xhci-hcd.2.auto: Set slot id 6 dcbaa entry 000000001bfdd5c7 to 0xffff74000
+[  101.713779] usb 1-1.3.4: new full-speed USB device number 12 using xhci-hcd
+[  101.713797] xhci-hcd xhci-hcd.2.auto: Slot ID 6: HW portnum 0, hcd portnum 0
+[  101.713805] xhci-hcd xhci-hcd.2.auto: udev->tt = 00000000ef33b62e
+[  101.713812] xhci-hcd xhci-hcd.2.auto: udev->ttport = 0x4
+[  101.713821] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  101.713898] xhci-hcd xhci-hcd.2.auto: Successful setup context command
+[  101.713909] xhci-hcd xhci-hcd.2.auto: Op regs DCBAA ptr = 0x00000fffffd000
+[  101.713916] xhci-hcd xhci-hcd.2.auto: Slot ID 6 dcbaa entry @000000001bfdd5c7 = 0x00000ffff74000
+[  101.713923] xhci-hcd xhci-hcd.2.auto: Output Context DMA address = 0xffff74000
+[  101.713928] xhci-hcd xhci-hcd.2.auto: Internal device address = 0
+[  101.714373] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[  101.789770] xhci-hcd xhci-hcd.2.auto: Resetting device with slot ID 6
+[  101.789784] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  101.789823] xhci-hcd xhci-hcd.2.auto: Completed reset device command.
+[  101.789856] xhci-hcd xhci-hcd.2.auto: Can't reset device (slot ID 6) in default state
+[  101.789862] xhci-hcd xhci-hcd.2.auto: Not freeing device rings.
+[  101.789873] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  101.790051] xhci-hcd xhci-hcd.2.auto: Successful setup address command
+[  101.790059] xhci-hcd xhci-hcd.2.auto: Op regs DCBAA ptr = 0x00000fffffd000
+[  101.790063] xhci-hcd xhci-hcd.2.auto: Slot ID 6 dcbaa entry @000000001bfdd5c7 = 0x00000ffff74000
+[  101.790068] xhci-hcd xhci-hcd.2.auto: Output Context DMA address = 0xffff74000
+[  101.790070] xhci-hcd xhci-hcd.2.auto: Internal device address = 6
+[  101.811720] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[  101.812503] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[  101.812896] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[  101.812949] device: '1-1.3.4': device_add
+[  101.813116] usb 1-1.3.4: bus: 'usb': __driver_probe_device: matched device with driver usb
+[  101.813121] usb 1-1.3.4: bus: 'usb': really_probe: probing driver usb with device
+[  101.813167] xhci-hcd xhci-hcd.2.auto: add ep 0x81, slot id 6, new drop flags = 0x0, new add flags = 0x8
+[  101.813173] xhci-hcd xhci-hcd.2.auto: add ep 0x82, slot id 6, new drop flags = 0x0, new add flags = 0x28
+[  101.813176] xhci-hcd xhci-hcd.2.auto: xhci_check_bandwidth called for udev 00000000b9835d5b
+[  101.813183] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  101.842358] xhci-hcd xhci-hcd.2.auto: Successful Endpoint Configure command
+[  101.842397] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  101.842438] xhci-hcd xhci-hcd.2.auto: Stopped on No-op or Link TRB for slot 6 ep 2
+[  101.842468] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  101.874361] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  101.874404] xhci-hcd xhci-hcd.2.auto: Stopped on No-op or Link TRB for slot 6 ep 4
+[  101.874432] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  101.906562] device: '1-1.3.4:1.0': device_add
+[  101.906611] usb 1-1.3.4:1.0: bus: 'usb': __driver_probe_device: matched device with driver usbhid
+[  101.906617] usb 1-1.3.4:1.0: bus: 'usb': really_probe: probing driver usbhid with device
+[  101.908248] device: '0003:25A7:FA07.000B': device_add
+[  101.908279] hid 0003:25A7:FA07.000B: bus: 'hid': __driver_probe_device: matched device with driver hid-generic
+[  101.908282] hid 0003:25A7:FA07.000B: bus: 'hid': really_probe: probing driver hid-generic with device
+[  101.908335] device: 'input29': device_add
+[  101.908383] input: Compx 2.4G Wireless Receiver as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.4/1-1.3.4:1.0/0003:25A7:FA07.000B/input/input29
+[  101.908392] device: 'event15': device_add
+[  101.908459] device: 'hidraw4': device_add
+[  101.908531] hid-generic 0003:25A7:FA07.000B: input,hidraw4: USB HID v1.10 Mouse [Compx 2.4G Wireless Receiver] on usb-xhci-hcd.2.auto-1.3.4/input0
+[  101.908535] hid-generic 0003:25A7:FA07.000B: driver: 'hid-generic': driver_bound: bound to device
+[  101.908549] hid-generic 0003:25A7:FA07.000B: bus: 'hid': really_probe: bound device to driver hid-generic
+[  101.908554] usbhid 1-1.3.4:1.0: driver: 'usbhid': driver_bound: bound to device
+[  101.908564] usbhid 1-1.3.4:1.0: bus: 'usb': really_probe: bound device to driver usbhid
+[  101.908568] device: 'ep_81': device_add
+[  101.908580] device: '1-1.3.4:1.1': device_add
+[  101.908598] usb 1-1.3.4:1.1: bus: 'usb': __driver_probe_device: matched device with driver usbhid
+[  101.908600] usb 1-1.3.4:1.1: bus: 'usb': really_probe: probing driver usbhid with device
+[  101.911558] device: '0003:25A7:FA07.000C': device_add
+[  101.911584] hid 0003:25A7:FA07.000C: bus: 'hid': __driver_probe_device: matched device with driver hid-generic
+[  101.911588] hid 0003:25A7:FA07.000C: bus: 'hid': really_probe: probing driver hid-generic with device
+[  101.911656] device: 'wakeup15': device_add
+[  101.911788] device: 'input30': device_add
+[  101.911839] input: Compx 2.4G Wireless Receiver Keyboard as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.4/1-1.3.4:1.1/0003:25A7:FA07.000C/input/input30
+[  101.965763] device: 'event16': device_add
+[  101.965834] device: 'input31': device_add
+[  101.965861] input: Compx 2.4G Wireless Receiver as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.4/1-1.3.4:1.1/0003:25A7:FA07.000C/input/input31
+[  101.965865] device: 'event17': device_add
+[  101.965906] device: 'input32': device_add
+[  101.965930] input: Compx 2.4G Wireless Receiver as /devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.3/1-1.3.4/1-1.3.4:1.1/0003:25A7:FA07.000C/input/input32
+[  101.965933] device: 'event18': device_add
+[  101.965967] device: 'hidraw5': device_add
+[  101.966011] hid-generic 0003:25A7:FA07.000C: input,hidraw5: USB HID v1.10 Keyboard [Compx 2.4G Wireless Receiver] on usb-xhci-hcd.2.auto-1.3.4/input1
+[  101.966015] hid-generic 0003:25A7:FA07.000C: driver: 'hid-generic': driver_bound: bound to device
+[  101.966029] hid-generic 0003:25A7:FA07.000C: bus: 'hid': really_probe: bound device to driver hid-generic
+[  101.966033] usbhid 1-1.3.4:1.1: driver: 'usbhid': driver_bound: bound to device
+[  101.966043] usbhid 1-1.3.4:1.1: bus: 'usb': really_probe: bound device to driver usbhid
+[  101.966046] device: 'ep_82': device_add
+[  101.966057] usb 1-1.3.4: driver: 'usb': driver_bound: bound to device
+[  101.966068] usb 1-1.3.4: bus: 'usb': really_probe: bound device to driver usb
+[  101.966080] device: 'ep_00': device_add
+[  101.966178] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  101.966210] xhci-hcd xhci-hcd.2.auto: Slot 7 output ctx = 0x0000000ffffd2000 (dma)
+[  101.966214] xhci-hcd xhci-hcd.2.auto: Slot 7 input ctx = 0x0000000ffffa4000 (dma)
+[  101.966218] xhci-hcd xhci-hcd.2.auto: Set slot id 7 dcbaa entry 000000007aaaab06 to 0xffffd2000
+[  102.041764] usb 1-1.3.5: new high-speed USB device number 13 using xhci-hcd
+[  102.041776] xhci-hcd xhci-hcd.2.auto: Slot ID 7: HW portnum 0, hcd portnum 0
+[  102.041779] xhci-hcd xhci-hcd.2.auto: udev->tt = 0000000000000000
+[  102.041782] xhci-hcd xhci-hcd.2.auto: udev->ttport = 0x0
+[  102.041786] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  102.041830] xhci-hcd xhci-hcd.2.auto: Successful setup context command
+[  102.041835] xhci-hcd xhci-hcd.2.auto: Op regs DCBAA ptr = 0x00000fffffd000
+[  102.041837] xhci-hcd xhci-hcd.2.auto: Slot ID 7 dcbaa entry @000000007aaaab06 = 0x00000ffffd2000
+[  102.041840] xhci-hcd xhci-hcd.2.auto: Output Context DMA address = 0xffffd2000
+[  102.041842] xhci-hcd xhci-hcd.2.auto: Internal device address = 0
+[  102.042209] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[  102.093790] xhci-hcd xhci-hcd.2.auto: Cancel URB 0000000077570049, dev 1.3.4, ep 0x81, starting at offset 0xffff77000
+[  102.093809] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  102.093848] xhci-hcd xhci-hcd.2.auto: Stopped on Transfer TRB for slot 6 ep 2
+[  102.093870] xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xffff77000 (dma) in stream 0 URB 0000000077570049
+[  102.093886] xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xffff77010, cycle 1
+
+[  102.093895] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  102.093905] xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 0000000077570049 TD as cancel_status is 2
+[  102.093919] xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @ffff77010
+[  102.093927] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 0000000077570049 TD
+[  102.093936] xhci-hcd xhci-hcd.2.auto: Giveback URB 0000000077570049, len = 0, expected = 7, status = -115
+[  102.093949] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[  102.117771] xhci-hcd xhci-hcd.2.auto: Resetting device with slot ID 7
+[  102.117780] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  102.117821] xhci-hcd xhci-hcd.2.auto: Completed reset device command.
+[  102.117843] xhci-hcd xhci-hcd.2.auto: Can't reset device (slot ID 7) in default state
+[  102.117847] xhci-hcd xhci-hcd.2.auto: Not freeing device rings.
+[  102.117856] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  102.117902] xhci-hcd xhci-hcd.2.auto: Successful setup address command
+[  102.117909] xhci-hcd xhci-hcd.2.auto: Op regs DCBAA ptr = 0x00000fffffd000
+[  102.117913] xhci-hcd xhci-hcd.2.auto: Slot ID 7 dcbaa entry @000000007aaaab06 = 0x00000ffffd2000
+[  102.117917] xhci-hcd xhci-hcd.2.auto: Output Context DMA address = 0xffffd2000
+[  102.117920] xhci-hcd xhci-hcd.2.auto: Internal device address = 7
+[  102.140302] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[  102.140806] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[  102.141324] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[  102.141373] device: '1-1.3.5': device_add
+[  102.141500] usb 1-1.3.5: bus: 'usb': __driver_probe_device: matched device with driver usb
+[  102.141504] usb 1-1.3.5: bus: 'usb': really_probe: probing driver usb with device
+[  102.141551] xhci-hcd xhci-hcd.2.auto: add ep 0x81, slot id 7, new drop flags = 0x0, new add flags = 0x8
+[  102.141555] xhci-hcd xhci-hcd.2.auto: add ep 0x1, slot id 7, new drop flags = 0x0, new add flags = 0xc
+[  102.141558] xhci-hcd xhci-hcd.2.auto: xhci_check_bandwidth called for udev 00000000579e3d73
+[  102.141562] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  102.162342] xhci-hcd xhci-hcd.2.auto: Successful Endpoint Configure command
+[  102.162380] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  102.162421] xhci-hcd xhci-hcd.2.auto: Stopped on No-op or Link TRB for slot 7 ep 2
+[  102.162449] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  102.194347] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  102.194386] xhci-hcd xhci-hcd.2.auto: Stopped on No-op or Link TRB for slot 7 ep 1
+[  102.194416] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  102.227436] device: '1-1.3.5:1.0': device_add
+[  102.227926] xhci-hcd xhci-hcd.2.auto: Waiting for status stage event
+[  102.228019] usb 1-1.3.5:1.0: bus: 'usb': __driver_probe_device: matched device with driver usbhid
+[  102.228026] usb 1-1.3.5:1.0: bus: 'usb': really_probe: probing driver usbhid with device
+[  102.229015] device: '0003:0424:274B.000D': device_add
+[  102.229049] hid 0003:0424:274B.000D: bus: 'hid': __driver_probe_device: matched device with driver hid-generic
+[  102.229052] hid 0003:0424:274B.000D: bus: 'hid': really_probe: probing driver hid-generic with device
+[  102.229139] device: 'hidraw6': device_add
+[  102.229246] hid-generic 0003:0424:274B.000D: hidraw6: USB HID v1.10 Device [Microchip Tech Hub Controller] on usb-xhci-hcd.2.auto-1.3.5/input0
+[  102.229250] hid-generic 0003:0424:274B.000D: driver: 'hid-generic': driver_bound: bound to device
+[  102.229266] hid-generic 0003:0424:274B.000D: bus: 'hid': really_probe: bound device to driver hid-generic
+[  102.229271] usbhid 1-1.3.5:1.0: driver: 'usbhid': driver_bound: bound to device
+[  102.229279] usbhid 1-1.3.5:1.0: bus: 'usb': really_probe: bound device to driver usbhid
+[  102.229284] device: 'ep_81': device_add
+[  102.229300] device: 'ep_01': device_add
+[  102.229311] usb 1-1.3.5: driver: 'usb': driver_bound: bound to device
+[  102.229323] usb 1-1.3.5: bus: 'usb': really_probe: bound device to driver usb
+[  102.229334] device: 'ep_00': device_add
+[  116.440316] device: '0:81': device_unregister
+[  116.443413] device: '0:81': device_create_release
+[  116.542252] xhci-hcd xhci-hcd.2.auto: Cancel URB 0000000077570049, dev 1.3.4, ep 0x81, starting at offset 0xffff78cb0
+[  116.542284] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  116.542584] xhci-hcd xhci-hcd.2.auto: Stopped on Transfer TRB for slot 6 ep 2
+[  116.542608] xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xffff78cb0 (dma) in stream 0 URB 0000000077570049
+[  116.542624] xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xffff78cc0, cycle 1
+
+[  116.542634] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[  116.542643] xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 0000000077570049 TD as cancel_status is 2
+[  116.542658] xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @ffff78cc0
+[  116.542668] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 0000000077570049 TD
+[  116.542678] xhci-hcd xhci-hcd.2.auto: Giveback URB 0000000077570049, len = 0, expected = 7, status = -115
+[  116.542693] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[  116.618569] audit: type=1106 audit(1794381465.763:201): pid=3117 uid=0 auid=1000 ses=1 msg='op=PAM:session_close grantors=pam_selinux,pam_loginuid,pam_selinux,pam_keyinit,pam_namespace,pam_keyinit,pam_limits,pam_systemd,pam_unix,pam_umask,pam_lastlog2 acct="armada" exe="/usr/libexec/sddm-helper" hostname=armada addr=? terminal=/dev/tty1 res=success'
+[  116.619104] audit: type=1104 audit(1794381465.763:202): pid=3117 uid=0 auid=1000 ses=1 msg='op=PAM:setcred grantors=pam_permit acct="armada" exe="/usr/libexec/sddm-helper" hostname=armada addr=? terminal=/dev/tty1 res=success'
+[  116.662516] audit: type=1100 audit(1794381465.807:203): pid=14857 uid=0 auid=4294967295 ses=4294967295 msg='op=PAM:authentication grantors=pam_permit acct="armada" exe="/usr/libexec/sddm-helper" hostname=? addr=? terminal=? res=success'
+[  116.666807] audit: type=1101 audit(1794381465.811:204): pid=14857 uid=0 auid=4294967295 ses=4294967295 msg='op=PAM:accounting grantors=pam_unix acct="armada" exe="/usr/libexec/sddm-helper" hostname=? addr=? terminal=? res=success'
+[  116.667362] audit: type=1103 audit(1794381465.811:205): pid=14857 uid=0 auid=4294967295 ses=4294967295 msg='op=PAM:setcred grantors=pam_permit acct="armada" exe="/usr/libexec/sddm-helper" hostname=? addr=? terminal=? res=success'
+[  116.667426] audit: type=1006 audit(1794381465.811:206): pid=14857 uid=0 old-auid=4294967295 auid=1000 tty=(none) old-ses=4294967295 ses=3 res=1
+[  116.667436] audit: type=1300 audit(1794381465.811:206): arch=c00000b7 syscall=64 success=yes exit=4 a0=c a1=ffffe3601df0 a2=4 a3=0 items=0 ppid=2968 pid=14857 auid=1000 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=(none) ses=3 comm="sddm-helper" exe="/usr/libexec/sddm-helper" key=(null)
+[  116.667441] audit: type=1327 audit(1794381465.811:206): proctitle=2F7573722F6C6962657865632F7364646D2D68656C706572002D2D736F636B6574002F746D702F7364646D2D617574682D65663664353532612D383039652D346631392D613233642D653430363031623261333264002D2D69640032002D2D7374617274002F7573722F6C6962657865632F61726D6164612F61726D6164612D
+[  116.745335] audit: type=1105 audit(1794381465.887:207): pid=14857 uid=0 auid=1000 ses=3 msg='op=PAM:session_open grantors=pam_selinux,pam_loginuid,pam_selinux,pam_keyinit,pam_namespace,pam_keyinit,pam_limits,pam_systemd,pam_unix,pam_umask,pam_lastlog2 acct="armada" exe="/usr/libexec/sddm-helper" hostname=armada addr=? terminal=/dev/tty1 res=success'
+[  116.772158] audit: type=1334 audit(1794381465.915:208): prog-id=61 op=UNLOAD
+[  116.809467] device: 'lo': device_add
+[  117.179831] [drm:msm_dp_link_process_request] *ERROR* PSR RFB STORAGE ERROR
+[  117.179875] [drm:msm_dp_link_process_request] *ERROR* PSR IRQ_HPD received
+[  117.317940] [drm:msm_dp_link_process_request] *ERROR* PSR RFB STORAGE ERROR
+[  117.317972] [drm:msm_dp_link_process_request] *ERROR* PSR IRQ_HPD received
+[  117.448935] [drm:msm_dp_link_process_request] *ERROR* PSR RFB STORAGE ERROR
+[  117.448996] [drm:msm_dp_link_process_request] *ERROR* PSR IRQ_HPD received
+[  118.132124] device: 'lo': device_add
+[  121.976471] [drm:msm_dp_link_process_request] *ERROR* PSR RFB STORAGE ERROR
+[  121.976493] [drm:msm_dp_link_process_request] *ERROR* PSR IRQ_HPD received
+[  126.059323] kauditd_printk_skb: 9 callbacks suppressed
+[  126.059328] audit: type=1130 audit(1794381475.203:218): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.discretegpuhelper@0 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  126.158951] audit: type=1130 audit(1794381475.303:219): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.chargethresholdhelper@0 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  126.348527] audit: type=1130 audit(1794381475.491:220): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.backlighthelper@0 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  127.274553] device: '0:84': device_add
+[  136.023008] audit: type=1131 audit(1794381485.167:221): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.discretegpuhelper@0 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  137.019237] audit: type=1131 audit(1794381486.163:222): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.backlighthelper@0 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  137.026152] audit: type=1131 audit(1794381486.167:223): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.chargethresholdhelper@0 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  139.293436] exFAT-fs (sdg2): Volume was not properly unmounted. Some data may be corrupt. Please run fsck.
+[  146.885722] audit: type=1131 audit(1794381496.027:224): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=systemd-hostnamed comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  146.939279] audit: type=1334 audit(1794381496.083:225): prog-id=65 op=UNLOAD
+[  148.222040] audit: type=1131 audit(1794381497.363:226): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=systemd-localed comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  148.299765] audit: type=1334 audit(1794381497.443:227): prog-id=70 op=UNLOAD
+[  148.299784] audit: type=1334 audit(1794381497.443:228): prog-id=69 op=UNLOAD
+[  148.299790] audit: type=1334 audit(1794381497.443:229): prog-id=68 op=UNLOAD
+[  808.559233] [drm:msm_dp_link_process_request] *ERROR* PSR RFB STORAGE ERROR
+[  808.559278] [drm:msm_dp_link_process_request] *ERROR* PSR IRQ_HPD received
+[  808.693615] [drm:msm_dp_link_process_request] *ERROR* PSR RFB STORAGE ERROR
+[  808.693658] [drm:msm_dp_link_process_request] *ERROR* PSR IRQ_HPD received
+[  901.291141] audit: type=1130 audit(1794382250.409:230): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=systemd-tmpfiles-clean comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[  901.291159] audit: type=1131 audit(1794382250.409:231): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=systemd-tmpfiles-clean comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[ 2758.281407] audit: type=1334 audit(1794384107.334:232): prog-id=71 op=LOAD
+[ 2758.485043] audit: type=1130 audit(1794384107.538:233): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=logrotate comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[ 2758.485055] audit: type=1131 audit(1794384107.538:234): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=logrotate comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[ 2758.520015] audit: type=1334 audit(1794384107.574:235): prog-id=71 op=UNLOAD
+[ 2841.050126] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 5 ep 4 on endpoint
+[ 2841.050208] xhci-hcd xhci-hcd.2.auto: Soft-reset ep 4, slot 5
+[ 2841.050248] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 2841.050275] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 5 ep 2 on endpoint
+[ 2841.050303] xhci-hcd xhci-hcd.2.auto: Soft-reset ep 2, slot 5
+[ 2841.050322] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 2841.050348] xhci-hcd xhci-hcd.2.auto: Port change event, 1-1, id 1, portsc: 0x202a0
+[ 2841.050375] xhci-hcd xhci-hcd.2.auto: handle_port_status: starting usb1 port polling.
+[ 2841.050426] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 6 ep 4 on endpoint
+[ 2841.050457] xhci-hcd xhci-hcd.2.auto: Hard-reset ep 4, slot 6
+[ 2841.050476] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 2841.050498] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 6 ep 2 on endpoint
+[ 2841.050524] xhci-hcd xhci-hcd.2.auto: Hard-reset ep 2, slot 6
+[ 2841.050543] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 2841.050571] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[ 2841.050606] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[ 2841.050632] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[ 2841.050652] xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xffff79010 (dma) in stream 0 URB 0000000086684da1
+[ 2841.050687] xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xffff79020, cycle 1
+
+[ 2841.050708] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 2841.050730] xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 0000000086684da1 TD as cancel_status is 2
+[ 2841.050758] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[ 2841.050777] xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xffff78d20 (dma) in stream 0 URB 0000000077570049
+[ 2841.050801] xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xffff78d30, cycle 1
+
+[ 2841.050820] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 2841.050839] xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 0000000077570049 TD as cancel_status is 2
+[ 2841.050866] xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @ffff79020
+[ 2841.050888] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 0000000086684da1 TD
+[ 2841.050910] xhci-hcd xhci-hcd.2.auto: Giveback URB 0000000086684da1, len = 0, expected = 17, status = -71
+[ 2841.050940] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[ 2841.050963] xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @ffff78d30
+[ 2841.050982] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 0000000077570049 TD
+[ 2841.051002] xhci-hcd xhci-hcd.2.auto: Giveback URB 0000000077570049, len = 0, expected = 7, status = -71
+[ 2841.051026] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[ 2841.051118] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 5 ep 4 on endpoint
+[ 2841.051139] xhci-hcd xhci-hcd.2.auto: Soft-reset ep 4, slot 5
+[ 2841.051161] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 2841.051180] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 5 ep 2 on endpoint
+[ 2841.051200] xhci-hcd xhci-hcd.2.auto: Soft-reset ep 2, slot 5
+[ 2841.051219] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 2841.051238] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[ 2841.051265] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[ 2841.051670] xhci-hcd xhci-hcd.2.auto: Get port status 1-1 read: 0x202a0, return 0x10100
+[ 2841.051727] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 5 ep 4 on endpoint
+[ 2841.051748] xhci-hcd xhci-hcd.2.auto: Soft-reset ep 4, slot 5
+[ 2841.051770] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 2841.051789] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 5 ep 2 on endpoint
+[ 2841.051808] xhci-hcd xhci-hcd.2.auto: Soft-reset ep 2, slot 5
+[ 2841.051826] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 2841.051847] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[ 2841.051873] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[ 2841.052050] xhci-hcd xhci-hcd.2.auto: clear port1 connect change, portsc: 0x2a0
+[ 2841.052185] usb 1-1: USB disconnect, device number 2
+[ 2841.052208] usb 1-1.1: USB disconnect, device number 3
+[ 2841.052350] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 5 ep 4 on endpoint
+[ 2841.052373] xhci-hcd xhci-hcd.2.auto: Soft-reset ep 4, slot 5
+[ 2841.052396] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 2841.052416] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 5 ep 2 on endpoint
+[ 2841.052435] xhci-hcd xhci-hcd.2.auto: Soft-reset ep 2, slot 5
+[ 2841.052452] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 2841.052474] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[ 2841.052500] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[ 2841.052972] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 5 ep 4 on endpoint
+[ 2841.053000] xhci-hcd xhci-hcd.2.auto: Hard-reset ep 4, slot 5
+[ 2841.053025] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 2841.053044] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 5 ep 2 on endpoint
+[ 2841.053063] xhci-hcd xhci-hcd.2.auto: Hard-reset ep 2, slot 5
+[ 2841.053080] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 2841.053101] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[ 2841.053119] xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xfffd69000 (dma) in stream 0 URB 0000000070831100
+[ 2841.053145] xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xfffd69010, cycle 1
+
+[ 2841.053164] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 2841.053182] xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 0000000070831100 TD as cancel_status is 2
+[ 2841.053209] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[ 2841.053226] xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xfffd6b5f0 (dma) in stream 0 URB 00000000415bb2e4
+[ 2841.053249] xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xfffd6b600, cycle 1
+
+[ 2841.053267] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 2841.053285] xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 00000000415bb2e4 TD as cancel_status is 2
+[ 2841.053310] xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @fffd69010
+[ 2841.053329] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 0000000070831100 TD
+[ 2841.053348] xhci-hcd xhci-hcd.2.auto: Giveback URB 0000000070831100, len = 0, expected = 16, status = -71
+[ 2841.053378] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[ 2841.053399] xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @fffd6b600
+[ 2841.053418] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 00000000415bb2e4 TD
+[ 2841.053436] xhci-hcd xhci-hcd.2.auto: Giveback URB 00000000415bb2e4, len = 0, expected = 8, status = -71
+[ 2841.053459] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[ 2841.054479] xhci-hcd xhci-hcd.2.auto: xhci_check_bandwidth called for udev 0000000023f5a5b3
+[ 2841.054549] device: 'ep_00': device_unregister
+[ 2841.059947] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 2841.060463] usb 1-1.2: USB disconnect, device number 4
+[ 2841.060493] device: 'ep_81': device_unregister
+[ 2841.060914] device: 'ep_02': device_unregister
+[ 2841.063537] device: '1:0:0:0': device_unregister
+[ 2841.090737] xhci-hcd xhci-hcd.2.auto: xhci_hub_status_data: stopping usb1 port polling
+[ 2841.275712] device: '8:96': device_unregister
+[ 2841.276310] device: 'pd0': device_unregister
+[ 2841.276561] device: 'port0-partner': device_unregister
+[ 2841.276955] device: '8:96': device_create_release
+[ 2841.278301] xhci-hcd xhci-hcd.2.auto: remove, state 4
+[ 2841.278338] usb usb2: USB disconnect, device number 1
+[ 2841.278359] device: 'ep_81': device_unregister
+[ 2841.279020] device: 'usb2-port1': device_unregister
+[ 2841.279693] xHCI xhci_drop_endpoint called for root hub
+[ 2841.279712] xHCI xhci_check_bandwidth called for root hub
+[ 2841.279731] device: 'ep_00': device_unregister
+[ 2841.281439] xhci-hcd xhci-hcd.2.auto: USB bus 2 deregistered
+[ 2841.281482] xhci-hcd xhci-hcd.2.auto: remove, state 1
+[ 2841.281532] usb usb1: USB disconnect, device number 1
+[ 2841.324024] sd 1:0:0:0: [sdg] Synchronizing SCSI cache
+[ 2841.324351] sd 1:0:0:0: [sdg] Synchronize Cache(10) failed: Result: hostbyte=0x01 driverbyte=DRIVER_OK
+[ 2841.338761] device: 'host1': device_unregister
+[ 2841.339656] xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 00000000f966865f
+[ 2841.339761] xhci-hcd xhci-hcd.2.auto: drop ep 0x81, slot id 3, new drop flags = 0x8, new add flags = 0x0
+[ 2841.339780] xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 00000000f966865f
+[ 2841.339846] xhci-hcd xhci-hcd.2.auto: drop ep 0x2, slot id 3, new drop flags = 0x18, new add flags = 0x0
+[ 2841.339896] device: 'ep_00': device_unregister
+[ 2841.341067] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 2841.341238] usb 1-1.3: USB disconnect, device number 10
+[ 2841.341258] usb 1-1.3.2: USB disconnect, device number 11
+[ 2841.341276] device: 'ep_81': device_unregister
+[ 2841.395967] device: 'input24::numlock': device_unregister
+[ 2841.396458] device: 'input24::numlock': device_create_release
+[ 2841.420147] device: 'input24::capslock': device_unregister
+[ 2841.435195] device: 'input24::capslock': device_create_release
+[ 2841.462978] device: 'input24::scrolllock': device_unregister
+[ 2841.463398] device: 'input24::scrolllock': device_create_release
+[ 2841.463415] device: 'input24::compose': device_unregister
+[ 2841.463529] device: 'input24::compose': device_create_release
+[ 2841.486782] device: 'input24::kana': device_unregister
+[ 2841.487303] device: 'input24::kana': device_create_release
+[ 2841.523465] device: 'hidraw1': device_unregister
+[ 2841.523775] device: 'hidraw1': device_create_release
+[ 2841.523993] device: 'ep_82': device_unregister
+[ 2841.714466] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 4 ep 2 on endpoint
+[ 2841.714491] xhci-hcd xhci-hcd.2.auto: Soft-reset ep 2, slot 4
+[ 2841.714502] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 2841.714534] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[ 2841.714582] xhci-hcd xhci-hcd.2.auto: Transfer error for slot 1 ep 2 on endpoint
+[ 2841.714592] xhci-hcd xhci-hcd.2.auto: Soft-reset ep 2, slot 1
+[ 2841.714599] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 2841.714627] xhci-hcd xhci-hcd.2.auto: Ignoring reset ep completion code of 1
+[ 2841.719033] device: 'hidraw2': device_unregister
+[ 2841.719311] device: 'hidraw2': device_create_release
+[ 2841.719551] device: 'ep_83': device_unregister
+[ 2841.719763] device: 'ep_04': device_unregister
+[ 2841.720148] device: 'hidraw3': device_unregister
+[ 2841.720392] device: 'hidraw3': device_create_release
+[ 2841.720570] device: 'ep_05': device_unregister
+[ 2841.721045] xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 0000000006836223
+[ 2841.721110] xhci-hcd xhci-hcd.2.auto: drop ep 0x81, slot id 5, new drop flags = 0x8, new add flags = 0x0
+[ 2841.721132] xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 0000000006836223
+[ 2841.721167] xhci-hcd xhci-hcd.2.auto: drop ep 0x82, slot id 5, new drop flags = 0x28, new add flags = 0x0
+[ 2841.721175] xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 0000000006836223
+[ 2841.721210] xhci-hcd xhci-hcd.2.auto: drop ep 0x83, slot id 5, new drop flags = 0xa8, new add flags = 0x0
+[ 2841.721217] xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 0000000006836223
+[ 2841.721275] xhci-hcd xhci-hcd.2.auto: drop ep 0x4, slot id 5, new drop flags = 0x1a8, new add flags = 0x0
+[ 2841.721283] xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 0000000006836223
+[ 2841.721317] xhci-hcd xhci-hcd.2.auto: drop ep 0x5, slot id 5, new drop flags = 0x5a8, new add flags = 0x0
+[ 2841.721329] xhci-hcd xhci-hcd.2.auto: endpoint disable with ep_state 0x40
+[ 2841.721335] xhci-hcd xhci-hcd.2.auto: endpoint disable with ep_state 0x40
+[ 2841.721355] device: 'ep_00': device_unregister
+[ 2841.722191] device: 'wakeup14': device_unregister
+[ 2841.722768] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 2841.746935] usb 1-1.3.4: USB disconnect, device number 12
+[ 2841.746957] device: 'ep_81': device_unregister
+[ 2841.762114] device: 'hidraw4': device_unregister
+[ 2841.762492] device: 'hidraw4': device_create_release
+[ 2841.763670] device: 'ep_82': device_unregister
+[ 2841.845235] audit: type=1130 audit(1794384190.895:236): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.backlighthelper@1 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[ 2841.883079] device: 'hidraw5': device_unregister
+[ 2841.886883] device: 'hidraw5': device_create_release
+[ 2841.887101] xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 00000000b9835d5b
+[ 2841.887157] xhci-hcd xhci-hcd.2.auto: drop ep 0x81, slot id 6, new drop flags = 0x8, new add flags = 0x0
+[ 2841.887165] xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 00000000b9835d5b
+[ 2841.887193] xhci-hcd xhci-hcd.2.auto: drop ep 0x82, slot id 6, new drop flags = 0x28, new add flags = 0x0
+[ 2841.887203] xhci-hcd xhci-hcd.2.auto: endpoint disable with ep_state 0x40
+[ 2841.887209] xhci-hcd xhci-hcd.2.auto: endpoint disable with ep_state 0x40
+[ 2841.887230] device: 'ep_00': device_unregister
+[ 2841.887681] device: 'wakeup15': device_unregister
+[ 2841.887877] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 2841.906388] usb 1-1.3.5: USB disconnect, device number 13
+[ 2841.906406] device: 'ep_81': device_unregister
+[ 2841.906594] device: 'ep_01': device_unregister
+[ 2841.907023] device: 'hidraw6': device_unregister
+[ 2841.907387] device: 'hidraw6': device_create_release
+[ 2841.907647] xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 00000000579e3d73
+[ 2841.907684] xhci-hcd xhci-hcd.2.auto: drop ep 0x1, slot id 7, new drop flags = 0x4, new add flags = 0x0
+[ 2841.907692] xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 00000000579e3d73
+[ 2841.907723] xhci-hcd xhci-hcd.2.auto: drop ep 0x81, slot id 7, new drop flags = 0xc, new add flags = 0x0
+[ 2841.907748] device: 'ep_00': device_unregister
+[ 2841.911865] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 2841.938400] device: 'ep_81': device_unregister
+[ 2841.938839] xhci-hcd xhci-hcd.2.auto: Cancel URB 00000000b07eb10a, dev 1.3, ep 0x81, starting at offset 0xffffd4000
+[ 2841.938863] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 2841.938898] xhci-hcd xhci-hcd.2.auto: Stopped on Transfer TRB for slot 4 ep 2
+[ 2841.938910] xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xffffd4000 (dma) in stream 0 URB 00000000b07eb10a
+[ 2841.938921] xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xffffd4010, cycle 1
+
+[ 2841.938927] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 2841.938935] xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 00000000b07eb10a TD as cancel_status is 2
+[ 2841.938945] xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @ffffd4010
+[ 2841.938953] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 00000000b07eb10a TD
+[ 2841.938960] xhci-hcd xhci-hcd.2.auto: Giveback URB 00000000b07eb10a, len = 0, expected = 1, status = -115
+[ 2841.938971] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[ 2841.939036] device: '1-1.3-port5': device_unregister
+[ 2841.939409] device: '1-1.3-port4': device_unregister
+[ 2841.939936] device: '1-1.3-port3': device_unregister
+[ 2841.940193] device: '1-1.3-port2': device_unregister
+[ 2841.940367] device: '1-1.3-port1': device_unregister
+[ 2841.940993] xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 00000000b3f224a6
+[ 2841.941043] xhci-hcd xhci-hcd.2.auto: drop ep 0x81, slot id 4, new drop flags = 0x8, new add flags = 0x0
+[ 2841.941068] device: 'ep_00': device_unregister
+[ 2841.949153] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 2841.970565] device: 'ep_81': device_unregister
+[ 2841.971213] xhci-hcd xhci-hcd.2.auto: Cancel URB 0000000036f013dc, dev 1, ep 0x81, starting at offset 0xffffcd060
+[ 2841.971243] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 2841.971279] xhci-hcd xhci-hcd.2.auto: Stopped on Transfer TRB for slot 1 ep 2
+[ 2841.971290] xhci-hcd xhci-hcd.2.auto: Removing canceled TD starting at 0xffffcd060 (dma) in stream 0 URB 0000000036f013dc
+[ 2841.971303] xhci-hcd xhci-hcd.2.auto: Set TR Deq ptr 0xffffcd070, cycle 1
+
+[ 2841.971309] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 2841.971317] xhci-hcd xhci-hcd.2.auto: xhci_giveback_invalidated_tds: Keep cancelled URB 0000000036f013dc TD as cancel_status is 2
+[ 2841.971329] xhci-hcd xhci-hcd.2.auto: Successful Set TR Deq Ptr cmd, deq = @ffffcd070
+[ 2841.971337] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: Giveback cancelled URB 0000000036f013dc TD
+[ 2841.971345] xhci-hcd xhci-hcd.2.auto: Giveback URB 0000000036f013dc, len = 0, expected = 1, status = -115
+[ 2841.971357] xhci-hcd xhci-hcd.2.auto: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
+[ 2841.971722] device: '1-1-port4': device_unregister
+[ 2841.973116] device: '1-1-port3': device_unregister
+[ 2841.973242] device: '1-1-port2': device_unregister
+[ 2841.973323] device: '1-1-port1': device_unregister
+[ 2841.973516] xhci-hcd xhci-hcd.2.auto: xhci_drop_endpoint called for udev 000000002974e25c
+[ 2841.973563] xhci-hcd xhci-hcd.2.auto: drop ep 0x81, slot id 1, new drop flags = 0x8, new add flags = 0x0
+[ 2841.973604] device: 'ep_00': device_unregister
+[ 2841.978629] xhci-hcd xhci-hcd.2.auto: // Ding dong!
+[ 2842.002461] device: 'ep_81': device_unregister
+[ 2842.002790] device: 'usb1-port1': device_unregister
+[ 2842.003006] xHCI xhci_drop_endpoint called for root hub
+[ 2842.003013] xHCI xhci_check_bandwidth called for root hub
+[ 2842.003021] device: 'ep_00': device_unregister
+[ 2842.004667] xhci-hcd xhci-hcd.2.auto: // Halt the HC
+[ 2842.004680] xhci-hcd xhci-hcd.2.auto: // Reset the HC
+[ 2842.007047] xhci-hcd xhci-hcd.2.auto: Wait for controller to be ready for doorbell rings
+[ 2842.007515] xhci-hcd xhci-hcd.2.auto: // Disabling event ring interrupts
+[ 2842.007527] xhci-hcd xhci-hcd.2.auto: cleaning up memory
+[ 2842.007563] xhci-hcd xhci-hcd.2.auto: Freed interrupters
+[ 2842.007569] xhci-hcd xhci-hcd.2.auto: Freed command ring
+[ 2842.008151] xhci-hcd xhci-hcd.2.auto: Freed segment pool
+[ 2842.008397] xhci-hcd xhci-hcd.2.auto: Freed device context pool
+[ 2842.008406] xhci-hcd xhci-hcd.2.auto: Freed small stream array pool
+[ 2842.008412] xhci-hcd xhci-hcd.2.auto: Freed xhci port bw array pool
+[ 2842.008418] xhci-hcd xhci-hcd.2.auto: Freed medium stream array pool
+[ 2842.008695] xhci-hcd xhci-hcd.2.auto: xhci_stop completed - status = 1
+[ 2842.008928] xhci-hcd xhci-hcd.2.auto: USB bus 1 deregistered
+[ 2842.032190] device: 'a600000.usb': device_add
+[ 2842.032390] device: 'gadget.0': device_add
+[ 2848.159770] dwc3-qcom a600000.usb: port-1 HS-PHY not in L2
+[ 2852.122352] audit: type=1131 audit(1794384201.171:237): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.backlighthelper@1 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[ 2853.963131] qcom-qmp-combo-phy 88e8000.phy: phy initialization timed-out
+[ 2853.963202] phy phy-88e8000.phy.3: phy init failed --> -110
+[ 2853.963404] dwc3-qcom a600000.usb: Failed to resume device
+[ 2853.963555] device: 'port0-partner': device_add
+[ 2853.963864] dwc3-qcom a600000.usb: Failed to resume device
+[ 2853.964387] device: 'a600000.usb': device_unregister
+[ 2853.971282] device: 'xhci-hcd.2.auto': device_add
+[ 2853.973163] platform xhci-hcd.2.auto: bus: 'platform': __driver_probe_device: matched device with driver xhci-hcd
+[ 2853.973196] platform xhci-hcd.2.auto: bus: 'platform': really_probe: probing driver xhci-hcd with device
+[ 2853.973368] xhci-hcd xhci-hcd.2.auto: runtime PM trying to activate child device xhci-hcd.2.auto but parent (a600000.usb) is not active
+[ 2853.977038] xhci-hcd xhci-hcd.2.auto: xHCI Host Controller
+[ 2853.977085] xhci-hcd xhci-hcd.2.auto: new USB bus registered, assigned bus number 1
+[ 2853.977128] xhci-hcd xhci-hcd.2.auto: // Halt the HC
+[ 2853.977147] xhci-hcd xhci-hcd.2.auto: Resetting HCD
+[ 2853.977162] xhci-hcd xhci-hcd.2.auto: // Reset the HC
+[ 2870.112389] device: 'port0-partner': device_unregister
+[ 2873.545002] xhci-hcd xhci-hcd.2.auto: can't setup: -110
+[ 2873.545030] xhci-hcd xhci-hcd.2.auto: USB bus 1 deregistered
+[ 2873.545138] xhci-hcd xhci-hcd.2.auto: probe with driver xhci-hcd failed with error -110
+[ 2873.547104] device: 'a600000.usb': device_add
+[ 2873.547215] device: 'gadget.0': device_add
+[ 2874.565386] ------------[ cut here ]------------
+[ 2874.565420] gcc_usb3_prim_phy_pipe_clk already disabled
+[ 2874.565503] WARNING: drivers/clk/clk.c:1188 at clk_core_disable+0x2a0/0x310, CPU#0: kworker/0:4/83266
+[ 2874.565558] Modules linked in: exfat rfcomm q6prm_clocks q6apm_lpass_dais q6apm_dai snd_q6dsp_common q6prm snd_q6apm ath12k_wifi7 ath12k mac80211 soundwire_qcom snd_soc_sc8280xp snd_soc_qcom_sdw snd_soc_lpass_va_macro snd_soc_lpass_tx_macro snd_soc_wcd938x snd_soc_wcd938x_sdw snd_soc_lpass_wsa_macro slimbus regmap_sdw qcom_q6v5_pas snd_soc_wcd_mbhc snd_soc_lpass_rx_macro snd_soc_qcom_common snd_soc_lpass_macro_common snd_soc_wcd_common snd_seq snd_soc_wcd_classh hci_uart cfg80211 qcom_pil_info soundwire_bus snd_soc_aw88166 btqca qcom_iris btbcm v4l2_mem2mem videobuf2_dma_contig bluetooth videobuf2_memops videobuf2_v4l2 snd_soc_hdmi_codec snd_soc_aw88395_lib videodev ecdh_generic snd_seq_device qcom_q6v5 videobuf2_common ecc libarc4 binfmt_misc pmic_pdcharger_ulog snd_soc_core snd_compress snd_pcm_dmaengine mc rfkill snd_pcm qcom_sysmon snd_timer pci_pwrctrl_pwrseq qcomtee snd soundcore joydev zram zsmalloc overlay erofs pinctrl_sm8550_lpass_lpi gpio_sbu_mux rtc_pm8xxx nvmem_qcom_spmi_sdam pinctrl_lpass_lpi qcrypto
+[ 2874.566310]  qcom_battmgr nvmem_reboot_mode pwm_fan qcom_rng btrfs xor libblake2b raid6_pq dm_mirror dm_region_hash dm_log dm_mod rsinput qcom_hv_haptics fuse mangmi_pocket_max cpufreq_conservative retroid qcom_common hid_sony hid_playstation hid_nintendo hid_steam
+[ 2874.566553] CPU: 0 UID: 0 PID: 83266 Comm: kworker/0:4 Tainted: G S      W           7.2.6 #1 PREEMPT 
+[ 2874.566589] Tainted: [S]=CPU_OUT_OF_SPEC, [W]=WARN
+[ 2874.566602] Hardware name: Retroid Pocket 6 (DT)
+[ 2874.566619] Workqueue: events ucsi_handle_connector_change
+[ 2874.566659] pstate: 634000c5 (nZCv daIF +PAN -UAO +TCO +DIT -SSBS BTYPE=--)
+[ 2874.566681] pc : clk_core_disable+0x2a0/0x310
+[ 2874.566708] lr : clk_core_disable+0x2a0/0x310
+[ 2874.566734] sp : ffff80009cf73c30
+[ 2874.566746] x29: ffff80009cf73c30 x28: 0000000000000000 x27: 0000000000000000
+[ 2874.566788] x26: 0000000000000000 x25: 0000000000000000 x24: ffff0008000c2605
+[ 2874.566827] x23: ffff00085525b030 x22: ffffc7dfb98f2518 x21: ffff000800f8d928
+[ 2874.566866] x20: 0000000000000000 x19: ffff000800f1cc00 x18: ffff3829c3949000
+[ 2874.566904] x17: ffff000805b6b480 x16: 0000000000000c3d x15: ffffc7dfbb68ce60
+[ 2874.566942] x14: 0000000000000000 x13: 64656c6261736964 x12: 2079646165726c61
+[ 2874.566980] x11: 206b6c635f657069 x10: 705f7968705f6d69 x9 : ffffc7dfb822e368
+[ 2874.567018] x8 : 3ffffffffffff215 x7 : ffffc7dfbb7117f8 x6 : 0000000000000001
+[ 2874.567056] x5 : ffff00097eeb7248 x4 : ffff3829c3949000 x3 : ffff0008a6732280
+[ 2874.567095] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff0008a6732280
+[ 2874.567136] Call trace:
+[ 2874.567151]  clk_core_disable+0x2a0/0x310 (P)
+[ 2874.567182]  clk_disable+0x40/0x70
+[ 2874.567210]  qmp_combo_com_exit.isra.0+0x4c/0x98
+[ 2874.567238]  qmp_combo_typec_switch_set+0x80/0x1e0
+[ 2874.567262]  typec_switch_set+0x68/0xb0
+[ 2874.567290]  typec_set_orientation+0x28/0x80
+[ 2874.567318]  pmic_glink_ucsi_connector_status+0x64/0xa0
+[ 2874.567342]  ucsi_handle_connector_change+0xb0/0x550
+[ 2874.567370]  process_one_work+0x168/0x4c0
+[ 2874.567396]  worker_thread+0x18c/0x2f8
+[ 2874.567419]  kthread+0x134/0x150
+[ 2874.567447]  ret_from_fork+0x10/0x20
+[ 2874.567475] ---[ end trace 0000000000000000 ]---
+[ 2874.568437] ------------[ cut here ]------------
+[ 2874.568460] gcc_usb3_prim_phy_pipe_clk already unprepared
+[ 2874.568540] WARNING: drivers/clk/clk.c:1047 at clk_core_unprepare+0x2e0/0x330, CPU#0: kworker/0:4/83266
+[ 2874.568585] Modules linked in: exfat rfcomm q6prm_clocks q6apm_lpass_dais q6apm_dai snd_q6dsp_common q6prm snd_q6apm ath12k_wifi7 ath12k mac80211 soundwire_qcom snd_soc_sc8280xp snd_soc_qcom_sdw snd_soc_lpass_va_macro snd_soc_lpass_tx_macro snd_soc_wcd938x snd_soc_wcd938x_sdw snd_soc_lpass_wsa_macro slimbus regmap_sdw qcom_q6v5_pas snd_soc_wcd_mbhc snd_soc_lpass_rx_macro snd_soc_qcom_common snd_soc_lpass_macro_common snd_soc_wcd_common snd_seq snd_soc_wcd_classh hci_uart cfg80211 qcom_pil_info soundwire_bus snd_soc_aw88166 btqca qcom_iris btbcm v4l2_mem2mem videobuf2_dma_contig bluetooth videobuf2_memops videobuf2_v4l2 snd_soc_hdmi_codec snd_soc_aw88395_lib videodev ecdh_generic snd_seq_device qcom_q6v5 videobuf2_common ecc libarc4 binfmt_misc pmic_pdcharger_ulog snd_soc_core snd_compress snd_pcm_dmaengine mc rfkill snd_pcm qcom_sysmon snd_timer pci_pwrctrl_pwrseq qcomtee snd soundcore joydev zram zsmalloc overlay erofs pinctrl_sm8550_lpass_lpi gpio_sbu_mux rtc_pm8xxx nvmem_qcom_spmi_sdam pinctrl_lpass_lpi qcrypto
+[ 2874.569225]  qcom_battmgr nvmem_reboot_mode pwm_fan qcom_rng btrfs xor libblake2b raid6_pq dm_mirror dm_region_hash dm_log dm_mod rsinput qcom_hv_haptics fuse mangmi_pocket_max cpufreq_conservative retroid qcom_common hid_sony hid_playstation hid_nintendo hid_steam
+[ 2874.569432] CPU: 0 UID: 0 PID: 83266 Comm: kworker/0:4 Tainted: G S      W           7.2.6 #1 PREEMPT 
+[ 2874.569463] Tainted: [S]=CPU_OUT_OF_SPEC, [W]=WARN
+[ 2874.569475] Hardware name: Retroid Pocket 6 (DT)
+[ 2874.569490] Workqueue: events ucsi_handle_connector_change
+[ 2874.569525] pstate: 63400005 (nZCv daif +PAN -UAO +TCO +DIT -SSBS BTYPE=--)
+[ 2874.569547] pc : clk_core_unprepare+0x2e0/0x330
+[ 2874.569573] lr : clk_core_unprepare+0x2e0/0x330
+[ 2874.569597] sp : ffff80009cf73c30
+[ 2874.569609] x29: ffff80009cf73c30 x28: 0000000000000000 x27: 0000000000000000
+[ 2874.569649] x26: 0000000000000000 x25: 0000000000000000 x24: ffff0008000c2605
+[ 2874.569687] x23: ffff00085525b030 x22: ffffc7dfb98f2518 x21: ffff000800f8d928
+[ 2874.569725] x20: ffffc7dfb98f2518 x19: ffff000800f1cc00 x18: ffff3829c3949000
+[ 2874.569763] x17: 0000000000000000 x16: 0000000000000000 x15: ffffc7dfbb68ce60
+[ 2874.569822] x14: 0000000000000000 x13: 6465726170657270 x12: 6e75207964616572
+[ 2874.569860] x11: 6c61206b6c635f65 x10: 7069705f7968705f x9 : ffffc7dfb822e368
+[ 2874.569898] x8 : 3ffffffffffff23a x7 : ffffc7dfbb7117f8 x6 : 0000000000000001
+[ 2874.569937] x5 : ffff00097eeb7248 x4 : ffff3829c3949000 x3 : ffff0008a6732280
+[ 2874.569975] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff0008a6732280
+[ 2874.570014] Call trace:
+[ 2874.570026]  clk_core_unprepare+0x2e0/0x330 (P)
+[ 2874.570057]  clk_unprepare+0x38/0x60
+[ 2874.570084]  qmp_combo_com_exit.isra.0+0x54/0x98
+[ 2874.570128]  qmp_combo_typec_switch_set+0x80/0x1e0
+[ 2874.570152]  typec_switch_set+0x68/0xb0
+[ 2874.570186]  typec_set_orientation+0x28/0x80
+[ 2874.570213]  pmic_glink_ucsi_connector_status+0x64/0xa0
+[ 2874.570237]  ucsi_handle_connector_change+0xb0/0x550
+[ 2874.570265]  process_one_work+0x168/0x4c0
+[ 2874.570288]  worker_thread+0x18c/0x2f8
+[ 2874.570310]  kthread+0x134/0x150
+[ 2874.570337]  ret_from_fork+0x10/0x20
+[ 2874.570366] ---[ end trace 0000000000000000 ]---
+[ 2874.572771] dwc3-qcom a600000.usb: Failed to resume device
+[ 2874.572878] device: 'port0-partner': device_add
+[ 2874.573940] device: 'a600000.usb': device_unregister
+[ 2874.580877] dwc3-qcom a600000.usb: Failed to resume device
+[ 2874.581257] device: 'xhci-hcd.2.auto': device_add
+[ 2874.582944] platform xhci-hcd.2.auto: bus: 'platform': __driver_probe_device: matched device with driver xhci-hcd
+[ 2874.582987] platform xhci-hcd.2.auto: bus: 'platform': really_probe: probing driver xhci-hcd with device
+[ 2874.583147] xhci-hcd xhci-hcd.2.auto: runtime PM trying to activate child device xhci-hcd.2.auto but parent (a600000.usb) is not active
+[ 2874.592460] xhci-hcd xhci-hcd.2.auto: xHCI Host Controller
+[ 2874.592529] xhci-hcd xhci-hcd.2.auto: new USB bus registered, assigned bus number 1
+[ 2874.592580] xhci-hcd xhci-hcd.2.auto: // Halt the HC
+[ 2874.663271] xhci-hcd xhci-hcd.2.auto: Host halt failed, -110
+[ 2874.663296] xhci-hcd xhci-hcd.2.auto: can't setup: -110
+[ 2874.663313] xhci-hcd xhci-hcd.2.auto: USB bus 1 deregistered
+[ 2874.663434] xhci-hcd xhci-hcd.2.auto: probe with driver xhci-hcd failed with error -110
+[ 3001.186833] audit: type=1130 audit(1794384350.230:238): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.backlighthelper@2 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[ 3013.121094] audit: type=1131 audit(1794384362.165:239): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.backlighthelper@2 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[ 3450.469567] audit: type=1130 audit(1794384799.498:240): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.backlighthelper@3 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[ 3461.130790] audit: type=1131 audit(1794384810.158:241): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.backlighthelper@3 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[ 3638.251832] audit: type=1130 audit(1794384987.276:242): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.backlighthelper@4 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[ 3650.151424] audit: type=1131 audit(1794384999.176:243): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.backlighthelper@4 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[ 3803.416604] audit: type=1130 audit(1794385152.434:244): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.backlighthelper@5 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[ 3813.147457] audit: type=1131 audit(1794385162.162:245): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.backlighthelper@5 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[ 3815.741237] audit: type=1130 audit(1794385164.758:246): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.chargethresholdhelper@1 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[ 3833.159840] audit: type=1131 audit(1794385182.173:247): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=dbus-:1.3-org.kde.powerdevil.chargethresholdhelper@1 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[ 5856.024083] device: 'port0-partner': device_unregister
+[ 5856.030463] device: 'a600000.usb': device_add
+[ 5856.030796] device: 'gadget.0': device_add
+[ 5862.884312] dwc3-qcom a600000.usb: Failed to resume device
+[ 5862.884437] device: 'port0-partner': device_add
+[ 5862.884740] dwc3-qcom a600000.usb: Failed to resume device
+[ 5862.886644] device: 'a600000.usb': device_unregister
+[ 5862.897580] device: 'xhci-hcd.2.auto': device_add
+[ 5862.900045] platform xhci-hcd.2.auto: bus: 'platform': __driver_probe_device: matched device with driver xhci-hcd
+[ 5862.900093] platform xhci-hcd.2.auto: bus: 'platform': really_probe: probing driver xhci-hcd with device
+[ 5862.900289] xhci-hcd xhci-hcd.2.auto: runtime PM trying to activate child device xhci-hcd.2.auto but parent (a600000.usb) is not active
+[ 5862.901851] xhci-hcd xhci-hcd.2.auto: xHCI Host Controller
+[ 5862.901922] xhci-hcd xhci-hcd.2.auto: new USB bus registered, assigned bus number 1
+[ 5862.901981] xhci-hcd xhci-hcd.2.auto: // Halt the HC
+[ 5862.998729] xhci-hcd xhci-hcd.2.auto: Host halt failed, -110
+[ 5862.998761] xhci-hcd xhci-hcd.2.auto: can't setup: -110
+[ 5862.998783] xhci-hcd xhci-hcd.2.auto: USB bus 1 deregistered
+[ 5862.998951] xhci-hcd xhci-hcd.2.auto: probe with driver xhci-hcd failed with error -110
+[ 6268.480522] device: 'port0-partner': device_unregister
+[ 6268.486639] device: 'a600000.usb': device_add
+[ 6268.487014] device: 'gadget.0': device_add
+[ 6275.016074] dwc3-qcom a600000.usb: Failed to resume device
+[ 6275.016201] device: 'port0-partner': device_add
+[ 6275.016508] dwc3-qcom a600000.usb: Failed to resume device
+[ 6275.019131] device: 'a600000.usb': device_unregister
+[ 6275.027092] device: 'xhci-hcd.2.auto': device_add
+[ 6275.029134] platform xhci-hcd.2.auto: bus: 'platform': __driver_probe_device: matched device with driver xhci-hcd
+[ 6275.029183] platform xhci-hcd.2.auto: bus: 'platform': really_probe: probing driver xhci-hcd with device
+[ 6275.029403] xhci-hcd xhci-hcd.2.auto: runtime PM trying to activate child device xhci-hcd.2.auto but parent (a600000.usb) is not active
+[ 6275.030824] xhci-hcd xhci-hcd.2.auto: xHCI Host Controller
+[ 6275.030898] xhci-hcd xhci-hcd.2.auto: new USB bus registered, assigned bus number 1
+[ 6275.030956] xhci-hcd xhci-hcd.2.auto: // Halt the HC
+[ 6275.143119] xhci-hcd xhci-hcd.2.auto: Host halt failed, -110
+[ 6275.143162] xhci-hcd xhci-hcd.2.auto: can't setup: -110
+[ 6275.143194] xhci-hcd xhci-hcd.2.auto: USB bus 1 deregistered
+[ 6275.143535] xhci-hcd xhci-hcd.2.auto: probe with driver xhci-hcd failed with error -110
+[ 6334.154434] device: 'port0-partner': device_unregister
+[ 6334.164360] device: 'a600000.usb': device_add
+[ 6334.164786] device: 'gadget.0': device_add
+[ 6344.225426] device: 'port0-partner': device_add
+[ 6344.432686] dwc3-qcom a600000.usb: Failed to resume device
+[ 6345.465941] device: 'pd0': device_add
+[ 6347.112105] dwc3-qcom a600000.usb: Failed to resume device
+[ 6347.112824] device: 'a600000.usb': device_unregister
+[ 6347.120867] device: 'xhci-hcd.2.auto': device_add
+[ 6347.123105] platform xhci-hcd.2.auto: bus: 'platform': __driver_probe_device: matched device with driver xhci-hcd
+[ 6347.123152] platform xhci-hcd.2.auto: bus: 'platform': really_probe: probing driver xhci-hcd with device
+[ 6347.123342] xhci-hcd xhci-hcd.2.auto: runtime PM trying to activate child device xhci-hcd.2.auto but parent (a600000.usb) is not active
+[ 6347.125012] xhci-hcd xhci-hcd.2.auto: xHCI Host Controller
+[ 6347.125205] xhci-hcd xhci-hcd.2.auto: new USB bus registered, assigned bus number 1
+[ 6347.125267] xhci-hcd xhci-hcd.2.auto: // Halt the HC
+[ 6347.233202] xhci-hcd xhci-hcd.2.auto: Host halt failed, -110
+[ 6347.233240] xhci-hcd xhci-hcd.2.auto: can't setup: -110
+[ 6347.233274] xhci-hcd xhci-hcd.2.auto: USB bus 1 deregistered
+[ 6347.233579] xhci-hcd xhci-hcd.2.auto: probe with driver xhci-hcd failed with error -110
+[ 6347.248422] dwc3-qcom a600000.usb: Failed to resume device
+[ 6347.612804] [drm:msm_dp_link_process_request] *ERROR* PSR RFB STORAGE ERROR
+[ 6347.612879] [drm:msm_dp_link_process_request] *ERROR* PSR IRQ_HPD received
+[ 6347.727252] [drm:msm_dp_link_process_request] *ERROR* PSR RFB STORAGE ERROR
+[ 6347.727282] [drm:msm_dp_link_process_request] *ERROR* PSR IRQ_HPD received
+[ 6404.781213] [drm:msm_dp_link_process_request] *ERROR* PSR RFB STORAGE ERROR
+[ 6404.781293] [drm:msm_dp_link_process_request] *ERROR* PSR IRQ_HPD received
+[ 6404.911319] [drm:msm_dp_link_process_request] *ERROR* PSR RFB STORAGE ERROR
+[ 6404.911356] [drm:msm_dp_link_process_request] *ERROR* PSR IRQ_HPD received
+[ 6416.060441] device: 'pd0': device_unregister
+[ 6416.060894] device: 'port0-partner': device_unregister
+[ 6416.067824] device: 'a600000.usb': device_add
+[ 6416.068148] device: 'gadget.0': device_add
+[ 6423.468999] dwc3-qcom a600000.usb: Failed to resume device
+[ 6423.469135] device: 'port0-partner': device_add
+[ 6423.469682] dwc3-qcom a600000.usb: Failed to resume device
+[ 6423.471582] device: 'a600000.usb': device_unregister
+[ 6423.479748] device: 'xhci-hcd.2.auto': device_add
+[ 6423.488242] platform xhci-hcd.2.auto: bus: 'platform': __driver_probe_device: matched device with driver xhci-hcd
+[ 6423.488287] platform xhci-hcd.2.auto: bus: 'platform': really_probe: probing driver xhci-hcd with device
+[ 6423.488487] xhci-hcd xhci-hcd.2.auto: runtime PM trying to activate child device xhci-hcd.2.auto but parent (a600000.usb) is not active
+[ 6423.490063] xhci-hcd xhci-hcd.2.auto: xHCI Host Controller
+[ 6423.490127] xhci-hcd xhci-hcd.2.auto: new USB bus registered, assigned bus number 1
+[ 6423.490183] xhci-hcd xhci-hcd.2.auto: // Halt the HC
+[ 6423.490211] xhci-hcd xhci-hcd.2.auto: Resetting HCD
+[ 6423.490231] xhci-hcd xhci-hcd.2.auto: // Reset the HC
+[ 6423.492593] xhci-hcd xhci-hcd.2.auto: Wait for controller to be ready for doorbell rings
+[ 6423.492630] xhci-hcd xhci-hcd.2.auto: Reset complete
+[ 6423.492648] xhci-hcd xhci-hcd.2.auto: Enabling 64-bit DMA addresses.
+[ 6423.492676] xhci-hcd xhci-hcd.2.auto: HCD page size set to 4K
+[ 6423.492697] xhci-hcd xhci-hcd.2.auto: Starting xhci_mem_init
+[ 6423.492718] xhci-hcd xhci-hcd.2.auto: Allocating internal virtual device array
+[ 6423.492797] xhci-hcd xhci-hcd.2.auto: Device context base array address = 0x0000000ffffc9000 (DMA), 000000007385909e (virt)
+[ 6423.492864] xhci-hcd xhci-hcd.2.auto: Allocated command ring at 00000000b5fbeaea
+[ 6423.492889] xhci-hcd xhci-hcd.2.auto: Allocating primary event ring
+[ 6423.492976] xhci-hcd xhci-hcd.2.auto: Allocating 2 scratchpad buffers
+[ 6423.493070] xhci-hcd xhci-hcd.2.auto: Ext Cap 000000004b1ff12d, port offset = 1, count = 1, revision = 0x2
+[ 6423.493100] xhci-hcd xhci-hcd.2.auto: xHCI 1.0: support USB2 hardware lpm
+[ 6423.493128] xhci-hcd xhci-hcd.2.auto: Ext Cap 00000000c6ec5e20, port offset = 2, count = 1, revision = 0x3
+[ 6423.493277] xhci-hcd xhci-hcd.2.auto: PSIV:4 PSIE:3 PLT:0 PFD:1 LP:0 PSIM:5
+[ 6423.493305] xhci-hcd xhci-hcd.2.auto: PSIV:5 PSIE:3 PLT:0 PFD:1 LP:1 PSIM:10
+[ 6423.493331] xhci-hcd xhci-hcd.2.auto: Found 1 USB 2.0 ports and 1 USB 3.0 ports.
+[ 6423.493355] xhci-hcd xhci-hcd.2.auto: Finished xhci_mem_init
+[ 6423.493376] xhci-hcd xhci-hcd.2.auto: Starting xhci_init
+[ 6423.493396] xhci-hcd xhci-hcd.2.auto: xHC can handle at most 64 device slots
+[ 6423.493420] xhci-hcd xhci-hcd.2.auto: Setting Max device slots reg = 0x40
+[ 6423.493445] xhci-hcd xhci-hcd.2.auto: Setting command ring address to 0xffffe1001
+[ 6423.493474] xhci-hcd xhci-hcd.2.auto: Doorbell array is located at offset 0x2000 from cap regs base addr
+[ 6423.493507] xhci-hcd xhci-hcd.2.auto: // Write event ring dequeue pointer, preserving EHB bit
+[ 6423.493529] xhci-hcd xhci-hcd.2.auto: Finished xhci_init
+[ 6423.493548] xhci-hcd xhci-hcd.2.auto: hcc params 0x0110ffc5 hci version 0x110 quirks 0x0000808020000810
+[ 6423.493683] xhci-hcd xhci-hcd.2.auto: irq 194, io mem 0x0a600000
+[ 6423.493716] xhci-hcd xhci-hcd.2.auto: xhci_run
+[ 6423.493739] xhci-hcd xhci-hcd.2.auto: ERST deq = 64'hffffe3000
+[ 6423.493762] xhci-hcd xhci-hcd.2.auto: Finished xhci_run for main hcd
+[ 6423.495313] xhci-hcd xhci-hcd.2.auto: xHCI Host Controller
+[ 6423.495354] xhci-hcd xhci-hcd.2.auto: new USB bus registered, assigned bus number 2
+[ 6423.495388] xhci-hcd xhci-hcd.2.auto: Host supports USB 3.1 Enhanced SuperSpeed
+[ 6423.495412] xhci-hcd xhci-hcd.2.auto: Enable interrupts
+[ 6423.495434] xhci-hcd xhci-hcd.2.auto: Enable primary interrupter
+[ 6423.495458] xhci-hcd xhci-hcd.2.auto: // Turn on HC, cmd = 0x5.
+[ 6423.495513] xhci-hcd xhci-hcd.2.auto: Port change event, 2-1, id 2, portsc: 0x2802a0
+[ 6423.495540] xhci-hcd xhci-hcd.2.auto: handle_port_status: starting usb2 port polling.
+[ 6423.495684] usb usb1: runtime PM trying to activate child device usb1 but parent (xhci-hcd.2.auto) is not active
+[ 6423.496076] device: 'usb1': device_add
+[ 6423.497544] usb usb1: bus: 'usb': __driver_probe_device: matched device with driver usb
+[ 6423.497576] usb usb1: bus: 'usb': really_probe: probing driver usb with device
+[ 6423.497628] usb usb1: can't set config #1, error -16
+[ 6423.497648] usb usb1: driver: 'usb': driver_bound: bound to device
+[ 6423.497779] usb usb1: bus: 'usb': really_probe: bound device to driver usb
+[ 6423.497817] device: 'ep_00': device_add
+[ 6423.498153] usb usb2: runtime PM trying to activate child device usb2 but parent (xhci-hcd.2.auto) is not active
+[ 6423.498443] device: 'usb2': device_add
+[ 6423.499123] usb usb2: bus: 'usb': __driver_probe_device: matched device with driver usb
+[ 6423.499150] usb usb2: bus: 'usb': really_probe: probing driver usb with device
+[ 6423.499219] usb usb2: can't set config #1, error -16
+[ 6423.499240] usb usb2: driver: 'usb': driver_bound: bound to device
+[ 6423.499361] usb usb2: bus: 'usb': really_probe: bound device to driver usb
+[ 6423.499393] device: 'ep_00': device_add
+[ 6423.499527] xhci-hcd xhci-hcd.2.auto: driver: 'xhci-hcd': driver_bound: bound to device
+[ 6423.499659] xhci-hcd xhci-hcd.2.auto: bus: 'platform': really_probe: bound device to driver xhci-hcd
+[ 6423.546647] xhci-hcd xhci-hcd.2.auto: Port change event, 1-1, id 1, portsc: 0x206e1
+[ 6423.546680] xhci-hcd xhci-hcd.2.auto: handle_port_status: starting usb1 port polling.
+[ 6442.591182] device: '0:84': device_unregister
+[ 6442.591564] device: '0:84': device_create_release
+[ 6442.865304] device: 'scsi_tmf_1': device_unregister
+[ 6442.869395] audit: type=1106 audit(1794387791.801:248): pid=14857 uid=0 auid=1000 ses=3 msg='op=PAM:session_close grantors=pam_selinux,pam_loginuid,pam_selinux,pam_keyinit,pam_namespace,pam_keyinit,pam_limits,pam_systemd,pam_unix,pam_umask,pam_lastlog2 acct="armada" exe="/usr/libexec/sddm-helper" hostname=armada addr=? terminal=/dev/tty1 res=success'
+[ 6442.869862] audit: type=1104 audit(1794387791.801:249): pid=14857 uid=0 auid=1000 ses=3 msg='op=PAM:setcred grantors=pam_permit acct="armada" exe="/usr/libexec/sddm-helper" hostname=armada addr=? terminal=/dev/tty1 res=success'
+[ 6442.896272] audit: type=1131 audit(1794387791.825:250): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=systemd-udev-load-credentials comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[ 6442.903308] audit: type=1131 audit(1794387791.833:251): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=avahi-daemon comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[ 6442.903896] audit: type=1131 audit(1794387791.833:252): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=bluetooth comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[ 6442.906485] audit: type=1131 audit(1794387791.837:253): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=chronyd comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[ 6442.908004] audit: type=1131 audit(1794387791.837:254): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=rtkit-daemon comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[ 6442.909706] audit: type=1131 audit(1794387791.841:255): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=seatd comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[ 6442.911933] audit: type=1131 audit(1794387791.841:256): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=accounts-daemon comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+[ 6442.912616] audit: type=1131 audit(1794387791.841:257): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=polkit comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'

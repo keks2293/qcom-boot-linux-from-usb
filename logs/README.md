@@ -46,6 +46,7 @@ xref = `grep '##0x<vaddr>' text_all.txt`; writes =
 | [`dbg32-connector-reset.txt`](dbg32-connector-reset.txt) | dbg32 (run K) | `CONNECTOR_RESET` word `0x00010003` (port 1): rc=0, handler completed including the PMIC doorbell, no effect (no fresh CC event). Word `0x00800003` re-decoded: hard flag + **port 0 = invalid** — the hang was a confounded experiment, not a hard-reset measurement. Not a fix. |
 | [`dbg49-adsp-icm-ncp-stby.txt`](dbg49-adsp-icm-ncp-stby.txt) | dbg49 run, ULOG excerpt | ADSP fingerprint: `icm_ncp_stby_main: keeps in icm_ncp_stby until charger type updated`, `chgr_stat`/state info. Points to BC1.2/charger classification blocking the data path (P-06). |
 | [`dbg51-rpm-no-suspend.txt`](dbg51-rpm-no-suspend.txt) | dbg51 run | Runtime PM trace showing `rpm_idle` returns `-EAGAIN`/`-EBUSY`, `child_count>=2`, root hubs pinned at `autosuspend_delay_ms=-1000`. Chain cannot enter runtime suspend; L2/runtime-PM class is closed as the cause. |
+| [`preplug-source/`](preplug-source/) | full-system pre-plug round, 2026-11-11 | **The control boot succeeded**: full system, **source** role, pre-plugged direct stick, normal orientation → `sdg` at 14.21 s with `usb_type=[Unknown]` + skip-while-sourcing gate + `ncp_stby` (the failing-side PPM fingerprint). Plus the reverse-orientation boot (spontaneous 464 s), the source-role `-110` hot-plug/re-plug watcher, and the `dracut` screenshot (`/dev/disk/by-uuid/49a99c0a-3e…`). See [`../docs/FULL_SYSTEM_PREPLUG_SOURCE_ROLE.md`](../docs/FULL_SYSTEM_PREPLUG_SOURCE_ROLE.md). |
 
 ## Notes
 
