@@ -18,10 +18,14 @@ is the whole bug" hypothesis is **refuted in the strong form**. Empirical
 gate correction: the typec roles are **not** a proxy for VBUS (roles are set
 at UCSI port registration, ~1.8 s **before** the PPM enables the OTG VBUS).
 Next lever: the **full chain** reset (UCSI → xhci → dwc3 unbind, dwc3 → UCSI
-rebind), code-verified in §9; first a cheap check (port **orientation**,
-stick LED). v4 (dbgC4) will gate the first rebind on `port0-partner` and, if
-the manual full-chain test works, auto-escalate xhci-only → full chain on
-`FAIL-NO-SCAN`. Design rationale:
+rebind), code-verified in §9. The manual full-chain test is **impossible**
+(the emergency shell takes no input on this hardware, confirmed
+2026-11-12) ⇒ v4 (dbgC4) is built with the **unconditional**
+auto-escalation: it gates the first rebind on `port0-partner` (the real
+post-VBUS marker, §3.3), dumps `orientation` / `partner` / the xhci → usbN
+mapping, and on `FAIL-NO-SCAN` escalates xhci-only → full chain, printing
+the beta-1 / beta-2 verdict (`ENUMERATION OK (full-chain)` vs
+`FAIL-NO-SCAN-FULL`). Run 5 = dbgC4, protocol in §10.3. Design rationale:
 [SEQUENCER_TIMING_BEST_PRACTICE.md](SEQUENCER_TIMING_BEST_PRACTICE.md),
 evidence: [FULL_SYSTEM_PREPLUG_SOURCE_ROLE.md](FULL_SYSTEM_PREPLUG_SOURCE_ROLE.md).
 
@@ -43,8 +47,9 @@ byte-identical to the base image. In the Android boot header only
 | result (v1) | `KERNEL.ci-a699dd6-dbgC`, 202 110 046 B, md5 `506cb36f9eadd0459d064ac2f4883927` |
 | base (v2/v3) | `KERNEL.ci-a699dd6-dbgB2` (same base + lever B **v2**: the EAGAIN-suppressed read, see §7) |
 | result (v2) | `KERNEL.ci-a699dd6-dbgC2`, 202 111 747 B, md5 `ab8621850dabacb25e851f8b19f8f7ac`, sha256 `9fa2b591cad49791d822c62763d93d198a27a3cdf8e9ae046fe4cb5a68c92673` — **never booted on hardware** (the second run was the v1 image again, §3.1) |
-| result (v3) | `KERNEL.ci-a699dd6-dbgC3`, 202 112 128 B, md5 `9969edaff95d75c4766d84919d82cbb7`, sha256 `81046641e053cf3cdc3e788f4d0ff4d90e9e48a92300a6103a1242e539517e12` — the image to flash next |
-| builders | `diag/build_dbgB2_ci.py`, `diag/build_dbgC2_ci.py`, `diag/build_dbgC3_ci.py` (assert magic, header diff, kernel identity, hook round-trip; the dbgC2/dbgC3 builders additionally assert the base's lever-B hook is byte-identical to `diag/armada-ulog-b2.sh` and the v3 tree-dump markers) |
+| result (v3) | `KERNEL.ci-a699dd6-dbgC3`, 202 112 128 B, md5 `9969edaff95d75c4766d84919d82cbb7`, sha256 `81046641e053cf3cdc3e788f4d0ff4d90e9e48a92300a6103a1242e539517e12` — ran in run 4 (§3.3) |
+| result (v4) | `KERNEL.ci-a699dd6-dbgC4`, 202 114 227 B, md5 `5704495b563cd991102264581eb4e9e7`, sha256 `66111bd8773b7f55211142f91d92f14038fc802ba44894d60b0ee512f0d7a9a3` — **the image to flash for run 5** (partner gate + dump additions + unconditional full-chain escalation, §10.3) |
+| builders | `diag/build_dbgB2_ci.py`, `diag/build_dbgC2_ci.py`, `diag/build_dbgC3_ci.py`, `diag/build_dbgC4_ci.py` (assert magic, header diff, kernel identity, hook round-trip; the dbgC2/dbgC3/dbgC4 builders additionally assert the base's lever-B hook is byte-identical to `diag/armada-ulog-b2.sh` and the version-specific hook markers) |
 
 The in-image hook names did not change between versions. Each image keeps a
 **distinct filename** on purpose: after the second run turned out to be the
@@ -511,6 +516,12 @@ that the xhci-only rebind does not reset → v4 (dbgC4) = the auto-escalation.
 Zero events even on the full chain → the blocker is below dwc3 (PHY /
 repeater / PPM data path / orientation) — chase item by item.
 
+**The emergency shell takes no input on this hardware (confirmed by the
+user, 2026-11-12), so this manual sequence is not possible.** The same
+sequence is automated in v4 (dbgC4) as the escalation of §9.1–9.3: it fires
+only on the `FAIL-NO-SCAN` / `FAIL-NO-DEV` branches, dumps the tree before
+and after, and prints the beta-1 / beta-2 verdict directly.
+
 ## 10. Run protocol
 
 ### 10.1 dbgC3 (runs 1–4; the image is still on the spare stick)
@@ -528,37 +539,53 @@ eventually `ARMADA-C: TREE[ …` lines; a screen showing only the v1
 `FAIL-NO-DEV … at 3s` line (plus the lever-B `line 82: read …` error) is the
 wrong image.
 
-### 10.2 Run 5 (the manual full-chain test, no rebuild)
+### 10.2 Run 5 (the manual full-chain test) — **not possible**
 
 When dracut fails to find the root it drops an **emergency shell**; the test
-is §9.5 (the exact sysfs echoes). Pre-checks, cheapest first:
+was to be §9.5 (the exact sysfs echoes). The emergency shell **takes no
+input on this hardware (confirmed by the user, 2026-11-12)** — no console
+keys, no Bluetooth keyboard. The manual full-chain test is therefore
+**impossible**, and v4 (dbgC4) with the unconditional auto-escalation is the
+only beta-1 / beta-2 discriminator. Its two pre-checks moved into the run:
 
-1. **orientation** — `cat /sys/class/typec/port0/orientation` (values
-   `unknown` / `normal` / `reverse`). If **`reverse`**: flip the plug and
-   re-run dbgC3 *before* anything else — a reverse orientation can leave the
-   data path unrouted for minutes and would explain everything without new
-   levers.
-2. **the stick LED** — whether the VBUS the PPM reports as out actually
-   reaches the stick (the PPM reading is not a guarantee at the connector).
-3. **the full-chain rebind** — §9.5; read `dmesg | tail -40` and
-   `ls /sys/block/`.
+1. **orientation** — the v4 dump prints `port0/orientation` (values
+   `unknown` / `normal` / `reverse`) on every `TREE[ …` line. If a run
+   prints **`reverse`**: flip the plug and re-run the *same* dbgC4 image —
+   a reverse orientation can leave the data path unrouted and would explain
+   everything without new levers.
+2. **the stick LED** — physical observation during the run (no input
+   needed): whether the VBUS the PPM reports as out actually reaches the
+   stick (the PPM reading is not a guarantee at the connector).
 
-Open question gating the manual test: whether the emergency shell accepts
-keyboard input on this hardware (console buttons / a Bluetooth keyboard). If
-not, the test is not possible and v4 (dbgC4) with the auto-escalation is the
-only path (it fires only on the `FAIL-NO-SCAN` branch, so the primary verdict
-is unaffected).
+### 10.3 v4 (dbgC4) — built, the image for run 5
 
-### 10.3 v4 (dbgC4) design, after the manual test
-
-- **gate** the first rebind on `port0-partner` appearance (or the ULog line
-  `otg enable: 1`) instead of the bare typec roles (§3.3 gate correction);
-- **dump additions**: `port0/orientation` and the xhci → `usbN` mapping
-  (`ls` of the xhci device directory: which root hub belongs to
-  `xhci-hcd.2.auto`);
-- **`wait_disk` optimization** (run 4: ~12.7 s wall clock per "10 s");
+- **gate** the first rebind on `port0-partner` appearance (≤20 s; the real
+  post-VBUS marker, §3.3 gate correction — the bare roles at 3.66 s were
+  pre-VBUS) instead of the bare typec roles;
+- **dump additions**: `port0/orientation`, `partner: yes/no`, and the
+  xhci → `usbN` mapping (`ls` of each xhci device directory: which root hub
+  belongs to `xhci-hcd.*.auto` — the auto ID is looked up by glob, never
+  hard-coded, because a full-chain reset can re-create the device under a
+  new ID);
+- **`wait_disk` optimization** (run 4: ~12.7 s wall clock per "10 s" —
+  UFS-LUN cache, `sleep 0.5`, the `-110` check every 2nd iteration);
 - **auto-escalation** xhci-only → full chain (UCSI → xhci → dwc3 unbind,
-  dwc3 → UCSI rebind, §9) **only if the manual full-chain test worked**,
-  fired only on the `FAIL-NO-SCAN` branch.
+  dwc3 → UCSI rebind, §9) **unconditional** (the manual test is impossible),
+  fired only on the `FAIL-NO-SCAN` / `FAIL-NO-DEV` branches, with a safety
+  abort (if the UCSI unbind fails, dwc3 is not touched — the role-switch
+  reference, §9.2).
 
-Then: flash a distinct `dbgC4` image (md5 both sides after flashing), run 6.
+Verdicts: `ENUMERATION OK (full-chain)` (beta-1: the residual blocker was
+dwc3/UCSI state → the hook is the fix) / `FAIL-NO-SCAN-FULL` (beta-2: the
+blocker is below dwc3 — chase PHY / repeater / PPM data path / orientation
+item by item) / `FAIL-ESCALATE` / `FAIL: Host halt -110 after full-chain
+reset`. New `TREE[ …` tags: `ESC`, `ESC-ABORT`, `NO-XHCI-ESC`,
+`NO-SCAN-FULL`, `OK-FULL`.
+
+Protocol (run 5): flash `KERNEL.ci-a699dd6-dbgC4` to the spare stick,
+**verify md5 on both sides after flashing** (the lesson of §3.1), stick
+pre-plugged, ABL → `linux usb`, zero actions, photo of the diag screen,
+watch the stick LED. A run is a genuine dbgC4 run only if it prints
+`ARMADA-C: hook loaded up=Ns` and then either `partner at Ns (port0-partner;
+…)` or `WARN-nopartner` (the v4 gate line); on failure, `ESCALATE at Ns:
+full-chain reset (…)` marks the escalation.
