@@ -22,8 +22,10 @@ evidence is under [`logs/preplug-source/`](../logs/preplug-source/).
   PDR 12.454 s → first port scan **12.787 s (post-PDR)** → device 13.05 s.
   Initramfs (dbgB): port scan **2.7 s, before the PDR at 3.5 s** → nothing.
 - **⇒ the fix is a post-PDR rescan inside the initramfs** (lever **C** in
-  [INITRAMFS_CHANGES.md](INITRAMFS_CHANGES.md): unbind/rebind `dwc3-qcom`/xHCI
-  after the `PDR: Indication … charger_pd` line). The `usb_type`/classification
+  [INITRAMFS_CHANGES.md](INITRAMFS_CHANGES.md): unbind/rebind **`xhci-hcd`
+  only** after the `PDR: Indication … charger_pd` line — see
+  [LEVER_C_IMPLEMENTATION.md](LEVER_C_IMPLEMENTATION.md) for why `dwc3-qcom`
+  must not be unbound). The `usb_type`/classification
   work (lever D, firmware byte) is **not needed** for enumeration.
 - **Orientation matters** on this board: reverse orientation can leave the data
   path unrouted for minutes (or forever); the USB-boot recipe must require
@@ -207,8 +209,9 @@ timeout scripts because the stick never enumerated. With lever C the
    pre-plug scenario enumerates with the failing-side PPM fingerprint. Stop
    pursuing classification (lever D / firmware byte) for *enumeration*.
 2. **The fix is lever C:** a post-PDR rescan inside the initramfs — wait for the
-   `PDR: Indication … charger_pd` line, then unbind/rebind `dwc3-qcom` (or the
-   xHCI host) so the host controller scans **after** the PDR, exactly like E.
+   `PDR: Indication … charger_pd` line, then unbind/rebind the **xHCI host
+   device** (not `dwc3-qcom` — UCSI holds a role-switch reference) so the host
+   controller scans **after** the PDR, exactly like E.
 3. **Normal orientation is required** (D).
 4. The `-110` role-switch failure (B/C) is a **separate** bug; keep the rescan
    single-shot and early so it is never hit.

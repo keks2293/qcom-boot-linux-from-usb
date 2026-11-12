@@ -68,7 +68,7 @@ classification window**.
 |---|---|---|---|
 | **A** | **Stage the ADSP start like a normal boot.** Don't let `qcom_q6v5_pas` probe at ~3 s; delay it to ~10 s (blacklist + a hook that loads it later, or a `modprobe -r`/`modprobe` pair) | The one timing difference between the environments that has **never** been varied. Full system: ADSP up **10.978 s** (13:09 boot; 12.012 s in the 15:39 boot — the start drifts ~1.5 s boot-to-boot) → PDR 11.025 → classified 11.08. Initramfs: PDR 3.498 s, immediately behind ABL's USB host session. If the PPM coming up "late and clean" is what makes initial detection succeed, this reproduces it | one boot |
 | **B** | **The poller + ADSP ULog capture in initramfs.** Ship [`scripts/usb-type-poller.sh`](../scripts/usb-type-poller.sh) and [`scripts/adsp-ulog-capture.sh`](../scripts/adsp-ulog-capture.sh) into the initramfs: mount tracefs, `modprobe pmic_pdcharger_ulog` (the **stock** AP-side reader — no dependencies, **already in the initramfs image**), enable `pmic_pdcharger_ulog:pmic_pdcharger_ulog_msg`, drain ~40 s. Grep the `PartnerType=` detection result, `ncp_stby_db`, `sm_state_loop` around the PDR | Diagnostic, no behaviour change: does initial detection **run** in the failing env, and what does it return? Success side already captured ([ADSP_ULOG.md](ADSP_ULOG.md)); this boot gets the failing side for the diff | one boot |
-| **C** | **Post-PDR nudge inside the ≤30 s window** — a hook that waits for the `PDR: Indication … charger_pd` line, then (one lever per boot) mounts debugfs and issues the UCSI command, or toggles `/sys/class/usb_role/*/role`, or unbinds/binds `dwc3-qcom` | The last open AP-side option. Every previous attempt was either run **outside** the window (dbg49's re-probe at >32 s) or with a confounded command word (dbg31/dbg32) — `FULL_SYSTEM_PREPLUG_RESULT.md` next-experiment #1 has still never been run | one boot per lever |
+| **C** | **Post-PDR nudge inside the ≤30 s window** — a hook that waits for the `PDR: Indication … charger_pd` line, then (one lever per boot) mounts debugfs and issues the UCSI command, or toggles `/sys/class/usb_role/*/role`, or unbinds/binds the xHCI host device (`dwc3-qcom` is **not** an option — see [LEVER_C_IMPLEMENTATION.md](LEVER_C_IMPLEMENTATION.md) §2) | The last open AP-side option. Every previous attempt was either run **outside** the window (dbg49's re-probe at >32 s) or with a confounded command word (dbg31/dbg32) — `FULL_SYSTEM_PREPLUG_RESULT.md` next-experiment #1 has still never been run | one boot per lever |
 | **D** | *(not an init change)* **`apsd-rerun-cfg` 0→1** in `adsp_dtb.mbn` (1 byte + `sha384` slot, recipe byte-verified, TZ accepts the re-hash) | Opens the only edge-free re-detection path the firmware has. Caveat: `SetRerunApsd` still needs the AP's `pmic_glink` message in the right DPM state, which is undecoded — so even D may need C | one boot (dbg52) |
 
 **Recommended order: B → A → C → D.** B first because it turns the next boot
@@ -182,7 +182,7 @@ enumeration is proven.
 **Why this vehicle.** One boot runs the first candidates of the ranked order
 together — **A** (stage the ADSP start to ~T+11 s), **B** (the poller + the
 stock `pmic_pdcharger_ulog` PPM-ULog drain), and **C-lite** (unbind/rebind
-`dwc3-qcom` around the PDR) — and B's first-drain ULog window is exactly the
+`xhci-hcd` around the PDR) — and B's first-drain ULog window is exactly the
 discriminator the decision rule needs. A debug PID-1
 (`armada-usb-fix-debug-init`) runs the sequence with a console echo per step;
 on enumeration it prints `ENUMERATION OK: /dev/sdX` and keeps refreshing the
@@ -238,8 +238,11 @@ ICM `ncp_stby`. So the discriminator is **not** partner-type/pre-plug and **not*
   with the failing fingerprint). Lever **D** (the firmware `apsd-rerun-cfg`
   byte) is not needed for enumeration.
 - **Lever C is the fix:** a post-PDR rescan inside the initramfs (wait for the
-  `PDR: Indication … charger_pd` line, then unbind/rebind `dwc3-qcom`/xHCI) so
-  the host scan lands **after** the PDR, exactly as in the working full system.
+  `PDR: Indication … charger_pd` line, then unbind/rebind **`xhci-hcd` only** —
+  never `dwc3-qcom`, whose unbind would leave UCSI with a stale role-switch
+  pointer) so the host scan lands **after** the PDR, exactly as in the working
+  full system. Implementation, gates and verdicts:
+  [LEVER_C_IMPLEMENTATION.md](LEVER_C_IMPLEMENTATION.md).
 - **Normal orientation is required** (reverse can leave the data path unrouted
   for minutes).
 - A separate kernel bug makes any **runtime** source-role re-probe fail

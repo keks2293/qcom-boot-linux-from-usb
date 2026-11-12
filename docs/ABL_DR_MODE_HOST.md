@@ -184,7 +184,7 @@ non-automated version of the initramfs-script fix below.
 |---|---|---|---|
 | **Kernel patch (recommended)** | `dwc3`: demote `dr_mode=host` → OTG when `usb-role-switch` is present | Yes — needs a kernel (CI) build | Reproduces the full-system (known-good) behavior in the initramfs; also removes the UCSI deferral as a side effect (the role-switch device then exists) |
 | ABL patch | ABL: only set `dr_mode=host` when `usb-role-switch` is **absent** | No — ABL is closed | The "right" place semantically, but not actionable |
-| Initramfs script | dracut: hold the first scan until the PDR, then re-probe | Yes — no kernel rebuild | `unbind`/`bind` the `dwc3-qcom` device once the PDR line appears; ships in the next CI image |
+| Initramfs script | dracut: hold the first scan until the PDR, then re-probe | Yes — no kernel rebuild | `unbind`/`bind` the **`xhci-hcd`** host device once the PDR line appears (not `dwc3-qcom` — UAF via UCSI); ships in the next CI image |
 
 > **Status (2026-11-07, updated after the `dbg1400` run):** the kernel patch
 > option was implemented as Armada PR #704 commit `a699dd6` (patch
@@ -248,41 +248,48 @@ the role-switch callback, so the core demotion above is the functional fix.
 
 ### Initramfs script (no kernel rebuild)
 
-The platform driver is **`dwc3-qcom`** (device `a600000.usb`), not `dwc3`. Hold the
-first scan until the PDR line appears in the kernel ring buffer, then re-probe:
+Final, implemented variant (2026-11-12) — full description and console verdicts
+in [LEVER_C_IMPLEMENTATION.md](LEVER_C_IMPLEMENTATION.md). Two corrections
+against the sketch that used to be here:
+
+1. **Rebind the `xhci-hcd` platform device, not `dwc3-qcom`.** Unbinding the
+   glue driver unregisters the USB role-switch device that UCSI holds a
+   reference to (`ucsi.c:1837`) and calls `set_role()` on at every connector
+   change (`ucsi.c:1376,1958`) → use-after-free on the post-PDR attach. The
+   xHCI host device is separate, keeps its quirk platform data across the
+   unbind (`dwc3/host.c:199` → `xhci-plat.c:430`), and re-probing it gives
+   exactly the fresh HCRST + root-hub scan we need.
+2. **Gate on `dr_mode=host` in the live FDT**, not on "the PDR is already
+   absent". In a *normal* boot the PDR arrives ~12 s from the real root, after
+   `switch_root`; a hook that unbinds early and waits for a PDR would leave the
+   controller down forever.
 
 ```sh
 #!/bin/sh
-# Hold the first host scan until the charger_pd PDR, then re-probe.
-DEV=a600000.usb
-DRV=/sys/bus/platform/drivers/dwc3-qcom
+# hold the first host scan until the charger_pd PDR, then re-probe
+DT=/sys/bus/platform/devices/a600000.usb/of_node
+DRV=/sys/bus/platform/drivers/xhci-hcd
 
-# wait for the controller
-while [ ! -e "$DRV/$DEV" ]; do sleep 0.1; done
+[ "$(tr -d '\000' < "$DT/dr_mode" 2>/dev/null)" = host ] || exit 0   # linux usb only
 
-# if the PDR already arrived, nothing to do (normal full-system boot)
-if dmesg | grep -q "PDR: Indication received from msm/adsp/charger_pd"; then
-    exit 0
-fi
+N=
+for d in "$DRV"/xhci-hcd.*; do [ -e "$d" ] && { N=${d##*/}; break; }; done
+[ -n "$N" ] || exit 0
+echo "$N" > "$DRV/unbind"
 
-# drop the early (pre-PDR) host controller
-echo "$DEV" > "$DRV/unbind"
-
-# wait for the charger service (bounded)
 i=0
 until dmesg | grep -q "PDR: Indication received from msm/adsp/charger_pd"; do
-    i=$((i+1)); [ "$i" -ge 200 ] && break   # ~20 s bound
+    i=$((i+1)); [ "$i" -ge 300 ] && break      # ~30 s bound, 0.1 s steps
     sleep 0.1
 done
 
-# re-probe: fresh first scan, now after the PDR
-echo "$DEV" > "$DRV/bind"
+udevadm settle --timeout=10
+echo "$N" > "$DRV/bind"
 ```
 
-Self-gating: on a normal boot the PDR is already present when the controller
-appears, so the script exits immediately. In `linux usb` it unbinds the early
-host, waits for the PDR (~3.5 s), and re-probes — putting the first scan inside
-the working window.
+The shipped hook additionally: skips when a **USB-backed** `sd*` already exists,
+verifies ≤10 s with up to 3 rebinds, stops on a new `Host halt failed, -110`,
+and is idempotent across the repeated sourcing by `dracut-initqueue`.
 
 ---
 
