@@ -1,17 +1,27 @@
 # Lever C implementation: post-PDR xHCI rescan in the initramfs
 
-Status: **v3 (dbgC3) built and smoke-tested, 2026-11-12; awaiting the
-decisive hardware run (the third one).** The v1 image (`dbgC`) was run on
-hardware **twice** on 2026-11-12 — both times it failed with `FAIL-NO-DEV` at
-~3.1 s, a **race in the hook, not a hardware verdict** (the v1 hook was
-written for a forced-host kernel; on the patch-1400 kernel the `xhci-hcd`
-device does not exist until the post-PDR role flip at ~5.3–5.5 s). The second
-"decisive" run turned out to be the v1 image again (the stick's `KERNEL` was
-byte-identical to `dbgC`; the v2 image was never flashed) — so a v2/v3 image
-must be md5-verified **after** flashing. v2 removed the race; v3 adds a
+Status: **v3 (dbgC3) ran on hardware for the first time (run 4, 2026-11-12):
+verdict `FAIL-NO-SCAN` with a live controller — a new, strong result.** The
+v1 image (`dbgC`) was run on hardware **three** times on 2026-11-12 — each
+time it failed with `FAIL-NO-DEV` at ~3.1 s, a **race in the hook, not a
+hardware verdict** (the v1 hook was written for a forced-host kernel; on the
+patch-1400 kernel the `xhci-hcd` device does not exist until the post-PDR role
+flip). Runs 2 and 3 turned out to be the v1 image again (the stick's `KERNEL`
+was byte-identical to `dbgC` each time; v2/v3 were never flashed) — so an
+image must be md5-verified **after** flashing. v2 removed the race; v3 adds a
 one-shot device-tree snapshot so that a failure can no longer leave "the
 xhci controller was created and scanned but found nothing" indistinguishable
-from "the xhci controller was never created at all". Design rationale:
+from "the xhci controller was never created at all". Run 4 (genuine dbgC3)
+confirmed case (A): controller alive, root hub up, **three fresh post-PDR
+scans (two post-VBUS) found nothing** (`scan-events=0`) — the "scan ordering
+is the whole bug" hypothesis is **refuted in the strong form**. Empirical
+gate correction: the typec roles are **not** a proxy for VBUS (roles are set
+at UCSI port registration, ~1.8 s **before** the PPM enables the OTG VBUS).
+Next lever: the **full chain** reset (UCSI → xhci → dwc3 unbind, dwc3 → UCSI
+rebind), code-verified in §9; first a cheap check (port **orientation**,
+stick LED). v4 (dbgC4) will gate the first rebind on `port0-partner` and, if
+the manual full-chain test works, auto-escalate xhci-only → full chain on
+`FAIL-NO-SCAN`. Design rationale:
 [SEQUENCER_TIMING_BEST_PRACTICE.md](SEQUENCER_TIMING_BEST_PRACTICE.md),
 evidence: [FULL_SYSTEM_PREPLUG_SOURCE_ROLE.md](FULL_SYSTEM_PREPLUG_SOURCE_ROLE.md).
 
@@ -70,7 +80,7 @@ The first draft of lever C said "unbind/rebind `dwc3-qcom`/xHCI". That is
 That is sufficient for the experiment (the port must be re-scanned after the
 PDR) with no UAF risk.
 
-## 3. The hardware runs (2026-11-12): a hook race, not a hardware verdict
+## 3. The hardware runs (2026-11-12): runs 1–3 = a hook race, not a hardware verdict; run 4 = the genuine verdict
 
 ### 3.0 Run 1
 
@@ -135,7 +145,78 @@ hook, it is impossible to tell "the xhci controller was created by the
 post-PDR flip, a scan ran, and found nothing" from "the xhci controller was
 never created at all" — the two have different next levers (§8). v3 exists
 to close exactly this gap. (3) Run protocol now includes an **md5 check after
-flashing** (§9).
+flashing** (§10).
+
+### 3.2 Run 3: the third bit-identical v1 repeat (the stick was still never re-flashed)
+
+Prepared after v3 (dbgC3) was built, the third run produced the **third
+bit-identical v1 repeat**: `ARMADA-C: FAIL-NO-DEV: no xhci-hcd device for
+a600000.usb at 3s` at 3.299 s, PPM/port side again 1:1 with control E. The
+stick's `KERNEL` md5 was checked after the run and was **again**
+`506cb36f9eadd0459d064ac2f4883927` (v1 `dbgC`) — dbgC3 had been built but
+never written to this stick. Determinism ×3 (PDR ~3.5 s → otg-enable
+~5.3–5.5 s → roles ~5.5 s → the known source-role fingerprint) confirmed the
+runs are reproducible, so a new image would yield a comparable result.
+dbgC3 was then flashed (12 ноя 13:27; md5 `9969edaff95d75c4766d84919d82cbb7`
+verified on **both** sides, AppleDouble `._*` cleaned, `KERNEL.md5` updated,
+volume ejected).
+
+### 3.3 Run 4 (the first genuine lever-C test): ⭐ `FAIL-NO-SCAN` with a live controller
+
+Pre-plug, normal orientation, `linux usb`, zero actions. The v2/v3 logic ran
+exactly as designed:
+
+```
+ARMADA-C: hook loaded up=3s                                  @3.31
+ARMADA-C: start up=3s: dr_mode='host' xhci=ABSENT (patch-1400 kernel …) pdr=no   @3.38
+ARMADA-C: PDR seen at 3s                                     @3.54
+ARMADA-C: source+host at 3s (power='[source] sink' data='[host] device')        @3.66
+ARMADA-C: xhci=xhci-hcd.2.auto at 3s: checking the first post-flip scan         @3.67
+  (try 1: unbind+bind rc=0 @3.70/3.72 — **pre-VBUS**)
+[  5.44] otg enable: 1 / otg source = 1                       (PPM OTG VBUS on)
+[  7.49] GET_CONNECTOR_STATUS: ConnectStatus=1, PowerDirection=1, ConnectPartnerType=2, USB=1
+ARMADA-C: TREE[t10] up=10s …                                  @10.1
+ARMADA-C: no disk after try 1 at 16s: rebind retry (scan-events=0)              @16.39  (try 2, post-VBUS)
+ARMADA-C: no disk after try 2 at 29s: rebind retry (scan-events=0)              @29.18  (try 3, post-VBUS)
+ARMADA-C: FAIL-NO-SCAN: no USB disk after 3 tries …            ~42 s
+```
+
+No `Host halt failed, -110` at any point (the rebind is safe and repeatable;
+the qmp-combo defect is not in the path). The `TREE[t10]` dump:
+
+```
+a600000.usb: [of_node … usb_role xhci-hcd.2.auto]     (controller ALIVE, xhci bound)
+role /sys/class/usb_role/a600000.usb-role-switch: [host]
+/sys/block: [loop0…7 mmcblk0 sda sdb sdc sdd sde sdf]  (UFS only, no USB sd*)
+usb: [1-0:1.0 2-0:1.0 usb1 usb2]                      (two root hubs, NO port-1 child)
+```
+
+**Verdict: case (A) confirmed, case (B) excluded.** The controller is alive,
+both root hubs are up, and **three fresh scans — two of them post-VBUS,
+~11 s and ~24 s after the PPM enabled the OTG VBUS — saw no connect event at
+all** (`scan-events=0`). Yet the PPM *sees* the stick (`ConnectPartnerType=2,
+USB=1`), the OTG VBUS is out (`otg source=1`, ~5.06 V) and the role is host.
+The pre-plugged drive is therefore not being presented electrically on the
+bus: the residual blocker is the **data path** — either state left in dwc3 /
+UCSI / PHY below the xhci layer, or orientation / repeater / the power switch.
+
+**⭐ Empirical gate correction (for v4).** The v2 assumption "typec `port0`
+`[source]`+`[host]` = PPM enabled the OTG VBUS" is **wrong**: the hook saw
+source+host at **3.66 s** — UCSI sets the roles when it registers the port
+(`drivers/usb/typec/ucsi/ucsi.c:1837,1958`) — while the PPM actually enabled
+the OTG VBUS (`otg enable: 1`) at **5.44 s**, ~1.8 s later. The `xhci-hcd`
+device appeared at 3.67 s right after the role set, i.e. it is created by the
+**role flip, not by the VBUS**. Try 1 (3.7 s) was pre-VBUS and doomed by
+timing; tries 2 and 3 (16.4 s / 29.2 s) were post-VBUS and still
+`scan-events=0` — so scan ordering is necessary but not sufficient. The
+correct gate for the first rebind is the appearance of **`port0-partner`**
+(~5.4 s; `ucsi_register_partner()` at `ucsi.c:1944`, after
+`GET_CONNECTOR_STATUS`) or the ULog line `otg enable: 1`.
+
+**Note:** `wait_disk 100` ("10 s") costs ~12.7 s of wall clock in practice
+(per-iteration cost: the six UFS-LUN `sda`–`sdf` resolved via `cd -P`/`pwd -P`
+plus a forked `dmesg | grep -c` each time) — that is why the tries ended at
+16.4 s / 29.2 s. v4 will shorten the wait.
 
 ## 4. Hook behaviour (v2/v3; v3 = v2 byte-for-byte plus the tree dump)
 
@@ -156,7 +237,7 @@ Sequence:
 | 0b | skip if a USB-backed `sd*` already exists |
 | 1 | `udevadm settle`; if `xhci-hcd.*` of `a600000.usb` **exists** (forced-host kernel), unbind it to discard the pre-PDR scan. If it is **absent** (patch-1400 kernel) that is **not** an error — step 4 waits for it. |
 | 2 | wait for the `PDR: Indication received from msm/adsp/charger_pd` line (≤30 s, 0.1 s steps, event-driven) |
-| 3 | wait for typec `port0` `power_role=[source]` **and** `data_role=[host]` (≤15 s) — the proxy for "PPM has enabled the OTG VBUS" (step 3 of the v1 run: the scan must be post-VBUS, not only post-PDR) |
+| 3 | wait for typec `port0` `power_role=[source]` **and** `data_role=[host]` (≤15 s) — **v4 correction:** this is *not* a reliable proxy for "PPM has enabled the OTG VBUS" (run 4, §3.3: the roles appear at 3.66 s, ~1.8 s **before** `otg enable: 1` at 5.44 s; v4 gates on `port0-partner` / `otg enable: 1` instead) |
 | 4 | wait for the `xhci-hcd.*` device to appear (≤10 s; created by the role flip) — never appears ⇒ `FAIL-NO-DEV` (the role flip itself did not happen: UCSI/partner, a **new class**) |
 | 5 | if the first post-flip scan already produced a USB disk → `ENUMERATION OK (first post-PDR scan)` **without a rebind** |
 | 6 | otherwise unbind+bind (fresh HCRST + new root-hub scan), verify ≤10 s; up to 3 tries; **hard stop on a *new* `Host halt failed, -110`** (baseline count taken before any unbind, checked **inside** the wait loop → stop immediately; known qmp-combo defect, a retry cannot recover) |
@@ -293,7 +374,7 @@ error line. Fix: `2>/dev/null` on that one read
 (`diag/armada-ulog-b2.sh`); the image is `KERNEL.ci-a699dd6-dbgB2` (202 107 571
 B, md5 `62c84617968a0adfc97a5e2926568c98`).
 
-## 8. Interpretation of the dbgC3 result
+## 8. Interpretation of the runs (decision tree state after run 4)
 
 The v3 tree dump makes the two failure classes directly distinguishable on the
 screen (the `usb:` line is the key): **`usb: [usb1]`** = case A, the xhci
@@ -302,36 +383,143 @@ controller exists and a scan ran but found nothing; **`usb: []`** (+
 created, i.e. the post-PDR role flip itself did not happen. The `role
 …: [host]` line cross-checks the usb-role-switch state, and the `/sys/block:`
 line shows whether any `sd*` appeared that the USB-backed detection missed.
+**Run 4 returned case (A): `usb: [1-0:1.0 2-0:1.0 usb1 usb2]`, role `[host]`,
+no port-1 child — `FAIL-NO-SCAN` with a live controller** (§3.3).
 
-- **`ENUMERATION OK`** (either variant) → ordering (pre- vs post-PDR/VBUS scan)
-  was the whole bug; lever C is the fix and belongs in the initramfs of PR #704
-  (dracut module), after which the plan is an OS-root clone and boot from the
-  stick.
-- **`FAIL-NO-SCAN`** with the controller alive (tree: `usb: [usb1]`) →
-  ordering is necessary but not sufficient; the next lever is the full chain
-  (repeater → hsphy → dwc3), and it must be preceded by unbinding
-  `pmic_glink.ucsi.0` so UCSI re-fetches a fresh role switch instead of keeping
-  a stale one.
-- **`FAIL: Host halt -110`** → the qmp-combo defect; retries are pointless.
-  Backport the upstream fix (Oleg Keri, LKML 2026-09-16, "keep the Type-C
-  callbacks off unclocked registers") instead.
-- **`WARN: no charger_pd PDR in 30 s`** → check the ADSP drop-in / remoteproc in
-  the initramfs (without it the PDR does not reach the initramfs at all).
-- **`FAIL-NO-DEV`** → the role flip itself did not happen (UCSI/partner); a new
-  failure class, lever C did not get to run.
+- ~~`ENUMERATION OK`~~ (either variant) → not triggered.
+- **`FAIL-NO-SCAN` with the controller alive — GIVEN (run 4).** Ordering
+  (pre- vs post-PDR/VBUS scan) is **necessary but not sufficient**: three
+  fresh scans, two of them post-VBUS, found nothing. The next lever is the
+  **full chain** reset — UCSI → xhci → dwc3 unbind, dwc3 → UCSI rebind,
+  code-verified in §9 — preceded by unbinding the UCSI auxiliary driver so
+  UCSI re-fetches a fresh role switch instead of keeping a stale reference.
+  Two sub-branches: (β1) the manual full-chain rebind in the emergency shell
+  enumerates the stick → the residual blocker was state left in dwc3/UCSI and
+  v4 (dbgC4) automates the escalation; (β2) even the full chain produces zero
+  events → the blocker is below dwc3 (PHY / eUSB2 repeater / PPM data path /
+  plug orientation) and is chased item by item.
+- ~~`FAIL: Host halt -110`~~ → not triggered (rebind rc=0 ×3). If it ever
+  appears: the qmp-combo defect; retries are pointless. Backport the upstream
+  fix (Oleg Keri, LKML 2026-09-16, "keep the Type-C callbacks off unclocked
+  registers") instead.
+- ~~`WARN: no charger_pd PDR in 30 s`~~ → not triggered (PDR at 3.54 s).
+- ~~`FAIL-NO-DEV`~~ → not triggered (the flip happened; xhci appeared at
+  3.67 s).
+
+Cheap checks before the full chain (run 5 protocol, §10): (1) the port
+**orientation** (`/sys/class/typec/port0/orientation`, values
+`unknown`/`normal`/`reverse` per `drivers/usb/typec/class.c:1678-1682`) — a
+`reverse` orientation can leave the data path unrouted for minutes and is
+exactly consistent with live CC/VBUS + no enumeration (test D); if reverse,
+flip the plug and re-run dbgC3 first; (2) the **stick LED** — does the VBUS
+that the PPM reports as out actually reach the stick.
 
 Expected timeline of a successful run (from the v1 run and control E):
 PDR ~3.5 s → `source+host` ~5.5 s → `xhci-hcd` ~5.5–5.6 s → first scan (or
 rebind ~5.6 s) → `ENUMERATION OK` ~6–7 s — inside the ~30 s PPM window and
 before any runtime role switch, so the `-110` bug is not in the path.
 
-## 9. Run protocol
+## 9. The full-chain reset (code-verified; the next lever)
+
+Scope expansion beyond §2: if the xhci-only rebind cannot make the port re-scan
+a pre-plugged drive, the next step resets the **whole** stack. Everything below
+is verified against the source (kernel v7.2.6), with the exact sysfs paths for
+the manual test in the emergency shell.
+
+### 9.1 The drivers and their sysfs locations (correction: UCSI is an *auxiliary* driver)
+
+| component | driver | driver name | device | sysfs unbind/bind |
+|---|---|---|---|---|
+| UCSI over PMIC-GLINK | `drivers/usb/typec/ucsi/ucsi_glink.c:480-487` — an **auxiliary** driver (`auxiliary_driver pmic_glink_ucsi_driver`, `.name = "pmic_glink_ucsi"`, id table `pmic_glink.ucsi` :474-477), **not** platform | `pmic_glink_ucsi` | **`pmic_glink.ucsi.0`** — `drivers/base/auxiliary.c:325` (`dev_set_name(dev, "%s.%s.%d", modname, auxdev->name, auxdev->id)`, modname `pmic_glink`, name `"ucsi"` passed at `drivers/soc/qcom/pmic_glink.c:329`) | `/sys/bus/auxiliary/drivers/pmic_glink_ucsi/unbind\|bind` |
+| xHCI | `drivers/usb/host/xhci-plat.c:631-636` (`platform_driver usb_generic_xhci_driver`) | `xhci-hcd` | **`xhci-hcd.2.auto`** (auto ID `.2`; child of `a600000.usb`; the SoC has several DWC3 instances, hence two root hubs `usb1`/`usb2`) | `/sys/bus/platform/drivers/xhci-hcd/unbind\|bind` |
+| DWC3 glue | `drivers/usb/dwc3/dwc3-qcom.c:847-858` (`platform_driver dwc3_qcom_driver`) | `dwc3-qcom` | **`a600000.usb`** | `/sys/bus/platform/drivers/dwc3-qcom/unbind\|bind` |
+| role switch | `drivers/usb/dwc3/drd.c:504-540` (`dwc3_setup_role_switch`), name `<parent>-role-switch` (`drivers/usb/roles/class.c:392`) | — | **`a600000.usb-role-switch`** (appears/disappears with the dwc3 driver) | not directly bindable; created/destroyed by dwc3 bind/unbind |
+
+### 9.2 Unbind order: **UCSI → xhci → dwc3**
+
+- UCSI holds a reference to the role switch: `ucsi.c:1837`
+  (`con->usb_role_sw = fwnode_usb_role_switch_get(cap->fwnode)`) and calls
+  `usb_role_switch_set_role()` on every connector change (`ucsi.c:1376`,
+  `:1958`). Unbinding dwc3 while UCSI still holds the switch would unregister
+  it out from under a live reference (UAF) — so **UCSI goes first**.
+- Unbinding dwc3 = `dwc3_qcom_remove` → `dwc3_core_remove`
+  (`drivers/usb/dwc3/core.c:2409-2436`) → `dwc3_core_exit_mode` (:2413) → OTG
+  ⇒ `dwc3_drd_exit` (`drd.c:596-624`): `usb_role_switch_unregister`
+  (:600-601) **plus** `dwc3_host_exit` while `current_dr_role == HOST`
+  (:610-612, which destroys the `xhci-hcd` platform device) → then
+  `dwc3_core_exit` (core.c:2416, the CORESOFTRESET/halt path). The xhci
+  unbind itself is top-down and its safety is already proven by run 4
+  (rc=0 ×3, no `-110`).
+
+### 9.3 Rebind order: **dwc3 → UCSI** (the chain then completes itself)
+
+- **dwc3 first**: `dwc3_qcom_probe` → `dwc3_core_probe` → OTG ⇒
+  `dwc3_drd_init` (`drd.c:546-552`) → `dwc3_setup_role_switch` → a **new**
+  `a600000.usb-role-switch`, initial mode **DEVICE** (no `default-role`
+  property in the image DTB, §9.4). No `xhci-hcd` yet.
+- **UCSI second, and it must be second**: the probe resolves the role switch
+  via `ucsi_find_fwnode()` (`ucsi.c:1800-1808`, the fwnode of `connector@0`)
+  → `fwnode_usb_role_switch_get()` (`drivers/usb/roles/class.c:190-201`) →
+  `fwnode_connection_find_match()` (`drivers/base/property.c:1444-1459`) →
+  graph walk: the `connector@0` endpoint →
+  `fwnode_graph_get_remote_port_parent()` (property.c:1385) → the
+  `a600000.usb` node, where `usb_role_switch_match()`
+  (`roles/class.c:126-136`) requires the **`usb-role-switch` property — which
+  is present in the image DTB** (§9.4). Without a registered switch the
+  probe **hard-fails** (`ucsi.c:1838-1840`, `dev_err_probe`) — hence dwc3 must
+  be re-bound first.
+- **After that UCSI completes the chain by itself** (no further user action):
+  `GET_CONNECTOR_STATUS` (`ucsi.c:1916`; the PPM never de-plugged the stick ⇒
+  CONNECTED) → partner type UFP ⇒ `u_role = USB_ROLE_HOST` (:1925-1928) +
+  `ucsi_register_partner()` (:1944 — `port0-partner` reappears) +
+  `ucsi_orientation()` (:1946) → `usb_role_switch_set_role(HOST)` (:1958) ⇒
+  `dwc3_usb_role_switch_set` (`drd.c:450-474`) → `dwc3_set_mode(HOST)` →
+  CORESOFTRESET + `dwc3_host_init` (core.c:244) ⇒ **`xhci-hcd.2.auto` is
+  recreated** → auto-bind → fresh root hub → **fresh scan**.
+
+### 9.4 Image DTB facts (the dbgC3 image; checked with the token-walk tool)
+
+Both rp6 DTBs embedded in the kernel section (two are present; ABL picks one)
+have **`usb-role-switch` present** on `soc@0/usb@a600000` and **no**
+`dr_mode` (ABL injects it into the in-RAM DT in `linux usb` mode) and **no**
+`default-role` (hence the initial role-switch mode is DEVICE). The DTB uses a
+non-standard FDT tag encoding (the high `0x10` byte of tag words is cleared,
+so tags are bare `1/2/3/4/9`; the strings block has no leading empty string),
+so the naive `diag/dump_usb_dtb.py` parser mis-parses it (it printed
+`usb-role-switch=НЕТ` — wrong); the authoritative check is the full token walk
+(`diag/check_dtb_role_switch.py`, byte-identical round-trip against the
+un-spliced reference DTBs) plus the runtime (the switch is live in run 4 and
+the flip works).
+
+### 9.5 The manual sequence (emergency shell, no rebuild)
+
+```sh
+cat /sys/class/typec/port0/orientation        # 1) normal or reverse?  (reverse ⇒ flip the plug, re-run dbgC3 first)
+ls /sys/class/typec/                          # port0, port0-partner?
+echo pmic_glink.ucsi.0  > /sys/bus/auxiliary/drivers/pmic_glink_ucsi/unbind
+echo xhci-hcd.2.auto    > /sys/bus/platform/drivers/xhci-hcd/unbind
+echo a600000.usb        > /sys/bus/platform/drivers/dwc3-qcom/unbind
+echo a600000.usb        > /sys/bus/platform/drivers/dwc3-qcom/bind
+echo pmic_glink.ucsi.0  > /sys/bus/auxiliary/drivers/pmic_glink_ucsi/bind
+dmesg | tail -40                              # "new high-speed/SuperSpeed USB device"?
+ls /sys/block/                                # a new sdX beyond sda–sdf?
+```
+
+Success = `new …-speed USB device` in dmesg + a new `sdX`: the residual
+blocker was state left in dwc3/UCSI (pre-PDR scan / the ABL host session)
+that the xhci-only rebind does not reset → v4 (dbgC4) = the auto-escalation.
+Zero events even on the full chain → the blocker is below dwc3 (PHY /
+repeater / PPM data path / orientation) — chase item by item.
+
+## 10. Run protocol
+
+### 10.1 dbgC3 (runs 1–4; the image is still on the spare stick)
 
 Flash `KERNEL.ci-a699dd6-dbgC3` to the **spare** stick, then **verify md5
 `9969edaff95d75c4766d84919d82cbb7` on both sides after flashing** (lesson of
-§3.1: the second run booted the v1 image because the stick was never checked),
-stick **pre-plugged in the normal orientation** (reverse orientation leaves the
-data path unrouted), ABL → `linux usb`, **zero actions**, read the
+§3.1: runs 2 and 3 booted the v1 image because the stick was never checked),
+stick **pre-plugged in the normal orientation** (reverse orientation leaves
+the data path unrouted), ABL → `linux usb`, **zero actions**, read the
 `ARMADA-C:` lines.
 
 A run is a genuine dbgC3 run only if it prints `ARMADA-C: hook loaded up=Ns`
@@ -339,3 +527,38 @@ followed by `start up=…: dr_mode='host' xhci=ABSENT (patch-1400 kernel …)` a
 eventually `ARMADA-C: TREE[ …` lines; a screen showing only the v1
 `FAIL-NO-DEV … at 3s` line (plus the lever-B `line 82: read …` error) is the
 wrong image.
+
+### 10.2 Run 5 (the manual full-chain test, no rebuild)
+
+When dracut fails to find the root it drops an **emergency shell**; the test
+is §9.5 (the exact sysfs echoes). Pre-checks, cheapest first:
+
+1. **orientation** — `cat /sys/class/typec/port0/orientation` (values
+   `unknown` / `normal` / `reverse`). If **`reverse`**: flip the plug and
+   re-run dbgC3 *before* anything else — a reverse orientation can leave the
+   data path unrouted for minutes and would explain everything without new
+   levers.
+2. **the stick LED** — whether the VBUS the PPM reports as out actually
+   reaches the stick (the PPM reading is not a guarantee at the connector).
+3. **the full-chain rebind** — §9.5; read `dmesg | tail -40` and
+   `ls /sys/block/`.
+
+Open question gating the manual test: whether the emergency shell accepts
+keyboard input on this hardware (console buttons / a Bluetooth keyboard). If
+not, the test is not possible and v4 (dbgC4) with the auto-escalation is the
+only path (it fires only on the `FAIL-NO-SCAN` branch, so the primary verdict
+is unaffected).
+
+### 10.3 v4 (dbgC4) design, after the manual test
+
+- **gate** the first rebind on `port0-partner` appearance (or the ULog line
+  `otg enable: 1`) instead of the bare typec roles (§3.3 gate correction);
+- **dump additions**: `port0/orientation` and the xhci → `usbN` mapping
+  (`ls` of the xhci device directory: which root hub belongs to
+  `xhci-hcd.2.auto`);
+- **`wait_disk` optimization** (run 4: ~12.7 s wall clock per "10 s");
+- **auto-escalation** xhci-only → full chain (UCSI → xhci → dwc3 unbind,
+  dwc3 → UCSI rebind, §9) **only if the manual full-chain test worked**,
+  fired only on the `FAIL-NO-SCAN` branch.
+
+Then: flash a distinct `dbgC4` image (md5 both sides after flashing), run 6.
