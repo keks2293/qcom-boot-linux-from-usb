@@ -1,7 +1,11 @@
 # Lever C implementation: post-PDR xHCI rescan in the initramfs
 
-Status: **v3 (dbgC3) ran on hardware for the first time (run 4, 2026-11-12):
-verdict `FAIL-NO-SCAN` with a live controller — a new, strong result.** The
+Status: **clean beta-2 (run 7, 2026-11-13, §11): the full chain ran
+correctly, early and post-VBUS — and did not help; the residual blocker is
+below dwc3 (PMIC / PPM / physical); all AP-side software levers are
+exhausted.** Runs 1–4 (2026-11-12) in one line each: runs 1–3 = the v1
+image three times (a hook race, not a hardware verdict); run 4 = genuine
+dbgC3, `FAIL-NO-SCAN` with a live controller. The
 v1 image (`dbgC`) was run on hardware **three** times on 2026-11-12 — each
 time it failed with `FAIL-NO-DEV` at ~3.1 s, a **race in the hook, not a
 hardware verdict** (the v1 hook was written for a forced-host kernel; on the
@@ -17,15 +21,34 @@ scans (two post-VBUS) found nothing** (`scan-events=0`) — the "scan ordering
 is the whole bug" hypothesis is **refuted in the strong form**. Empirical
 gate correction: the typec roles are **not** a proxy for VBUS (roles are set
 at UCSI port registration, ~1.8 s **before** the PPM enables the OTG VBUS).
-Next lever: the **full chain** reset (UCSI → xhci → dwc3 unbind, dwc3 → UCSI
-rebind), code-verified in §9. The manual full-chain test is **impossible**
-(the emergency shell takes no input on this hardware, confirmed
-2026-11-12) ⇒ v4 (dbgC4) is built with the **unconditional**
-auto-escalation: it gates the first rebind on `port0-partner` (the real
-post-VBUS marker, §3.3), dumps `orientation` / `partner` / the xhci → usbN
-mapping, and on `FAIL-NO-SCAN` escalates xhci-only → full chain, printing
-the beta-1 / beta-2 verdict (`ENUMERATION OK (full-chain)` vs
-`FAIL-NO-SCAN-FULL`). Run 5 = dbgC4, protocol in §10.3. Design rationale:
+The full chain (§9) has now run on hardware (runs 5–7, 2026-11-13, §11) and
+the verdict is in. The manual full-chain test was impossible (the emergency
+shell takes no input on this hardware) ⇒ v4 (dbgC4) automated the
+escalation unconditionally: it gates the first rebind on `port0-partner`,
+dumps `orientation` / `partner` / the xhci → usbN mapping, and on
+`FAIL-NO-SCAN` escalates xhci-only → full chain, printing the beta-1 /
+beta-2 verdict. Run 5 (dbgC4) fell over a wrong UCSI sysfs path (the real
+auxiliary driver name is `ucsi_glink.pmic_glink_ucsi`, §11.1); run 6
+(dbgC5) was the first genuine full chain — early, all rc=0, self-completing
+in 0.6 s — but confounded by `orientation=[reverse]`; run 7 (same image,
+normal orientation) is the clean beta-2. Note for anyone re-deriving: the
+full chain **does** re-initialize the eUSB2 repeater and both PHYs
+(including a hard BCR reset of the SoC HS PHY, `phy-snps-eusb2.c:476-484`)
+— the "the full chain never touched the repeater" idea is refuted by the
+source. The current front: the **eUSB2 repeater is only partially
+initialized by the kernel** (it writes 0x46/0x51/0x53/0x54/0x57 plus the
+host-mode force registers; 0x50/0x52/0x55/0x56/0x58/0x59-0x5b are never
+written) and upstream states plainly "there is **no repeater reset
+available**, and enable/disable of repeater doesn't clear previous value
+due to shared regulators" (`phy-qcom-eusb2-repeater.c:213-217`) — in
+`linux usb` the ABL host session has already configured the repeater, so
+the kernel's partial init leaves ABL's values in the un-touched registers
+(§11.5). Decisive experiment: **dump the repeater registers 0xfd00-0xfd5b**
+in `linux usb` (broken) vs the full system (working) — needs
+`CONFIG_REGMAP_DEBUGFS=y` (off today) or an spmi route; cheap discriminators
+without a new image: the stick **LED** in the 5.4-23 s window (power vs
+data) and a **manual replug** (CC-edge confirmation). Run protocol: §10.
+Design rationale:
 [SEQUENCER_TIMING_BEST_PRACTICE.md](SEQUENCER_TIMING_BEST_PRACTICE.md),
 evidence: [FULL_SYSTEM_PREPLUG_SOURCE_ROLE.md](FULL_SYSTEM_PREPLUG_SOURCE_ROLE.md).
 
@@ -394,15 +417,25 @@ no port-1 child — `FAIL-NO-SCAN` with a live controller** (§3.3).
 - ~~`ENUMERATION OK`~~ (either variant) → not triggered.
 - **`FAIL-NO-SCAN` with the controller alive — GIVEN (run 4).** Ordering
   (pre- vs post-PDR/VBUS scan) is **necessary but not sufficient**: three
-  fresh scans, two of them post-VBUS, found nothing. The next lever is the
-  **full chain** reset — UCSI → xhci → dwc3 unbind, dwc3 → UCSI rebind,
-  code-verified in §9 — preceded by unbinding the UCSI auxiliary driver so
-  UCSI re-fetches a fresh role switch instead of keeping a stale reference.
-  Two sub-branches: (β1) the manual full-chain rebind in the emergency shell
-  enumerates the stick → the residual blocker was state left in dwc3/UCSI and
-  v4 (dbgC4) automates the escalation; (β2) even the full chain produces zero
-  events → the blocker is below dwc3 (PHY / eUSB2 repeater / PPM data path /
-  plug orientation) and is chased item by item.
+  fresh scans, two of them post-VBUS, found nothing. The next lever was the
+  **full chain** reset (UCSI → xhci → dwc3 unbind, dwc3 → UCSI rebind,
+  §9). **It has now run (runs 6–7, §11):** the chain executes correctly,
+  early and post-VBUS, all rc=0, and self-completes in 0.6 s
+  (`GET_CONNECTOR_STATUS` → partner → role host → xhci recreated) — and
+  **beta-2 is established** (run 7, normal orientation): even the full
+  chain produces zero events. The blocker is below dwc3 (eUSB2 repeater /
+  PPM data path / physical power); the "residual = dwc3/UCSI/PHY state that
+  a re-probe resets" hypothesis is refuted.
+- **Run 5 (dbgC4) was not a hardware verdict:** the escalation aborted at
+  the UCSI unbind — a wrong sysfs path in the hook (`pmic_glink_ucsi`); the
+  real auxiliary driver name is `ucsi_glink.pmic_glink_ucsi`
+  (`drivers/base/auxiliary.c:358-360`, §11.1). Fixed in v5 by resolving the
+  driver from the device's `driver` symlink at runtime (never hard-code the
+  path).
+- **Run 6 (dbgC5) was confounded:** the first genuine full chain — but
+  `orientation=[reverse]` in every dump; a reverse plug can leave the data
+  path unrouted, so the verdict was invalid. Run 7 re-ran the same image
+  with the plug flipped to normal.
 - ~~`FAIL: Host halt -110`~~ → not triggered (rebind rc=0 ×3). If it ever
   appears: the qmp-combo defect; retries are pointless. Backport the upstream
   fix (Oleg Keri, LKML 2026-09-16, "keep the Type-C callbacks off unclocked
@@ -411,13 +444,17 @@ no port-1 child — `FAIL-NO-SCAN` with a live controller** (§3.3).
 - ~~`FAIL-NO-DEV`~~ → not triggered (the flip happened; xhci appeared at
   3.67 s).
 
-Cheap checks before the full chain (run 5 protocol, §10): (1) the port
+The pre-checks from the run-5 protocol, now with results: (1) the port
 **orientation** (`/sys/class/typec/port0/orientation`, values
-`unknown`/`normal`/`reverse` per `drivers/usb/typec/class.c:1678-1682`) — a
-`reverse` orientation can leave the data path unrouted for minutes and is
-exactly consistent with live CC/VBUS + no enumeration (test D); if reverse,
-flip the plug and re-run dbgC3 first; (2) the **stick LED** — does the VBUS
-that the PPM reports as out actually reach the stick.
+`unknown`/`normal`/`reverse` per `drivers/usb/typec/class.c:1678-1682`) —
+measured in every run's dumps: `normal` in runs 5 and 7, `reverse` in run 6
+(the confound); a `reverse` orientation can leave the data path unrouted
+and is exactly consistent with live CC/VBUS + no enumeration (test D); (2)
+the **stick LED** — still pending: whether the VBUS the PPM reports as out
+actually reaches the stick; it is now the power-vs-data discriminator for
+the below-dwc3 blocker (§11.6); (3) a **manual replug** in the current era
+— a CC-edge confirmation without a new image (October history: an early
+re-attach, <30 s, opens the port; a late one, 38-102 s, does not).
 
 Expected timeline of a successful run (from the v1 run and control E):
 PDR ~3.5 s → `source+host` ~5.5 s → `xhci-hcd` ~5.5–5.6 s → first scan (or
@@ -435,7 +472,7 @@ the manual test in the emergency shell.
 
 | component | driver | driver name | device | sysfs unbind/bind |
 |---|---|---|---|---|
-| UCSI over PMIC-GLINK | `drivers/usb/typec/ucsi/ucsi_glink.c:480-487` — an **auxiliary** driver (`auxiliary_driver pmic_glink_ucsi_driver`, `.name = "pmic_glink_ucsi"`, id table `pmic_glink.ucsi` :474-477), **not** platform | `pmic_glink_ucsi` | **`pmic_glink.ucsi.0`** — `drivers/base/auxiliary.c:325` (`dev_set_name(dev, "%s.%s.%d", modname, auxdev->name, auxdev->id)`, modname `pmic_glink`, name `"ucsi"` passed at `drivers/soc/qcom/pmic_glink.c:329`) | `/sys/bus/auxiliary/drivers/pmic_glink_ucsi/unbind\|bind` |
+| UCSI over PMIC-GLINK | `drivers/usb/typec/ucsi/ucsi_glink.c:480-487` — an **auxiliary** driver (`auxiliary_driver pmic_glink_ucsi_driver`, `.name = "pmic_glink_ucsi"`, id table `pmic_glink.ucsi` :474-477), **not** platform | **`ucsi_glink.pmic_glink_ucsi`** — *correction (run 5, §11.1):* for a built-in auxiliary driver the sysfs name is **`<KBUILD_MODNAME>.<.name>`** (`drivers/base/auxiliary.c:358-360`: `driver.name = kasprintf("%s.%s", modname, auxdrv->name)`; the caller's module name for built-in `ucsi_glink` is `"ucsi_glink"`) — **not** the bare `.name` | **`pmic_glink.ucsi.0`** — `drivers/base/auxiliary.c:325` (`dev_set_name(dev, "%s.%s.%d", modname, auxdev->name, auxdev->id)`, modname `pmic_glink`, name `"ucsi"` passed at `drivers/soc/qcom/pmic_glink.c:329`). Device and driver are named from *different* modnames, hence the asymmetry | `/sys/bus/auxiliary/drivers/ucsi_glink.pmic_glink_ucsi/unbind\|bind` (resolve at runtime from the device's `driver` symlink — never hard-code) |
 | xHCI | `drivers/usb/host/xhci-plat.c:631-636` (`platform_driver usb_generic_xhci_driver`) | `xhci-hcd` | **`xhci-hcd.2.auto`** (auto ID `.2`; child of `a600000.usb`; the SoC has several DWC3 instances, hence two root hubs `usb1`/`usb2`) | `/sys/bus/platform/drivers/xhci-hcd/unbind\|bind` |
 | DWC3 glue | `drivers/usb/dwc3/dwc3-qcom.c:847-858` (`platform_driver dwc3_qcom_driver`) | `dwc3-qcom` | **`a600000.usb`** | `/sys/bus/platform/drivers/dwc3-qcom/unbind\|bind` |
 | role switch | `drivers/usb/dwc3/drd.c:504-540` (`dwc3_setup_role_switch`), name `<parent>-role-switch` (`drivers/usb/roles/class.c:392`) | — | **`a600000.usb-role-switch`** (appears/disappears with the dwc3 driver) | not directly bindable; created/destroyed by dwc3 bind/unbind |
@@ -501,11 +538,11 @@ the flip works).
 ```sh
 cat /sys/class/typec/port0/orientation        # 1) normal or reverse?  (reverse ⇒ flip the plug, re-run dbgC3 first)
 ls /sys/class/typec/                          # port0, port0-partner?
-echo pmic_glink.ucsi.0  > /sys/bus/auxiliary/drivers/pmic_glink_ucsi/unbind
+echo pmic_glink.ucsi.0  > /sys/bus/auxiliary/drivers/ucsi_glink.pmic_glink_ucsi/unbind
 echo xhci-hcd.2.auto    > /sys/bus/platform/drivers/xhci-hcd/unbind
 echo a600000.usb        > /sys/bus/platform/drivers/dwc3-qcom/unbind
 echo a600000.usb        > /sys/bus/platform/drivers/dwc3-qcom/bind
-echo pmic_glink.ucsi.0  > /sys/bus/auxiliary/drivers/pmic_glink_ucsi/bind
+echo pmic_glink.ucsi.0  > /sys/bus/auxiliary/drivers/ucsi_glink.pmic_glink_ucsi/bind
 dmesg | tail -40                              # "new high-speed/SuperSpeed USB device"?
 ls /sys/block/                                # a new sdX beyond sda–sdf?
 ```
@@ -589,3 +626,185 @@ watch the stick LED. A run is a genuine dbgC4 run only if it prints
 `ARMADA-C: hook loaded up=Ns` and then either `partner at Ns (port0-partner;
 …)` or `WARN-nopartner` (the v4 gate line); on failure, `ESCALATE at Ns:
 full-chain reset (…)` marks the escalation.
+
+### 10.4 v5 (dbgC5) — the image for runs 6–7 (2026-11-13)
+
+v5 = v4 minus the 3-try xhci loop (run 4: three empty scans bought nothing)
+plus:
+
+- **early escalation** — a bounded 3 s wait after the partner gate, then the
+  full chain immediately (target ~7 s: post-VBUS, inside the ~30 s window);
+- **runtime UCSI resolution** (`_ac_ucsi_resolve`): the device by glob
+  `pmic_glink.ucsi.*` on the auxiliary bus, the driver from the device's
+  `driver` symlink (`cd -P "$dev/driver" && pwd -P` — no `readlink -f` in
+  the initramfs) — the run-5 path bug cannot recur;
+- an **ESCDIAG dump** (auxiliary devices / drivers / per-candidate driver
+  path) before the unbind;
+- abort branches rc=127 (device absent) / rc=128 (device unbound) ⇒
+  `ESC-ABORT`, dwc3 untouched.
+
+Image: `KERNEL.ci-a699dd6-dbgC5`, 202 114 351 B, md5
+`c08490f9f3d7d9eb1440a175e597d6f5`, sha256
+`55ec5436235830f12afb5baf7c9df85691a24851d44df097d9e0313368e4ec9f`; hook v5
+(25 326 B, md5 `a509333bea77f9ba4ff80e91b11dc1e1`); all image invariants
+verified (magic `ANDROID!`, header `[20:576]` byte-identical to the base,
+kernel identical, hook round-trip). Protocol: flash to the spare stick,
+md5 both sides, stick **pre-plugged in the normal orientation** (read the
+`orientation=` line in the photo first — a `reverse` run is a confound,
+run 6), ABL → `linux usb`, zero actions, photo.
+
+## 11. Runs 5–7 (2026-11-13): the full chain ran, beta-2 is clean, and the eUSB2 repeater hypothesis
+
+### 11.1 Run 5 (dbgC4): the escalation aborted on a wrong UCSI path (not a hardware verdict)
+
+`line 299: /sys/bus/auxiliary/drivers/pmic_glink_ucsi/unbind: No such file
+or directory` @34.86 s — the hard-coded driver path does not exist in the
+running kernel; the UAF guard worked (dwc3 untouched), but the full chain
+never ran. The real auxiliary **driver** name is
+**`ucsi_glink.pmic_glink_ucsi`**: `drivers/base/auxiliary.c:358-360` builds
+it as `<KBUILD_MODNAME>.<.name>` from the *caller's* module name (built-in
+`ucsi_glink` ⇒ `"ucsi_glink"`), while the *device* name
+`pmic_glink.ucsi.0` (`auxiliary.c:325`) is built from the parent device's
+modname `pmic_glink`. Lesson: never hard-code a sysfs driver path — resolve
+it from the device's `driver` symlink. v5 does this and found the right
+path unassisted (run 6 ESCDIAG: device `pmic_glink.ucsi.0` bound to
+`ucsi_glink.pmic_glink_ucsi`).
+
+### 11.2 Run 6 (dbgC5): the first genuine full chain — confounded by `reverse`
+
+Timeline (dmesg ms): `TREE[NO-SCAN] orientation=[reverse] partner=yes`
+@7.087742 → `ESCDIAG` dump @7.18 → `unbind done ucsi rc=0 xhci rc=0 dwc3
+rc=0` @7.208002 → `rebind dwc3 rc=0` @7.242017 → `rebind ucsi rc=0`
+@7.275570 → `GET_CONNECTOR_STATUS: ConnectStatus=1, ConnectPartnerType=2,
+USB=1` @7.482094 (UCSI completes the chain itself) → `xhci=xhci-hcd.2.auto
+at 7s` @7.791763 → `TREE[NO-SCAN-FULL] orientation=[reverse]` @23.177465 →
+`FAIL-NO-SCAN-FULL (last up=23s, scan-events=0)` @23.199086. No `-110`.
+
+**What it proves:** the §9 mechanism works on hardware — early (post-VBUS
+5.44 s, inside the ~30 s window), safe (all rc=0), and the chain
+self-completes in 0.6 s exactly like the full system's bring-up; the PPM's
+CONNECTED state survives the rebind. **Why it is invalid as a verdict:**
+`orientation=[reverse]` in all three dumps — a reverse plug can leave the
+data path unrouted, so `scan-events=0` is explained by orientation, not by
+depth. Run 7 = the same image, plug flipped to normal.
+
+### 11.3 Run 7 (dbgC5, normal): ⭐ clean beta-2
+
+Timeline: `otg enable: 1` (VBUS out) @5.401118 → `TREE[NO-SCAN]
+orientation=[normal] partner=yes` @7.009344 → `FAIL-NO-SCAN (scan-events=0);
+escalating` @7.038515 → `ESCALATE at 7s (ucsi=pmic_glink.ucsi.0
+ucsi-drv=ucsi_glink.pmic_glink_ucsi … vbus=out)` @7.043093 → `unbind done
+ucsi rc=0 xhci rc=0 dwc3 rc=0` @7.104682 → `rebind dwc3 rc=0` @7.140214 →
+`rebind ucsi rc=0` @7.154555 → `GET_CONNECTOR_STATUS … USB=1` @7.454549 →
+`xhci=xhci-hcd.2.auto at 7s` @7.668929 → `TREE[t10] orientation=[normal]`
+@10.306546 → `TREE[NO-SCAN-FULL] usb: [1-0:1.0 2-0:1.0 usb1 usb2]`
+@23.058100/23.069913 → **`FAIL-NO-SCAN-FULL (last up=23s, scan-events=0)`**
+@23.077586. No `-110`.
+
+Every condition of the decisive test holds: **normal** orientation in all
+dumps; the full chain **executed** (all rc=0, self-completing, fresh scan
+after the re-attach); **post-VBUS** (5.40 s) and **early** (7 s, inside the
+~30 s window); no `-110`, no UAF. ⇒ the residual blocker is **below dwc3**
+(PMIC / PPM / physical). The hypothesis "the residual is dwc3/UCSI/PHY
+state that a re-probe resets" is **refuted**: the full chain re-ran
+`dwc3_qcom_probe`, re-initialized both PHYs, and redid the whole Type-C
+contract and orientation — and did not help.
+
+### 11.4 What is now closed (the software stack does everything right)
+
+| hypothesis | status |
+|---|---|
+| scan order (pre/post PDR, pre/post VBUS) | closed — post-VBUS scans are empty |
+| plug orientation | closed — `normal` measured in runs 5 and 7 |
+| dwc3/UCSI/PHY state reset by re-probe | **closed by run 7** — the full chain did not help |
+| PPM classification / `usb_type` | closed — control E works with the identical fingerprint |
+| UCSI path / `-110` / UAF | fixed (v5 runtime resolution) / not in the path |
+
+The **takeover framing** (accepted): ABL read `\KERNEL` from the stick, so
+at handoff the link **worked** (data path routed, VBUS out, the stick
+answering) — ABL left a *working* state, not dirt. The bug is that the
+kernel's teardown-and-reinit does not restore a working link; the kernel
+assumes a default that `linux usb` does not have. (Repo docs:
+`ABL_DR_MODE_HOST.md` — "the controller state is torn down and
+re-initialized at handoff… What the kernel lacks is sequencing, not a
+driver.")
+
+### 11.5 The eUSB2 repeater: partial init, no reset (the current front)
+
+The data path is `dwc3 → usb_1_hsphy` (SoC eUSB2 HS PHY) `→
+pm8550b_eusb2_repeater` (PMIC) `→ connector` (`sm8550.dtsi:4565-4566`, the
+board DTS wires `usb_1_hsphy`'s `phys` to the repeater). The repeater is a
+**separate PMIC device** (`arch/arm64/boot/dts/qcom/pm8550b.dtsi:58-62`,
+`reg = <0xfd00>`) driven by
+`drivers/phy/qualcomm/phy-qcom-eusb2-repeater.c` (platform driver
+`qcom-eusb2-repeater`, regmap of the **parent PMIC** via
+`dev_get_regmap(dev->parent)`, base from its own `reg`).
+
+Register map (driver :14-38): `0x08` status (RO, `RPTR_OK` = BIT 7), `0x46`
+EN_CTL1 (enable), `0x50` CROSSOVER, `0x51` IUSB2, `0x52` RES_FSDIF, `0x53`
+HSDISC, `0x54` SQUELCH_U, `0x55` SLEW, `0x56` EQU, `0x57` PREEM, `0x58`
+HS_COMP_CUR, `0x59-0x5B` EUSB slew/equ/comp, `0xe8`/`0xed` force-enable/value
+(BIT 6 = 19.2 MHz clock).
+
+**What the kernel writes** (`eusb2_repeater_init`, :141-193): the enable
+(0x46=0x80), the SoC init table (IUSB2=0x8, SQUELCH_U=0x3, PREEM=0x5), the
+board DT overrides (RP6: PREEM=0x3, HSDISC=0x6, IUSB2=0xb), and a poll of
+`RPTR_OK`. In host mode `set_mode` additionally forces the 19.2 MHz clock
+(0xe8/0xed = 0x40 — the documented CM.Lx workaround, :204-211). **It never
+writes 0x50, 0x52, 0x55, 0x56, 0x58, 0x59-0x5b** — those keep whatever the
+hardware holds. Upstream says exactly why this matters (:213-217):
+
+> "In device mode clear host mode related workaround as **there is no
+> repeater reset available, and enable/disable of repeater doesn't clear
+> previous value due to shared regulators** (say host <-> device mode
+> switch)."
+
+Model: full system — ABL never touched the repeater, the un-written
+registers hold PMIC defaults, the partial init suffices; `linux usb` — ABL
+configured the repeater for its own host session, the kernel's partial init
+runs on top and **leaves ABL's values in the un-touched registers** → the
+HS path is broken (e.g. a squelch/disconnect threshold, crossover). The
+FORCE registers are not the residual — `dwc3_core_init_mode`'s host branch
+rewrites them on every rebind (`core.c:252` → `phy-snps-eusb2.c:179-185`).
+
+**Correction of an earlier belief:** the full chain **does** re-initialize
+the repeater — `dwc3_core_init` → `dwc3_phy_init` (`core.c:827-843`) →
+`snps_eusb2_hsphy_init` (`phy-snps-eusb2.c:455`): repeater `phy_init`
+(:464) **plus a hard BCR reset of the SoC HS PHY**
+(`reset_control_assert/deassert` :476-484, `GCC_QUSB2PHY_PRIM_BCR`) and the
+QMP re-init. So "hard-reset the repeater/PHY" is not an unused lever — it
+already ran in run 7 and failed. The SoC side is fully reset on every
+rebind; the residual (if analog) sits on the **PMIC side**, where nothing
+resets the register file.
+
+**Regulator sharing decides whether the residual can survive a rebind at
+all** (RP6 DTS, `qcs8550-ayn-common.dtsi`): `vdd18` = ldo15 is
+**shared** (wcd939x audio :503-505 + wcn7850-pmu :521) ⇒ a rebind's
+`regulator_bulk_disable` does **not** power-cycle it (refcount); `vdd3` =
+ldo5 is **exclusive** to the repeater ⇒ it is power-cycled. Neither LDO is
+always-on/boot-on. ⇒ the hypothesis is consistent with run 7 **only if the
+register file is powered by vdd18** (or the residual is elsewhere, e.g. the
+PPM data path). A register dump decides.
+
+### 11.6 Next experiments (ranked)
+
+1. **Dump the repeater registers `0xfd00-0xfd5b`** in `linux usb`
+   (broken, after the full chain) and in the full system (working); diff.
+   Route: `CONFIG_REGMAP_DEBUGFS=y` (off in the current config) →
+   `/sys/kernel/debug/regmap/<pmic>/registers` (the PMIC regmap is created
+   in `drivers/mfd/qcom-spmi-pmic.c:246-260`, device `pmic@7` = pm8550b;
+   `CONFIG_MFD_SPMI_PMIC=y` is already in the vanilla defconfig) — needs a
+   new kernel image (CI pipeline + the `build_dbgC5_ci.py` pattern, same
+   invariants); alternative: an spmi read/write route.
+2. **The stick LED** in the 5.4-23 s window (no code): off ⇒ the power path
+   (VBUS does not reach the connector — the PPM reports out, but an
+   external FET may be off); on ⇒ power is fine, the data path (repeater)
+   is the suspect.
+3. **A manual replug** in the current era (no image): confirms the CC-edge
+   model — October history: an early re-attach (<30 s) opens the port
+   (runs A/U, F′), a late one (38-102 s) does not (runs D/Q/R/S/T).
+4. (Second echelon) `snps,host-vbus-glitches-quirk` in the DT — the
+   upstream dwc3 workaround for a ~15 µs VBUS dip at host entry; the
+   symptoms differ (full-speed/descriptor corruption, not a total
+   no-connect) and on the RP6 the PPM, not the PP bit, drives VBUS — cheap,
+   low prior.
