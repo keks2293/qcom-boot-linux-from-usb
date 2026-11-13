@@ -43,11 +43,21 @@ available**, and enable/disable of repeater doesn't clear previous value
 due to shared regulators" (`phy-qcom-eusb2-repeater.c:213-217`) — in
 `linux usb` the ABL host session has already configured the repeater, so
 the kernel's partial init leaves ABL's values in the un-touched registers
-(§11.5). Decisive experiment: **dump the repeater registers 0xfd00-0xfd5b**
+(§11.5). The two cheap discriminators have since been answered by the
+user: the stick **LED is on** (the power path is excluded — VBUS reaches
+the connector) and a **manual replug works** (the CC-edge model is
+confirmed: a fresh CC attach opens the port; no AP-side lever can create
+one). Decisive experiment: **dump the repeater registers 0xfd00-0xfd5b**
 in `linux usb` (broken) vs the full system (working) — needs
-`CONFIG_REGMAP_DEBUGFS=y` (off today) or an spmi route; cheap discriminators
-without a new image: the stick **LED** in the 5.4-23 s window (power vs
-data) and a **manual replug** (CC-edge confirmation). Run protocol: §10.
+`CONFIG_REGMAP_DEBUGFS=y` (off today) or an spmi route. Web research of
+the upstream driver history (2026-11-13, §11.7) added a **concrete
+regression candidate**: upstream commit `31bc94de` (2025-06) removed the
+zeroing of the un-touched tuning registers that the vendor kernel used to
+perform — the zeroing-era kernel overwrote ABL's residue at every init
+(self-healing), the new kernel trusts it (the mismatch that breaks
+`linux usb`); the dump image can therefore test the zero-cost documented
+fix first: **write 0x00 to the eight registers** (pre-`31bc94de` vendor
+behavior, §11.6). Run protocol: §10.
 Design rationale:
 [SEQUENCER_TIMING_BEST_PRACTICE.md](SEQUENCER_TIMING_BEST_PRACTICE.md),
 evidence: [FULL_SYSTEM_PREPLUG_SOURCE_ROLE.md](FULL_SYSTEM_PREPLUG_SOURCE_ROLE.md).
@@ -786,25 +796,143 @@ always-on/boot-on. ⇒ the hypothesis is consistent with run 7 **only if the
 register file is powered by vdd18** (or the residual is elsewhere, e.g. the
 PPM data path). A register dump decides.
 
-### 11.6 Next experiments (ranked)
+### 11.6 Next experiments (updated 2026-11-13: LED/replug answered, dump plan sharpened)
 
-1. **Dump the repeater registers `0xfd00-0xfd5b`** in `linux usb`
-   (broken, after the full chain) and in the full system (working); diff.
-   Route: `CONFIG_REGMAP_DEBUGFS=y` (off in the current config) →
-   `/sys/kernel/debug/regmap/<pmic>/registers` (the PMIC regmap is created
-   in `drivers/mfd/qcom-spmi-pmic.c:246-260`, device `pmic@7` = pm8550b;
-   `CONFIG_MFD_SPMI_PMIC=y` is already in the vanilla defconfig) — needs a
-   new kernel image (CI pipeline + the `build_dbgC5_ci.py` pattern, same
-   invariants); alternative: an spmi read/write route.
-2. **The stick LED** in the 5.4-23 s window (no code): off ⇒ the power path
-   (VBUS does not reach the connector — the PPM reports out, but an
-   external FET may be off); on ⇒ power is fine, the data path (repeater)
-   is the suspect.
-3. **A manual replug** in the current era (no image): confirms the CC-edge
-   model — October history: an early re-attach (<30 s) opens the port
-   (runs A/U, F′), a late one (38-102 s) does not (runs D/Q/R/S/T).
-4. (Second echelon) `snps,host-vbus-glitches-quirk` in the DT — the
+1. **The stick LED** — **ANSWERED: on.** The power path is excluded (VBUS
+   reaches the connector; the PPM's "source=1" is real); the blocker is the
+   data path (repeater / PPM routing).
+2. **A manual replug** — **ANSWERED: it works.** The CC-edge model is
+   confirmed in the current era (a fresh CC attach opens the port; October
+   history: an early re-attach <30 s opens, a late one, 38-102 s, does
+   not). No AP-side lever (R/T/SET) can create a genuine CC edge — the
+   physical replug is the only known working lever. (Pending details: the
+   replug's timing from boot start, and whether it produced a full boot —
+   if so, one replug at the start of a `linux usb` boot is already a
+   working stop-gap.)
+3. **Dump + fix test: one image, two runs** (the decisive experiment).
+   Image = the dbgC5 base + `CONFIG_REGMAP_DEBUGFS=y` + the hidden one-line
+   `#define REGMAP_ALLOW_WRITE_DEBUGFS` in
+   `drivers/base/regmap/regmap-debugfs.c` (upstream: "don't provide any
+   real compile time configuration option… modify the source code
+   directly") — makes `/sys/kernel/debug/regmap/<pmic>/registers` 0600
+   with the write format `echo <reg-hex> <val-hex> > registers`
+   (`regmap-debugfs.c:294-333`; read format `<reg>: <val>`, :252-257).
+   The PMIC regmap is created in `drivers/mfd/qcom-spmi-pmic.c:246-260`
+   (device `pmic@7` = pm8550b); the regmap **directory is resolved at
+   runtime** (never hard-coded — the UCSI lesson). CI pipeline + the
+   `build_dbgC5_ci.py` pattern, same invariants; alternative: an spmi
+   read/write route.
+   - **Run 1 — the full system from the stick** (working; the stick is
+     enumerated): read the known-good blob `fd00:`-`fd5b:`. The eight
+     un-written registers hold the **hardware reset values** — non-public,
+     not in any DTS (§11.7): the dump is the only source of the recipe.
+   - **Run 2 — `linux usb`, pre-plugged**: after the full chain the hook
+     reads the current blob, prints the diff, then walks the ladder:
+     - **Step A: write 0x00 to the eight un-written registers**
+       (0xfd50, 0xfd52, 0xfd55, 0xfd56, 0xfd58, 0xfd59, 0xfd5a, 0xfd5b) —
+       restore the pre-`31bc94de` vendor behavior (§11.7) → wait for the
+       scan. Enumeration ⇒ the `31bc94de` regression is **proven** and the
+       fix is ready: an armada kernel patch that zeroes the eight
+       registers in `eusb2_repeater_init` (documented vendor behavior, no
+       dependency on the dump values).
+     - **Step B** (if A fails): write the run-1 known-good values →
+       enumeration ⇒ the general residue hypothesis; fix = the dump
+       values (kernel patch or hook-write first).
+     - **Step C** (if B fails): an empty diff ⇒ the residue is **not** in
+       the register file ⇒ H2 (eUSB2 link state: the BCR reset resets the
+       SoC PHY but not the repeater — one-sided reset) / the PPM data
+       path ⇒ the PPM side (ADSP tcpc_cfg / RE) or the brute-force vdd18
+       cut (raw SPMI write; only if the dump shows a register-file
+       residual that the writes cannot cure).
+4. (Optional, no build) **The official vendor kernel in `linux usb`
+   pre-plug** (the official boot image as `\KERNEL` on the stick): the
+   RP6's vendor kernel (ship era, likely the zeroing era) should enumerate
+   without a replug if the §11.7 hypothesis holds ⇒ the regression
+   confirmed at kernel level. Requires the official ROM (not kept locally;
+   caveat: the official DTS may carry different tune values).
+5. (Second echelon) `snps,host-vbus-glitches-quirk` in the DT — the
    upstream dwc3 workaround for a ~15 µs VBUS dip at host entry; the
    symptoms differ (full-speed/descriptor corruption, not a total
    no-connect) and on the RP6 the PPM, not the PP bit, drives VBUS — cheap,
    low prior.
+
+### 11.7 Upstream driver history: the zero-out saga and the `31bc94de` regression candidate (web research, 2026-11-13)
+
+The full commit history of
+`drivers/phy/qualcomm/phy-qcom-eusb2-repeater.c` (18 commits, via the
+GitHub mirror of `torvalds/linux`) contains the key lead — the driver
+**once zeroed the un-touched tuning registers**, exactly like the vendor
+kernel, and was explicitly changed **not to**:
+
+1. `99a517a5` (2023-09-13, Konrad Dybcio, Linaro) — "Zero out untouched
+   tuning regs": *"The vendor kernel zeroes out all tuning data outside
+   the init sequence as part of initialization. Follow suit to avoid UB."*
+2. `734550d6` (2024-02-01, Abel Vesa, Linaro) — "Rework init to drop
+   redundant zero-out loop": the rework **kept the zeroing** — the init
+   table became a C zero-initialized array and init wrote **all ten**
+   tuning registers: the table values (+ DT overrides) and **0x00 for
+   0x50/0x52/0x55/0x56/0x58/0x59/0x5a/0x5b**.
+3. **`31bc94de` (2025-06-17, Luca Weiss, Fairphone; Reviewed-by: Konrad
+   Dybcio and Dmitry Baryshkov — both Qualcomm)** — "Don't zero-out
+   registers": *"Zeroing out registers does not happen in the downstream
+   kernel, and will "tune" the repeater in surely unexpected ways since
+   most registers don't have a reset value of 0x0. Stop doing that and
+   instead just set the registers that are in the init sequence."*
+
+So the zeroing era is upstream ~6.7–6.15 (+ the vendor kernel, per
+`99a517a5`). Our 7.2.6 includes `31bc94de` and its later fixes — it writes
+only the init table + DT overrides.
+
+**The regression mechanism (the top candidate).** The commit's premise
+("the hardware default is fine") is true for a cold boot and **false after
+the ABL's USB host session**, which left its own values in the eight
+registers. State table (the eight un-written registers):
+
+| kernel | full system (cold ABL) | `linux usb` (ABL ran a host session) |
+|---|---|---|
+| zeroing era (upstream ~6.7-6.15; vendor per `99a517a5`) | 0x00 (the kernel zeroes) | 0x00 (ABL zeroes\* + kernel zeroes) — **consistent, presumed working** |
+| no zeroing (7.2.6) | **reset values** — **working (control E)** | **ABL residue** — **broken (runs 5-7)** |
+
+\* if ABL follows the vendor behavior quoted in `99a517a5`.
+
+`31bc94de` moved the full-system state (0x00 → reset values) but **cannot
+move the `linux usb` state** (the ABL residue) ⇒ the mismatch between the
+two modes appeared with that commit. The zeroing-era kernel was robust to
+the ABL residue (it overwrote it at every init); the new kernel **trusts**
+it.
+
+**Consistency with all observations:** control E (full system, pre-plugged)
+works ⇒ the reset values are a working state; `linux usb` is broken with
+live power (LED on) ⇒ the ABL residue sits in the RX/TX thresholds (the
+register semantics below); the replug works ⇒ a fresh CC edge makes the
+PPM re-run its attach handling, which plausibly **rewrites the repeater
+tuning to a working state** (the AP-side full chain cannot reach the PMIC
+register file); the synthetic levers (R/T/SET) are no-ops (they don't touch
+the PMIC register file).
+
+**Register semantics (vendor kernel, from `942e47ab`, "the downstream
+correspondence"):** `0x57` PREEM = Tx pre-emphasis tuning; `0x51` IUSB2 =
+HS transmit amplitude; `0x54` SQUELCH_U = squelch detection threshold;
+`0x53` HSDISC = HS disconnect threshold; `0x59` SLEW = slew rate — all
+analog HS signaling parameters, i.e. exactly the kind that can silence a
+connect event. `5c87da03` (2025-12-19, Qualcomm) adds
+`qcom,squelch-detector-bp` (-6000…+1000 mV → 0x54 = 0..7).
+
+**Side findings:** (a) `31bc94de` accidentally swapped the DT mapping
+(amplitude↔preem); fixed by `942e47ab` (2025-08-12) — our 7.2.6 has the
+correct mapping (RP6 values unchanged: 0x51=0xb, 0x53=0x6, 0x54=0x3,
+0x57=0x3); (b) no mainline board (Sony Xperia 1 VI — the same sm8550 —,
+sm8750-mtp, Fairphone FP6) sets the eight registers in its DTS ⇒ in every
+mainline system they hold the reset values ⇒ **the known-good values are
+non-public hardware reset values: a live dump is the only source of the
+recipe**; (c) no public discussion of "USB pre-plug broken after an ABL
+USB host session" was found — the configuration seems specific to the RP6
+(ordinary ABLs do not run a USB host session before handoff); no upstream
+fix to expect.
+
+**Honest caveats:** (a) `linux usb` pre-plug was never tested with a
+zeroing-era kernel (all October runs were 7.2.6-based) — "the zeroing
+world worked" is a hypothesis that step A (§11.6) will test directly;
+(b) 0x00 is not guaranteed functional — the `31bc94de` authors argued
+against the zeroing (possibly because it broke something on their boards)
+— so step A may fail, and step B (the dump values) is the fallback.
