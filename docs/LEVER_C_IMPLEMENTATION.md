@@ -1149,3 +1149,14 @@ Result:
    (`qcom,pm8550b-eusb2-repeater`), driver `qcom-eusb2-repeater`
    (built-in), regulators `vdd18`/`vdd3`. The `phy-qcom-m31-eusb2.ko`
    module is the SM8750 M31 HSPHY driver, not bound on this board.
+
+**Front moved (2026-11-14).** The ULog diff of the working control (E,
+EXP-027) against the failing run (dbgB, EXP-026) —
+[ULOG_DIFF_DATA_PATH.md](ULOG_DIFF_DATA_PATH.md) — shows the PPM fingerprint
+is *identical* in both boots and VBUS is driven in the failing mode too; the
+only divergence is the xHCI D+/D− connect (absent in the failing mode), and
+host-bring-up **ordering** is refuted as the discriminator (EXP-037's
+post-PDR first init still fails). The `apsd-rerun-cfg` patch (EXP-041) is
+repositioned to **diagnostic**; the live front is localizing the closed
+eUSB2 routing element (EXP-042: TCPC data-routing / SNPS eUSB2 PHY @`88e3000`
+/ PMIC eUSB2 switch).

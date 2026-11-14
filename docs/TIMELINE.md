@@ -154,3 +154,33 @@ routing (H2); next front: the PPM side (EXP-041: `apsd-rerun-cfg` 0→1 on
 device).
 → [LEVER_C_IMPLEMENTATION.md](LEVER_C_IMPLEMENTATION.md) §12.8,
 [logs/lever-c/exp-038-dump.txt](../logs/lever-c/exp-038-dump.txt)
+
+## 2026-11-14 (ULog diff) — the residual blocker is the eUSB2 **data path**; ordering and classification are both refuted as the fix
+
+Diffed the full PPM ULog of the working source-role pre-plug control E
+(EXP-027, 2026-11-11) against the filtered PPM ULog of the failing
+`linux usb` pre-plug run dbgB (EXP-026, 2026-11-09), plus each side's xHCI
+bus events. The two boots are identical in every physical variable (source
+role, host data role, `normal` orientation, direct stick, pre-plug) and
+differ **only in environment** (full system vs initramfs) — E enumerates,
+dbgB never does. Findings: (1) the PPM logs **no** eUSB2/route/mux/HSIC
+action in either boot (keyword sweep of E's 2239-line log: all zero; only
+the periodic `tcpci_clear_alert`) — routing is a register-level action;
+(2) the PPM fingerprint is **identical** in both (`usb_type=[Unknown]`,
+`ncp_stby`, skip-while-sourcing) — classification is not the blocker;
+(3) **VBUS is driven in the failing mode** (5.061 V, `otg source=1`) —
+correcting the `dbg1400` "no VBUS" phrasing; the port is dead for data, not
+power; (4) the only divergence is xHCI: E's root port sees a D+/D− connect
+(port change 1-1 @12.828 s) and enumerates, dbgB's never does (repeater
+activity registers all `00`); (5) **ordering is not the discriminator** —
+both pre-PDR (stock kernel) and post-PDR (patch-1400: dbg1400/dbgB/EXP-037)
+first init fail in the initramfs, only the full system works. Consequence:
+the `apsd-rerun-cfg` patch (EXP-041) is repositioned to **diagnostic** (it
+re-arms classification, which is not the blocker); the **current front** is
+the eUSB2 data path (H2): refined hypothesis = the ABL USB-boot session
+(`linux usb` only) leaves the PPM/TCPC/PHY data path unrouted, no fresh CC
+edge re-routes it. Next: EXP-042 localizes the closed routing element (TCPC
+data-routing / SNPS eUSB2 PHY @`88e3000` / PMIC eUSB2 switch) in a paired
+failing-vs-working capture.
+→ [ULOG_DIFF_DATA_PATH.md](ULOG_DIFF_DATA_PATH.md),
+[RESULTS.md](RESULTS.md#ulog-diff-working-control-exp-027-vs-failing-run-exp-026-2026-11-14--the-residual-blocker-is-the-eusb2-data-path-not-classification-vbus-or-ordering)

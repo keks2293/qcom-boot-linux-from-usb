@@ -40,6 +40,7 @@ Read in this order if you are new to the project:
 | [ADSP_CONFIG.md](ADSP_CONFIG.md) | **reference** | `adsp_dtb.mbn` container layout, PPM config values, the 1-byte `apsd-rerun-cfg` patch recipe |
 | [FULL_SYSTEM_PREPLUG_RESULT.md](FULL_SYSTEM_PREPLUG_RESULT.md) | **log** | The 2026-11-05 control: full-system pre-plug works, `usb_type = SDP`, host after the PDR |
 | [FULL_SYSTEM_PREPLUG_SOURCE_ROLE.md](FULL_SYSTEM_PREPLUG_SOURCE_ROLE.md) | **log** | The 2026-11-11 control: full-system pre-plug in the source role enumerates **with the failing-side PPM fingerprint** ⇒ `usb_type` is not the discriminator |
+| [ULOG_DIFF_DATA_PATH.md](ULOG_DIFF_DATA_PATH.md) | **active** | The 2026-11-14 ULog diff (working E vs failing dbgB): the residual blocker is the **eUSB2 data path** — not classification, VBUS, or ordering; `apsd-rerun-cfg` repositioned to diagnostic; sets up EXP-042 (localize the closed routing element) |
 | [FULL_SYSTEM_MECHANISM_CAPTURE.md](FULL_SYSTEM_MECHANISM_CAPTURE.md) | **closed** | Q1–Q5: the host controller is *created* on the Type-C role flip; nothing holds the probe |
 | [FULL_SYSTEM_COLDPLUG_TEST.md](FULL_SYSTEM_COLDPLUG_TEST.md) | **reference** | How to run the full-system capture script |
 | [TEST_METHOD.md](TEST_METHOD.md) | **reference** | The test protocol: image invariants, flashing, orientation, zero-action runs |

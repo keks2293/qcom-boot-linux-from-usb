@@ -3,6 +3,46 @@
 Newest first. Each entry names its experiment ID
 ([EXPERIMENTS.md](EXPERIMENTS.md)); the console transcripts are in `logs/`.
 
+## ULog diff: working control (EXP-027) vs failing run (EXP-026) (2026-11-14) — the residual blocker is the eUSB2 **data path**, not classification, VBUS, or ordering
+
+Analysis of already-recorded boots (no new run). Full write-up:
+[ULOG_DIFF_DATA_PATH.md](ULOG_DIFF_DATA_PATH.md). Sources: the full 2239-line
+PPM ULog of the working source-role pre-plug control E
+([`logs/preplug-source/e-normal-success-20261111-172918/`](../logs/preplug-source/e-normal-success-20261111-172918/))
+vs the filtered PPM ULog of the failing `linux usb` pre-plug run dbgB
+([`logs/dbgB-preplug-usb-ulog-20261109.txt`](../logs/dbgB-preplug-usb-ulog-20261109.txt)),
+plus each side's xHCI bus events and the EXP-037/038 repeater dumps.
+
+- **The two boots differ only in environment** (full system vs `linux usb`
+  initramfs): identical source role, host data role, `normal` orientation,
+  direct stick (no PD), pre-plug. E enumerates (port change 1-1 @12.828 s →
+  `usb 1-1` @13.05 s → `sdg`); dbgB never detects a connect.
+- **The PPM does not log data-path routing**: keyword sweep over E's full ULog
+  gives `eusb/repeater/hsic/route/mux/lanes/ssphy` = 0 lines; the only TCPC
+  activity is the periodic `tcpci_clear_alert` (0x0010). Routing is a
+  register-level action, invisible in the ULog.
+- **The PPM fingerprint is identical in both**: partner detected,
+  `otg enable: 1`, `otg source = 1`, VBUS ≈ 5.06 V,
+  `skip checking usb charging type while usb is sourcing`, ICM `ncp_stby`,
+  `usb_type=[Unknown]`. **Classification is not the blocker** — E enumerates
+  with the unclassified fingerprint.
+- **VBUS is driven in the failing mode** (5.061 V, `otg source = 1` @5.36 s) —
+  correcting the `dbg1400` "no VBUS / electrically dead" phrasing
+  ([KERNEL_PATCH_1400.md](KERNEL_PATCH_1400.md)); the port is dead for data,
+  not power.
+- **Ordering is not the discriminator**: pre-PDR first init (stock kernel) and
+  post-PDR first init (patch-1400 kernel: dbg1400/dbgB/EXP-037) **both fail**
+  in the initramfs; only the full system (post-PDR) works. Lever C's
+  post-VBUS re-probe (EXP-034) already failed.
+- **Consequence**: the `apsd-rerun-cfg` 0→1 patch (EXP-041) re-arms
+  *classification*, which is not the blocker — repositioned to **diagnostic**
+  (its re-detection is the probe for "does a re-armed PPM drive a link to the
+  repeater", readout = the seven activity registers). The **current front** is
+  the eUSB2 data path (H2, [INVESTIGATION.md](INVESTIGATION.md)): the ABL
+  USB-boot session (`linux usb` only) leaves the PPM/TCPC/PHY data path
+  unrouted; **EXP-042** localizes the closed routing element in a paired
+  failing-vs-working register capture.
+
 ## EXP-038 — eUSB2 repeater dump, working mode (2026-11-14) — the register file is **not** the discriminator
 
 Conditions: normal "sdcard" boot (stock Armada OS, kernel 7.2.6 + 192

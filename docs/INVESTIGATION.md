@@ -37,7 +37,8 @@ Concretely:
 | ID | Hypothesis | Status | Notes |
 |---|---|---|---|
 | P-01 | XBL/ABL handoff leaves controller/PHY in bad state | Mostly ruled out | ADSP restart showed re-attach events but no enumeration |
-| P-06 | ADSP/PPM BC1.2 classification blocks data path until charger type updated | **Strong candidate** | `icm_ncp_stby_main: keeps in icm_ncp_stby until charger type updated`, `chgr_stat=7`, `charger_present=0`. PPM = "Platform Policy Manager" (UCSI 2.0 spec term); `icm_ncp_stby` is an ADSP-internal state (NCP = "No Charging Port", BC1.2) — not publicly documented anywhere else. Firmware RE (see below) pinned the re-trigger paths: a fresh CC edge, USB suspend→resume (dead, tied to ADSP restart), or a charger-detection SM event (event 0x25 broadcast; HW IRQ **or** AP glink). The ADSP side processes all of them unconditionally. The AP actor is now **named**: the in-kernel UCSI core (`ucsi.c` + `ucsi_glink.c`) is the only AP↔PPM client in **every** environment (it fires the four PMIC-doorbell commands 0x03/0x09/0x0b/0x10 when active — spliced images — and was also measured **active in the full system** on 2026-11-05, so active-vs-deferred is not the discriminator) — the discriminator is the PPM/PMIC **state** in the failing environment (port misclassified as USB2, role commands refused, no fresh CC edge), not a missing actor. See [diagrams/ppm-ucsi-command-flow.md](../diagrams/ppm-ucsi-command-flow.md) |
+| P-06 | ADSP/PPM BC1.2 classification blocks data path until charger type updated | **Refuted as the enumeration blocker (2026-11-14 ULog diff)** — the wedge is real but not the cause | `icm_ncp_stby_main: keeps in icm_ncp_stby until charger type updated`, `chgr_stat=7`, `charger_present=0`. PPM = "Platform Policy Manager" (UCSI 2.0 spec term); `icm_ncp_stby` is an ADSP-internal state (NCP = "No Charging Port", BC1.2) — not publicly documented anywhere else. The 2026-11-11 source-role control (E) enumerates a pre-plugged stick **with the identical fingerprint** (`usb_type=[Unknown]`, `ncp_stby`, skip-while-sourcing, VBUS driven) ⇒ classification does not gate the link ([ULOG_DIFF_DATA_PATH.md](ULOG_DIFF_DATA_PATH.md)). Firmware RE (see below) pinned the re-trigger paths: a fresh CC edge, USB suspend→resume (dead, tied to ADSP restart), or a charger-detection SM event (event 0x25 broadcast; HW IRQ **or** AP glink). The ADSP side processes all of them unconditionally. The AP actor is now **named**: the in-kernel UCSI core (`ucsi.c` + `ucsi_glink.c`) is the only AP↔PPM client in **every** environment (it fires the four PMIC-doorbell commands 0x03/0x09/0x0b/0x10 when active — spliced images — and was also measured **active in the full system** on 2026-11-05, so active-vs-deferred is not the discriminator) — the discriminator is the PPM/PMIC **state** in the failing environment (port misclassified as USB2, role commands refused, no fresh CC edge), not a missing actor. See [diagrams/ppm-ucsi-command-flow.md](../diagrams/ppm-ucsi-command-flow.md) |
+| H2 | The eUSB2 D+/D− **data path** is not routed to the SoC PHY/repeater in `linux usb`: the ABL USB-boot session leaves the PPM/TCPC/PHY data path unrouted and no fresh CC edge re-routes it at handoff | **Current front (2026-11-14)** | ULog diff of the working control (E) vs the failing run (dbgB): identical PPM fingerprint + VBUS driven (5.06 V) in both; the *only* divergence is xHCI never seeing a D+/D− connect in the failing mode (repeater activity registers all `00`, EXP-037/038). Ordering refuted as the discriminator (EXP-037: first xHCI init post-PDR, still fails); role/partner refuted (direct stick **and** PD dock both fail in `linux usb`, same dock works in the full system). Next: **EXP-042** localizes the closed routing element (TCPC data-routing / SNPS eUSB2 PHY @`88e3000` / PMIC eUSB2 switch) |
 | H1 | HW CC arming / functional processing gated by an AP-ready runtime flag in the ADSP firmware | **Refuted (RE)** | The three "runtime flag globals" (ULog enable mask / level / verbosity counter) are **ULog logging controls**. Full write-site analysis: set at ADSP boot (`BattMngr_init` → ULog client init, mask `0x3FFFFFFF`, level 3) and reconfigurable by the AP over glink (ULOG type-0x19). Every "gate" site investigated is a log gate; the functional code (state writes, `callr` dispatch, glink intent processing) runs unconditionally |
 | L2/PM | Glue/XHCI enter runtime suspend/L2 and block enumeration | **Closed (dbg51)** | Observed in all tested PM states; blocked by root-hub autosuspend policy and child counts |
 | battmgr | Missing `qcom_battmgr` module in initramfs prevents BC1.2 classification | **Refuted (code + disk)** | `qcom_battmgr.ko` is already present in the CI initramfs (dracut `--no-hostonly`) and is auto-loaded by udev via `alias auxiliary:pmic_glink.power-supply qcom_battmgr`; battery psys are alive in every initramfs run (dbg48). Explicit `add_drivers` changes nothing |
@@ -140,10 +141,30 @@ cannot be the whole story. The full-system pre-plug fork was captured on
 the port is classified (`usb_type=[SDP]`, PD contract), and the xHCI host comes
 up **after** the ADSP `charger_pd` PDR (10.41 s → 14.81 s), while in the
 initramfs the USB port-change events (2.716/3.182 s) precede the PDR (3.498 s)
-and no later bus events occur. The resulting candidate is that host-controller
-bring-up after the charger service is ready is the re-arming event; the next
-step is the falsifiable test — re-probe `dwc3-qcom` + `xhci-hcd` inside the
-≤30 s window in the initramfs and check whether the drive enumerates.
+and no later bus events occur. The resulting candidate was that host-controller
+bring-up after the charger service is ready is the re-arming event.
+
+**That candidate is now refuted in its cleanest form.** The falsifiable test
+was run twice over: re-probing the host post-VBUS inside the window (lever C,
+EXP-028…034 — the full UCSI→xHCI→dwc3 rebind ran clean, `rc=0`, no
+enumeration) and *no early init at all* (patch-1400 kernel: first xHCI init
+post-PDR, EXP-023/026/037 — still no enumeration). Both orderings (pre-PDR and
+post-PDR first init) fail in the initramfs; only the full system succeeds.
+The 2026-11-11 source-role control (E, [FULL_SYSTEM_PREPLUG_SOURCE_ROLE.md](FULL_SYSTEM_PREPLUG_SOURCE_ROLE.md))
+then ruled out classification: it enumerates a pre-plugged **direct stick in
+the source role with the failing-side fingerprint** (`usb_type=[Unknown]`,
+`ncp_stby`, skip-while-sourcing) — and VBUS (5.06 V) is driven in the failing
+mode too. The 2026-11-14 ULog diff
+([ULOG_DIFF_DATA_PATH.md](ULOG_DIFF_DATA_PATH.md)) closed the loop: the PPM
+does not log any data-path routing action at all; the *only* measured
+divergence between the working and failing boots is that the xHCI root port
+**never sees a D+/D− connect** in the failing mode (repeater activity
+registers all `00`, EXP-037/038). The residual blocker is therefore the
+**eUSB2 data path** (H2): the refined hypothesis is that the ABL USB-boot
+session (`linux usb` mode only) leaves the PPM/TCPC/PHY data path unrouted and
+nothing re-routes it at handoff. Next: **EXP-042** localizes the closed
+routing element (TCPC data-routing / SNPS eUSB2 PHY @`88e3000` / PMIC eUSB2
+switch) in a paired failing-vs-working capture.
 
 ## PPM/ADSP firmware reverse engineering
 
