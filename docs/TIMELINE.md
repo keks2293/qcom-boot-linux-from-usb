@@ -184,3 +184,36 @@ data-routing / SNPS eUSB2 PHY @`88e3000` / PMIC eUSB2 switch) in a paired
 failing-vs-working capture.
 → [ULOG_DIFF_DATA_PATH.md](ULOG_DIFF_DATA_PATH.md),
 [RESULTS.md](RESULTS.md#ulog-diff-working-control-exp-027-vs-failing-run-exp-026-2026-11-14--the-residual-blocker-is-the-eusb2-data-path-not-classification-vbus-or-ordering)
+
+## 2026-11-14 (EXP-042 image) — the failing-leg instrument is on the stick; one zero-action `linux usb` run remains
+
+The EXP-042 instrument was completed and flashed (no new boot yet):
+
+- **Capture hook** `scripts/lever-c/armada-exp042-e.sh` (read-only; the
+  lever-C escalation is deleted so nothing perturbs the ABL handoff state):
+  gates on `linux usb` mode, v8 scan resolves the repeater regmap, and at
+  up=15/30/60 s prints the data-path context + repeater summary
+  (`E042-ACT/WRN/KEY`) + the full SPMI `0-07` window diff against the shipped
+  baseline (`E042-DIFF` per register, volatile set marked `V`, `E042-SUM`
+  counts, `E042-NONVOL` list). All reads bounded (timeout 5/55), console
+  quieted only during reads, no sysfs symlink resolution.
+- **Image exp042** built over dbgC8 from the stick
+  ([`build_exp042_ci.py`](../scripts/lever-c/build_exp042_ci.py), md5
+  `024e2390596a88f15b89a5c71e3953e8`, 202 147 513 B): the 91 slot replaced,
+  `etc/armada/exp042-baseline-0-07.regmap` (the dock+PD working baseline,
+  65536 lines) added; invariants + round-trip verified (baseline
+  self-diff = 0; the 7 activity registers + volatile set + 2 injected
+  non-volatile registers round-trip through the hook's exact awk).
+- **Flashed** to the "ARMADA" stick in place (no wipe; `KERNEL` +
+  `KERNEL.md5` replaced, md5 verified both sides, clean umount).
+- The baseline leg needs no new run: the dock+PD baseline is
+  topology-matched (the failing run also uses the dock/hub).
+
+Next: the failing boot itself — stick in the hub, pre-plugged before
+power-on, ABL `linux usb`, zero actions, photo the `ARMADA-E:` console lines
+(15/30/60 s captures). Interpretation rules are in
+[ULOG_DIFF_DATA_PATH.md](ULOG_DIFF_DATA_PATH.md) (activity registers expected
+`00`; volatile set is noise; the rest is the fix candidate; stable across the
+three captures = settled state).
+→ [EXPERIMENTS.md](EXPERIMENTS.md) (EXP-042 row + artifact table),
+[ULOG_DIFF_DATA_PATH.md](ULOG_DIFF_DATA_PATH.md#image-built--flashed-2026-11-14)

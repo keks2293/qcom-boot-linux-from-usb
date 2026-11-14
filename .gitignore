@@ -1,0 +1,5 @@
+# boot images are never committed (~200 MB each; reproducible from the
+# builder scripts, identified by md5 in docs/EXPERIMENTS.md §3)
+scripts/lever-c/KERNEL.*
+__pycache__/
+*.pyc

@@ -263,6 +263,41 @@ Output is console-oriented (photo OCR, ~45 lines).
   set and the already-known repeater activity window — is the closed routing
   element.
 
+### Image built + flashed (2026-11-14)
+
+The failing leg is a single boot of **image exp042**
+([`build_exp042_ci.py`](../scripts/lever-c/build_exp042_ci.py), over dbgC8,
+md5 `024e2390596a88f15b89a5c71e3953e8`, 202 147 513 B), now on the "ARMADA"
+FAT32 stick (md5 verified both sides, `KERNEL.md5` updated, no wipe — the
+`KERNEL` file was replaced in place). The 91 initqueue slot carries
+[`armada-exp042-e.sh`](../scripts/lever-c/armada-exp042-e.sh) — the read-only
+capture (the lever-C escalation is **deleted**: it would rebind
+UCSI/xhci/dwc3 and perturb exactly the state being measured). It gates on
+`linux usb` mode (a normal boot with the image is inert — safe recovery),
+resolves the repeater regmap by the proven v8 scan, and at up=15/30/60 s
+prints (kmsg `<0>`, `ARMADA-E:` prefix, ~60–90 OCR-able lines): the data-path
+context, the repeater summary (`E042-ACT` the 7 activity registers / `E042-WRN`
+/ `E042-KEY`), and the full-window diff against the shipped baseline
+(`E042-DIFF` per register, volatile set marked `V`; `E042-SUM` counts;
+`E042-NONVOL` the non-volatile address list). The baseline leg needs no new
+run: the dock+PD baseline above **is** the topology-matched working capture
+(the failing run uses the dock/hub too).
+
+Interpretation rules for the console diff:
+
+1. `fd00 fd02 fd04 fd05 fd09 fd0a fd42` are **expected `00`** in the failing
+   mode (the link-never-reached-the-repeater confirmation, EXP-037/038) —
+   not the routing switch.
+2. `260f 28eb 28ee 3ae2 3ae4 4f90 4fa0 4fc0` are **volatile** (drift even in
+   the working mode) — noise.
+3. Anything else that is set in the baseline and clear here is the fix
+   candidate. Caveat: the baseline ran the stock 7.2.6 kernel, the failing
+   leg runs CI `a699dd6` (1400) — kernel-dependent PMIC config can add
+   spurious diffs; prefer candidates in the routing/PHY/switch address space.
+4. If the three captures (15/30/60 s) show a **stable** non-volatile set, the
+   state is settled and the diff is the measurement; a changing set means
+   something is still transitioning (report which registers move).
+
 The SPMI `0-07` window is the right scope because it is the **only** PMIC-side
 element of the data path (no PMIC USB-switch node exists on any PMIC; the TCPC
 is ADSP-side and not AP-visible), so a mode diff of this window plus the
