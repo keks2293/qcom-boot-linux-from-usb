@@ -1,6 +1,71 @@
 # Results
 
+Newest first. Each entry names its experiment ID
+([EXPERIMENTS.md](EXPERIMENTS.md)); the console transcripts are in `logs/`.
+
+## EXP-037 — eUSB2 repeater register dump (2026-11-14) — `FAIL-NO-SCAN-FULL`, dump complete
+
+Image `dbgC8` (md5 `52c888a01f0470fb35f2b1a028209e9f`), hook v8, `linux usb`,
+stick pre-plugged, normal orientation, zero actions. The chain is beta-2 for
+the fourth time (partner 3 s, `otg enable` 5.48 s, `ESCALATE` 7 s with all
+rc=0, `TREE[NO-SCAN-FULL]` 23 s, `scan-events=0`, no `-110`), and the dump —
+which stalled in EXP-035 and EXP-036 — completes in 2 s:
+
+```
+RPT-S2: candidates=[0-00 0-01 0-05 0-07]
+RPT-SCAN: 0-00 lines=92 … XX   (window beyond max_register: no HW read)
+RPT-SCAN: 0-01 lines=92 … XX
+RPT-SCAN: 0-05 lines=92 … XX
+RPT-SCAN: 0-07 lines=92 WRN: 08=80 46=80 51=0b 53=06 54=03 57=03
+                 KEY: 50=00 52=01 55=03 56=00 58=02 59=03 5a=01 5b=02
+RPT-DONE: dump complete at 25s
+```
+
+The repeater is spmi device `0-07` (address 0x07 = pm8550b), identified by
+its own signature `0xfd08 = RPTR_OK` + `0xfd46 = RPTR_EN`. Full transcript:
+[`logs/lever-c/exp-037-dump.txt`](../logs/lever-c/exp-037-dump.txt); analysis:
+[LEVER_C_IMPLEMENTATION.md](LEVER_C_IMPLEMENTATION.md) §12.5–12.7.
+
+| reg | name | value | kernel writes it? |
+|---|---|---|---|
+| `fd08` | RPTR_STATUS (RO) | `80` (RPTR_OK) | — |
+| `fd46` | EN_CTL1 | `80` (RPTR_EN) | yes |
+| `fd51` | TUNE_IUSB2 | `0b` | yes (DT amplitude) |
+| `fd53` | TUNE_HSDISC | `06` | yes (DT disc-thres) |
+| `fd54` | TUNE_SQUELCH_U | `03` | yes (init table) |
+| `fd57` | TUNE_USB2_PREEM | `03` | yes (DT preem) |
+| `fd50` | TUNE_USB2_CROSSOVER | `00` | **no** |
+| `fd52` | TUNE_RES_FSDIF | `01` | **no** |
+| `fd55` | TUNE_USB2_SLEW | `03` | **no** |
+| `fd56` | TUNE_USB2_EQU | `00` | **no** |
+| `fd58` | TUNE_USB2_HS_COMP_CUR | `02` | **no** |
+| `fd59` | TUNE_EUSB_SLEW | `03` | **no** |
+| `fd5a` | TUNE_EUSB_EQU | `01` | **no** |
+| `fd5b` | TUNE_EUSB_HS_COMP_CUR | `02` | **no** |
+
+Takeaways: (1) the repeater is enabled and healthy in the broken state and
+the kernel's init ran (the DT/init values are exactly the ones it writes);
+(2) the eight un-written registers are **not zero** ⇒ the "ABL zeroed the
+tuning" form of the `31bc94de` regression is refuted for `linux usb`;
+(3) the "676 SPMI timeouts" model of the read duration is refuted
+(0.2–1.1 s per map, `timeouts before=0`, `after=0`); (4) the scan-based
+identification works on live hardware. The control (normal boot, same
+image, EXP-038) decides whether the register file differs between the
+working and the broken mode at all.
+
+## EXP-035 / EXP-036 — why the dump stalled (2026-11-13/14) — both invalid as dumps
+
+`dbgC6` (EXP-035) printed its first dump line at 23.629 s and then nothing
+for 28 s; `dbgC7` (EXP-036) added step markers and located the stall:
+`mkdir rc=0` → `mount rc=0` → `RPT-S2: globbing platform devices` @23.394 s
+→ silence. debugfs mounts fine and the register read never starts: the hang
+is the platform-device **symlink resolve** (`*eusb2*` glob, `[ -e ]`,
+`cd -P`, `pwd -P`, `stat`). v8 removed it. Details:
+[LEVER_C_IMPLEMENTATION.md](LEVER_C_IMPLEMENTATION.md) §12.1–12.4.
+
 ## dbgB run — failing-side PPM ULog capture (2026-11-09) — FAIL-NO-CLASSIFY
+
+Experiment: **EXP-026** ([registry](EXPERIMENTS.md)).
 
 Lever B as designed in [INITRAMFS_CHANGES.md](INITRAMFS_CHANGES.md): the
 failing env's own PPM view, captured in the initramfs console. Image `dbgB`
@@ -37,6 +102,8 @@ stick (discriminates pre-plug/source-role from initramfs-vs-full), then the
 firmware-side levers per [INITRAMFS_CHANGES.md](INITRAMFS_CHANGES.md).
 
 ## PPM ULog from the AP — success-side fingerprint (2026-11-08, boot 1 of 2)
+
+Experiment: **EXP-025** ([registry](EXPERIMENTS.md)).
 
 New instrument: the stock `pmic_pdcharger_ulog.ko` — never loaded in any
 environment — reads the PPM charger ULog from the AP over the
@@ -80,6 +147,8 @@ Write-up: [ADSP_ULOG.md](ADSP_ULOG.md).
 
 ## `usb_type` timing — full-system pre-plug (2026-11-08)
 
+Experiment: **EXP-024** ([registry](EXPERIMENTS.md)).
+
 New instrument (`scripts/usb-type-poller.sh`, 50 ms, enabled at
 `sysinit.target`) on a normal pre-plug boot, zero actions. It closes the
 "when does it get classified?" hole left open in
@@ -111,6 +180,8 @@ Full write-up: [USB_TYPE_TIMING.md](USB_TYPE_TIMING.md). Consequence for the
 fix: [INITRAMFS_CHANGES.md](INITRAMFS_CHANGES.md).
 
 ## dbg1400 run — `linux usb` pre-plug (2026-11-07, second run)
+
+Experiment: **EXP-023** ([registry](EXPERIMENTS.md)).
 
 Image: `KERNEL.ci-a699dd6-dbg1400` (CI kernel with patch 1400 + CI initramfs
 + CI cmdline + dracut `initqueue/timeout` dump hook). The run used the
@@ -161,6 +232,8 @@ transitions) + full-boot re-check on the same CI build (control). Details:
 
 ## Kernel patch 1400 in the CI image — `linux usb` pre-plug (2026-11-07)
 
+Experiment: **EXP-022** ([registry](EXPERIMENTS.md)).
+
 First device test of the patched kernel (Armada PR #704, HEAD `a699dd6`; CI
 run 42324657729, artifact `armada-disk-pr704`):
 
@@ -180,6 +253,8 @@ run 42324657729, artifact `armada-disk-pr704`):
   [KERNEL_PATCH_1400.md](KERNEL_PATCH_1400.md).
 
 ## Cell II — full-system pre-plug (2026-11-05)
+
+Experiment: **EXP-020** ([registry](EXPERIMENTS.md)).
 
 Full-system boot (internal storage) with the dock and drive connected before
 power-on: the drive enumerated at **16.99 s**, 13 s after switch-root and
@@ -201,6 +276,8 @@ Details, caveats and the next falsifiable test (host re-probe inside the
 ≤30 s window): [FULL_SYSTEM_PREPLUG_RESULT.md](FULL_SYSTEM_PREPLUG_RESULT.md).
 
 ## Full-system mechanism capture (2026-11-06)
+
+Experiment: **EXP-021** ([registry](EXPERIMENTS.md)).
 
 Second pre-plug boot, captured with `scripts/full-system-mechanism-capture.sh`:
 
@@ -227,6 +304,8 @@ Full write-up: [FULL_SYSTEM_MECHANISM_CAPTURE.md](FULL_SYSTEM_MECHANISM_CAPTURE.
 
 ## dbg50 — Invalid
 
+Experiment: **EXP-008** ([registry](EXPERIMENTS.md)).
+
 Image: `KERNEL.ci-5d953ca-dbg50`
 
 - **Harness bug**: PM attributes read/written without `power/` prefix (`runtime_status`, `autosuspend_delay_ms`, `wakeup`)
@@ -237,6 +316,8 @@ Image: `KERNEL.ci-5d953ca-dbg50`
 - Result: L2 question remained open
 
 ## dbg51 — Valid, L2/PM class closed
+
+Experiment: **EXP-009** ([registry](EXPERIMENTS.md)).
 
 Image: `KERNEL.ci-5d953ca-dbg51` (md5 `7d04d60fb30936d7ffbf354efa935832`)
 
@@ -296,6 +377,8 @@ Findings:
 - Battery power-supply attributes (`qcom-battmgr-usb`, `battery`, `qcom-battmgr-wls`) are alive and readable in every initramfs run (dbg48–dbg51: VBUS 5057000–5069000 uV) — the module is loaded and probing successfully, so the "missing module" hypothesis is refuted.
 
 ## dbg31/dbg32 — UCSI command re-decode (word layout)
+
+Experiment: **EXP-003** ([registry](EXPERIMENTS.md)).
 
 With the command word layout known (`bits[7:0]` = command, `bits[23:16]` =
 connector number, `bit 23` = CONNECTOR_RESET hard flag; kernel

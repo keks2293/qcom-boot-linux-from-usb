@@ -1,63 +1,24 @@
 # Lever C implementation: post-PDR xHCI rescan in the initramfs
 
-Status: **clean beta-2 (run 7, 2026-11-13, §11): the full chain ran
-correctly, early and post-VBUS — and did not help; the residual blocker is
-below dwc3 (PMIC / PPM / physical); all AP-side software levers are
-exhausted.** Runs 1–4 (2026-11-12) in one line each: runs 1–3 = the v1
-image three times (a hook race, not a hardware verdict); run 4 = genuine
-dbgC3, `FAIL-NO-SCAN` with a live controller. The
-v1 image (`dbgC`) was run on hardware **three** times on 2026-11-12 — each
-time it failed with `FAIL-NO-DEV` at ~3.1 s, a **race in the hook, not a
-hardware verdict** (the v1 hook was written for a forced-host kernel; on the
-patch-1400 kernel the `xhci-hcd` device does not exist until the post-PDR role
-flip). Runs 2 and 3 turned out to be the v1 image again (the stick's `KERNEL`
-was byte-identical to `dbgC` each time; v2/v3 were never flashed) — so an
-image must be md5-verified **after** flashing. v2 removed the race; v3 adds a
-one-shot device-tree snapshot so that a failure can no longer leave "the
-xhci controller was created and scanned but found nothing" indistinguishable
-from "the xhci controller was never created at all". Run 4 (genuine dbgC3)
-confirmed case (A): controller alive, root hub up, **three fresh post-PDR
-scans (two post-VBUS) found nothing** (`scan-events=0`) — the "scan ordering
-is the whole bug" hypothesis is **refuted in the strong form**. Empirical
-gate correction: the typec roles are **not** a proxy for VBUS (roles are set
-at UCSI port registration, ~1.8 s **before** the PPM enables the OTG VBUS).
-The full chain (§9) has now run on hardware (runs 5–7, 2026-11-13, §11) and
-the verdict is in. The manual full-chain test was impossible (the emergency
-shell takes no input on this hardware) ⇒ v4 (dbgC4) automated the
-escalation unconditionally: it gates the first rebind on `port0-partner`,
-dumps `orientation` / `partner` / the xhci → usbN mapping, and on
-`FAIL-NO-SCAN` escalates xhci-only → full chain, printing the beta-1 /
-beta-2 verdict. Run 5 (dbgC4) fell over a wrong UCSI sysfs path (the real
-auxiliary driver name is `ucsi_glink.pmic_glink_ucsi`, §11.1); run 6
-(dbgC5) was the first genuine full chain — early, all rc=0, self-completing
-in 0.6 s — but confounded by `orientation=[reverse]`; run 7 (same image,
-normal orientation) is the clean beta-2. Note for anyone re-deriving: the
-full chain **does** re-initialize the eUSB2 repeater and both PHYs
-(including a hard BCR reset of the SoC HS PHY, `phy-snps-eusb2.c:476-484`)
-— the "the full chain never touched the repeater" idea is refuted by the
-source. The current front: the **eUSB2 repeater is only partially
-initialized by the kernel** (it writes 0x46/0x51/0x53/0x54/0x57 plus the
-host-mode force registers; 0x50/0x52/0x55/0x56/0x58/0x59-0x5b are never
-written) and upstream states plainly "there is **no repeater reset
-available**, and enable/disable of repeater doesn't clear previous value
-due to shared regulators" (`phy-qcom-eusb2-repeater.c:213-217`) — in
-`linux usb` the ABL host session has already configured the repeater, so
-the kernel's partial init leaves ABL's values in the un-touched registers
-(§11.5). The two cheap discriminators have since been answered by the
-user: the stick **LED is on** (the power path is excluded — VBUS reaches
-the connector) and a **manual replug works** (the CC-edge model is
-confirmed: a fresh CC attach opens the port; no AP-side lever can create
-one). Decisive experiment: **dump the repeater registers 0xfd00-0xfd5b**
-in `linux usb` (broken) vs the full system (working) — needs
-`CONFIG_REGMAP_DEBUGFS=y` (off today) or an spmi route. Web research of
-the upstream driver history (2026-11-13, §11.7) added a **concrete
-regression candidate**: upstream commit `31bc94de` (2025-06) removed the
-zeroing of the un-touched tuning registers that the vendor kernel used to
-perform — the zeroing-era kernel overwrote ABL's residue at every init
-(self-healing), the new kernel trusts it (the mismatch that breaks
-`linux usb`); the dump image can therefore test the zero-cost documented
-fix first: **write 0x00 to the eight registers** (pre-`31bc94de` vendor
-behavior, §11.6). Run protocol: §10.
+Status (2026-11-14): **clean beta-2, and the eUSB2 repeater dump is now
+done.** The full chain (UCSI → xHCI → dwc3 unbind/rebind) runs correctly,
+early and post-VBUS, and does not help (EXP-034) — the residual blocker is
+below dwc3. The decisive measurement is no longer blocked: EXP-037 (dbgC8,
+`linux usb`, pre-plug, §12.5) read the repeater's `0xfd00–0xfd5b` window
+and shows the repeater **enabled and reporting OK** (`0xfd46=0x80`,
+`0xfd08=0x80`), the DT/init tuning written as expected (`0x51=0x0b`,
+`0x53=0x06`, `0x54=0x03`, `0x57=0x03`), and the eight registers the kernel
+never writes holding **non-zero** values (`50=00 52=01 55=03 56=00 58=02
+59=03 5a=01 5b=02`) — so the "ABL left zeros in the tuning" form of the
+`31bc94de` regression is **refuted for `linux usb`** (§12.6). The
+normal-boot control on the same image (EXP-038) decides whether the
+register file differs between the broken and the working mode at all.
+
+Numbering: every boot has an immutable `EXP-NNN` ID
+([EXPERIMENTS.md](EXPERIMENTS.md)). The old per-document "run N" counter is
+kept only as an alias — EXP-028…031 = runs 1–4, EXP-032…034 = runs 5–7,
+EXP-035/036/037 = runs 8/9/10.
+
 Design rationale:
 [SEQUENCER_TIMING_BEST_PRACTICE.md](SEQUENCER_TIMING_BEST_PRACTICE.md),
 evidence: [FULL_SYSTEM_PREPLUG_SOURCE_ROLE.md](FULL_SYSTEM_PREPLUG_SOURCE_ROLE.md).
@@ -118,9 +79,9 @@ The first draft of lever C said "unbind/rebind `dwc3-qcom`/xHCI". That is
 That is sufficient for the experiment (the port must be re-scanned after the
 PDR) with no UAF risk.
 
-## 3. The hardware runs (2026-11-12): runs 1–3 = a hook race, not a hardware verdict; run 4 = the genuine verdict
+## 3. The hardware runs (2026-11-12): EXP-028…031 — runs 1–3 = a hook race, not a hardware verdict; run 4 = the genuine verdict
 
-### 3.0 Run 1
+### 3.0 EXP-028 — run 1
 
 Pre-plug, normal orientation, `linux usb`, zero actions. First console line:
 
@@ -153,7 +114,7 @@ dbg1400 run: the role flip was post-PDR, but the early scan could have outrun
 the otg-enable. In control E the first scan was at 12.787 s, 46 ms **after**
 the otg-enable at 12.741 s.
 
-### 3.1 Run 2 (the "decisive" run that was not): the stick still held the v1 image
+### 3.1 EXP-029 — run 2 (the "decisive" run that was not): the stick still held the v1 image
 
 The second run — prepared to flash `dbgC2` — produced a **deterministic
 repeat** of run 1: `ARMADA-C: FAIL-NO-DEV: no xhci-hcd device for a600000.usb
@@ -185,7 +146,7 @@ never created at all" — the two have different next levers (§8). v3 exists
 to close exactly this gap. (3) Run protocol now includes an **md5 check after
 flashing** (§10).
 
-### 3.2 Run 3: the third bit-identical v1 repeat (the stick was still never re-flashed)
+### 3.2 EXP-030 — run 3: the third bit-identical v1 repeat (the stick was still never re-flashed)
 
 Prepared after v3 (dbgC3) was built, the third run produced the **third
 bit-identical v1 repeat**: `ARMADA-C: FAIL-NO-DEV: no xhci-hcd device for
@@ -199,7 +160,7 @@ dbgC3 was then flashed (12 ноя 13:27; md5 `9969edaff95d75c4766d84919d82cbb7`
 verified on **both** sides, AppleDouble `._*` cleaned, `KERNEL.md5` updated,
 volume ejected).
 
-### 3.3 Run 4 (the first genuine lever-C test): ⭐ `FAIL-NO-SCAN` with a live controller
+### 3.3 EXP-031 — run 4 (the first genuine lever-C test): ⭐ `FAIL-NO-SCAN` with a live controller
 
 Pre-plug, normal orientation, `linux usb`, zero actions. The v2/v3 logic ran
 exactly as designed:
@@ -663,9 +624,9 @@ md5 both sides, stick **pre-plugged in the normal orientation** (read the
 `orientation=` line in the photo first — a `reverse` run is a confound,
 run 6), ABL → `linux usb`, zero actions, photo.
 
-## 11. Runs 5–7 (2026-11-13): the full chain ran, beta-2 is clean, and the eUSB2 repeater hypothesis
+## 11. Runs 5–7 (2026-11-13): EXP-032…034 — the full chain ran, beta-2 is clean, and the eUSB2 repeater hypothesis
 
-### 11.1 Run 5 (dbgC4): the escalation aborted on a wrong UCSI path (not a hardware verdict)
+### 11.1 EXP-032 — run 5 (dbgC4): the escalation aborted on a wrong UCSI path (not a hardware verdict)
 
 `line 299: /sys/bus/auxiliary/drivers/pmic_glink_ucsi/unbind: No such file
 or directory` @34.86 s — the hard-coded driver path does not exist in the
@@ -680,7 +641,7 @@ it from the device's `driver` symlink. v5 does this and found the right
 path unassisted (run 6 ESCDIAG: device `pmic_glink.ucsi.0` bound to
 `ucsi_glink.pmic_glink_ucsi`).
 
-### 11.2 Run 6 (dbgC5): the first genuine full chain — confounded by `reverse`
+### 11.2 EXP-033 — run 6 (dbgC5): the first genuine full chain — confounded by `reverse`
 
 Timeline (dmesg ms): `TREE[NO-SCAN] orientation=[reverse] partner=yes`
 @7.087742 → `ESCDIAG` dump @7.18 → `unbind done ucsi rc=0 xhci rc=0 dwc3
@@ -698,7 +659,7 @@ CONNECTED state survives the rebind. **Why it is invalid as a verdict:**
 data path unrouted, so `scan-events=0` is explained by orientation, not by
 depth. Run 7 = the same image, plug flipped to normal.
 
-### 11.3 Run 7 (dbgC5, normal): ⭐ clean beta-2
+### 11.3 EXP-034 — run 7 (dbgC5, normal): ⭐ clean beta-2
 
 Timeline: `otg enable: 1` (VBUS out) @5.401118 → `TREE[NO-SCAN]
 orientation=[normal] partner=yes` @7.009344 → `FAIL-NO-SCAN (scan-events=0);
@@ -936,3 +897,192 @@ world worked" is a hypothesis that step A (§11.6) will test directly;
 (b) 0x00 is not guaranteed functional — the `31bc94de` authors argued
 against the zeroing (possibly because it broke something on their boards)
 — so step A may fail, and step B (the dump values) is the fallback.
+
+## 12. Runs 8–10 (2026-11-13/14): EXP-035…037 — the repeater dump: the stall, its cause, and the result
+
+The dump planned in §11.6 is the only way to see the eight registers the
+kernel never writes (§11.5). Getting it took three images, because the first
+two failed for reasons that had nothing to do with the repeater.
+
+### 12.1 EXP-035 (dbgC6): the dump stalled silently
+
+Hook v6 = v5 byte-for-byte plus one block: after the full chain, mount
+debugfs, resolve the repeater's platform device, read
+`/sys/kernel/debug/regmap/<pmic>/registers` from offset `0xfd00` and print
+the 92-register block. The chain was again clean beta-2 (PDR 3 s, partner
+3 s, `otg enable: 1` 3.39 s, `ESCALATE` 7 s with all rc=0,
+`TREE[NO-SCAN-FULL]` 23 s, `scan-events=0`, no `-110`), and then:
+
+```
+[23.629] ARMADA-C: RPT-DUMP: linux-usb mode; dumping after the chain
+… only heartbeats (hb up=28/33/…/51s) to the end of the photo at 51.5 s
+```
+
+No second dump line, no `RPT-ABSENT`, no block. The v6 hook printed its
+second marker *after* the resolve and *before* the read, so the stall was
+somewhere in mount → glob → resolve → open, or in the read itself; v6 had no
+markers to tell them apart.
+
+### 12.2 The read mechanics (source analysis, 7.2.6) — plausible, and later refuted
+
+Why a naive read *could* cost tens of seconds, from the source:
+
+- `regmap_map_fops.llseek = default_llseek` (`regmap-debugfs.c:342`), so GNU
+  `tail -c +582913` seeks instead of reading-and-discarding; the seek lands
+  inside the file.
+- `regmap_read_debugfs(map, 0, max_register, …)` iterates
+  `for (i = start; i <= to; i = regmap_next_readable_reg(map, i))`
+  (`regmap-debugfs.c:216-270`) — to **`max_register` = 0xffff**, not to the
+  92nd line. The pm8550b regmap has `max_register = 0xffff` and no
+  `readable_reg` callback ⇒ **768 HW reads**, of which
+  `0xfd5c–0xffff` = **676** are unimplemented PMIC addresses.
+- Each unimplemented read runs `pmic_arb_wait_for_done` with
+  `PMIC_ARB_TIMEOUT_US = 1000` and `udelay(1)` per iteration
+  (`spmi-pmic-arb.c:102,390,401`) **plus a `dev_err`** (`:411`) — a
+  plausible ~1 s of `udelay` and 676 console lines.
+- `count` (8192 B) exceeds the whole `0xfd00–0xffff` window (6912 B) ⇒ the
+  read is a **single `read(2)`** and the output appears only at the end ⇒
+  "silence until it finishes" is by design, and a kill mid-read yields an
+  empty file.
+
+This model predicts a *slow* read, not a hang — and §12.5 shows it was
+wrong anyway (0.2–1.1 s per map, zero timeouts).
+
+**Tooling errata** (worth recording once): the CI initramfs is a full Fedora
+one — `mkdir`, `mount`, `dmesg`, `timeout`, `stat`, `ps`, `pgrep`, `pkill`,
+`cut`, `date` are present; `dd`, `head`, `wc`, `od`, `xxd` are not.
+
+### 12.3 EXP-036 (dbgC7): the stall is the platform-device symlink resolve
+
+v7 = v6 plus step markers, console quieting and a bounded read. The markers
+answered the question in one boot:
+
+```
+[23.267] RPT-S0: enter (mode=linux-usb)
+[23.280] RPT-S1: mkdir rc=0
+[23.298] RPT-S1: mount rc=0                     ← debugfs is mounted
+[23.394] RPT-S2: globbing platform devices
+… heartbeats only, to 60 s
+```
+
+debugfs mounts fine; the register read **never started**. The hang is the
+*resolve*: the shell glob `*eusb2*` over `/sys/bus/platform/devices/`, the
+`[ -e ]` test on the platform-device symlink, `cd -P`, `pwd -P` or the
+`stat` behind it. This also refutes the "676 SPMI timeouts" explanation for
+this stall (§12.2 stands only as an explanation of read *duration*).
+
+### 12.4 v8 (dbgC8): scan-based identification — no symlink resolve at all
+
+v8 removes the resolve chain entirely (and still hard-codes nothing):
+
+1. `timeout 5 ls /sys/bus/spmi/devices/` and
+   `timeout 5 ls /sys/kernel/debug/regmap/` — a plain readdir of a debugfs
+   directory and of the spmi bus.
+2. Candidates = the intersection (the PMIC regmaps; `spmi.c:67` names
+   devices `"%d-%02x"`), falling back to every regmap directory.
+3. For each candidate: read the same `0xfd00–0xfd5b` window
+   (`timeout 55 tail -c +582913 … | sed -n 1,92p`, with a 50 s kill
+   watchdog, a 5 s grace and a byte-size progress line), then **identify the
+   repeater by its own signature** — `0xfd08 = RPTR_OK (0x80)` and
+   `0xfd46 = RPTR_EN (0x80)`. Every candidate produces one
+   `RPT-SCAN: <dir> lines=N WRN:… KEY:…` line, so a non-match still leaves
+   the values on screen (`RPT-NOHIT`).
+4. The console is quieted with `dmesg -n 1` during the reads and restored
+   afterwards; every external step is under `timeout`, so the hook cannot
+   hang.
+
+The fake-sysfs harness (`scripts/lever-c/fake-test-c8.sh`) covers 11 boot
+modes, including a decoy regmap (a small map ⇒ empty window), a missing
+regmap directory (`RPT-ABSENT`) and a non-matching signature
+(`RPT-NOHIT`): 0 failures. Image invariants: `ANDROID!`, header `[20:576]`
+byte-identical, kernel identical, SHA1 id recomputed, one hook entry
+replaced (cpio 3112 entries), ramdisk −633 B.
+
+### 12.5 EXP-037 (dbgC8, `linux usb`, pre-plug): the dump
+
+Zero user actions, stick pre-plugged, normal orientation. The chain is beta-2
+again (partner 3 s, `otg enable` 5.48 s, `ESCALATE` 7 s, all rc=0,
+`TREE[NO-SCAN-FULL]` 23 s, `scan-events=0`), and then, for the first time,
+the dump completes (23 → 25 s):
+
+```
+RPT-S2: spmi=[0-00 0-01 0-05 0-07 …]  regmap=[…]
+RPT-S2: candidates=[0-00 0-01 0-05 0-07]
+RPT-S3: console=4; timeouts before=0; suppressing to 1
+RPT-S4: 0-00: read started (bounded 55s) at 23s
+RPT-S5: 0-00: read done size=828 at 23s
+RPT-SCAN: 0-00 lines=92 WRN: 08=XX 46=XX 51=XX 53=XX 54=XX 57=XX KEY: 50=XX … 5b=XX
+RPT-SCAN: 0-01 lines=92 … XX
+RPT-SCAN: 0-05 lines=92 … XX
+RPT-SCAN: 0-07 lines=92 WRN: 08=80 46=80 51=0b 53=06 54=03 57=03
+                 KEY: 50=00 52=01 55=03 56=00 58=02 59=03 5a=01 5b=02
+RPT-S5: console restored to 4; timeouts after=0 at 25s
+RPT-DUMP: repeater regmap=0-07 (92 regs fd00-fd5b, 9 B/line, offset 582912)
+RPT-B: … 12 lines …
+RPT-KEY (never kernel-written; residue candidates): 50=00 52=01 55=03 56=00 58=02 59=03 5a=01 5b=02
+RPT-WRN (expect 08=80 46=80 51=0b 53=06 54=03 57=03): 08=80 46=80 51=0b 53=06 54=03 57=03
+RPT-DONE: dump complete at 25s
+```
+
+The three non-repeater PMICs produce 92 lines of `XX`: the window is beyond
+their `max_register`, so `regmap_readable()` is false and debugfs prints
+`XX` without touching the hardware. The repeater is `0-07` (spmi address
+0x07 = pm8550b). Full 92-line block: `logs/lever-c/exp-037-dump.txt`.
+
+| reg | name (`phy-qcom-eusb2-repeater.c`) | value | written by the kernel? |
+|---|---|---|---|
+| `fd08` | RPTR_STATUS (RO) | `80` = RPTR_OK | — |
+| `fd46` | EN_CTL1 | `80` = RPTR_EN | yes (init) |
+| `fd51` | TUNE_IUSB2 | `0b` | yes (DT amplitude) |
+| `fd53` | TUNE_HSDISC | `06` | yes (DT disc-thres) |
+| `fd54` | TUNE_SQUELCH_U | `03` | yes (init table) |
+| `fd57` | TUNE_USB2_PREEM | `03` | yes (DT preem) |
+| `fd50` | TUNE_USB2_CROSSOVER | `00` | **no** |
+| `fd52` | TUNE_RES_FSDIF | `01` | **no** |
+| `fd55` | TUNE_USB2_SLEW | `03` | **no** |
+| `fd56` | TUNE_USB2_EQU | `00` | **no** |
+| `fd58` | TUNE_USB2_HS_COMP_CUR | `02` | **no** |
+| `fd59` | TUNE_EUSB_SLEW | `03` | **no** |
+| `fd5a` | TUNE_EUSB_EQU | `01` | **no** |
+| `fd5b` | TUNE_EUSB_HS_COMP_CUR | `02` | **no** |
+
+### 12.6 What the dump proves and what it refutes
+
+1. **The repeater is enabled and healthy in the broken state**:
+   `0xfd46 = 0x80` (enabled) and `0xfd08 = 0x80` (RPTR_OK). The kernel's
+   `eusb2_repeater_init` ran — the DT/init values are exactly the ones it
+   writes (`0x51=0x0b`, `0x53=0x06`, `0x54=0x03`, `0x57=0x03`), and the
+   `RPTR_OK` poll would have failed loudly otherwise.
+2. **The eight un-written registers are not zero** — six of eight are
+   non-zero and the set looks like plausible hardware reset values, which is
+   exactly what `31bc94de` claims ("most registers don't have a reset value
+   of 0x0"). ⇒ **the "ABL zeroed the tuning" form of the regression
+   candidate is refuted for `linux usb`.** Step A of the ladder (§11.6)
+   would therefore *create* the mismatch rather than repair it — it is no
+   longer the first thing to try.
+3. **The SPMI-timeout model of the read is refuted**: 0.2–1.1 s per map,
+   `timeouts before=0`, `timeouts after=0`. Unimplemented addresses return a
+   fast arbiter error, not a `PMIC_ARB_TIMEOUT_US` spin.
+4. **The v8 identification works on live hardware**: the intersection is
+   exactly the four PMIC regmaps, the signature picks `0-07`, and the three
+   non-repeaters cost one cheap empty read each.
+
+What is **not** yet known: whether the working mode (normal boot) holds the
+same eight values. That is the control (EXP-038): identical values ⇒ the
+register file is not the discriminator ⇒ H1/`31bc94de` is refuted and the
+blocker is H2 (eUSB2 link state / PPM routing: the BCR reset resets the SoC
+PHY but nothing resets the repeater, and no AP-side lever creates a fresh CC
+edge); different values (e.g. `0x00` in the working mode) ⇒ the known-good
+recipe is the normal-boot blob, and step A ≡ step B.
+
+### 12.7 The write ladder (re-ordered after the dump)
+
+1. **EXP-038 — the control** (normal boot, same image, stick pre-plugged):
+   one boot, no writes, decides §12.6.
+2. **EXP-039 — step A/B** on a write-capable kernel (the regmap debugfs
+   write path, armada patch 1401): write the EXP-038 values into the eight
+   registers and re-scan. Enumeration ⇒ the register-file hypothesis is
+   proven and the fix is a kernel patch that writes those values in
+   `eusb2_repeater_init`.
+3. **step C** — an empty diff ⇒ the residue is not in the register file ⇒
+   the PPM/eUSB2-link side (firmware RE, §ADSP_RE.md) or the vdd18 cut.

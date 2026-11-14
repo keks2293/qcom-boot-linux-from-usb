@@ -115,3 +115,15 @@ little-endian Hexagon ELF with no section headers). All RE claims in
 Xref method: `grep '##0x<vaddr>' text_all.txt`. Gotcha: `= ##0xADDR` matches
 register *loads*, not memory *writes* — direct writes are
 `memw/memb/memh/memd(##0xADDR) = …`.
+
+## lever-c/ — the lever-C hook sources, harness and builder
+
+[`lever-c/`](lever-c/) is the **complete, reproducible** lever-C toolchain
+(EXP-028…037): hook versions v2…v8 (`armada-usb-fix-c2.sh`…`-c8.sh`), the
+lever-B v2 prerequisite hook, one image builder per step
+(`build_dbgB2_ci.py`, `build_dbgC2_ci.py`…`build_dbgC8_ci.py`), the cpio
+helper they share, and `fake-test-c8.sh` — a fake-sysfs harness for v8 with
+11 boot modes (no root, no device).
+
+See [`lever-c/README.md`](lever-c/README.md) for the build chain, how to get
+the CI base image, the dump geometry and the run protocol.

@@ -561,7 +561,7 @@ can only arrive as a **property-service push** (RX callback → … → ctxB->+0
   because the actor is not userspace: it is the **in-kernel UCSI core**
   (`ucsi.c` + `ucsi_glink.c`), which exists in every environment and sends the four
   PMIC-doorbell commands itself (0x03/0x09/0x0b/0x10) — see
-  [the UCSI/PPM command protocol section](#the-ucsi-ppm-command-protocol-ap--adsp).
+  [the UCSI/PPM command protocol section](#the-ucsippm-command-protocol-ap--adsp).
 - **Conclusion:** the ADSP mechanism and the AP actor are both fully named, and the
   `apsd-rerun-cfg` patch is backed by the ADSP mechanism. The remaining unknown is
   the PPM/PMIC **state** in the failing environment (port misclassification + no
@@ -734,7 +734,7 @@ registry in [`cross-firmware-compare.txt`](../logs/adsp-re/cross-firmware-compar
 
 With the ADSP-side flag wall removed, the property system mapped and the AP
 actor named (the in-kernel UCSI core — see
-[the UCSI/PPM command protocol section](#the-ucsi-ppm-command-protocol-ap--adsp)),
+[the UCSI/PPM command protocol section](#the-ucsippm-command-protocol-ap--adsp)),
 the candidates narrow to:
 
 1. **PPM/PMIC state in the failing environment (primary):** the UCSI core
@@ -896,7 +896,7 @@ fingerprint table in [ADSP_ULOG.md](ADSP_ULOG.md) are updated accordingly.
 The CC-edge-driven re-detection path (the second route in the
 [final answer](#final-answer-to-who-pulls-the-charger-type)) is now fully
 decoded, and the dbgB `FAIL-NO-CLASSIFY` fingerprint
-([run result](INITRAMFS_CHANGES.md#dbgB-run-result-2026-11-09--fail-no-classify))
+([run result](INITRAMFS_CHANGES.md#dbgb-run-result-2026-11-09--fail-no-classify))
 is explained in code: **in the source role the handler deliberately skips the
 USB charging-type classification and writes no property at all.**
 

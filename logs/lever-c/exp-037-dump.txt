@@ -1,0 +1,143 @@
+EXP-037 — dbgC8, `linux usb`, stick pre-plugged, zero user actions
+=================================================================
+
+Image:  KERNEL.ci-a699dd6-dbgC8
+        202 116 935 B, md5 52c888a01f0470fb35f2b1a028209e9f,
+        sha256 8d2004f96c4148fc4435e5d8d9f83b7c520eaf75963f77313019c2fa58aacb7e
+Hook:   v8 (scripts/lever-c/armada-usb-fix-c8.sh)
+Date:   2026-11-14
+Source: transcription of the on-screen diag console (three photos,
+        IMG_20261114_*.jpg). Timestamps are the kernel's, as printed.
+        Lines are wrapped by the 128-column console; the wrapping is not
+        reproduced. ULog lines and the 5 s heartbeats after ~25 s are
+        omitted (they repeat unchanged to 120 s).
+
+Chain (beta-2, fourth time)
+---------------------------
+
+[ 3.259832] ARMADA-C: hook loaded up=3s
+[ 3.288639] ARMADA-C: start up=3s: dr_mode='host' xhci=ABSENT (patch-1400 kernel: xhci appears with the post-PDR role flip) pdr=no
+[ 3.309690] ARMADA-C: ULog capture on (pmic_pdcharger_ulog tracepoint)
+[ 3.351609] ARMADA-C: usb: usb_type=Unknown SDP DCP CDP ACA C PD PD_DRP PD_PPS BrickID online=0
+[ 3.461230] ARMADA-C: hb up=3s :: start up=3s: dr_mode='host' xhci=ABSENT ...
+[ 3.912101] ARMADA-C: PDR seen at 3s
+[ 3.933699] ARMADA-C: xhci=xhci-hcd.2.auto at 3s
+[ 3.955800] ARMADA-C: partner at 3s (port0-partner; power='[source] sink' data='[host] device'; vbus=pending)
+[ 4.461459] ARMADA-U: ULog: typec_detect_partner: ssdev_types=[ipu3phv-0, TypeC-PortType-0]
+[ 4.461459] ARMADA-U: ULog: charger_detection_evaluate_state_change: charger_detection: input101 bLpdEn=0, bLiquidDetected=0
+[ 4.567467] ARMADA-U: ULog: sm_state_loop: charger state: event_type=10, curr=1, next=1, status=0x0
+[ 4.726316] ARMADA-U: ULog: sm_state_loop: charger state: event_type=10, curr=2, next=2, status=0x0
+[ 4.726316] ARMADA-U: ULog: sm_state_loop: charger state: event_type=10, curr=3, next=3, status=0x0
+[ 4.765651] ARMADA-U: ULog: battmgr_plat_scpcbq_qbg_r1_update_vlstx_otg_context: battmgr_plat_scpcbq_qbg_r1_update_vlstx_otg_context: vlstx enable: 0
+[ 4.849494] ARMADA-U: ULog: battmgr_plat_scpcbq_qbg_r1_update_vlstx_otg_context: ... vlstx enable: 1
+[ 5.485970] ARMADA-U: ULog: battmgr_plat_scpcbq_qbg_r1_update_vlstx_otg_context: ... otg source = 1
+[ 5.491220] ARMADA-C: usb: usb_type=Unknown SDP DCP CDP ACA C PD PD_DRP PD_PPS BrickID online=0
+[ 7.039123] ARMADA-C: TREE[NO-SCAN] up=7s: orientation=[normal] partner=yes
+[ 7.063531] ARMADA-C: FAIL-NO-SCAN: no USB disk after the first post-flip scan (last up=7s, scan-events=0); escalating to the full chain
+[ 7.086851] ARMADA-C: ESCALATE at 7s: full-chain reset (ucsi=pmic_glink.ucsi.0 ucsi-drv=ucsi_glink.pmic_glink_ucsi xhci=xhci-hcd.2.auto vbus=out)
+[ 7.089923] ARMADA-C: ESCALATE: unbind order ucsi -> xhci -> dwc3, rebind order dwc3 -> ucsi (UCSI holds the role-switch ref; ucsi.c)
+[ 7.106411] ARMADA-C: TREE[ESCDIAG] up=7s: a600000.usb: [firmware, typec, port0, driver, driver_override, lcm, lcm_group, modalias, of_node, power, subsystem, supplier:phy-qcom-ssphy.1, supplier:phy-qcom-ssphy.3, supplier:platform:15000000.iommu, supplier:platform:1c00000.interconnect, supplier:platform:1c40000.iommu, supplier:platform:24100000.interconnect, supplier:platform:fc400000.clock-controller, supplier:platform:fc400000.iommu, uevent, usb_role, xhci-hcd.2.auto]
+[ 7.107631] ARMADA-C: TREE[ESCDIAG] up=7s: role /sys/class/usb_role/a600000.usb-role-switch: [host]
+[ 7.110732] ARMADA-C: TREE[ESCDIAG] up=7s: typec: orientation=[normal] partner=yes
+[ 7.115861] ARMADA-C: TREE[ESCDIAG] up=7s: xhci: xhci-hcd.2.auto -> [usb1 usb2]
+[ 7.118631] ARMADA-C: TREE[ESCDIAG] up=7s: /sys/block: [loop0 loop1 loop2 loop3 loop4 loop5 loop6 loop7 mmcblk0 sda sdb sdc sdd sde sdf]
+[ 7.121269] ARMADA-C: TREE[ESCDIAG] up=7s: usb: [1-0:1.0 2-0:1.0 usb1 usb2]
+[ 7.124815] ARMADA-C: ESCDIAG aux: [mux_bridge.aux_bridge.0 aux_bridge.0 aux_hpd_bridge.0 aux_hpd_bridge.0 pmic_glink.altmode.0 pmic_glink.aux_tt.0 pmic_glink.ucsi.0 qcom_common.pm_snapper.0]
+[ 7.129061] ARMADA-C: ESCDIAG aux-drv: [mux_bridge.aux_bridge.0 aux_bridge.0 aux_hpd_bridge.0 aux_hpd_bridge.0 pmic_glink.altmode.0 pmic_glink.aux_tt.0 pmic_glink.ucsi.0 ...]
+[ 7.134508] ARMADA-C: ESCDIAG ucsi-cand: pmic_glink.ucsi.0 drv=/sys/bus/auxiliary/drivers/ucsi_glink.pmic_glink_ucsi
+[ 7.164210] ARMADA-C: ESCALATE: unbind done ucsi rc=0 xhci rc=0 dwc3 rc=0 up=7s
+[ 7.196293] ARMADA-C: ESCALATE: rebind dwc3 rc=0 up=7s
+[ 7.232201] ARMADA-C: ESCALATE: rebind ucsi rc=0 up=7s (UCSI now completes the chain by itself: GET_CONNECTOR_STATUS -> partner -> set_role(host) -> xhci recreated)
+[ 7.261361] ARMADA-U: ULog: battmgr_plat_scpcbq_qbg_r1_check_state_change: ... bL chg_status
+[ 7.514009] ARMADA-U: ULog: battmgr_plat_scpcbq_qbg_r1_check_state_change: ... Change to state 1
+[ 7.516491] ARMADA-U: ULog: battmgr_plat_scpcbq_qbg_r1_check_state_change: ... Change to state 2
+[ 7.516491] ARMADA-U: ULog: battmgr_plat_scpcbq_qbg_r1_check_state_change: ... Change to state 3
+[ 7.516491] ARMADA-U: ULog: battmgr_plat_scpcbq_qbg_r1_check_state_change: ... Change to state 4
+[ 7.516491] ARMADA-U: ULog: battmgr_plat_scpcbq_qbg_r1_check_state_change: ... Change to state 1 from 1
+[ 7.516491] ARMADA-U: ULog: battmgr_plat_scpcbq_qbg_r1_check_state_change: ... Charge to state 1 from 1
+[ 7.516491] ARMADA-U: ULog: icm_ncp_stby_main: icm_ncp_stby_main: loops in icm_ncp_stby until charger_type updated
+[ 7.522043] ARMADA-U: ULog: icm_ncp_stby_main: icm_ncp_stby_main: loops in icm_ncp_stby until charger_type updated
+[ 7.522043] ARMADA-U: ULog: FPM: GET_CONNECTOR_STATUS: Port0: ConnectorStatusChange=0x0000, PowerOperationMode=1, ConnectStatus=1, ConnectPartnerType=2, USB=1, Altmode=0, RDO=0x00000000
+[ 7.766465] ARMADA-C: ESCALATE: xhci=xhci-hcd.2.auto at 7s; waiting for the fresh full-chain scan
+[ 7.767653] ARMADA-C: hb up=8s :: ESCALATE: xhci=xhci-hcd.2.auto at 7s; waiting for the fresh full-chain scan
+[ 8.057933] ARMADA-U: ULog: battmgr_plat_scpcbq_qbg_r1_update_vlstx_otg_context: ... vlstx enable: 0
+[ 10.967271] ARMADA-C: TREE[t10] up=10s: a600000.usb: [... xhci-hcd.2.auto]
+[ 10.970377] ARMADA-C: TREE[t10] up=10s: role /sys/class/usb_role/a600000.usb-role-switch: [host]
+[ 10.973825] ARMADA-C: TREE[t10] up=10s: typec: orientation=[normal] partner=yes
+[ 10.975923] ARMADA-C: TREE[t10] up=10s: xhci: xhci-hcd.2.auto -> [usb1 usb2]
+[ 10.979430] ARMADA-C: TREE[t10] up=10s: /sys/block: [loop0 ... sdf]
+[ 10.986155] ARMADA-C: TREE[t10] up=10s: usb: [1-0:1.0 2-0:1.0 usb1 usb2]
+[ 11.632201] ARMADA-U: ULog: usb: usb_type=Unknown SDP DCP CDP ACA C PD PD_DRP PD_PPS BrickID online=0
+[ 13.421299] ARMADA-C: hb up=13s :: ESCALATE: xhci=xhci-hcd.2.auto at 7s; waiting for the fresh full-chain scan
+[ 15.743290] ARMADA-U: ULog: usb: usb_type=Unknown SDP DCP CDP ACA C PD PD_DRP PD_PPS BrickID online=0
+[ 17.612741] ARMADA-U: ULog: sm_state_loop: charger state: event_type=3, curr=2, next=2, status=0x0
+[ 17.615352] ARMADA-U: ULog: charger_detection_get_active_charger: activePort[1] PartnerType=0, Voltage_max=0 mV, Current_max=0 mA
+[ 17.817570] ARMADA-U: ULog: charger_detection_get_charger_update: activePort[1] ChargerPower current=0x00000000, previous=0x00000000
+[ 17.823525] ARMADA-U: ULog: charger_detection_get_charger_update: activePort[1] ChargerPower current=0 uA, previous=0 uA
+[ 17.826591] ARMADA-U: ULog: battmgr_plat_scpcbq_qbg_r1_check_state_change: ... Charge to state 1
+[ 18.020555] ARMADA-U: ULog: battmgr_tech_scpcbq_chg_r1_get_chg_cable_state: ... cable is not connected
+[ 23.058100] ARMADA-C: TREE[NO-SCAN-FULL] up=23s: a600000.usb: [...]
+[ 23.059133] ARMADA-C: TREE[NO-SCAN-FULL] up=23s: role ...: [host]
+[ 23.071751] ARMADA-C: TREE[NO-SCAN-FULL] up=23s: typec: orientation=[normal] partner=yes
+[ 23.079441] ARMADA-C: TREE[NO-SCAN-FULL] up=23s: xhci: xhci-hcd.2.auto -> [usb1 usb2]
+[ 23.082712] ARMADA-C: TREE[NO-SCAN-FULL] up=23s: /sys/block: [...]
+[ 23.082712] ARMADA-C: TREE[NO-SCAN-FULL] up=23s: usb: [1-0:1.0 2-0:1.0 usb1 usb2]
+[ 23.215300] ARMADA-C: FAIL-NO-SCAN-FULL: no USB disk after full-chain reset (last up=23s, scan-events=0)
+[ 23.225874] ARMADA-C: RPT-S0: enter (mode=linux-usb) at 23s
+[ 23.237413] ARMADA-C: RPT-S1: mounting debugfs (mkdir first) at 23s
+[ 23.242900] ARMADA-C: RPT-S1: mkdir rc=0 at 23s
+[ 23.250197] ARMADA-C: RPT-S1: mount rc=0 at 23s
+[ 23.260204] ARMADA-C: RPT-S2: listing spmi + regmap at 23s
+[ 23.265707] ARMADA-C: RPT-S2: spmi=[0-00 0-01 0-05 0-07 …] at 23s
+[ 23.265707] ARMADA-C: RPT-S2: regmap=[0-00 0-01 0-05 0-07 <clock-controller, interconnect, …>] at 23s
+[ 23.281190] ARMADA-C: RPT-S2: candidates=[0-00 0-01 0-05 0-07] at 23s
+[ 23.291473] ARMADA-C: RPT-S3: console=4; timeouts before=0; suppressing to 1
+[ 23.297653] ARMADA-C: RPT-S3: console now=1
+[ 23.297252] ARMADA-C: RPT-S4: 0-00: read started (bounded 55s) at 23s
+[ 23.319831] ARMADA-C: RPT-S5: 0-00: read done size=828 at 23s
+[ 23.320011] ARMADA-C: RPT-SCAN: 0-00 lines=92 WRN: 08=XX 46=XX 51=XX 53=XX 54=XX 57=XX KEY: 50=XX 52=XX 55=XX 56=XX 58=XX 59=XX 5a=XX 5b=XX
+[ 23.639923] ARMADA-C: RPT-S4: 0-01: read started (bounded 55s) at 23s
+[ 23.835141] ARMADA-C: RPT-S5: 0-01: read done size=828 at 24s
+[ 23.835141] ARMADA-C: RPT-SCAN: 0-01 lines=92 WRN: 08=XX 46=XX 51=XX 53=XX 54=XX 57=XX KEY: 50=XX … 5b=XX
+[ 23.854149] ARMADA-C: RPT-S4: 0-05: read started (bounded 55s) at 23s
+[ 24.943177] ARMADA-C: RPT-S5: 0-05: read done size=828 at 24s
+[ 24.943177] ARMADA-C: RPT-SCAN: 0-05 lines=92 WRN: 08=XX 46=XX 51=XX 53=XX 54=XX 57=XX KEY: 50=XX … 5b=XX
+[ 24.360761] ARMADA-C: RPT-S4: 0-07: read started (bounded 55s) at 24s
+[ 24.406497] ARMADA-C: RPT-S5: 0-07: read done size=828 at 24s
+[ 24.406497] ARMADA-C: RPT-SCAN: 0-07 lines=92 WRN: 08=80 46=80 51=0b 53=06 54=03 57=03 KEY: 50=00 52=01 55=03 56=00 58=02 59=03 5a=01 5b=02
+[ 25.528353] ARMADA-C: RPT-S5: console restored to 4; timeouts after=0 at 25s
+[ 25.530321] ARMADA-C: RPT-DUMP: repeater regmap=0-07 (92 regs fd00-fd5b, 9 B/line, offset 582912)
+[ 25.530321] ARMADA-C: RPT-B: fd00=00 fd01=00 fd02=00 fd03=00 fd04=00 fd05=00 fd06=00 fd07=00
+[ 25.540590] ARMADA-C: RPT-B: fd08=80 fd09=00 fd0a=00 fd0b=00 fd0c=00 fd0d=00 fd0e=00 fd0f=00
+[ 25.545095] ARMADA-C: RPT-B: fd10=00 fd11=00 fd12=00 fd13=00 fd14=00 fd15=00 fd16=00 fd17=00
+[ 25.546951] ARMADA-C: RPT-B: fd18=00 fd19=00 fd1a=00 fd1b=00 fd1c=00 fd1d=00 fd1e=00 fd1f=00
+[ 25.548916] ARMADA-C: RPT-B: fd20=00 fd21=00 fd22=00 fd23=00 fd24=00 fd25=00 fd26=00 fd27=00
+[ 25.551314] ARMADA-C: RPT-B: fd28=00 fd29=00 fd2a=00 fd2b=00 fd2c=00 fd2d=00 fd2e=00 fd2f=00
+[ 25.553291] ARMADA-C: RPT-B: fd30=00 fd31=00 fd32=00 fd33=00 fd34=00 fd35=00 fd36=00 fd37=00
+[ 25.554162] ARMADA-C: RPT-B: fd38=00 fd39=00 fd3a=00 fd3b=00 fd3c=00 fd3d=00 fd3e=00 fd3f=00
+[ 25.554162] ARMADA-C: RPT-B: fd40=00 fd41=00 fd42=00 fd43=00 fd44=00 fd45=00 fd46=80 fd47=00
+[ 25.554621] ARMADA-C: RPT-B: fd48=00 fd49=00 fd4a=00 fd4b=00 fd4c=00 fd4d=00 fd4e=00 fd4f=00
+[ 25.554621] ARMADA-C: RPT-B: fd50=00 fd51=0b fd52=01 fd53=06 fd54=03 fd55=03 fd56=00 fd57=03
+[ 25.554621] ARMADA-C: RPT-B: fd58=02 fd59=03 fd5a=01 fd5b=02
+[ 25.567341] ARMADA-C: RPT-KEY (never kernel-written; residue candidates): 50=00 52=01 55=03 56=00 58=02 59=03 5a=01 5b=02
+[ 25.567341] ARMADA-C: RPT-WRN (expect 08=80 46=80 51=0b 53=06 54=03 57=03): 08=80 46=80 51=0b 53=06 54=03 57=03
+[ 25.601045] ARMADA-C: RPT-DONE: dump complete at 25s
+[ 26.241344] ARMADA-U: ULog: BattMngrStateMachine_Main_Thread: BattMngrStateMachine_Main_Thread: Servicing BATTERY_DNR_QBG_DATA_FULL
+[ 26.246823] ARMADA-C: hb up=28s :: FAIL-NO-SCAN-FULL: no USB disk after full-chain reset (last up=23s, scan-events=0)
+… heartbeats and the unchanged ULog fingerprint repeat to 120 s;
+  `scan-events=0` throughout, no `-110`.
+
+Notes
+-----
+
+* The four candidates are the intersection of `/sys/bus/spmi/devices/`
+  (`0-00 0-01 0-05 0-07`) with the debugfs regmap directories. `0-07` is
+  spmi address 0x07 = pm8550b, the repeater's parent PMIC.
+* `0-00`, `0-01`, `0-05` print 92 lines of `XX`: their `max_register` is
+  below 0xfd00, so `regmap_readable()` is false and debugfs prints `XX`
+  without a hardware read.
+* The `RPT-SCAN` line for `0-07` carries the signature
+  (`08=80 46=80`) that selected it; the full block is `RPT-B`.
+* `timeouts before=0` / `after=0`: no `pmic_arb_wait_for_done` timeouts —
+  the "676 unimplemented registers × 1 ms" model of §12.2 does not happen
+  in practice (fast arbiter error).
