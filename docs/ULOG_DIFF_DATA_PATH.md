@@ -229,11 +229,44 @@ The element that is "open/enabled" in the working boot but "closed/disabled"
 in the failing boot is the fix target (drive it open early in the initramfs, or
 re-route the data path after the ABL handoff).
 
-Capture: extend
-[`scripts/lever-c/exp038-repeater-dump.sh`](../scripts/lever-c/exp038-repeater-dump.sh)
-into a routing dump (repeater window + TCPC + SNPS eUSB2 PHY + switch) that runs
-as root in **both** environments and is diffable. Registered as
-[EXP-042](EXPERIMENTS.md).
+### Instrument (built 2026-11-14)
+
+Capture:
+[`scripts/lever-c/exp042-routing-dump.sh`](../scripts/lever-c/exp042-routing-dump.sh)
+(run as root; `baseline` / `diff BASE` subcommands). It dumps the data-path
+context (typec port0 orientation/roles/partner/opmode, `usb_role`, phy list,
+USB-chain `runtime_status`, xHCI port-event tail), the repeater window
+`fd00–fd5b`, and the **full SPMI `0-07` (pmic@7, the eUSB2-repeater PMIC)
+regmap window** (65536 regs). `diff` compares the current window line-by-line
+against a baseline with a portable `awk` (no `diff`/`sha256sum` dependency —
+safe in the minimal initramfs) and prints every differing register, capped.
+Output is console-oriented (photo OCR, ~45 lines).
+
+- **Provisional working baseline captured** (this boot: full system,
+  **dock+PD** topology, working data path; repeater window bit-matches EXP-038):
+  [`logs/lever-c/exp042-baseline-0-07-working.regmap`](../logs/lever-c/exp042-baseline-0-07-working.regmap)
+  (clean 65536-line window) +
+  [`…-working.sha`](../logs/lever-c/exp042-baseline-0-07-working.sha) (per-64-reg
+  block checksums) +
+  [`…-working.txt`](../logs/lever-c/exp042-baseline-0-07-working.txt)
+  (headered copy).
+- **Volatile-register caveat:** a self-diff of the same working boot ~8 min
+  apart shows **8 registers that change on their own** (counters/status):
+  `0x260f 0x28eb 0x28ee 0x3ae2 0x3ae4 0x4f90 0x4fa0 0x4fc0`. A mode diff must
+  treat these as noise; the routing signal is a register that differs
+  **systematically** (failing vs working), not one that drifts over time.
+- **The real EXP-042 is a paired run** (same topology both legs): one failing
+  `linux usb` pre-plug boot (the `diff` leg, baseline shipped in the image at
+  `/etc/armada/exp042-baseline-0-07.regmap`) + one working full-system
+  pre-plug boot (the `baseline` leg, topology-matched). The register that is
+  set in the working leg and clear in the failing leg — outside the volatile
+  set and the already-known repeater activity window — is the closed routing
+  element.
+
+The SPMI `0-07` window is the right scope because it is the **only** PMIC-side
+element of the data path (no PMIC USB-switch node exists on any PMIC; the TCPC
+is ADSP-side and not AP-visible), so a mode diff of this window plus the
+repeater window brackets the PMIC/PHY half of the path.
 
 ## References
 
