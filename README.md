@@ -24,18 +24,25 @@ and the port still sees no connect event (`scan-events=0`, EXP-034). The
 residual blocker is **below dwc3**: the PMIC-side eUSB2 repeater, the eUSB2
 link state, or the PPM's routing.
 
-The decisive measurement is now in. The eUSB2 repeater's `0xfd00–0xfd5b`
-window was read in the broken mode (EXP-037): the repeater is **enabled and
-reporting OK**, the board tuning is written as the device tree asks, and the
-eight registers the kernel never touches hold **non-zero** values —
+The decisive measurement is in, on **both sides**. The eUSB2 repeater's
+`0xfd00–0xfd5b` window was read in the broken mode (EXP-037) and in the
+working mode (EXP-038): the repeater is **enabled and reporting OK in
+both**, the board tuning is written as the device tree asks in both, and
+the eight registers the kernel never touches are **bit-identical** —
 `50=00 52=01 55=03 56=00 58=02 59=03 5a=01 5b=02`. That refutes the
-"the bootloader zeroed the tuning" form of the upstream `31bc94de`
-regression, which was the leading hypothesis.
+upstream `31bc94de` register-file hypothesis in both its forms (the
+"bootloader zeroed the tuning" form and the "working mode holds a
+different blob" form). The only mode diff in the window is seven
+status/activity registers no AP-side software writes
+(`fd00 fd02 fd04 fd05 fd09 fd0a fd42`): all `0x00` in the broken mode,
+non-zero in the working one — in `linux usb` the repeater has never seen
+a link.
 
-**Open:** the same dump in a normal (working) boot (EXP-038). Identical
-values ⇒ the register file is not the discriminator and the blocker is the
-eUSB2 link state / PPM side; different values ⇒ the working-mode blob is the
-recipe and the fix is a kernel patch that writes it.
+**Front:** the blocker is the eUSB2 link state / PPM routing (H2). The
+write ladder is dead (zeroing the eight would create a mismatch; writing
+the "known-good" values is a no-op — EXP-039 superseded). Next: re-arm the
+PPM without a fresh CC edge — the `apsd-rerun-cfg` 0→1 firmware patch on
+device (EXP-041).
 
 ### Closed along the way
 

@@ -1,0 +1,96 @@
+EXP-038 — eUSB2 repeater register dump, WORKING mode (the EXP-037 control)
+=========================================================================
+
+Conditions: normal "sdcard" boot (not `linux usb`), stock Armada OS install
+(ostree deployment 6bb952cad7…, kernel 7.2.6 + 192 armada patches — NOT the
+CI a699dd6 image kernel). Netac MobileDataStar 512 GB stick cold-plugged
+(first plug 1806 s, disconnect 1836 s, re-plug 1844 s); enumerated as sdg
+under xhci-hcd.2.auto/usb1; zero user actions after the re-plug. typec:
+orientation=[normal] partner=yes power=[source] data=[host].
+Capture: scripts/lever-c/exp038-repeater-dump.sh, run as root at uptime
+3045 s (2026-11-14). Same mechanics as the v8 hook: scan-based candidate
+selection, fd08=80/fd46=80 signature, line geometry auto-verified
+(9 B/line on this kernel as well), every read bounded by timeout(1).
+
+--- raw output ---
+=== EXP-038 repeater capture 2026-11-14 07:14:50 UTC ===
+kernel: 7.2.6
+  src: Source: linux-7.2.6 (kernel.org stable)
+  src: Built: armada-builder on aarch64
+  src: Patches applied: 192 (from patches/series)
+  src: DTBs included: 27 boards (SM8250 + SM8550 + SM8650 + SM8750)
+  src: Repackaged for: armada
+uptime: 3045.70s
+cmdline: [ostree=/ostree/boot.1/default/34d7969129f068943c4e123a35bc6e25680bdfb4f24d274d56333824a20bc988/0 root=UUID=6c512adc-c48e-434b-9f36-d7a016a7edd5 rw boot=UUID=24f4f3d0-4a5c-429d-9490-4b7a819b7d7c rootwait console=tty0 quiet loglevel=3 allow_m]
+block: [loop0 loop1 loop2 loop3 loop4 loop5 loop6 loop7 mmcblk0 sda sdb sdc sdd sde sdf sdg zram0 ]
+usb-disk: sdg -> /sys/devices/platform/soc@0/a600000.usb/xhci-hcd.2.auto/usb1/1-1/1-1.2/1-1.2:1.0/host1/target1:0:0/1:0:0:0/block/sdg
+usb: [1-0:1.0 1-1 1-1.1 1-1.1:1.0 1-1.2 1-1.2:1.0 1-1.4 1-1.4.2 1-1.4.2:1.0 1-1.4.2:1.1 1-1.4.2:1.2 1-1.4.2:1.3 1-1.4.4 1-1.4.4:1.0 1-1.4.4:1.1 1-1.4.5 1-1.4.5:1.0 1-1.4:1.0 1-1:1.0 2-0:1.0 usb1 usb2 ]
+typec: orientation=[normal] partner=yes power=[source [sink]] data=[[host] device]
+stick-plug-history: [[ 2325.187938] usb 1-1.4: USB disconnect, device number 13|[ 2325.961781] usb 1-1.4: new high-speed USB device number 17 using xhci-hcd|[ 2415.811951] usb 1-1.4: USB disconnect, device number 17|[ 2416.584988] usb 1-1.4: new high-speed USB device number 21 using xhci-hcd|]
+spmi: [0-00 0-01 0-05 0-07 ]
+regmap: [0-00 0-0034 0-0035 0-01 0-05 0-07 1-0038 100000.clock-controller 1680000.interconnect 16c0000.interconnect 16e0000.interconnect 1700000.interconnect 1780000.interconnect 1f40000.hwlock 1fc0000.clock-controller 2-003c 24100000.interconnect 25000000.system-cache-controller-llcc0_base 25000000.system-cache-controller-llcc1_base 25000000.system-cache-controller-llcc2_base 25000000.system-cache-controller-llcc3_base 25000000.system-cache-controller-llcc_broadcast_and_base 25000000.system-cache-controller-llcc_broadcast_base 3-003c 3d90000.clock-controller 6aa0000.codec-wsa_macro 6ac0000.codec-rx_macro 6ae0000.codec-tx_macro 6d44000.codec-va_macro aaf0000.clock-controller ade0000.clock-controller af00000.clock-controller c271000.thermal-sensor-srot c271000.thermal-sensor-tm c272000.thermal-sensor-srot c272000.thermal-sensor-tm c273000.thermal-sensor-srot c273000.thermal-sensor-tm sdw:3:0:0217:010d:00:3-wcd938x_csr ]
+candidates: [ 0-00 0-01 0-05 0-07]
+RPT-SCAN: 0-00 lines=92 WRN: 08=XX 46=XX 51=XX 53=XX 54=XX 57=XX KEY: 50=XX 52=XX 55=XX 56=XX 58=XX 59=XX 5a=XX 5b=XX
+RPT-SCAN: 0-01 lines=92 WRN: 08=XX 46=XX 51=XX 53=XX 54=XX 57=XX KEY: 50=XX 52=XX 55=XX 56=XX 58=XX 59=XX 5a=XX 5b=XX
+RPT-SCAN: 0-05 lines=92 WRN: 08=XX 46=XX 51=XX 53=XX 54=XX 57=XX KEY: 50=XX 52=XX 55=XX 56=XX 58=XX 59=XX 5a=XX 5b=XX
+RPT-SCAN: 0-07 lines=92 WRN: 08=80 46=80 51=0b 53=06 54=03 57=03 KEY: 50=00 52=01 55=03 56=00 58=02 59=03 5a=01 5b=02
+RPT-DUMP: repeater regmap=0-07 (92 regs fd00-fd5b, lw=9)
+RPT-B: fd00=02 fd01=00 fd02=03 fd03=00 fd04=0b fd05=0e fd06=00 fd07=00
+RPT-B: fd08=80 fd09=9f fd0a=18 fd0b=00 fd0c=00 fd0d=00 fd0e=00 fd0f=00
+RPT-B: fd10=00 fd11=00 fd12=00 fd13=00 fd14=00 fd15=00 fd16=00 fd17=00
+RPT-B: fd18=00 fd19=00 fd1a=00 fd1b=00 fd1c=00 fd1d=00 fd1e=00 fd1f=00
+RPT-B: fd20=00 fd21=00 fd22=00 fd23=00 fd24=00 fd25=00 fd26=00 fd27=00
+RPT-B: fd28=00 fd29=00 fd2a=00 fd2b=00 fd2c=00 fd2d=00 fd2e=00 fd2f=00
+RPT-B: fd30=00 fd31=00 fd32=00 fd33=00 fd34=00 fd35=00 fd36=00 fd37=00
+RPT-B: fd38=00 fd39=00 fd3a=00 fd3b=00 fd3c=00 fd3d=00 fd3e=00 fd3f=00
+RPT-B: fd40=00 fd41=00 fd42=80 fd43=00 fd44=00 fd45=00 fd46=80 fd47=00
+RPT-B: fd48=00 fd49=00 fd4a=00 fd4b=00 fd4c=00 fd4d=00 fd4e=00 fd4f=00
+RPT-B: fd50=00 fd51=0b fd52=01 fd53=06 fd54=03 fd55=03 fd56=00 fd57=03
+RPT-B: fd58=02 fd59=03 fd5a=01 fd5b=02
+RPT-KEY (never kernel-written; residue candidates): 50=00 52=01 55=03 56=00 58=02 59=03 5a=01 5b=02
+RPT-WRN (expect 08=80 46=80 51=0b 53=06 54=03 57=03): 08=80 46=80 51=0b 53=06 54=03 57=03
+=== EXP-038 CAPTURE COMPLETE ===
+
+--- diff against EXP-037 (the broken mode, logs/lever-c/exp-037-dump.txt) ---
+
+  KEY (the eight never-kernel-written tuning registers): IDENTICAL
+      50=00 52=01 55=03 56=00 58=02 59=03 5a=01 5b=02
+  WRN (kernel-written / RO status): IDENTICAL
+      08=80 46=80 51=0b 53=06 54=03 57=03
+  Differing registers (all 0x00 in the broken mode, non-zero here):
+      fd00=00 -> 02   fd02=00 -> 03   fd04=00 -> 0b   fd05=00 -> 0e
+      fd09=00 -> 9f   fd0a=00 -> 18   fd42=00 -> 80
+  All other registers in the window: identical (fd01..fd07, fd0b..fd41,
+  fd43..fd45, fd47..fd4f, fd50..fd5b all equal).
+
+Notes
+-----
+
+* The planned experiment said "normal boot of dbgC8". This run deviates on
+  three condition points — the stock 7.2.6+192p kernel instead of the CI
+  a699dd6 kernel, a plain Netac stick instead of the CI stick, cold-plug
+  instead of pre-plug. None of them can confound the tuning comparison:
+  the eight KEY registers are never written by the driver in either kernel
+  (upstream phy-qcom-eusb2-repeater.c writes only fd46 + the init-table
+  fd51/fd54/fd57 + DT overrides fd57/fd53/fd51 (+fd52/fd54 only if the
+  board DT carried qcom,tune-res-fsdif / qcom,squelch-detector-bp — this
+  board's repeater node has neither), set_mode writes fde8/fded outside
+  the window), and an identical NON-ZERO match across two different
+  kernels cannot be a kernel artifact (a zero-out kernel would read 00).
+  The WRN set being identical shows the effective DT/init writes are the
+  same on both kernels.
+* The seven differing registers are likewise never written by the AP-side
+  driver in either mode. They hold repeater-internal status/activity
+  state: in the working mode the link is active at the repeater, in the
+  broken mode the repeater (enabled, RPTR_OK) has never seen one.
+  Register names beyond the driver's #defines are not public; the pattern
+  (all-zero broken vs non-zero working) is the datum.
+* The repeater platform device on this kernel: c400000.spmi:pmic@7:phy@fd00
+  (compatible qcom,pm8550b-eusb2-repeater), driver qcom-eusb2-repeater
+  (built-in), regulators vdd18/vdd3, DT tuning
+  qcom,tune-usb2-amplitude / -disc-thres / -preem. The separately-present
+  phy-qcom-m31-eusb2.ko is the SM8750 M31 HSPHY driver, not bound here.
+* Residual caveat (cheap to close, optional): a normal boot of the CI
+  a699dd6 kernel with the same manual read would confirm the seven
+  activity registers on the identical kernel. The tuning-register verdict
+  is already conclusive in both directions without it.

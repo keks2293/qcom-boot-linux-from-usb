@@ -142,14 +142,15 @@ Images and hook versions: [LEVER_C_IMPLEMENTATION.md](LEVER_C_IMPLEMENTATION.md)
 | EXP-035 | 2026-11-13 | dbgC6 (`17189737…`) | `linux usb`, pre-plug | `FAIL-NO-SCAN-FULL`; the register dump **stalled silently** after its first line | valid (beta-2); the dump itself invalid | §12.1 |
 | EXP-036 | 2026-11-14 | dbgC7 (`8ab490c9…`) | `linux usb`, pre-plug | `FAIL-NO-SCAN-FULL`; the stall **located** in the platform-device symlink resolve | valid (beta-2); dump still incomplete | §12.3 |
 | EXP-037 | 2026-11-14 | dbgC8 (`52c888a0…`) | `linux usb`, pre-plug | `FAIL-NO-SCAN-FULL`; **dump complete** — repeater `0-07`, the eight registers are **not** zero | valid | §12.5 |
+| EXP-038 | 2026-11-14 | — (stock 7.2.6+192p kernel, manual debugfs read) | normal ("sdcard"), cold-plug | `OK-ENUM`; **dump complete** — the eight tuning registers **bit-identical** to EXP-037; the only mode diff is seven never-AP-written activity registers, all `00` in the broken mode | valid (control) | §12.8 |
 
 ### 2.5 Planned
 
 | ID | planned experiment | why it decides |
 |---|---|---|
-| EXP-038 | normal boot of `dbgC8`, stick pre-plugged, dump | the control for the eight registers: same values ⇒ the `31bc94de` regression is **refuted**; `0x00` ⇒ known-good = zero ⇒ zero-out patch |
-| EXP-039 | the write ladder on a write-capable kernel: step A (zero the eight) / step B (write the EXP-038 values) | proves or refutes the register-file hypothesis directly |
+| EXP-039 | **superseded by EXP-038** (2026-11-14): the eight-register diff is empty ⇒ step A (zero the eight) would *create* a mismatch, step B (write the EXP-038 values) is a no-op | — |
 | EXP-040 | full-boot re-check of the 1400 kernel (protocol: [KERNEL_PATCH_1400.md](KERNEL_PATCH_1400.md#full-boot-re-check-control-experiment--protocol)) | confirms 1400 is a no-op in a normal boot |
+| EXP-041 | the `apsd-rerun-cfg` 0→1 firmware patch on device (dbg52 candidate; recipe in [ADSP_CONFIG.md](ADSP_CONFIG.md)), `linux usb`, pre-plug, zero actions | edge-free PPM re-arming inside the ≤30 s window — the second live lever ([KERNEL_PATCH_1400.md](KERNEL_PATCH_1400.md#reconciliation-with-the-replug-window-required--the-hypothesis-alone-does-not-fit)): if the re-armed PPM classifies and drives the link, enumeration succeeds; the seven EXP-038 activity registers are the direct readout of whether the link reached the repeater |
 
 ### 2.6 Legacy alias map
 

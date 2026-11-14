@@ -1,18 +1,24 @@
 # Lever C implementation: post-PDR xHCI rescan in the initramfs
 
-Status (2026-11-14): **clean beta-2, and the eUSB2 repeater dump is now
-done.** The full chain (UCSI → xHCI → dwc3 unbind/rebind) runs correctly,
-early and post-VBUS, and does not help (EXP-034) — the residual blocker is
-below dwc3. The decisive measurement is no longer blocked: EXP-037 (dbgC8,
-`linux usb`, pre-plug, §12.5) read the repeater's `0xfd00–0xfd5b` window
-and shows the repeater **enabled and reporting OK** (`0xfd46=0x80`,
-`0xfd08=0x80`), the DT/init tuning written as expected (`0x51=0x0b`,
-`0x53=0x06`, `0x54=0x03`, `0x57=0x03`), and the eight registers the kernel
-never writes holding **non-zero** values (`50=00 52=01 55=03 56=00 58=02
-59=03 5a=01 5b=02`) — so the "ABL left zeros in the tuning" form of the
-`31bc94de` regression is **refuted for `linux usb`** (§12.6). The
-normal-boot control on the same image (EXP-038) decides whether the
-register file differs between the broken and the working mode at all.
+Status (2026-11-14): **clean beta-2; the eUSB2 repeater dump is done on
+both sides, and the register file is not the discriminator.** The full
+chain (UCSI → xHCI → dwc3 unbind/rebind) runs correctly, early and
+post-VBUS, and does not help (EXP-034) — the residual blocker is below
+dwc3. EXP-037 (dbgC8, `linux usb`, pre-plug, §12.5) and EXP-038 (working
+mode, manual debugfs read on a normal "sdcard" boot, §12.8) read the
+repeater's `0xfd00–0xfd5b` window in both modes: the repeater is
+**enabled and reporting OK in both** (`0xfd46=0x80`, `0xfd08=0x80`), the
+DT/init tuning is written as expected in both, and the eight registers
+the kernel never writes are **bit-identical** (`50=00 52=01 55=03 56=00
+58=02 59=03 5a=01 5b=02`) — so the `31bc94de` register-file hypothesis is
+**refuted in both its forms** (§12.6, §12.8). The only mode diff in the
+window is seven status/activity registers no AP-side software writes
+(`fd00 fd02 fd04 fd05 fd09 fd0a fd42`): all `0x00` in the broken mode,
+non-zero in the working one — in `linux usb` the repeater has never seen
+a link. The blocker is the eUSB2 link state / PPM routing (H2); the
+write ladder is dead (steps A and B both no-ops / mismatch-creators),
+and the next front is the PPM side (EXP-041: `apsd-rerun-cfg` 0→1 on
+device).
 
 Numbering: every boot has an immutable `EXP-NNN` ID
 ([EXPERIMENTS.md](EXPERIMENTS.md)). The old per-document "run N" counter is
@@ -1067,22 +1073,79 @@ their `max_register`, so `regmap_readable()` is false and debugfs prints
    exactly the four PMIC regmaps, the signature picks `0-07`, and the three
    non-repeaters cost one cheap empty read each.
 
-What is **not** yet known: whether the working mode (normal boot) holds the
-same eight values. That is the control (EXP-038): identical values ⇒ the
-register file is not the discriminator ⇒ H1/`31bc94de` is refuted and the
-blocker is H2 (eUSB2 link state / PPM routing: the BCR reset resets the SoC
-PHY but nothing resets the repeater, and no AP-side lever creates a fresh CC
-edge); different values (e.g. `0x00` in the working mode) ⇒ the known-good
-recipe is the normal-boot blob, and step A ≡ step B.
+What was not known here is now answered by the control (EXP-038, §12.8):
+the working mode holds the **same eight values** ⇒ the register file is
+not the discriminator ⇒ H1/`31bc94de` is refuted in both its forms, and
+the blocker is H2 (eUSB2 link state / PPM routing: the BCR reset resets
+the SoC PHY but nothing resets the repeater, and no AP-side lever creates
+a fresh CC edge) — now with a positive readout: the seven activity
+registers are all `0x00` in the broken mode.
 
-### 12.7 The write ladder (re-ordered after the dump)
+### 12.7 The write ladder (dead after EXP-038)
 
-1. **EXP-038 — the control** (normal boot, same image, stick pre-plugged):
-   one boot, no writes, decides §12.6.
-2. **EXP-039 — step A/B** on a write-capable kernel (the regmap debugfs
-   write path, armada patch 1401): write the EXP-038 values into the eight
-   registers and re-scan. Enumeration ⇒ the register-file hypothesis is
-   proven and the fix is a kernel patch that writes those values in
-   `eusb2_repeater_init`.
-3. **step C** — an empty diff ⇒ the residue is not in the register file ⇒
-   the PPM/eUSB2-link side (firmware RE, §ADSP_RE.md) or the vdd18 cut.
+1. **EXP-038 — the control** (2026-11-14, executed — see §12.8): the
+   eight-register diff is **empty**.
+2. ~~**EXP-039 — step A/B** on a write-capable kernel (the regmap debugfs
+   write path, armada patch 1401): write the EXP-038 values into the
+   eight registers and re-scan.~~ **Superseded**: step A (zero the eight)
+   would *create* the mismatch rather than repair it, and step B (write
+   the EXP-038 values) is a no-op — the values are already identical.
+3. **step C is the outcome, and it is the front**: the residue is not in
+   the register file ⇒ the PPM/eUSB2-link side (firmware RE,
+   [ADSP_RE.md](ADSP_RE.md)) or the vdd18 cut. Concretely: re-arm the
+   PPM without a fresh CC edge — the `apsd-rerun-cfg` 0→1 firmware patch
+   on device ([ADSP_CONFIG.md](ADSP_CONFIG.md), the dbg52 candidate) —
+   reserved as **EXP-041**.
+
+### 12.8 EXP-038 (working mode, 2026-11-14): the control
+
+Conditions: normal "sdcard" boot (stock Armada OS, ostree deployment
+`6bb952cad7…`, kernel 7.2.6 + 192 armada patches — not the CI `a699dd6`
+image kernel), Netac 512 GB stick cold-plug (first plug 1806 s,
+disconnect 1836 s, re-plug 1844 s), `OK-ENUM` (`sdg` under
+`xhci-hcd.2.auto/usb1`), orientation normal, partner present, zero user
+actions. Capture: a manual debugfs read
+(`scripts/lever-c/exp038-repeater-dump.sh`, run as root at uptime 3045 s)
+with the v8 hook's verified mechanics — scan-based candidate selection
+(same four PMIC maps `0-00 0-01 0-05 0-07`), the `fd08=80`/`fd46=80`
+signature, and the line geometry measured from the file (9 B/line on this
+kernel as well) instead of assumed. Transcript:
+`logs/lever-c/exp-038-dump.txt`.
+
+| set | EXP-037 (broken) | EXP-038 (working) |
+|---|---|---|
+| KEY — eight never-kernel-written tuning | `50=00 52=01 55=03 56=00 58=02 59=03 5a=01 5b=02` | **identical** |
+| WRN — kernel-written / RO | `08=80 46=80 51=0b 53=06 54=03 57=03` | **identical** |
+| seven never-AP-written status/activity | all `00` | `fd00=02 fd02=03 fd04=0b fd05=0e fd09=9f fd0a=18 fd42=80` |
+
+Result:
+
+1. **The register file is not the discriminator.** The eight tuning
+   registers are bit-identical across the modes — and across two
+   different kernels. The driver never writes them in either kernel
+   (upstream `phy-qcom-eusb2-repeater.c`: init table + DT overrides cover
+   only `fd46/fd51/fd53/fd54/fd57`, `set_mode` covers `fde8/fded`; the
+   board DT has no `qcom,tune-res-fsdif` / `qcom,squelch-detector-bp`),
+   and an identical *non-zero* match cannot be a kernel artifact (a
+   zero-out kernel would read `00`). H1/`31bc94de` is refuted; the write
+   ladder is dead (§12.7).
+2. **The mode diff is link activity, not configuration.** The seven
+   differing registers are never written by AP-side software in either
+   mode; they are repeater-internal status/activity state. In `linux usb`
+   they are all `0x00`: the repeater is enabled and OK but has never seen
+   a valid link. That is H2 in register form — the blocker is below the
+   repeater's input (PPM/ICM data path / SoC-side signal path),
+   consistent with the PPM `ncp_stby` fingerprint and the no-fresh-CC-edge
+   model ([KERNEL_PATCH_1400.md](KERNEL_PATCH_1400.md)).
+3. **Deviation from the plan, recorded:** the registry said "normal boot
+   of dbgC8, stick pre-plugged". Executed with the stock kernel, a plain
+   stick, cold-plug. Valid as the control for the tuning comparison for
+   the reasons in point 1 (and the WRN set — the kernel-written
+   registers — is identical, showing the effective DT/init writes match
+   on both kernels). Residual caveat, cheap to close: the same manual
+   read in a normal boot of the CI `a699dd6` kernel would confirm the
+   seven activity registers on the identical kernel.
+4. Repeater device on this kernel: `c400000.spmi:pmic@7:phy@fd00`
+   (`qcom,pm8550b-eusb2-repeater`), driver `qcom-eusb2-repeater`
+   (built-in), regulators `vdd18`/`vdd3`. The `phy-qcom-m31-eusb2.ko`
+   module is the SM8750 M31 HSPHY driver, not bound on this board.

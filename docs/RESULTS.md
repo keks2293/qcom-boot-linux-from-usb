@@ -3,6 +3,48 @@
 Newest first. Each entry names its experiment ID
 ([EXPERIMENTS.md](EXPERIMENTS.md)); the console transcripts are in `logs/`.
 
+## EXP-038 — eUSB2 repeater dump, working mode (2026-11-14) — the register file is **not** the discriminator
+
+Conditions: normal "sdcard" boot (stock Armada OS, kernel 7.2.6 + 192
+patches — not the CI `a699dd6` image kernel), Netac 512 GB stick
+cold-plug, `OK-ENUM` (`sdg` under `xhci-hcd.2.auto/usb1`), zero actions.
+Manual debugfs capture
+([`scripts/lever-c/exp038-repeater-dump.sh`](../scripts/lever-c/exp038-repeater-dump.sh)),
+same mechanics as the v8 hook. Transcript:
+[`logs/lever-c/exp-038-dump.txt`](../logs/lever-c/exp-038-dump.txt).
+
+| set | EXP-037 (broken, `linux usb`) | EXP-038 (working) |
+|---|---|---|
+| KEY — the eight never-kernel-written tuning registers | `50=00 52=01 55=03 56=00 58=02 59=03 5a=01 5b=02` | **identical** |
+| WRN — kernel-written / RO status | `08=80 46=80 51=0b 53=06 54=03 57=03` | **identical** |
+| seven never-AP-written status/activity registers | all `00` (`fd00 fd02 fd04 fd05 fd09 fd0a fd42`) | `fd00=02 fd02=03 fd04=0b fd05=0e fd09=9f fd0a=18 fd42=80` |
+
+1. **The eight tuning registers are bit-identical between the broken and
+   the working mode** ⇒ the register file is not the discriminator ⇒
+   H1 / the `31bc94de` regression is **refuted** (both its "ABL zeroed
+   the tuning" and "the working mode holds a different blob" forms). The
+   match holds across two different kernels, and the driver never writes
+   those registers in either (upstream `phy-qcom-eusb2-repeater.c`: init
+   table + DT overrides cover only `fd46/fd51/fd53/fd54/fd57`, `set_mode`
+   covers `fde8/fded`; the board DT carries no `qcom,tune-res-fsdif` /
+   `qcom,squelch-detector-bp`) — an identical non-zero match across
+   kernels is not a kernel artifact (a zero-out kernel would read `00`).
+2. **The only mode diff in the window is seven status/activity registers
+   that no AP-side software writes**: all `0x00` in the broken mode,
+   non-zero in the working mode. In `linux usb` the repeater is enabled
+   and OK but has **never seen a link** — the blocker is the eUSB2 link
+   state / PPM routing (H2), confirmed as the front: in the broken mode
+   nothing below the repeater's input ever presents a valid link.
+3. **The write ladder is dead** ([LEVER_C_IMPLEMENTATION.md](LEVER_C_IMPLEMENTATION.md)
+   §12.7): step A (zero the eight) would create a mismatch, step B (write
+   the "known-good" values) is a no-op. The next front is the PPM side:
+   EXP-041 (`apsd-rerun-cfg` 0→1 on device).
+
+Residual caveat: the two reads were on two different kernels. A normal
+boot of the CI `a699dd6` kernel with the same manual read would close it
+(cheap, optional); the tuning-register verdict is already conclusive in
+both directions without it.
+
 ## EXP-037 — eUSB2 repeater register dump (2026-11-14) — `FAIL-NO-SCAN-FULL`, dump complete
 
 Image `dbgC8` (md5 `52c888a01f0470fb35f2b1a028209e9f`), hook v8, `linux usb`,

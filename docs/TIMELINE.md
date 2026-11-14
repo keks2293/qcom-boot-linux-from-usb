@@ -135,3 +135,22 @@ decides whether the register file differs at all between the broken and the
 working mode.
 → [LEVER_C_IMPLEMENTATION.md](LEVER_C_IMPLEMENTATION.md) §12.5–12.7,
 [logs/lever-c/exp-037-dump.txt](../logs/lever-c/exp-037-dump.txt)
+
+## 2026-11-14 (EXP-038) — the control: the register file is not the discriminator
+
+Working-mode dump (normal "sdcard" boot, stock Armada kernel 7.2.6+192p,
+Netac stick cold-plug, manual debugfs read with the v8 hook's mechanics):
+the eight never-kernel-written tuning registers are **bit-identical to
+EXP-037** (`50=00 52=01 55=03 56=00 58=02 59=03 5a=01 5b=02`) and the WRN
+set identical ⇒ H1/`31bc94de` is **refuted in both forms**; the write
+ladder is dead (step A would create a mismatch, step B is a no-op,
+EXP-039 superseded). The only mode diff in the window: seven
+never-AP-written status/activity registers
+(`fd00 fd02 fd04 fd05 fd09 fd0a fd42`), all `0x00` in the broken mode,
+non-zero in the working (`fd00=02 fd02=03 fd04=0b fd05=0e fd09=9f
+fd0a=18 fd42=80`) — in `linux usb` the repeater is enabled and OK but has
+never seen a link. The blocker is confirmed as the eUSB2 link state / PPM
+routing (H2); next front: the PPM side (EXP-041: `apsd-rerun-cfg` 0→1 on
+device).
+→ [LEVER_C_IMPLEMENTATION.md](LEVER_C_IMPLEMENTATION.md) §12.8,
+[logs/lever-c/exp-038-dump.txt](../logs/lever-c/exp-038-dump.txt)
